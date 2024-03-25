@@ -85,7 +85,7 @@ ui <- navbarPage("Ikiam Wings Gallery",
                               column(3, selectInput("sort_by", "Sort By", choices = c("Row Number", "CAM_ID", "Preservation_date"), selected = "Preservation_date")),
                               column(3, selectInput("sort_order", "Sort Order", choices = c("Ascending" = "asc", "Descending" = "desc"), selected = "asc")),
                               column(3, actionButton("taxa_show_thumbnails", "Show Thumbnails", class = "btn-primary")),
-                              column(3, actionButton("update_database", "Update Database", class = "btn-primary"))
+                              column(3, actionButton("update_database", "Update Database", class = "btn-primary", style="background-color: #262626"))
                             ),
                             uiOutput("taxa_thumbnails_display")
                           )
