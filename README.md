@@ -6,7 +6,7 @@ Shiny application to view butterfly wing photos of specimens from the ongoing pr
 
 Screenshot of the Shiny Ikiam Wings Gallery's user interface:
 
-![Shiny Ikiam Wings Gallery Interface](screenshots/Interface 25-march-2024.png)
+![Shiny Ikiam Wings Gallery Interface](screenshots/interface-25-march-2024.png)
 
 ## How it works
 
