@@ -19,6 +19,7 @@ It downloads from Google Sheets the database and store a local backup since down
 - **Search by CAMID**: The user can input one or more CAMIDs to search for specific individuals.
 - **Sorting by**: The user can choose wether to sort by CAMID or preservation date wether ascending (A to Z, older to recent) or descending (Z to A, recent to older).
 - **One Per species/sex**: A checkbox, if checked will show only one individual per subspecies per sex, resembling identification guides such as Sangay or Butterflies of America.
+- **Only Indiv. With Photos**: When selected, the application will display only those specimens for which wing photos have been taken and uploaded to Google Drive.
 
 ## Usage
 
