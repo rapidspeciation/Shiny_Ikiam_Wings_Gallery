@@ -2,7 +2,7 @@
 
 Shiny application to view butterfly wing photos of specimens from the ongoing project at Ikiam - Ecuador.
 
-##How it works
+## How it works
 
 It downloads from Google Sheets the database and store a local backup since downloading takes a few seconds. It transforms google drive photo links from the database into thumbnail links that can be loaded on the Shiny interface.
 
