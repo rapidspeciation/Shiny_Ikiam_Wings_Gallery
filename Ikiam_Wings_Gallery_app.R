@@ -146,12 +146,19 @@ server <- function(input, output, session) {
     output[[displayId]] <- renderUI({
       if (nrow(filteredData) > 0) {
         img_tags <- lapply(1:nrow(filteredData), function(i) {
+          # Determine which images to display based on side selection
+          img_display <- switch(input$taxa_side_selection,
+                                "Dorsal" = div(style = "flex: 1;", img(src = filteredData$URLd[i], alt = "Dorsal Side", style = "max-width: 100%; height: auto;")),
+                                "Ventral" = div(style = "flex: 1;", img(src = filteredData$URLv[i], alt = "Ventral Side", style = "max-width: 100%; height: auto;")),
+                                "Dorsal and Ventral" = tagList(
+                                  div(style = "flex: 1;", img(src = filteredData$URLd[i], alt = "Dorsal Side", style = "max-width: 100%; height: auto;")),
+                                  div(style = "flex: 1;", img(src = filteredData$URLv[i], alt = "Ventral Side", style = "max-width: 100%; height: auto;"))
+                                )
+          )
+          
           tagList(
             h3(style = "font-weight: bold; font-size: larger;", paste("CAM ID:", filteredData$CAM_ID[i])),
-            div(style = "display: flex; justify-content: space-around;",
-                div(style = "flex: 1;", img(src = filteredData$URLd[i], alt = "Dorsal Side", style = "max-width: 100%; height: auto;")),
-                div(style = "flex: 1;", img(src = filteredData$URLv[i], alt = "Ventral Side", style = "max-width: 100%; height: auto;"))
-            ),
+            div(style = "display: flex; justify-content: space-around;", img_display),
             p(paste("Species:", filteredData$SPECIES[i])),
             p(paste("Subspecies/Form:", ifelse(is.na(filteredData$Subspecies_Form[i]), "N/A", filteredData$Subspecies_Form[i]))),
             p(paste("Sex:", ifelse(is.na(filteredData$Sex[i]), "N/A", filteredData$Sex[i])))
