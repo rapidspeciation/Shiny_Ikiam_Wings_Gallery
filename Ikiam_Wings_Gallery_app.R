@@ -5,6 +5,7 @@ library(stringr)
 library(shinyWidgets)
 library(googlesheets4)
 gs4_deauth()  # Use gs4_deauth() to indicate no need for google authentication
+Sys.setlocale(locale = "en_US.UTF-8") # Change time language to English so R can parse dates from google sheets properly (e.g. 1-Jan-22 to January 1st, 2022)
 
 # Define the paths to the RSD files
 # RSD files were used to avoid troubleshooting date format after loading from csv files
@@ -19,7 +20,7 @@ load_and_save_data <- function() {
   
   # Apply initial transformation for dates
   Coll_data <- Coll_data %>%
-    mutate(across(.cols = names(.)[grepl("date", names(.))], .fns = ~as.Date(., format = "%d-%m-%Y")))
+    mutate(across(.cols = names(.)[grepl("date", names(.))], .fns = ~as.Date(., format = "%d-%b-%y")))
   
   message("Data loaded from Google Sheets.")
   
@@ -48,7 +49,7 @@ process_and_save_data <- function(Coll_data, PhotoLinks) {
                             `CAM_ID insectary`, CAM_ID)) %>%
     left_join(Dorsal_links, by = "CAM_ID") %>%
     left_join(Ventral_links, by = "CAM_ID") %>%
-    mutate(Edited = FALSE) # Ensure the Edited column is added and set to FALSE
+    mutate(Preservation_date_formatted = format(as.Date(Preservation_date), "%d/%b/%Y")) # Format preservation date
   
   # Save the processed data to RSD files
   saveRDS(Collection_data, coll_data_rsd_path)
@@ -159,9 +160,15 @@ server <- function(input, output, session) {
           tagList(
             h3(style = "font-weight: bold; font-size: larger;", paste("CAM ID:", filteredData$CAM_ID[i])),
             div(style = "display: flex; justify-content: space-around;", img_display),
-            p(paste("Species:", filteredData$SPECIES[i])),
-            p(paste("Subspecies/Form:", ifelse(is.na(filteredData$Subspecies_Form[i]), "N/A", filteredData$Subspecies_Form[i]))),
-            p(paste("Sex:", ifelse(is.na(filteredData$Sex[i]), "N/A", filteredData$Sex[i])))
+            fluidRow(
+              column(3, p(paste("Species:", filteredData$SPECIES[i]))),
+              column(3, p(paste("Subspecies/Form:", filteredData$Subspecies_Form[i]))
+              )
+            ),
+            fluidRow(
+              column(3, p(paste("Sex:", filteredData$Sex[i]))),
+              column(3, p(paste("Preservation Date:", filteredData$Preservation_date_formatted[i])))
+            )
           )
         })
         do.call(tagList, img_tags)
