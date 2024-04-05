@@ -13,55 +13,59 @@ photo_links_rsd_path <- "PhotoLinks.rsd"
 
 # Function to load and save data
 load_and_save_data <- function() {
-  
   # Load data from Google Sheets
   Coll_data <- read_sheet("1QZj6YgHAJ9NmFXFPCtu-i-1NDuDmAdMF2Wogts7S2_4", sheet = "Collection_data", col_types = "c")
   PhotoLinks <- read_sheet("1QZj6YgHAJ9NmFXFPCtu-i-1NDuDmAdMF2Wogts7S2_4", sheet = "Photo_links", col_types = "c")
+  
+  # Apply initial transformation for dates
   Coll_data <- Coll_data %>%
     mutate(across(.cols = names(.)[grepl("date", names(.))], .fns = ~as.Date(., format = "%d-%m-%Y")))
   
-  # Save the loaded data to RSD files
-  saveRDS(Coll_data, coll_data_rsd_path)
-  saveRDS(PhotoLinks, photo_links_rsd_path)
-  
-  message("Data loaded from Google Sheets and saved to RSD.")
+  message("Data loaded from Google Sheets.")
   
   return(list(Coll_data = Coll_data, PhotoLinks = PhotoLinks))
 }
 
-# Check if RSD files exist and load or download data accordingly
-if(!file.exists(coll_data_rsd_path) | !file.exists(photo_links_rsd_path)) {
-  data_lists <- load_and_save_data()
-  Coll_data <- data_lists$Coll_data
-  PhotoLinks <- data_lists$PhotoLinks
-} else {
-  # RSD files exist, load data from RSD files instead
-  Coll_data <- readRDS(coll_data_rsd_path)
-  PhotoLinks <- readRDS(photo_links_rsd_path)
+process_and_save_data <- function(Coll_data, PhotoLinks) {
+  # Transform PhotoLinks for URLs
+  Photo_Links <- PhotoLinks %>%
+    mutate(URL_to_view = gsub("https://drive.google.com/file/d/(.*)/view\\?usp=drivesdk", 
+                              "https://drive.google.com/thumbnail?id=\\1&sz=w2000", URL),
+           CAM_ID = str_extract(Name, ".*(?=[dv]\\.JPG)"))
+  
+  # Create separate dataframes for dorsal and ventral URLs
+  Dorsal_links <- Photo_Links %>%
+    filter(str_detect(Name, "d\\.JPG")) %>%
+    select(CAM_ID, URLd = URL_to_view)
+  
+  Ventral_links <- Photo_Links %>%
+    filter(str_detect(Name, "v\\.JPG")) %>%
+    select(CAM_ID, URLv = URL_to_view)
+  
+  # Merge Collection_data with Dorsal and Ventral URLs
+  Collection_data <- Coll_data %>%
+    mutate(CAM_ID = if_else(!is.na(`CAM_ID insectary`) & `CAM_ID insectary` != "NA", 
+                            `CAM_ID insectary`, CAM_ID)) %>%
+    left_join(Dorsal_links, by = "CAM_ID") %>%
+    left_join(Ventral_links, by = "CAM_ID") %>%
+    mutate(Edited = FALSE) # Ensure the Edited column is added and set to FALSE
+  
+  # Save the processed data to RSD files
+  saveRDS(Collection_data, coll_data_rsd_path)
+  saveRDS(Photo_Links, photo_links_rsd_path) # Optionally save if you need Photo_Links separately
+  
+  return(Collection_data)
 }
 
-# Transform URLs in Photo_links
-Photo_Links <- PhotoLinks %>%
-  mutate(URL_to_view = gsub("https://drive.google.com/file/d/(.*)/view\\?usp=drivesdk", 
-                            "https://drive.google.com/thumbnail?id=\\1&sz=w2000", URL),
-         CAM_ID = str_extract(Name, ".*(?=[dv]\\.JPG)"))
-
-# Create separate dataframes for dorsal and ventral URLs
-Dorsal_links <- Photo_Links %>%
-  filter(str_detect(Name, "d\\.JPG")) %>%
-  select(CAM_ID, URLd = URL_to_view)
-
-Ventral_links <- Photo_Links %>%
-  filter(str_detect(Name, "v\\.JPG")) %>%
-  select(CAM_ID, URLv = URL_to_view)
-
-Collection_data <- Coll_data %>%
-  #Join camid insectary to camid collection data
-  mutate(CAM_ID = if_else(!is.na(Coll_data$`CAM_ID insectary`) & Coll_data$`CAM_ID insectary` != "NA", 
-                          Coll_data$`CAM_ID insectary`, Coll_data$CAM_ID)) %>%
-  # Merge Collection_data with Dorsal and Ventral URLs
-  left_join(Dorsal_links, by = "CAM_ID") %>%
-  left_join(Ventral_links, by = "CAM_ID")
+# Check if RSD files exist and load or download data accordingly
+if(!file.exists(coll_data_rsd_path) | !file.exists(photo_links_rsd_path)) {
+  data_lists <- load_and_save_data()  # Load fresh data
+  # Process and save this fresh data immediately after loading
+  Collection_data <- process_and_save_data(data_lists$Coll_data, data_lists$PhotoLinks)
+} else {
+  # RSD files exist, load data from RSD files instead
+  Collection_data <- readRDS(coll_data_rsd_path)
+}
 
 ui <- navbarPage("Ikiam Wings Gallery",
                  tabPanel("Search by Taxa",
@@ -107,9 +111,9 @@ ui <- navbarPage("Ikiam Wings Gallery",
 server <- function(input, output, session) {
   # Server: Add an observer for the 'Update database' button
   observeEvent(input$update_database, {
-    data_lists <- load_and_save_data()
-    Coll_data <- data_lists$Coll_data
-    PhotoLinks <- data_lists$PhotoLinks
+    data_lists <- load_and_save_data()  # Load fresh data from Google Sheets
+    # Process and save the fresh data
+    Collection_data <<- process_and_save_data(data_lists$Coll_data, data_lists$PhotoLinks)
   })
   
   # Observers for dynamically updating taxa selection inputs based on higher level selections
