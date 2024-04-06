@@ -243,6 +243,8 @@ server <- function(input, output, session) {
     }
     
     renderThumbnails("taxa_thumbnails_display", filteredData)
+    
+    showNotification(paste(nrow(filteredData), "individuals found"), type = "message")
   })
   
   # Observe event for "Search by CAMID" action button
