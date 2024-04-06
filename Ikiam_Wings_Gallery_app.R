@@ -82,16 +82,20 @@ ui <- navbarPage("Ikiam Wings Gallery",
                               column(3, selectInput("taxa_sex_selection", "Select Sex", choices = c("male", "female", "male and female"), selected = "male and female")),
                               column(3, selectInput("taxa_side_selection", "Select Side", choices = c("Dorsal", "Ventral", "Dorsal and Ventral"), selected = "Dorsal and Ventral")),
                               column(3, 
-                                     checkboxInput("one_per_subspecies_sex", "One Per Subspecies/Sex", FALSE),
-                                     checkboxInput("exclude_without_photos", "Only Indiv. With Photos", TRUE)
+                                     actionButton("update_database", "Update Database", class = "btn-primary", style="background-color: #262626; height: 50%"),
+                                     checkboxInput("one_per_subspecies_sex", "One Per Subspecies/Sex", FALSE)
                               )
                             ),
                             fluidRow(
                               column(3, selectInput("sort_by", "Sort By", choices = c("Row Number", "CAM_ID", "Preservation_date"), selected = "Preservation_date")),
                               column(3, selectInput("sort_order", "Sort Order", choices = c("Ascending" = "asc", "Descending" = "desc"), selected = "asc")),
                               column(3, actionButton("taxa_show_thumbnails", "Show Thumbnails", class = "btn-primary")),
-                              column(3, actionButton("update_database", "Update Database", class = "btn-primary", style="background-color: #262626"))
+                              column(3, 
+                                     checkboxInput("exclude_without_photos", "Only Indiv. With Photos", TRUE),
+                                     checkboxInput("enable_zoom", "Zoom In Photos", FALSE)
+                              )
                             ),
+                            uiOutput("zoom_controls"),
                             uiOutput("taxa_thumbnails_display")
                           )
                  ),
@@ -115,6 +119,16 @@ server <- function(input, output, session) {
     data_lists <- load_and_save_data()  # Load fresh data from Google Sheets
     # Process and save the fresh data
     Collection_data <<- process_and_save_data(data_lists$Coll_data, data_lists$PhotoLinks)
+  })
+  
+  # Add sliders to control Zoom
+  output$zoom_controls <- renderUI({
+    if (input$enable_zoom) {
+      fluidRow(
+        column(6, sliderInput("img_height", "Image Height", min = 100, max = 500, value = 300, step = 10)),
+        column(6, sliderInput("img_scale", "Image Scale", min = 0.25, max = 5.0, value = 2.5, step = 0.25))
+      )
+    }
   })
   
   # Observers for dynamically updating taxa selection inputs based on higher level selections
@@ -142,6 +156,15 @@ server <- function(input, output, session) {
     updateSelectizeInput(session, "taxa_subspecies_selection", choices = c("All" = "All", unique(filteredData$Subspecies_Form)), selected = "All") 
   })
   
+  createThumbnail <- function(url, alt) {
+    if (input$enable_zoom) {
+      div(style = paste0("overflow: hidden; width: 100%; height: ", input$img_height, "px; display: flex; justify-content: center;"), 
+          img(src = url, alt = alt, style = paste0("transform: scale(", input$img_scale, ");")))
+    } else {
+      div(style = "flex: 1;", img(src = url, alt = alt, style = "width: 100%; height: auto;"))
+    }
+  }
+  
   # Function to render thumbnails based on filtered data
   renderThumbnails <- function(displayId, filteredData) {
     output[[displayId]] <- renderUI({
@@ -149,11 +172,11 @@ server <- function(input, output, session) {
         img_tags <- lapply(1:nrow(filteredData), function(i) {
           # Determine which images to display based on side selection
           img_display <- switch(input$taxa_side_selection,
-                                "Dorsal" = div(style = "flex: 1;", img(src = filteredData$URLd[i], alt = "Dorsal Side", style = "max-width: 100%; height: auto;")),
-                                "Ventral" = div(style = "flex: 1;", img(src = filteredData$URLv[i], alt = "Ventral Side", style = "max-width: 100%; height: auto;")),
+                                "Dorsal" = createThumbnail(filteredData$URLd[i], "Dorsal Side"),
+                                "Ventral" = createThumbnail(filteredData$URLv[i], "Ventral Side"),
                                 "Dorsal and Ventral" = tagList(
-                                  div(style = "flex: 1;", img(src = filteredData$URLd[i], alt = "Dorsal Side", style = "max-width: 100%; height: auto;")),
-                                  div(style = "flex: 1;", img(src = filteredData$URLv[i], alt = "Ventral Side", style = "max-width: 100%; height: auto;"))
+                                  createThumbnail(filteredData$URLd[i], "Dorsal Side"),
+                                  createThumbnail(filteredData$URLv[i], "Ventral Side")
                                 )
           )
           
@@ -161,13 +184,13 @@ server <- function(input, output, session) {
             h3(style = "font-weight: bold; font-size: larger;", paste("CAM ID:", filteredData$CAM_ID[i])),
             div(style = "display: flex; justify-content: space-around;", img_display),
             fluidRow(
-              column(3, p(paste("Species:", filteredData$SPECIES[i]))),
-              column(3, p(paste("Subspecies/Form:", filteredData$Subspecies_Form[i]))
+              column(6, p(paste("Species:", filteredData$SPECIES[i]))),
+              column(6, p(paste("Subspecies/Form:", filteredData$Subspecies_Form[i]))
               )
             ),
             fluidRow(
-              column(3, p(paste("Sex:", filteredData$Sex[i]))),
-              column(3, p(paste("Preservation Date:", filteredData$Preservation_date_formatted[i])))
+              column(6, p(paste("Sex:", filteredData$Sex[i]))),
+              column(6, p(paste("Preservation Date:", filteredData$Preservation_date_formatted[i])))
             )
           )
         })

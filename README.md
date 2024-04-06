@@ -21,6 +21,7 @@ It downloads from Google Sheets the database and store a local backup since down
 - **One Per species/sex**: A checkbox, if checked will show only one individual per subspecies per sex, resembling identification guides such as Sangay or Butterflies of America.
 - **Only Indiv. With Photos**: When selected, the application will display only those specimens for which wing photos have been taken and uploaded to Google Drive.
 - **Choose View**: Whether to show pictures of dorsal, ventral or both sides.
+- **Zoom in Photos**: When checked, two sliders will appear (image height, image scale) to control size and zoom of photos. Defaults to 2x zoom.
 
 ## Usage
 
