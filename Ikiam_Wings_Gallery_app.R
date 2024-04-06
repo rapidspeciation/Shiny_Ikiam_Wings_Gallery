@@ -66,6 +66,13 @@ if(!file.exists(coll_data_rsd_path) | !file.exists(photo_links_rsd_path)) {
 } else {
   # RSD files exist, load data from RSD files instead
   Collection_data <- readRDS(coll_data_rsd_path)
+  
+  # Check if Collection_data contains column named URLd
+  if(!"URLd" %in% colnames(Collection_data)) {
+    # If URLd column is missing, previous version of this code was used so, to avoid Errors, reload fresh data from Google Sheets
+    data_lists <- load_and_save_data()  
+    Collection_data <- process_and_save_data(data_lists$Coll_data, data_lists$PhotoLinks)
+  }
 }
 
 ui <- navbarPage("Ikiam Wings Gallery",
