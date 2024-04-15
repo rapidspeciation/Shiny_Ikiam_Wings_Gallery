@@ -16,6 +16,7 @@ It downloads from Google Sheets the database and store a local backup since down
 
 - **Database Update**: Provides a button on the Shiny interface to update the local database. 
 - **Search by Taxa**: This tab allows users to filter individuals based on their taxa.
+- **CRISPR**: To view photos of CRISPR injected individuals.
 - **Search by CAMID**: The user can input one or more CAMIDs to search for specific individuals.
 - **Sorting by**: The user can choose wether to sort by CAMID or preservation date wether ascending (A to Z, older to recent) or descending (Z to A, recent to older).
 - **One Per species/sex**: A checkbox, if checked will show only one individual per subspecies per sex, resembling identification guides such as Sangay or Butterflies of America.
