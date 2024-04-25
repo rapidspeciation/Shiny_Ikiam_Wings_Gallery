@@ -45,8 +45,8 @@ process_and_save_data <- function(data) {
     # Convert strings to dates
     mutate(across(.cols = names(.)[grepl("date", names(.))], .fns = ~as.Date(., format = "%d-%b-%y"))) %>%
     # Merge Collection_data with Dorsal and Ventral URLs
-    mutate(CAM_ID = if_else(!is.na(`CAM_ID insectary`) & `CAM_ID insectary` != "NA", 
-                            `CAM_ID insectary`, CAM_ID)) %>%
+    mutate(CAM_ID = if_else(!is.na(`CAM_ID_insectary`) & `CAM_ID_insectary` != "NA", 
+                            `CAM_ID_insectary`, CAM_ID)) %>%
     left_join(Dorsal_links, by = "CAM_ID") %>%
     left_join(Ventral_links, by = "CAM_ID") %>%
     # Convert Preservation_date back to string to show in UI
