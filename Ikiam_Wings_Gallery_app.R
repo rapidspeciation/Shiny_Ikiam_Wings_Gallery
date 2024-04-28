@@ -83,7 +83,7 @@ ui <- navbarPage(
     fluidRow(
       column(3, actionButton("update_database", "Update Database", class = "btn-primary", style="background-color: #262626; height: 50%"), align = "center"),
       column(3, selectInput("sort_by", "Sort By", choices = c("Row Number", "CAM_ID", "Preservation_date"), selected = "Preservation_date")),
-      column(3, selectInput("sort_order", "Sort Order", choices = c("Ascending" = "asc", "Descending" = "desc"), selected = "asc")),
+      column(3, selectInput("sort_order", "Sort Order", choices = c("Ascending" = "asc", "Descending" = "desc"), selected = "desc")),
       column(3, 
              checkboxInput("exclude_without_photos", "Only Indiv. With Photos", TRUE),
              checkboxInput("enable_zoom", "Zoom In Photos", FALSE)
@@ -285,9 +285,9 @@ server <- function(input, output, session) {
     if(input$sort_by != "Row Number") {
       sortByColumn <- sym(input$sort_by)
       filteredData <- if(input$sort_order == "asc") {
-        filteredData %>% arrange(!!sortByColumn)
+        filteredData %>% arrange(!!sortByColumn, CAM_ID)
       } else {
-        filteredData %>% arrange(desc(!!sortByColumn))
+        filteredData %>% arrange(desc(!!sortByColumn), desc(CAM_ID))
       }
     }
     
@@ -311,9 +311,9 @@ server <- function(input, output, session) {
     if(input$sort_by != "Row Number") {
       sortByColumn <- sym(ifelse(input$sort_by == "Preservation_date", "Emerge_date", input$sort_by))
       filteredCRISPR <- if(input$sort_order == "asc") {
-        filteredCRISPR %>% arrange(!!sortByColumn)
+        filteredCRISPR %>% arrange(!!sortByColumn, CAM_ID)
       } else {
-        filteredCRISPR %>% arrange(desc(!!sortByColumn))
+        filteredCRISPR %>% arrange(desc(!!sortByColumn), desc(CAM_ID))
       }
     }
     
