@@ -93,7 +93,7 @@ ui <- navbarPage(
       column(3, 
              actionButton("update_database", "Update Database", 
                           class = "btn-primary", 
-                          style = "background-color: #262626; height: 50%"), 
+                          style = "background-color: #262626; margin-top:25px"), 
              align = "center"),
       column(3, 
              selectInput("sort_by", "Sort By", 
@@ -105,11 +105,19 @@ ui <- navbarPage(
                          selected = "desc")),
       column(3, 
              checkboxInput("exclude_without_photos", "Only Indiv. With Photos", TRUE),
-             checkboxInput("enable_zoom", "Zoom In Photos", FALSE)
-      )
+             checkboxInput("one_per_subspecies_sex", "One Per Subspecies/Sex", FALSE))
     ),
-    # Zoom controls: Only Reset Zoom button
-    uiOutput("zoom_controls")
+    fluidRow(
+      column(9, 
+             wellPanel(
+               style = "background-color: #f9f9f9; padding: 5px 5px; border: 1px solid #ccc; border-radius: 5px;",
+               p("Shift + Scroll = Zoom in all photos, Ctrl + Scroll = Zoom in one photo", 
+                 style = "font-size: 16px; text-align: center;")
+             ),
+             align = "center"),
+      column(3, 
+             actionButton("reset_zoom", "Reset Zoom", style = 'background-color:#D3D3D3'))
+    ),
   ),
   tabPanel("Search by Taxa",
            fluidPage(
@@ -149,9 +157,7 @@ ui <- navbarPage(
                column(3, 
                       selectInput("taxa_side_selection", "Select Side", 
                                   choices = c("Dorsal", "Ventral", "Dorsal and Ventral"), 
-                                  selected = "Dorsal and Ventral")),
-               column(3, 
-                      checkboxInput("one_per_subspecies_sex", "One Per Subspecies/Sex", FALSE))
+                                  selected = "Dorsal and Ventral"))
              ),
              fluidRow(
                column(3, 
@@ -209,72 +215,11 @@ server <- function(input, output, session) {
     data <<- process_and_save_data(rawData)
   })
   
-  # Zoom controls: Only Reset Zoom button
-  output$zoom_controls <- renderUI({
-    if (input$enable_zoom) {
-      tagList(
-        fluidRow(
-          column(12, actionButton("reset_zoom", "Reset Zoom"))
-        ),
-        tags$script(HTML('
-          setTimeout(function() {
-            // Destroy existing Panzoom instances if any
-            if (window.panzoomInstances) {
-              window.panzoomInstances.forEach(function(instance) {
-                instance.destroy();
-              });
-            }
-            window.panzoomInstances = [];
-            var panzoomElements = document.querySelectorAll(".panzoom");
-  
-            panzoomElements.forEach(function(elem) {
-              var panzoomInstance = Panzoom(elem, { maxScale: 5 });
-              window.panzoomInstances.push(panzoomInstance);
-            });
-  
-            // Add wheel zooming that zooms all images towards the center
-            document.addEventListener("wheel", function(event) {
-              if (!event.shiftKey) return;
-              // Check if the event target is within an image
-              if (!event.target.closest(".panzoom")) return;
-              event.preventDefault();
-              var deltaScale = event.deltaY < 0 ? 1.1 : 0.9;
-              window.panzoomInstances.forEach(function(panzoomInstance) {
-                var scale = panzoomInstance.getScale();
-                panzoomInstance.zoom(scale * deltaScale, { animate: false });
-              });
-            });
-  
-            // Get the reset button
-            var resetButton = document.getElementById("reset_zoom");
-  
-            // Remove existing event listeners to prevent duplicates
-            resetButton.replaceWith(resetButton.cloneNode(true));
-  
-            resetButton = document.getElementById("reset_zoom");
-  
-            // Add event listener for Reset Zoom button
-            resetButton.addEventListener("click", function() {
-              window.panzoomInstances.forEach(function(panzoomInstance) {
-                panzoomInstance.reset({ animate: false });
-              });
-            });
-  
-          }, 500); // Adjust the delay if necessary
-        '))
-      )
-    }
-  })
-  
-  # Function to create thumbnails
+  # Function to create thumbnails (always with Panzoom)
   createThumbnail <- function(url, alt) {
-    if (input$enable_zoom) {
-      img_tag <- img(src = url, alt = alt, class = "panzoom", style = "max-width: 100%; height: auto;")
-      div_tag <- div(style = "overflow: hidden; width: 100%; height: auto; display: flex; justify-content: center;", img_tag)
-      return(div_tag)
-    } else {
-      div(style = "flex: 1;", img(src = url, alt = alt, style = "width: 100%; height: auto; max-height: 600px; object-fit: contain;"))
-    }
+    img_tag <- img(src = url, alt = alt, class = "panzoom", style = "max-width: 100%; height: auto;")
+    div_tag <- div(style = "overflow: hidden; width: 100%; height: auto; display: flex; justify-content: center;", img_tag)
+    return(div_tag)
   }
   
   # Function to render thumbnails
@@ -325,6 +270,63 @@ server <- function(input, output, session) {
             info_tags
           )
         })
+        
+        # Include the JavaScript code
+        js_code <- '
+          setTimeout(function() {
+            // Destroy existing Panzoom instances if any
+            if (window.panzoomInstances) {
+              window.panzoomInstances.forEach(function(instance) {
+                instance.destroy();
+              });
+            }
+            window.panzoomInstances = [];
+            var panzoomElements = document.querySelectorAll(".panzoom");
+            
+            panzoomElements.forEach(function(elem) {
+              var panzoomInstance = Panzoom(elem, { maxScale: 5 });
+              window.panzoomInstances.push(panzoomInstance);
+              
+              // Add Ctrl + Wheel zooming for individual images
+              elem.parentElement.addEventListener("wheel", function(event) {
+                if (!event.ctrlKey) return;
+                event.preventDefault();
+                var scale = panzoomInstance.getScale();
+                var deltaScale = event.deltaY < 0 ? scale * 1.1 : scale * 0.9;
+                panzoomInstance.zoom(deltaScale, { animate: false });
+              });
+            });
+            
+            // Add Shift + Wheel zooming that zooms all images
+            document.addEventListener("wheel", function(event) {
+              if (!event.shiftKey) return;
+              event.preventDefault();
+              var deltaScale = event.deltaY < 0 ? 1.1 : 0.9;
+              window.panzoomInstances.forEach(function(panzoomInstance) {
+                var scale = panzoomInstance.getScale();
+                panzoomInstance.zoom(scale * deltaScale, { animate: false });
+              });
+            });
+            
+            // Get the reset button
+            var resetButton = document.getElementById("reset_zoom");
+            
+            // Remove existing event listeners to prevent duplicates
+            resetButton.replaceWith(resetButton.cloneNode(true));
+            
+            resetButton = document.getElementById("reset_zoom");
+            
+            // Add event listener for Reset Zoom button
+            resetButton.addEventListener("click", function() {
+              window.panzoomInstances.forEach(function(panzoomInstance) {
+                panzoomInstance.reset({ animate: false });
+              });
+            });
+            
+          }, 500); // Adjust the delay if necessary
+        '
+        
+        img_tags <- c(img_tags, list(tags$script(HTML(js_code))))
         
         do.call(tagList, img_tags)
       } else {
