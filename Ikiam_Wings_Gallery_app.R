@@ -1,3 +1,4 @@
+# Load necessary libraries
 library(shiny)
 library(dplyr)
 library(readxl)
@@ -84,33 +85,77 @@ if (!file.exists(rsd_paths$Collection_data) || !file.exists(rsd_paths$CRISPR)) {
 ui <- navbarPage(
   title = "Ikiam Wings Gallery",
   header = fluidPage(
+    tags$head(
+      # Include the Panzoom library from CDN
+      tags$script(src = "https://unpkg.com/@panzoom/panzoom@4.5.1/dist/panzoom.min.js")
+    ),
     fluidRow(
-      column(3, actionButton("update_database", "Update Database", class = "btn-primary", style = "background-color: #262626; height: 50%"), align = "center"),
-      column(3, selectInput("sort_by", "Sort By", choices = c("Row Number", "CAM_ID", "Preservation_date"), selected = "Preservation_date")),
-      column(3, selectInput("sort_order", "Sort Order", choices = c("Ascending" = "asc", "Descending" = "desc"), selected = "desc")),
+      column(3, 
+             actionButton("update_database", "Update Database", 
+                          class = "btn-primary", 
+                          style = "background-color: #262626; height: 50%"), 
+             align = "center"),
+      column(3, 
+             selectInput("sort_by", "Sort By", 
+                         choices = c("Row Number", "CAM_ID", "Preservation_date"), 
+                         selected = "Preservation_date")),
+      column(3, 
+             selectInput("sort_order", "Sort Order", 
+                         choices = c("Ascending" = "asc", "Descending" = "desc"), 
+                         selected = "desc")),
       column(3, 
              checkboxInput("exclude_without_photos", "Only Indiv. With Photos", TRUE),
              checkboxInput("enable_zoom", "Zoom In Photos", FALSE)
       )
     ),
+    # Zoom controls: Only Reset Zoom button
     uiOutput("zoom_controls")
   ),
   tabPanel("Search by Taxa",
            fluidPage(
              fluidRow(
-               column(3, selectizeInput("taxa_family_selection", "Select Family", choices = NULL, selected = "All", options = list(placeholder = 'Choose a family'))),
-               column(3, selectizeInput("taxa_subfamily_selection", "Select Subfamily", choices = NULL, selected = "All", options = list(placeholder = 'Choose a subfamily'))),
-               column(3, selectizeInput("taxa_tribe_selection", "Select Tribe", choices = NULL, selected = "All", options = list(placeholder = 'Choose a tribe'))),
-               column(3, selectizeInput("taxa_species_selection", "Select Species", choices = NULL, multiple = TRUE, options = list(placeholder = 'Choose species')))
+               column(3, 
+                      selectizeInput("taxa_family_selection", "Select Family", 
+                                     choices = NULL, 
+                                     selected = "All", 
+                                     options = list(placeholder = 'Choose a family'))),
+               column(3, 
+                      selectizeInput("taxa_subfamily_selection", "Select Subfamily", 
+                                     choices = NULL, 
+                                     selected = "All", 
+                                     options = list(placeholder = 'Choose a subfamily'))),
+               column(3, 
+                      selectizeInput("taxa_tribe_selection", "Select Tribe", 
+                                     choices = NULL, 
+                                     selected = "All", 
+                                     options = list(placeholder = 'Choose a tribe'))),
+               column(3, 
+                      selectizeInput("taxa_species_selection", "Select Species", 
+                                     choices = NULL, 
+                                     multiple = TRUE, 
+                                     options = list(placeholder = 'Choose species')))
              ),
              fluidRow(
-               column(3, selectizeInput("taxa_subspecies_selection", "Select Subspecies", choices = NULL, selected = "All", multiple = TRUE, options = list(placeholder = 'Choose subspecies'))),
-               column(3, selectInput("taxa_sex_selection", "Select Sex", choices = c("male", "female", "male and female"), selected = "male and female")),
-               column(3, selectInput("taxa_side_selection", "Select Side", choices = c("Dorsal", "Ventral", "Dorsal and Ventral"), selected = "Dorsal and Ventral")),
-               column(3, checkboxInput("one_per_subspecies_sex", "One Per Subspecies/Sex", FALSE))
+               column(3, 
+                      selectizeInput("taxa_subspecies_selection", "Select Subspecies", 
+                                     choices = NULL, 
+                                     selected = "All", 
+                                     multiple = TRUE, 
+                                     options = list(placeholder = 'Choose subspecies'))),
+               column(3, 
+                      selectInput("taxa_sex_selection", "Select Sex", 
+                                  choices = c("male", "female", "male and female"), 
+                                  selected = "male and female")),
+               column(3, 
+                      selectInput("taxa_side_selection", "Select Side", 
+                                  choices = c("Dorsal", "Ventral", "Dorsal and Ventral"), 
+                                  selected = "Dorsal and Ventral")),
+               column(3, 
+                      checkboxInput("one_per_subspecies_sex", "One Per Subspecies/Sex", FALSE))
              ),
              fluidRow(
-               column(3, actionButton("taxa_show_photos", "Show Photos", class = "btn-primary"))
+               column(3, 
+                      actionButton("taxa_show_photos", "Show Photos", class = "btn-primary"))
              ),
              uiOutput("taxa_photos_display")
            )
@@ -118,12 +163,24 @@ ui <- navbarPage(
   tabPanel("CRISPR",
            fluidPage(
              fluidRow(
-               column(3, selectizeInput("crispr_species_selection", "Select Species", choices = NULL, selected = "All", multiple = TRUE, options = list(placeholder = 'Choose a species'))),
-               column(3, selectInput("crispr_sex_selection", "Select Sex", choices = c("male", "female", "male and female"), selected = "male and female")),
-               column(3, selectInput("crispr_mutant_selection", "Mutant", choices = c("Yes", "No", "Check", "All"), selected = "All"))
+               column(3, 
+                      selectizeInput("crispr_species_selection", "Select Species", 
+                                     choices = NULL, 
+                                     selected = "All", 
+                                     multiple = TRUE, 
+                                     options = list(placeholder = 'Choose a species'))),
+               column(3, 
+                      selectInput("crispr_sex_selection", "Select Sex", 
+                                  choices = c("male", "female", "male and female"), 
+                                  selected = "male and female")),
+               column(3, 
+                      selectInput("crispr_mutant_selection", "Mutant", 
+                                  choices = c("Yes", "No", "Check", "All"), 
+                                  selected = "All"))
              ),
              fluidRow(
-               column(12, actionButton("crispr_show_photos", "Show Photos", class = "btn-primary"))
+               column(12, 
+                      actionButton("crispr_show_photos", "Show Photos", class = "btn-primary"))
              ),
              uiOutput("crispr_photos_display")
            )
@@ -132,7 +189,8 @@ ui <- navbarPage(
            fluidPage(
              fluidRow(
                column(12,
-                      textAreaInput("camid_input", "Enter CAMID(s)", placeholder = 'Enter one or more CAMIDs, separated by new lines or spaces'),
+                      textAreaInput("camid_input", "Enter CAMID(s)", 
+                                    placeholder = 'Enter one or more CAMIDs, separated by new lines or spaces'),
                       actionButton("search_camid", "Search", class = "btn-primary")
                )
              ),
@@ -151,12 +209,59 @@ server <- function(input, output, session) {
     data <<- process_and_save_data(rawData)
   })
   
-  # Zoom controls
+  # Zoom controls: Only Reset Zoom button
   output$zoom_controls <- renderUI({
     if (input$enable_zoom) {
-      fluidRow(
-        column(6, sliderInput("img_height", "Image Height", min = 100, max = 700, value = 300, step = 10)),
-        column(6, sliderInput("img_scale", "Image Scale", min = 0.25, max = 5.0, value = 2.5, step = 0.25))
+      tagList(
+        fluidRow(
+          column(12, actionButton("reset_zoom", "Reset Zoom"))
+        ),
+        tags$script(HTML('
+          setTimeout(function() {
+            // Destroy existing Panzoom instances if any
+            if (window.panzoomInstances) {
+              window.panzoomInstances.forEach(function(instance) {
+                instance.destroy();
+              });
+            }
+            window.panzoomInstances = [];
+            var panzoomElements = document.querySelectorAll(".panzoom");
+  
+            panzoomElements.forEach(function(elem) {
+              var panzoomInstance = Panzoom(elem, { maxScale: 5 });
+              window.panzoomInstances.push(panzoomInstance);
+            });
+  
+            // Add wheel zooming that zooms all images towards the center
+            document.addEventListener("wheel", function(event) {
+              if (!event.shiftKey) return;
+              // Check if the event target is within an image
+              if (!event.target.closest(".panzoom")) return;
+              event.preventDefault();
+              var deltaScale = event.deltaY < 0 ? 1.1 : 0.9;
+              window.panzoomInstances.forEach(function(panzoomInstance) {
+                var scale = panzoomInstance.getScale();
+                panzoomInstance.zoom(scale * deltaScale, { animate: false });
+              });
+            });
+  
+            // Get the reset button
+            var resetButton = document.getElementById("reset_zoom");
+  
+            // Remove existing event listeners to prevent duplicates
+            resetButton.replaceWith(resetButton.cloneNode(true));
+  
+            resetButton = document.getElementById("reset_zoom");
+  
+            // Add event listener for Reset Zoom button
+            resetButton.addEventListener("click", function() {
+              window.panzoomInstances.forEach(function(panzoomInstance) {
+                panzoomInstance.reset({ animate: false });
+              });
+            });
+  
+          }, 500); // Adjust the delay if necessary
+        '))
       )
     }
   })
@@ -164,8 +269,9 @@ server <- function(input, output, session) {
   # Function to create thumbnails
   createThumbnail <- function(url, alt) {
     if (input$enable_zoom) {
-      div(style = paste0("overflow: hidden; width: 100%; height: ", input$img_height, "px; display: flex; justify-content: center;"), 
-          img(src = url, alt = alt, style = paste0("transform: scale(", input$img_scale, ");")))
+      img_tag <- img(src = url, alt = alt, class = "panzoom", style = "max-width: 100%; height: auto;")
+      div_tag <- div(style = "overflow: hidden; width: 100%; height: auto; display: flex; justify-content: center;", img_tag)
+      return(div_tag)
     } else {
       div(style = "flex: 1;", img(src = url, alt = alt, style = "width: 100%; height: auto; max-height: 600px; object-fit: contain;"))
     }
@@ -219,6 +325,7 @@ server <- function(input, output, session) {
             info_tags
           )
         })
+        
         do.call(tagList, img_tags)
       } else {
         "No data available for the selected criteria."
@@ -295,7 +402,9 @@ server <- function(input, output, session) {
   
   # Observe event for "CRISPR" tab
   observe({
-    updateSelectizeInput(session, "crispr_species_selection", choices = c("All", unique(data$CRISPR$Species)), selected = "All")
+    updateSelectizeInput(session, "crispr_species_selection", 
+                         choices = c("All", unique(data$CRISPR$Species)), 
+                         selected = "All")
   })
   
   observeEvent(input$crispr_show_photos, {
