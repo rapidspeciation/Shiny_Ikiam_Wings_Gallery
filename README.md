@@ -33,3 +33,4 @@ To use this Shiny application in your RStudio:
 3. Select **Git** to clone the project from this Git repository.
 4. In the repository URL, paste the following link: https://github.com/rapidspeciation/Shiny_Ikiam_Wings_Gallery.
 5. Navigate to the **Files** panel in the lower right of RStudio, and open `Ikiam_Wings_Gallery_app.R`. If required packages are not installed, a prompt will appear at the top of the source code. Click **Install** to proceed. Once installation is complete, launch the application by clicking the green **Run App** button at the top of the source code editor.
+6. To update the project, go to the Git tab in the upper right panel of RStudio and click the blue down arrow (Pull) to download the latest changes from the repository.
