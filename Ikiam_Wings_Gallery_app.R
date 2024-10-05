@@ -4,26 +4,31 @@ library(dplyr)
 library(readxl)
 library(stringr)
 library(shinyWidgets)
-library(googlesheets4)
-gs4_deauth()  # No need for Google authentication
+library(readr)
+library(tidyr)  # Added to use separate()
 Sys.setlocale(locale = "en_US.UTF-8")  # Ensure date parsing in English
 
 # Define constants
 gsheet_id <- "1QZj6YgHAJ9NmFXFPCtu-i-1NDuDmAdMF2Wogts7S2_4"
-rsd_paths <- list(
-  Collection_data = "Coll_data.rsd",
-  PhotoLinks = "PhotoLinks.rsd",
-  CRISPR = "CRISPR.rsd"
+rds_paths <- list(
+  Collection_data = "Collection_data.rds",
+  PhotoLinks = "PhotoLinks.rds",
+  CRISPR = "CRISPR.rds",
+  Insectary_data = "Insectary_data.rds"
 )
 
-# Function to download data from Google Sheets
-Download_data <- function() {
-  sheets <- c("Collection_data", "Photo_links", "CRISPR")
+# Function to download data from Google Sheets and save as raw rds files
+Download_and_save_raw_data <- function() {
+  sheets <- c("Collection_data", "Photo_links", "CRISPR", "Insectary_data")
   data_list <- lapply(sheets, function(sheet_name) {
-    read_sheet(gsheet_id, sheet = sheet_name, col_types = "c")
+    url <- paste0("https://docs.google.com/spreadsheets/d/", gsheet_id, "/gviz/tq?tqx=out:csv&sheet=", URLencode(sheet_name))
+    read_csv(url, col_types = cols(.default = "c"))
   })
-  names(data_list) <- c("Collection_data", "PhotoLinks", "CRISPR")
+  names(data_list) <- c("Collection_data", "PhotoLinks", "CRISPR", "Insectary_data")
   message("Data loaded from Google Sheets.")
+  
+  # Save raw data as rds files
+  mapply(saveRDS, data_list, rds_paths)
   return(data_list)
 }
 
@@ -34,8 +39,8 @@ process_date_columns <- function(df) {
     mutate(across(all_of(date_cols), ~ as.Date(., format = "%d-%b-%y")))
 }
 
-# Function to process and save data
-process_and_save_data <- function(data) {
+# Function to process data
+process_data <- function(data) {
   data$PhotoLinks <- data$PhotoLinks %>%
     mutate(URL_to_view = gsub("https://drive.google.com/file/d/(.*)/view\\?usp=drivesdk",
                               "https://drive.google.com/thumbnail?id=\\1&sz=w2000", URL),
@@ -57,28 +62,47 @@ process_and_save_data <- function(data) {
     mutate(CAM_ID = if_else(!is.na(CAM_ID_insectary) & CAM_ID_insectary != "NA", CAM_ID_insectary, CAM_ID)) %>%
     left_join(Dorsal_links, by = "CAM_ID") %>%
     left_join(Ventral_links, by = "CAM_ID") %>%
-    mutate(Preservation_date_formatted = format(as.Date(Preservation_date), "%d/%b/%Y"))
+    mutate(Preservation_date_formatted = format(as.Date(Preservation_date), "%d/%b/%Y")) %>% 
+    rename(Species = SPECIES)
   
-  data$CRISPR <- data$CRISPR %>% process_date_columns()
+  data$CRISPR <- data$CRISPR %>% process_date_columns() %>% 
+    mutate(Preservation_date = Emerge_date)
   
-  # Save processed data
-  saveRDS(data$Collection_data, rsd_paths$Collection_data)
-  saveRDS(data$CRISPR, rsd_paths$CRISPR)
-  saveRDS(data$PhotoLinks, rsd_paths$PhotoLinks)  # Optional
+  # Process Insectary_data
+  data$Insectary_data <- data$Insectary_data %>%
+    filter(CAM_ID != "" & CAM_ID != "NA") %>% 
+    process_date_columns() %>%
+    mutate(CAM_ID = if_else(!is.na(CAM_ID_CollData) & CAM_ID_CollData != "NA", CAM_ID_CollData, CAM_ID)) %>%
+    mutate(Preservation_date_formatted = if_else(!is.na(Preservation_date), format(as.Date(Preservation_date), "%d/%b/%Y"), "NA"))
+  
+  # Split SPECIES into Species and Subspecies_Form
+  data$Insectary_data <- data$Insectary_data %>%
+    mutate(Species_full = SPECIES) %>%
+    separate(SPECIES, into = c("Genus", "Species_part", "Subspecies_part"), sep = "\\s+", extra = "merge", fill = "right") %>%
+    mutate(Species = paste(Genus, Species_part),
+           Subspecies_Form = if_else(!is.na(Subspecies_part), Subspecies_part, "None"),
+           SPECIES = Species_full) %>%
+    select(-Genus, -Species_part, -Subspecies_part, -Species_full)
   
   return(data)
 }
 
-# Load or download data
-if (!file.exists(rsd_paths$Collection_data) || !file.exists(rsd_paths$CRISPR)) {
-  rawData <- Download_data()
-  data <- process_and_save_data(rawData)
+# Load or download raw data
+if (!all(file.exists(unlist(rds_paths)))) {
+  rawData <- Download_and_save_raw_data()
 } else {
-  data <- list(
-    Collection_data = readRDS(rsd_paths$Collection_data),
-    PhotoLinks = readRDS(rsd_paths$PhotoLinks),
-    CRISPR = readRDS(rsd_paths$CRISPR)
-  )
+  rawData <- lapply(rds_paths, readRDS)
+  names(rawData) <- names(rds_paths)
+}
+
+# Process the data
+data <- process_data(rawData)
+
+# Helper function to get photo URLs
+get_photo_urls <- function(cam_id) {
+  data$PhotoLinks %>% 
+    filter(str_detect(Name, cam_id) & !str_detect(Name, "(ORF|CR2)$")) %>% 
+    select(Name, URL_to_view)
 }
 
 # UI components
@@ -111,15 +135,17 @@ ui <- navbarPage(
       column(9, 
              wellPanel(
                style = "background-color: #f9f9f9; padding: 5px 5px; border: 1px solid #ccc; border-radius: 5px;",
-               p("Shift + Scroll = Zoom in all photos, Ctrl + Scroll = Zoom in one photo", 
+               p("Shift + Scroll = Zoom in all photos, Ctrl (Cmd on Mac) + Scroll = Zoom in one photo", 
                  style = "font-size: 16px; text-align: center;")
              ),
              align = "center"),
       column(3, 
              actionButton("reset_zoom", "Reset Zoom", style = 'background-color:#D3D3D3'))
-    ),
+    )
   ),
-  tabPanel("Search by Taxa",
+  
+  # Reordered and renamed tabs
+  tabPanel("Collection",
            fluidPage(
              fluidRow(
                column(3, 
@@ -166,6 +192,38 @@ ui <- navbarPage(
              uiOutput("taxa_photos_display")
            )
   ),
+  
+  tabPanel("Insectary",
+           fluidPage(
+             fluidRow(
+               column(3,
+                      selectizeInput("insectary_species_selection", "Select Species",
+                                     choices = NULL,
+                                     multiple = TRUE, 
+                                     options = list(placeholder = 'Choose a species'))),
+               column(3,
+                      selectizeInput("insectary_subspecies_selection", "Select Subspecies",
+                                     choices = NULL,
+                                     selected = "All",
+                                     options = list(placeholder = 'Choose a subspecies'))),
+               column(3,
+                      selectInput("insectary_sex_selection", "Select Sex",
+                                  choices = c("male", "female", "male and female"),
+                                  selected = "male and female")),
+               column(3,
+                      selectizeInput("insectary_id_selection", "Select Insectary ID",
+                                     choices = NULL,
+                                     selected = "All",
+                                     options = list(placeholder = 'Choose an ID')))
+             ),
+             fluidRow(
+               column(12,
+                      actionButton("insectary_show_photos", "Show Photos", class = "btn-primary"))
+             ),
+             uiOutput("insectary_photos_display")
+           )
+  ),
+  
   tabPanel("CRISPR",
            fluidPage(
              fluidRow(
@@ -191,6 +249,7 @@ ui <- navbarPage(
              uiOutput("crispr_photos_display")
            )
   ),
+  
   tabPanel("Search by CAMID",
            fluidPage(
              fluidRow(
@@ -201,7 +260,8 @@ ui <- navbarPage(
                )
              ),
              uiOutput("collection_search_results"),
-             uiOutput("crispr_search_results")
+             uiOutput("crispr_search_results"),
+             uiOutput("insectary_search_results")
            )
   )
 )
@@ -211,8 +271,8 @@ server <- function(input, output, session) {
   
   # Update database button
   observeEvent(input$update_database, {
-    rawData <- Download_data()
-    data <<- process_and_save_data(rawData)
+    rawData <- Download_and_save_raw_data()
+    data <<- process_data(rawData)
   })
   
   # Function to create thumbnails (always with Panzoom)
@@ -223,46 +283,55 @@ server <- function(input, output, session) {
   }
   
   # Function to render thumbnails
-  renderThumbnails <- function(displayId, filteredData, isCRISPR = FALSE) {
+  renderThumbnails <- function(displayId, filteredData, data_source, side_selection = "Dorsal and Ventral") {
     output[[displayId]] <- renderUI({
       if (nrow(filteredData) > 0) {
         img_tags <- lapply(1:nrow(filteredData), function(i) {
-          img_display <- if (isCRISPR && !is.null(filteredData$Photo_URLs[[i]])) {
+          # Generate image displays based on data_source
+          if (data_source %in% c("CRISPR", "Insectary") && !is.null(filteredData$Photo_URLs[[i]])) {
             photos <- filteredData$Photo_URLs[[i]]
-            lapply(1:nrow(photos), function(j) {
+            img_display <- lapply(1:nrow(photos), function(j) {
               createThumbnail(photos$URL_to_view[j], photos$Name[j])
             })
           } else {
-            side_selection <- switch(input$taxa_side_selection,
-                                     "Dorsal" = list(createThumbnail(filteredData$URLd[i], "Dorsal Side")),
-                                     "Ventral" = list(createThumbnail(filteredData$URLv[i], "Ventral Side")),
-                                     "Dorsal and Ventral" = list(
-                                       createThumbnail(filteredData$URLd[i], "Dorsal Side"),
-                                       createThumbnail(filteredData$URLv[i], "Ventral Side")
-                                     ))
+            img_display <- switch(side_selection,
+                                  "Dorsal" = list(createThumbnail(filteredData$URLd[i], "Dorsal Side")),
+                                  "Ventral" = list(createThumbnail(filteredData$URLv[i], "Ventral Side")),
+                                  "Dorsal and Ventral" = list(
+                                    createThumbnail(filteredData$URLd[i], "Dorsal Side"),
+                                    createThumbnail(filteredData$URLv[i], "Ventral Side")
+                                  ))
           }
           
+          # Arrange images in rows
           img_display_rows <- lapply(seq(1, length(img_display), by = 2), function(k) {
             div(style = "display: flex; justify-content: space-around;",
                 img_display[k:min(k+1, length(img_display))]
             )
           })
           
-          info_tags <- if (isCRISPR) {
-            fluidRow(
-              column(6, p(paste("Species:", filteredData$Species[i]))),
-              column(6, p(paste("Sex:", filteredData$Sex[i]))),
-              column(6, p(paste("Emerge Date:", format(as.Date(filteredData$Emerge_date[i]), "%d/%b/%Y")))),
-              column(6, p(paste("Mutant:", filteredData$Mutant[i])))
-            )
-          } else {
-            fluidRow(
-              column(6, p(paste("Species:", filteredData$SPECIES[i]))),
-              column(6, p(paste("Subspecies/Form:", filteredData$Subspecies_Form[i]))),
-              column(6, p(paste("Sex:", filteredData$Sex[i]))),
-              column(6, p(paste("Preservation Date:", filteredData$Preservation_date_formatted[i])))
-            )
-          }
+          # Adjust info_tags based on data_source
+          info_tags <- switch(data_source,
+                              "Collection" = fluidRow(
+                                column(6, p(paste("Species:", filteredData$Species[i]))),
+                                column(6, p(paste("Subspecies/Form:", filteredData$Subspecies_Form[i]))),
+                                column(6, p(paste("Sex:", filteredData$Sex[i]))),
+                                column(6, p(paste("Preservation Date:", filteredData$Preservation_date_formatted[i])))
+                              ),
+                              "CRISPR" = fluidRow(
+                                column(6, p(paste("Species:", filteredData$Species[i]))),
+                                column(6, p(paste("Sex:", filteredData$Sex[i]))),
+                                column(6, p(paste("Emerge Date:", format(as.Date(filteredData$Emerge_date[i]), "%d/%b/%Y")))),
+                                column(6, p(paste("Mutant:", filteredData$Mutant[i])))
+                              ),
+                              "Insectary" = fluidRow(
+                                column(6, p(paste("Species:", filteredData$Species[i]))),
+                                column(6, p(paste("Subspecies/Form:", filteredData$Subspecies_Form[i]))),
+                                column(6, p(paste("Sex:", filteredData$Sex[i]))),
+                                column(6, p(paste("Insectary ID:", filteredData$Insectary_ID[i])))
+                              ),
+                              fluidRow()
+          )
           
           tagList(
             h3(style = "font-weight: bold; font-size: larger;", paste("CAM ID:", filteredData$CAM_ID[i])),
@@ -335,11 +404,12 @@ server <- function(input, output, session) {
     })
   }
   
-  # Reactive expressions for taxa selection
-  update_selectize <- function(inputId, choices, default_selected = 'All') {
-    updateSelectizeInput(session, inputId, choices = c("All" = "All", sort(unique(choices))), selected = default_selected)
+  # Function to update selectize inputs
+  update_selectize <- function(inputId, choices, default_selected = 'All', server = FALSE) {
+    updateSelectizeInput(session, inputId, choices = c("All" = "All", sort(unique(choices))), selected = default_selected, server = server)
   }
   
+  # Reactive expressions for taxa selection
   observe({
     update_selectize("taxa_family_selection", data$Collection_data$Family)
   })
@@ -359,12 +429,12 @@ server <- function(input, output, session) {
   observeEvent(input$taxa_tribe_selection, {
     filteredData <- data$Collection_data %>%
       filter(Tribe == input$taxa_tribe_selection | input$taxa_tribe_selection == "All")
-    update_selectize("taxa_species_selection", filteredData$SPECIES, default_selected = NULL)
+    update_selectize("taxa_species_selection", filteredData$Species, default_selected = NULL)
   })
   
   observeEvent(input$taxa_species_selection, {
     filteredData <- data$Collection_data %>%
-      filter(SPECIES %in% input$taxa_species_selection | "All" %in% input$taxa_species_selection)
+      filter(Species %in% input$taxa_species_selection | "All" %in% input$taxa_species_selection)
     update_selectize("taxa_subspecies_selection", filteredData$Subspecies_Form)
   })
   
@@ -375,7 +445,7 @@ server <- function(input, output, session) {
         (Family == input$taxa_family_selection | input$taxa_family_selection == "All"),
         (Subfamily == input$taxa_subfamily_selection | input$taxa_subfamily_selection == "All"),
         (Tribe == input$taxa_tribe_selection | input$taxa_tribe_selection == "All"),
-        (SPECIES %in% input$taxa_species_selection | "All" %in% input$taxa_species_selection),
+        (Species %in% input$taxa_species_selection | "All" %in% input$taxa_species_selection),
         (Subspecies_Form %in% input$taxa_subspecies_selection | "All" %in% input$taxa_subspecies_selection),
         (Sex == input$taxa_sex_selection | input$taxa_sex_selection == "male and female")
       )
@@ -398,7 +468,7 @@ server <- function(input, output, session) {
       }
     }
     
-    renderThumbnails("taxa_photos_display", filteredData)
+    renderThumbnails("taxa_photos_display", filteredData, data_source = "Collection", side_selection = input$taxa_side_selection)
     showNotification(paste(nrow(filteredData), "individuals found"), type = "message")
   })
   
@@ -412,17 +482,17 @@ server <- function(input, output, session) {
   observeEvent(input$crispr_show_photos, {
     filteredCRISPR <- data$CRISPR %>%
       filter(
-        (input$crispr_species_selection == "All" | Species %in% input$crispr_species_selection),
-        (input$crispr_sex_selection == "male and female" | Sex == input$crispr_sex_selection),
-        (input$crispr_mutant_selection == "All" | Mutant == input$crispr_mutant_selection),
+        (Species %in% input$crispr_species_selection | input$crispr_species_selection == "All"),
+        (Sex == input$crispr_sex_selection | input$crispr_sex_selection == "male and female"),
+        (Mutant == input$crispr_mutant_selection | input$crispr_mutant_selection == "All"),
         !is.na(Emerge_date)
       )
     
     if (input$exclude_without_photos) {
-      filteredCRISPR$Photo_URLs <- lapply(filteredCRISPR$CAM_ID, function(cam_id) {
-        data$PhotoLinks %>% filter(str_detect(Name, cam_id)) %>% select(Name, URL_to_view)
-      })
+      filteredCRISPR$Photo_URLs <- lapply(filteredCRISPR$CAM_ID, get_photo_urls)
       filteredCRISPR <- filteredCRISPR[sapply(filteredCRISPR$Photo_URLs, nrow) > 0, ]
+    } else {
+      filteredCRISPR$Photo_URLs <- lapply(filteredCRISPR$CAM_ID, get_photo_urls)
     }
     
     # Apply sorting
@@ -435,11 +505,7 @@ server <- function(input, output, session) {
       }
     }
     
-    filteredCRISPR$Photo_URLs <- lapply(filteredCRISPR$CAM_ID, function(cam_id) {
-      data$PhotoLinks %>% filter(str_detect(Name, cam_id)) %>% select(Name, URL_to_view)
-    })
-    
-    renderThumbnails("crispr_photos_display", filteredCRISPR, isCRISPR = TRUE)
+    renderThumbnails("crispr_photos_display", filteredCRISPR, data_source = "CRISPR")
   })
   
   # Observe event for "Search by CAMID"
@@ -448,18 +514,10 @@ server <- function(input, output, session) {
     camids <- str_split(input$camid_input, "[,\\s]+")[[1]]  # Split by any commas, spaces, or newlines
     camids <- camids[camids != ""]  # Remove empty entries
     
-    # Check if entered CAMIDs are valid
-    valid_camids <- camids[camids %in% c(data$Collection_data$CAM_ID, data$CRISPR$CAM_ID)]
-    invalid_camids <- setdiff(camids, valid_camids)
-    
-    if (length(invalid_camids) > 0) {
-      showNotification(paste("Invalid CAMIDs: ", paste(invalid_camids, collapse = ", ")), type = "error")
-    }
-    
     # Filter the Collection data based on valid CAMIDs
-    filteredCollection <- data$Collection_data %>% filter(CAM_ID %in% valid_camids)
+    filteredCollection <- data$Collection_data %>% filter(CAM_ID %in% camids)
     if (nrow(filteredCollection) > 0) {
-      renderThumbnails("collection_search_results", filteredCollection)
+      renderThumbnails("collection_search_results", filteredCollection, data_source = "Collection")
     } else {
       output$collection_search_results <- renderUI({
         "No valid CAMIDs found in the Collection data."
@@ -467,17 +525,75 @@ server <- function(input, output, session) {
     }
     
     # Filter the CRISPR data based on valid CAMIDs
-    filteredCRISPR <- data$CRISPR %>% filter(CAM_ID %in% valid_camids)
+    filteredCRISPR <- data$CRISPR %>% filter(CAM_ID %in% camids)
     if (nrow(filteredCRISPR) > 0) {
-      filteredCRISPR$Photo_URLs <- lapply(filteredCRISPR$CAM_ID, function(cam_id) {
-        data$PhotoLinks %>% filter(str_detect(Name, cam_id)) %>% select(Name, URL_to_view)
-      })
-      renderThumbnails("crispr_search_results", filteredCRISPR, isCRISPR = TRUE)
+      filteredCRISPR$Photo_URLs <- lapply(filteredCRISPR$CAM_ID, get_photo_urls)
+      renderThumbnails("crispr_search_results", filteredCRISPR, data_source = "CRISPR")
     } else {
       output$crispr_search_results <- renderUI({
         "No valid CAMIDs found in the CRISPR data."
       })
     }
+    
+    # Filter the Insectary data based on valid CAMIDs
+    filteredInsectary <- data$Insectary_data %>% filter(CAM_ID %in% camids)
+    if (nrow(filteredInsectary) > 0) {
+      filteredInsectary$Photo_URLs <- lapply(filteredInsectary$CAM_ID, get_photo_urls)
+      renderThumbnails("insectary_search_results", filteredInsectary, data_source = "Insectary")
+    } else {
+      output$insectary_search_results <- renderUI({
+        "No valid CAMIDs found in the Insectary data."
+      })
+    }
+  })
+  
+  # Insectary Gallery tab
+  observe({
+    update_selectize("insectary_species_selection",
+                     choices = data$Insectary_data$Species)
+  })
+  
+  observeEvent(input$insectary_species_selection, {
+    filteredData <- data$Insectary_data %>%
+      filter(Species == input$insectary_species_selection | input$insectary_species_selection == "All")
+    update_selectize("insectary_subspecies_selection",
+                     choices = filteredData$Subspecies_Form)
+    update_selectize("insectary_id_selection",
+                     choices = filteredData$Insectary_ID, server = TRUE)
+  })
+  
+  observeEvent(input$insectary_show_photos, {
+    filteredData <- data$Insectary_data %>%
+      filter(
+        (Species == input$insectary_species_selection | input$insectary_species_selection == "All"),
+        (Subspecies_Form == input$insectary_subspecies_selection | input$insectary_subspecies_selection == "All"),
+        (Sex == input$insectary_sex_selection | input$insectary_sex_selection == "male and female"),
+        (Insectary_ID == input$insectary_id_selection | input$insectary_id_selection == "All")
+      )
+    
+    if (input$exclude_without_photos) {
+      filteredData$Photo_URLs <- lapply(filteredData$CAM_ID, get_photo_urls)
+      filteredData <- filteredData[sapply(filteredData$Photo_URLs, nrow) > 0, ]
+    } else {
+      filteredData$Photo_URLs <- lapply(filteredData$CAM_ID, get_photo_urls)
+    }
+    
+    if (input$one_per_subspecies_sex) {
+      filteredData <- filteredData %>% group_by(Subspecies_Form, Sex) %>% slice(1) %>% ungroup()
+    }
+    
+    # Apply sorting
+    if (input$sort_by != "Row Number") {
+      sortByColumn <- sym(input$sort_by)
+      filteredData <- if (input$sort_order == "asc") {
+        filteredData %>% arrange(!!sortByColumn, CAM_ID)
+      } else {
+        filteredData %>% arrange(desc(!!sortByColumn), desc(CAM_ID))
+      }
+    }
+    
+    renderThumbnails("insectary_photos_display", filteredData, data_source = "Insectary")
+    showNotification(paste(nrow(filteredData), "individuals found"), type = "message")
   })
 }
 
