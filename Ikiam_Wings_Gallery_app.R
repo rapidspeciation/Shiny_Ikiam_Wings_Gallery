@@ -115,11 +115,6 @@ ui <- navbarPage(
     ),
     fluidRow(
       column(3, 
-             actionButton("update_database", "Update Database", 
-                          class = "btn-primary", 
-                          style = "background-color: #262626; margin-top:25px"), 
-             align = "center"),
-      column(3, 
              selectInput("sort_by", "Sort By", 
                          choices = c("Row Number", "CAM_ID", "Preservation_date"), 
                          selected = "Preservation_date")),
@@ -127,6 +122,10 @@ ui <- navbarPage(
              selectInput("sort_order", "Sort Order", 
                          choices = c("Ascending" = "asc", "Descending" = "desc"), 
                          selected = "desc")),
+      column(3, 
+             selectInput("side_selection", "Select Side", 
+                         choices = c("Dorsal", "Ventral", "Dorsal and Ventral"), 
+                         selected = "Dorsal and Ventral")),
       column(3, 
              checkboxInput("exclude_without_photos", "Only Indiv. With Photos", TRUE),
              checkboxInput("one_per_subspecies_sex", "One Per Subspecies/Sex", FALSE))
@@ -179,11 +178,7 @@ ui <- navbarPage(
                column(3, 
                       selectInput("taxa_sex_selection", "Select Sex", 
                                   choices = c("male", "female", "male and female"), 
-                                  selected = "male and female")),
-               column(3, 
-                      selectInput("taxa_side_selection", "Select Side", 
-                                  choices = c("Dorsal", "Ventral", "Dorsal and Ventral"), 
-                                  selected = "Dorsal and Ventral"))
+                                  selected = "male and female"))
              ),
              fluidRow(
                column(3, 
@@ -204,6 +199,7 @@ ui <- navbarPage(
                column(3,
                       selectizeInput("insectary_subspecies_selection", "Select Subspecies",
                                      choices = NULL,
+                                     multiple = TRUE, 
                                      selected = "All",
                                      options = list(placeholder = 'Choose a subspecies'))),
                column(3,
@@ -263,6 +259,13 @@ ui <- navbarPage(
              uiOutput("crispr_search_results"),
              uiOutput("insectary_search_results")
            )
+  ),
+  # Adding the Update Database button as a tabPanel
+  tabPanel(
+    title = tagList(actionButton("update_database", "Update Database", 
+                                 class = "btn-primary", 
+                                 style = "background-color: #262626; margin: -8px;")),
+    value = "update"
   )
 )
 
@@ -290,9 +293,17 @@ server <- function(input, output, session) {
           # Generate image displays based on data_source
           if (data_source %in% c("CRISPR", "Insectary") && !is.null(filteredData$Photo_URLs[[i]])) {
             photos <- filteredData$Photo_URLs[[i]]
-            img_display <- lapply(1:nrow(photos), function(j) {
-              createThumbnail(photos$URL_to_view[j], photos$Name[j])
-            })
+            # Filter photos based on side_selection
+            if (side_selection == "Dorsal") {
+              photos <- photos[grepl("d", photos$Name, ignore.case = TRUE), ]
+            } else if (side_selection == "Ventral") {
+              photos <- photos[grepl("v", photos$Name, ignore.case = TRUE), ]
+            }
+            if (nrow(photos)>0) {
+              img_display <- lapply(1:nrow(photos), function(j) {
+                createThumbnail(photos$URL_to_view[j], photos$Name[j])
+              })
+            }
           } else {
             img_display <- switch(side_selection,
                                   "Dorsal" = list(createThumbnail(filteredData$URLd[i], "Dorsal Side")),
@@ -468,7 +479,7 @@ server <- function(input, output, session) {
       }
     }
     
-    renderThumbnails("taxa_photos_display", filteredData, data_source = "Collection", side_selection = input$taxa_side_selection)
+    renderThumbnails("taxa_photos_display", filteredData, data_source = "Collection", side_selection = input$side_selection)
     showNotification(paste(nrow(filteredData), "individuals found"), type = "message")
   })
   
@@ -488,11 +499,10 @@ server <- function(input, output, session) {
         !is.na(Emerge_date)
       )
     
+    filteredCRISPR$Photo_URLs <- lapply(filteredCRISPR$CAM_ID, get_photo_urls)
+    
     if (input$exclude_without_photos) {
-      filteredCRISPR$Photo_URLs <- lapply(filteredCRISPR$CAM_ID, get_photo_urls)
       filteredCRISPR <- filteredCRISPR[sapply(filteredCRISPR$Photo_URLs, nrow) > 0, ]
-    } else {
-      filteredCRISPR$Photo_URLs <- lapply(filteredCRISPR$CAM_ID, get_photo_urls)
     }
     
     # Apply sorting
@@ -505,7 +515,7 @@ server <- function(input, output, session) {
       }
     }
     
-    renderThumbnails("crispr_photos_display", filteredCRISPR, data_source = "CRISPR")
+    renderThumbnails("crispr_photos_display", filteredCRISPR, data_source = "CRISPR", side_selection = input$side_selection)
   })
   
   # Observe event for "Search by CAMID"
@@ -517,7 +527,7 @@ server <- function(input, output, session) {
     # Filter the Collection data based on valid CAMIDs
     filteredCollection <- data$Collection_data %>% filter(CAM_ID %in% camids)
     if (nrow(filteredCollection) > 0) {
-      renderThumbnails("collection_search_results", filteredCollection, data_source = "Collection")
+      renderThumbnails("collection_search_results", filteredCollection, data_source = "Collection", side_selection = input$side_selection)
     } else {
       output$collection_search_results <- renderUI({
         "No valid CAMIDs found in the Collection data."
@@ -528,7 +538,7 @@ server <- function(input, output, session) {
     filteredCRISPR <- data$CRISPR %>% filter(CAM_ID %in% camids)
     if (nrow(filteredCRISPR) > 0) {
       filteredCRISPR$Photo_URLs <- lapply(filteredCRISPR$CAM_ID, get_photo_urls)
-      renderThumbnails("crispr_search_results", filteredCRISPR, data_source = "CRISPR")
+      renderThumbnails("crispr_search_results", filteredCRISPR, data_source = "CRISPR", side_selection = input$side_selection)
     } else {
       output$crispr_search_results <- renderUI({
         "No valid CAMIDs found in the CRISPR data."
@@ -539,7 +549,7 @@ server <- function(input, output, session) {
     filteredInsectary <- data$Insectary_data %>% filter(CAM_ID %in% camids)
     if (nrow(filteredInsectary) > 0) {
       filteredInsectary$Photo_URLs <- lapply(filteredInsectary$CAM_ID, get_photo_urls)
-      renderThumbnails("insectary_search_results", filteredInsectary, data_source = "Insectary")
+      renderThumbnails("insectary_search_results", filteredInsectary, data_source = "Insectary", side_selection = input$side_selection)
     } else {
       output$insectary_search_results <- renderUI({
         "No valid CAMIDs found in the Insectary data."
@@ -592,7 +602,7 @@ server <- function(input, output, session) {
       }
     }
     
-    renderThumbnails("insectary_photos_display", filteredData, data_source = "Insectary")
+    renderThumbnails("insectary_photos_display", filteredData, data_source = "Insectary", side_selection = input$side_selection)
     showNotification(paste(nrow(filteredData), "individuals found"), type = "message")
   })
 }
