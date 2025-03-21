@@ -23,10 +23,8 @@ It downloads from Google Sheets the database and store a local backup. It transf
   - **One Per Subspecies/Sex**: Show only one individual per subspecies per sex.
   - **Select Side**: Choose to display dorsal, ventral, or both sides.
 - **Zoom Functionality**:
-  - **Zoom Controls**: Use Shift + Scroll to zoom all photos, or Ctrl (Cmd on Mac) + Scroll to zoom individual photos.
-  - **Reset Zoom**: A "Reset Zoom" button resets the zoom level for all images.
-
-## Usage
+  - **Zoom Controls**: Use Shift + Scroll to zoom all photos, Ctrl + Scroll to zoom individual photos, Click & Drag to move one photo, Shift + Arrow Keys to move all photos.
+  - **Reset Zoom**: A button to reset zoom level and position for all images.
 
 ## Usage
 
@@ -35,7 +33,7 @@ To use this Shiny application in RStudio:
 1. **Clone the Repository**:
    - Click on **New Project**.
    - Choose **Version Control**.
-   - Select **Git** and enter the repository URL: `https://github.com/rapidspeciation/Shiny_Ikiam_Wings_Gallery`.
+   - Select **Git** and enter the repository URL: `https://github.com/rapidspeciation/Shiny_Ikiam_Wings_Gallery`
 
 2. **Install Required Packages**:
    - Open `Ikiam_Wings_Gallery_app.R`.

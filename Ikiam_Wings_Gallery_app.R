@@ -111,7 +111,7 @@ ui <- navbarPage(
   header = fluidPage(
     tags$head(
       # Include the Panzoom library from CDN
-      tags$script(src = "https://unpkg.com/@panzoom/panzoom@4.5.1/dist/panzoom.min.js")
+      tags$script(src = "https://unpkg.com/@panzoom/panzoom@4.6.0/dist/panzoom.min.js")
     ),
     fluidRow(
       column(3, 
@@ -134,7 +134,7 @@ ui <- navbarPage(
       column(9, 
              wellPanel(
                style = "background-color: #f9f9f9; padding: 5px 5px; border: 1px solid #ccc; border-radius: 5px;",
-               p("Shift + Scroll = Zoom in all photos, Ctrl (Cmd on Mac) + Scroll = Zoom in one photo", 
+               p("Navigation: Shift + Scroll = Zoom all photos | Ctrl + Scroll = Zoom one photo | Click & Drag = Move one photo | Shift + Arrow Keys = Move all photos", 
                  style = "font-size: 16px; text-align: center;")
              ),
              align = "center"),
@@ -262,9 +262,7 @@ ui <- navbarPage(
   ),
   # Adding the Update Database button as a tabPanel
   tabPanel(
-    title = tagList(actionButton("update_database", "Update Database", 
-                                 class = "btn-primary", 
-                                 style = "background-color: #262626; margin: -8px;")),
+    title = HTML("<button id='update_db_btn' class='btn btn-primary' style='background-color: #262626; border: none; margin: -8px; color: white;'>Update Database</button>"),
     value = "update"
   )
 )
@@ -277,6 +275,16 @@ server <- function(input, output, session) {
     rawData <- Download_and_save_raw_data()
     data <<- process_data(rawData)
   })
+  
+  # Prevent Update database button to act as a tab
+  insertUI(selector = "head", where = "beforeEnd", 
+    ui = tags$script("$(document).on('click', '#update_db_btn', function(e) {
+      e.preventDefault();
+      Shiny.setInputValue('update_database', true, {priority: 'event'});
+      return false;
+    });
+  ")
+  )
   
   # Function to create thumbnails (always with Panzoom)
   createThumbnail <- function(url, alt) {
@@ -381,10 +389,34 @@ server <- function(input, output, session) {
             document.addEventListener("wheel", function(event) {
               if (!event.shiftKey) return;
               event.preventDefault();
-              var deltaScale = event.deltaY < 0 ? 1.1 : 0.9;
+              // Use deltaY or deltaX (whichever has a larger absolute value)
+              var delta = Math.abs(event.deltaY) > Math.abs(event.deltaX) ? event.deltaY : event.deltaX;
+              var deltaScale = delta < 0 ? 1.1 : 0.9;
               window.panzoomInstances.forEach(function(panzoomInstance) {
                 var scale = panzoomInstance.getScale();
                 panzoomInstance.zoom(scale * deltaScale, { animate: false });
+              });
+            });
+            
+            // Add keyboard arrow key support with shift key - highly optimized
+            document.addEventListener("keydown", function(event) {
+              if (!event.shiftKey || !window.panzoomInstances?.length) return;
+              
+              const moveAmount = 5;
+              const moves = {
+                ArrowUp: [0, -moveAmount],
+                ArrowDown: [0, moveAmount],
+                ArrowLeft: [-moveAmount, 0],
+                ArrowRight: [moveAmount, 0]
+              };
+              
+              const direction = moves[event.key];
+              if (!direction) return;
+              
+              event.preventDefault();
+              window.panzoomInstances.forEach(instance => {
+                const {x, y} = instance.getPan();
+                instance.pan(x + direction[0], y + direction[1], {animate: false});
               });
             });
             
