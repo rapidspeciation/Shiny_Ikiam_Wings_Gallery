@@ -5,8 +5,11 @@
 .Rproj.user
 README.md
 screenshots
-deploy.sh
 *.key
 *.json
 *.pem
+credentials.json
+.env
+.DS_Store
+deploy.sh
 *.rds 
