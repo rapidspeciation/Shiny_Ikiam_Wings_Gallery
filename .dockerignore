@@ -1,0 +1,12 @@
+.git
+.gitignore
+.RData
+.Rhistory
+.Rproj.user
+README.md
+screenshots
+deploy.sh
+*.key
+*.json
+*.pem
+*.rds 
