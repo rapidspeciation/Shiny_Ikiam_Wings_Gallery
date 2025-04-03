@@ -1,7 +1,6 @@
 # Load necessary libraries
 library(shiny)
 library(dplyr)
-library(readxl)
 library(stringr)
 library(shinyWidgets)
 library(readr)
