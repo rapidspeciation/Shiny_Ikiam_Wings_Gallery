@@ -17,9 +17,13 @@ COPY Ikiam_Wings_Gallery_app.R /srv/shiny-server/
 # Install only the necessary R packages and their dependencies
 RUN R -e "install.packages(c('shiny', 'dplyr', 'readr', 'stringr', 'shinyWidgets', 'tidyr'), repos='https://cloud.r-project.org/')"
 
-# Note: The R script tries to save/load .rds files. 
-# It will download and save them inside the container if they don't exist.
-# No need to COPY .rds files during the build unless they *must* pre-exist.
+# Download and save the database files during build
+RUN R -e 'app_content <- readLines("/srv/shiny-server/Ikiam_Wings_Gallery_app.R"); \
+    app_content <- app_content[1:(length(app_content)-1)]; \
+    writeLines(app_content, "/srv/shiny-server/temp_app.R"); \
+    source("/srv/shiny-server/temp_app.R"); \
+    Download_and_save_raw_data(); \
+    print("Data downloaded and saved during build phase.")'
 
 # Make the app directory writable by the shiny user
 RUN chown -R shiny:shiny /srv/shiny-server
