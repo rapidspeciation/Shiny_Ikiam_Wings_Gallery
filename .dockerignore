@@ -11,5 +11,4 @@ screenshots
 credentials.json
 .env
 .DS_Store
-deploy.sh
-*.rds 
+deploy.sh 
