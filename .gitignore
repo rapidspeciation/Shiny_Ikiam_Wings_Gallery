@@ -7,3 +7,7 @@
 *.pem
 credentials.json
 .env
+# Local data files
+*.rds
+.DS_Store
+Ikiam_Wings_Gallery.Rproj
