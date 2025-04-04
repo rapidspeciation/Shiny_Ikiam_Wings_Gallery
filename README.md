@@ -2,6 +2,12 @@
 
 Shiny application to view butterfly wing photos of specimens from the ongoing project at Ikiam - Ecuador.
 
+## Deployment
+
+This application is hosted for free on [Google Cloud Run](https://console.cloud.google.com/run) using the prebuilt [rocker/shiny-verse](https://rocker-project.org/images/versioned/shiny.html) Docker container.
+
+[Live applicaton](https://shiny-ikiam-wings-gallery-536988393948.us-central1.run.app)
+
 ## Interface
 
 ![Shiny Ikiam Wings Gallery Interface](screenshots/interface-04-Oct-2024.png)
