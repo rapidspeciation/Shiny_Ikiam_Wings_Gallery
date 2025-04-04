@@ -1,6 +1,7 @@
-FROM rocker/shiny:4.3.2
+FROM rocker/shiny-verse:latest
 
 # Install only essential system dependencies for the required R packages
+# Many packages are already included in shiny-verse
 RUN apt-get update && apt-get install -y \
     libcurl4-openssl-dev \
     libssl-dev \
@@ -14,8 +15,9 @@ RUN mkdir -p /srv/shiny-server/
 # Make sure the filename matches your actual script!
 COPY Ikiam_Wings_Gallery_app.R /srv/shiny-server/
 
-# Install only the necessary R packages and their dependencies
-RUN R -e "install.packages(c('shiny', 'dplyr', 'readr', 'stringr', 'shinyWidgets', 'tidyr'), repos='https://cloud.r-project.org/')"
+# Install all required R packages to be safe
+# Some may already be in shiny-verse but installing again won't hurt
+RUN R -e "install.packages(c('shiny', 'dplyr', 'readr', 'stringr', 'shinyWidgets', 'tidyr'))"
 
 # Download and save the database files during build
 RUN R -e 'app_content <- readLines("/srv/shiny-server/Ikiam_Wings_Gallery_app.R"); \
