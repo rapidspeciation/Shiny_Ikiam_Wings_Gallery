@@ -133,7 +133,7 @@ ui <- navbarPage(
       column(9, 
              wellPanel(
                style = "background-color: #f9f9f9; padding: 5px 5px; border: 1px solid #ccc; border-radius: 5px;",
-               p("Navigation: Shift + Scroll = Zoom all photos | Ctrl + Scroll = Zoom one photo | Click & Drag = Move one photo | Shift + Arrow Keys = Move all photos", 
+               p(HTML("Navigation: Shift + Scroll = Zoom all photos | Ctrl + Scroll = Zoom one photo | Click & Drag = Move one photo | Shift + Arrow Keys = Move all photos<br>Github: <a href='https://github.com/rapidspeciation/Shiny_Ikiam_Wings_Gallery/' target='_blank'>rapidspeciation/Shiny_Ikiam_Wings_Gallery</a>"), 
                  style = "font-size: 16px; text-align: center;")
              ),
              align = "center"),
