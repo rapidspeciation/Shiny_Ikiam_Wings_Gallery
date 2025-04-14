@@ -15,7 +15,6 @@ RUN R -e 'app_content <- readLines("/srv/shiny-server/Ikiam_Wings_Gallery_app.R"
     app_content <- app_content[1:(length(app_content)-1)]; \
     writeLines(app_content, "/srv/shiny-server/temp_app.R"); \
     source("/srv/shiny-server/temp_app.R"); \
-    Download_and_save_raw_data(); \
     print("Data downloaded and saved during build phase.")'
 
 # Make the app directory writable by the shiny user
