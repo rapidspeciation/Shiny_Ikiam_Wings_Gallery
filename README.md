@@ -8,6 +8,8 @@ This application is hosted for free on [Google Cloud Run](https://console.cloud.
 
 [Live applicaton](https://shiny-ikiam-wings-gallery-536988393948.us-central1.run.app)
 
+A red border indicates server disconnection. Current images remain visible but require refresh to restore interactivity.
+
 ## Interface
 
 ![Shiny Ikiam Wings Gallery Interface](screenshots/interface-04-Oct-2024.png)

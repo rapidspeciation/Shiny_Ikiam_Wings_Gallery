@@ -110,7 +110,15 @@ ui <- navbarPage(
   header = fluidPage(
     tags$head(
       # Include the Panzoom library from CDN
-      tags$script(src = "https://unpkg.com/@panzoom/panzoom@4.6.0/dist/panzoom.min.js")
+      tags$script(src = "https://unpkg.com/@panzoom/panzoom@4.6.0/dist/panzoom.min.js"),
+      # Modify disconnect overlay to show border
+      tags$style(type = "text/css",
+        "#shiny-disconnected-overlay {
+          opacity: 1 !important;
+          background-color: transparent !important;
+          border: 5px solid red !important;
+        }"
+      )
     ),
     fluidRow(
       column(3, 
