@@ -4,7 +4,7 @@ This guide provides step-by-step instructions for deploying the Shiny Ikiam Wing
 
 ## Step 1: Launch an EC2 Instance
 
-1. Navigate to the EC2 Console: Go to the AWS Management Console and select EC2.
+1. Navigate to the EC2 Console: Go to [Amazon Elastic Compute Cloud (EC2)](https://aws.amazon.com/ec2/)
 2. Launch Instance: Click "Launch Instance."
 3. Choose an AMI: Select "Amazon Linux 2023 AMI (HVM)," making sure it's the t2.micro instance type (free tier eligible).
 4. Configure Instance Details: Accept the defaults.
