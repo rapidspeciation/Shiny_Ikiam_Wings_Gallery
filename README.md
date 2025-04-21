@@ -4,11 +4,14 @@ Shiny application to view butterfly wing photos of specimens from the ongoing pr
 
 ## Deployment
 
-This application is hosted for free on [Google Cloud Run](https://console.cloud.google.com/run) using the prebuilt [rocker/shiny-verse](https://rocker-project.org/images/versioned/shiny.html) Docker container.
+This application was previously hosted on [Google Cloud Run](https://console.cloud.google.com/run) using the prebuilt [rocker/shiny-verse](https://rocker-project.org/images/versioned/shiny.html) Docker container. It has been migrated to [Amazon Elastic Compute Cloud (EC2)](https://aws.amazon.com/ec2/) using Docker. The custom domain is managed through [FreeDNS](https://freedns.afraid.org).
 
-[Live applicaton](https://shiny-ikiam-wings-gallery-536988393948.us-central1.run.app)
+[Live application](http://wings.gallery.info.gf)
+
+For detailed deployment instructions, see [DEPLOYMENT.md](DEPLOYMENT.md).
 
 A red border indicates server disconnection. Current images remain visible but require refresh to restore interactivity.
+
 
 ## Interface
 
