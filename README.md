@@ -4,7 +4,7 @@ Shiny application to view butterfly wing photos of specimens from the ongoing pr
 
 ## Deployment
 
-This application was previously hosted on [Google Cloud Run](https://console.cloud.google.com/run) using the prebuilt [rocker/shiny-verse](https://rocker-project.org/images/versioned/shiny.html) Docker container. It has been migrated to [Amazon Elastic Compute Cloud (EC2)](https://aws.amazon.com/ec2/) using Docker. The custom domain is managed through [FreeDNS](https://freedns.afraid.org).
+This application was previously hosted on [Google Cloud Run](https://console.cloud.google.com/run) using the prebuilt [rocker/shiny-verse](https://rocker-project.org/images/versioned/shiny.html) Docker container. Google Cloud was slower and took 15 seconds to load the website so the app was migrated to [Amazon Elastic Compute Cloud (EC2)](https://aws.amazon.com/ec2/). The custom domain is managed through [FreeDNS](https://freedns.afraid.org).
 
 [Live application](http://wings.gallery.info.gf)
 
