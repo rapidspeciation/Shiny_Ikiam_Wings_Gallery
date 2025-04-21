@@ -74,8 +74,6 @@ EOF
 sudo nginx -t && sudo systemctl reload nginx
 ```
 
-aws links to the public ip addres with https but you change to http to load the app from port 80. E.g. [http://3.135.192.150](http://3.135.192.150) instead of [https://3.135.192.150](http://3.135.192.150)
-
 ## Step 3: Configure Custom Domain with FreeDNS
 
 1. Go to [https://freedns.afraid.org/](https://freedns.afraid.org/).
