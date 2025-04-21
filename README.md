@@ -1,7 +1,8 @@
 # Shiny Ikiam Wings Gallery
 
 Shiny application to view butterfly wing photos of specimens from the ongoing project at Ikiam - Ecuador.
-[Live application](http://wings.gallery.info.gf)
+
+## [Live application](http://wings.gallery.info.gf)
 
 ## Deployment
 
