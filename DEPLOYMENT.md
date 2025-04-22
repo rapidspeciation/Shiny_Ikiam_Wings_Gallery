@@ -39,8 +39,12 @@ git clone https://github.com/rapidspecretion/Shiny_Ikiam_Wings_Gallery
 cd Shiny_Ikiam_Wings_Gallery
 
 # 5. Build and run the Docker container for the Shiny app
-docker build -t shiny_ikiam_wings .
-docker run -d -p 8080:8080 shiny_ikiam_wings
+docker build -t sikwings_build .
+docker run -d -p 8080:8080 \
+  --name sikwings_instance \
+  --rm \
+  -v /home/ec2-user/Shiny_Ikiam_Wings_Gallery:/srv/shiny-server \
+  sikwings_build
 
 # 6. Install Nginx and disable Apache (if present)
 sudo dnf install nginx -y
@@ -74,7 +78,61 @@ EOF
 sudo nginx -t && sudo systemctl reload nginx
 ```
 
-## Step 3: Configure Custom Domain with FreeDNS
+## Step 3: Run the Shiny App with Auto-Update Support
+
+### 🚀 3.1 Run the app with a live code mount (hot updates via git pull)
+
+This allows you to update your app via git pull without rebuilding the image:
+
+```bash
+docker run -d -p 8080:8080 \
+  --name sikwings_instance \
+  --rm \
+  -v /home/ec2-user/Shiny_Ikiam_Wings_Gallery:/srv/shiny-server \
+  sikwings_build
+```
+
+### 🔄 3.2 Update the app from GitHub and restart the container
+
+Run the following commands whenever you want to pull the latest updates:
+
+```bash
+cd /home/ec2-user/Shiny_Ikiam_Wings_Gallery
+
+# Stop the running container (it will be automatically removed)
+docker stop sikwings_instance
+
+# Pull the latest code
+git pull
+
+# Restart the container with updated code
+docker run -d -p 8080:8080 \
+  --name sikwings_instance \
+  --rm \
+  -v $(pwd):/srv/shiny-server \
+  sikwings_build
+```
+
+That's it! This approach means you only need to build the image once, and after that, updating is as simple as a git pull + restart. The `--rm` flag ensures the container is automatically removed when stopped, keeping your system clean.
+
+> **Note:** If you make changes to the `Dockerfile`, you'll need to rebuild the Docker image. Here's how:
+> 
+> ```bash
+> # Stop the running container
+> docker stop sikwings_instance
+> 
+> # Rebuild the image
+> docker build -t sikwings_build .
+> 
+> # Start a new container with the updated image
+> docker run -d -p 8080:8080 \
+>   --name sikwings_instance \
+>   --rm \
+>   -v $(pwd):/srv/shiny-server \
+>   sikwings_build
+> ```
+
+## Step 4: Configure Custom Domain with FreeDNS
 
 1. Go to [https://freedns.afraid.org/](https://freedns.afraid.org/).
 2. Create an account or log in.
@@ -84,6 +142,6 @@ sudo nginx -t && sudo systemctl reload nginx
    - Enter your EC2 instance's public IPv4 address as the "Destination" (e.g. 3.135.192.150)
    - Save the configuration
 
-## Step 4: Access Your Shiny App
+## Step 5: Access Your Shiny App
 
 Open your web browser and navigate to your custom domain (e.g., http://wings.gallery.info.gf). You should see your Shiny app running. If website is not loading, wait for a few minutes until DNS changes take effect.
