@@ -277,6 +277,12 @@ ui <- navbarPage(
 # Server logic
 server <- function(input, output, session) {
   
+  # Helper variables for pagination
+  display_row_index <- list()   # rows already rendered per displayId
+  data_cache        <- list()   # complete filtered data per displayId
+  side_sel_cache    <- list()   # side‑selection ("Dorsal / Ventral …") per displayId
+  observer_created  <- list()   # flag so the "load‑more" observer is registered once
+  
   # Update database button
   observeEvent(input$update_database, {
     rawData <- Download_and_save_raw_data()
@@ -301,157 +307,190 @@ server <- function(input, output, session) {
   }
   
   # Function to render thumbnails
-  renderThumbnails <- function(displayId, filteredData, data_source, side_selection = "Dorsal and Ventral") {
+  renderThumbnails <- function(displayId, filteredData, data_source,
+                             side_selection = "Dorsal and Ventral", reset = TRUE) {
+    
+    ## cache data & settings
+    data_cache[[displayId]]     <<- filteredData
+    side_sel_cache[[displayId]] <<- side_selection
+    if (reset || is.null(display_row_index[[displayId]]))
+      display_row_index[[displayId]] <<- 0
+    
+    ## slice the next block of ≤200 rows
+    end_row   <- min(display_row_index[[displayId]] + 200, nrow(filteredData))
+    subsetData <- filteredData[seq_len(end_row), , drop = FALSE]
+    display_row_index[[displayId]] <<- end_row
+    
+    ## ----------‑‑‑‑‑‑‑‑‑‑‑‑ ORIGINAL BODY, but use subsetData  ‑‑‑‑‑‑‑‑‑‑‑‑‑‑‑‑ ##
     output[[displayId]] <- renderUI({
-      if (nrow(filteredData) > 0) {
-        img_tags <- lapply(1:nrow(filteredData), function(i) {
-          # Generate image displays based on data_source
-          if (data_source %in% c("CRISPR", "Insectary") && !is.null(filteredData$Photo_URLs[[i]])) {
-            photos <- filteredData$Photo_URLs[[i]]
-            # Filter photos based on side_selection
-            if (side_selection == "Dorsal") {
-              photos <- photos[grepl("d", photos$Name, ignore.case = TRUE), ]
-            } else if (side_selection == "Ventral") {
-              photos <- photos[grepl("v", photos$Name, ignore.case = TRUE), ]
-            }
-            if (nrow(photos)>0) {
-              img_display <- lapply(1:nrow(photos), function(j) {
-                createThumbnail(photos$URL_to_view[j], photos$Name[j])
-              })
-            }
-          } else {
-            img_display <- switch(side_selection,
-                                  "Dorsal" = list(createThumbnail(filteredData$URLd[i], "Dorsal Side")),
-                                  "Ventral" = list(createThumbnail(filteredData$URLv[i], "Ventral Side")),
-                                  "Dorsal and Ventral" = list(
-                                    createThumbnail(filteredData$URLd[i], "Dorsal Side"),
-                                    createThumbnail(filteredData$URLv[i], "Ventral Side")
-                                  ))
+      if (nrow(subsetData) == 0) return("No data available for the selected criteria.")
+      
+      img_tags <- lapply(seq_len(nrow(subsetData)), function(i) {
+        # Generate image displays based on data_source
+        if (data_source %in% c("CRISPR", "Insectary") && !is.null(subsetData$Photo_URLs[[i]])) {
+          photos <- subsetData$Photo_URLs[[i]]
+          # Filter photos based on side_selection
+          if (side_selection == "Dorsal") {
+            photos <- photos[grepl("d", photos$Name, ignore.case = TRUE), ]
+          } else if (side_selection == "Ventral") {
+            photos <- photos[grepl("v", photos$Name, ignore.case = TRUE), ]
           }
-          
-          # Arrange images in rows
-          img_display_rows <- lapply(seq(1, length(img_display), by = 2), function(k) {
-            div(style = "display: flex; justify-content: space-around;",
-                img_display[k:min(k+1, length(img_display))]
-            )
-          })
-          
-          # Adjust info_tags based on data_source
-          info_tags <- switch(data_source,
-                              "Collection" = fluidRow(
-                                column(6, p(paste("Species:", filteredData$Species[i]))),
-                                column(6, p(paste("Subspecies/Form:", filteredData$Subspecies_Form[i]))),
-                                column(6, p(paste("Sex:", filteredData$Sex[i]))),
-                                column(6, p(paste("Preservation Date:", filteredData$Preservation_date_formatted[i])))
-                              ),
-                              "CRISPR" = fluidRow(
-                                column(6, p(paste("Species:", filteredData$Species[i]))),
-                                column(6, p(paste("Sex:", filteredData$Sex[i]))),
-                                column(6, p(paste("Emerge Date:", format(as.Date(filteredData$Emerge_date[i]), "%d/%b/%Y")))),
-                                column(6, p(paste("Mutant:", filteredData$Mutant[i])))
-                              ),
-                              "Insectary" = fluidRow(
-                                column(6, p(paste("Species:", filteredData$Species[i]))),
-                                column(6, p(paste("Subspecies/Form:", filteredData$Subspecies_Form[i]))),
-                                column(6, p(paste("Sex:", filteredData$Sex[i]))),
-                                column(6, p(paste("Insectary ID:", filteredData$Insectary_ID[i])))
-                              ),
-                              fluidRow()
-          )
-          
-          tagList(
-            h3(style = "font-weight: bold; font-size: larger;", paste("CAM ID:", filteredData$CAM_ID[i])),
-            tagList(img_display_rows),
-            info_tags
+          if (nrow(photos)>0) {
+            img_display <- lapply(1:nrow(photos), function(j) {
+              createThumbnail(photos$URL_to_view[j], photos$Name[j])
+            })
+          }
+        } else {
+          img_display <- switch(side_selection,
+                                "Dorsal" = list(createThumbnail(subsetData$URLd[i], "Dorsal Side")),
+                                "Ventral" = list(createThumbnail(subsetData$URLv[i], "Ventral Side")),
+                                "Dorsal and Ventral" = list(
+                                  createThumbnail(subsetData$URLd[i], "Dorsal Side"),
+                                  createThumbnail(subsetData$URLv[i], "Ventral Side")
+                                ))
+        }
+        
+        # Arrange images in rows
+        img_display_rows <- lapply(seq(1, length(img_display), by = 2), function(k) {
+          div(style = "display: flex; justify-content: space-around;",
+              img_display[k:min(k+1, length(img_display))]
           )
         })
         
-        # Include the JavaScript code
-        js_code <- '
-          setTimeout(function() {
-            // Destroy existing Panzoom instances if any
-            if (window.panzoomInstances) {
-              window.panzoomInstances.forEach(function(instance) {
-                instance.destroy();
-              });
-            }
-            window.panzoomInstances = [];
-            var panzoomElements = document.querySelectorAll(".panzoom");
-            
-            panzoomElements.forEach(function(elem) {
-              var panzoomInstance = Panzoom(elem, { maxScale: 5 });
-              window.panzoomInstances.push(panzoomInstance);
-              
-              // Add Ctrl + Wheel zooming for individual images
-              elem.parentElement.addEventListener("wheel", function(event) {
-                if (!event.ctrlKey) return;
-                event.preventDefault();
-                var scale = panzoomInstance.getScale();
-                var deltaScale = event.deltaY < 0 ? scale * 1.1 : scale * 0.9;
-                panzoomInstance.zoom(deltaScale, { animate: false });
-              });
-            });
-            
-            // Add Shift + Wheel zooming that zooms all images
-            document.addEventListener("wheel", function(event) {
-              if (!event.shiftKey) return;
-              event.preventDefault();
-              // Use deltaY or deltaX (whichever has a larger absolute value)
-              var delta = Math.abs(event.deltaY) > Math.abs(event.deltaX) ? event.deltaY : event.deltaX;
-              var deltaScale = delta < 0 ? 1.1 : 0.9;
-              window.panzoomInstances.forEach(function(panzoomInstance) {
-                var scale = panzoomInstance.getScale();
-                panzoomInstance.zoom(scale * deltaScale, { animate: false });
-              });
-            });
-            
-            // Add keyboard arrow key support with shift key - highly optimized
-            document.addEventListener("keydown", function(event) {
-              if (!event.shiftKey || !window.panzoomInstances?.length) return;
-              
-              const moveAmount = 5;
-              const moves = {
-                ArrowUp: [0, -moveAmount],
-                ArrowDown: [0, moveAmount],
-                ArrowLeft: [-moveAmount, 0],
-                ArrowRight: [moveAmount, 0]
-              };
-              
-              const direction = moves[event.key];
-              if (!direction) return;
-              
-              event.preventDefault();
-              window.panzoomInstances.forEach(instance => {
-                const {x, y} = instance.getPan();
-                instance.pan(x + direction[0], y + direction[1], {animate: false});
-              });
-            });
-            
-            // Get the reset button
-            var resetButton = document.getElementById("reset_zoom");
-            
-            // Remove existing event listeners to prevent duplicates
-            resetButton.replaceWith(resetButton.cloneNode(true));
-            
-            resetButton = document.getElementById("reset_zoom");
-            
-            // Add event listener for Reset Zoom button
-            resetButton.addEventListener("click", function() {
-              window.panzoomInstances.forEach(function(panzoomInstance) {
-                panzoomInstance.reset({ animate: false });
-              });
-            });
-            
-          }, 500); // Adjust the delay if necessary
-        '
+        # Adjust info_tags based on data_source
+        info_tags <- switch(data_source,
+                            "Collection" = fluidRow(
+                              column(6, p(paste("Species:", subsetData$Species[i]))),
+                              column(6, p(paste("Subspecies/Form:", subsetData$Subspecies_Form[i]))),
+                              column(6, p(paste("Sex:", subsetData$Sex[i]))),
+                              column(6, p(paste("Preservation Date:", subsetData$Preservation_date_formatted[i])))
+                            ),
+                            "CRISPR" = fluidRow(
+                              column(6, p(paste("Species:", subsetData$Species[i]))),
+                              column(6, p(paste("Sex:", subsetData$Sex[i]))),
+                              column(6, p(paste("Emerge Date:", format(as.Date(subsetData$Emerge_date[i]), "%d/%b/%Y")))),
+                              column(6, p(paste("Mutant:", subsetData$Mutant[i])))
+                            ),
+                            "Insectary" = fluidRow(
+                              column(6, p(paste("Species:", subsetData$Species[i]))),
+                              column(6, p(paste("Subspecies/Form:", subsetData$Subspecies_Form[i]))),
+                              column(6, p(paste("Sex:", subsetData$Sex[i]))),
+                              column(6, p(paste("Insectary ID:", subsetData$Insectary_ID[i])))
+                            ),
+                            fluidRow()
+        )
         
-        img_tags <- c(img_tags, list(tags$script(HTML(js_code))))
-        
-        do.call(tagList, img_tags)
-      } else {
-        "No data available for the selected criteria."
+        tagList(
+          h3(style = "font-weight: bold; font-size: larger;", paste("CAM ID:", subsetData$CAM_ID[i])),
+          tagList(img_display_rows),
+          info_tags
+        )
+      })
+      
+      # Include the JavaScript code
+      js_code <- '
+        setTimeout(function() {
+          // Destroy existing Panzoom instances if any
+          if (window.panzoomInstances) {
+            window.panzoomInstances.forEach(function(instance) {
+              instance.destroy();
+            });
+          }
+          window.panzoomInstances = [];
+          var panzoomElements = document.querySelectorAll(".panzoom");
+          
+          panzoomElements.forEach(function(elem) {
+            var panzoomInstance = Panzoom(elem, { maxScale: 5 });
+            window.panzoomInstances.push(panzoomInstance);
+            
+            // Add Ctrl + Wheel zooming for individual images
+            elem.parentElement.addEventListener("wheel", function(event) {
+              if (!event.ctrlKey) return;
+              event.preventDefault();
+              var scale = panzoomInstance.getScale();
+              var deltaScale = event.deltaY < 0 ? scale * 1.1 : scale * 0.9;
+              panzoomInstance.zoom(deltaScale, { animate: false });
+            });
+          });
+          
+          // Add Shift + Wheel zooming that zooms all images
+          document.addEventListener("wheel", function(event) {
+            if (!event.shiftKey) return;
+            event.preventDefault();
+            // Use deltaY or deltaX (whichever has a larger absolute value)
+            var delta = Math.abs(event.deltaY) > Math.abs(event.deltaX) ? event.deltaY : event.deltaX;
+            var deltaScale = delta < 0 ? 1.1 : 0.9;
+            window.panzoomInstances.forEach(function(panzoomInstance) {
+              var scale = panzoomInstance.getScale();
+              panzoomInstance.zoom(scale * deltaScale, { animate: false });
+            });
+          });
+          
+          // Add keyboard arrow key support with shift key - highly optimized
+          document.addEventListener("keydown", function(event) {
+            if (!event.shiftKey || !window.panzoomInstances?.length) return;
+            
+            const moveAmount = 5;
+            const moves = {
+              ArrowUp: [0, -moveAmount],
+              ArrowDown: [0, moveAmount],
+              ArrowLeft: [-moveAmount, 0],
+              ArrowRight: [moveAmount, 0]
+            };
+            
+            const direction = moves[event.key];
+            if (!direction) return;
+            
+            event.preventDefault();
+            window.panzoomInstances.forEach(instance => {
+              const {x, y} = instance.getPan();
+              instance.pan(x + direction[0], y + direction[1], {animate: false});
+            });
+          });
+          
+          // Get the reset button
+          var resetButton = document.getElementById("reset_zoom");
+          
+          // Remove existing event listeners to prevent duplicates
+          resetButton.replaceWith(resetButton.cloneNode(true));
+          
+          resetButton = document.getElementById("reset_zoom");
+          
+          // Add event listener for Reset Zoom button
+          resetButton.addEventListener("click", function() {
+            window.panzoomInstances.forEach(function(panzoomInstance) {
+              panzoomInstance.reset({ animate: false });
+            });
+          });
+          
+        }, 500); // Adjust the delay if necessary
+      '
+      
+      extra_ui <- list(tags$script(HTML(js_code)))
+      
+      # Append a "Load More" button if there are still rows left
+      if (end_row < nrow(filteredData)) {
+        extra_ui <- c(extra_ui, list(
+          div(style = "text-align:center; margin-top:10px;",
+              actionButton(paste0(displayId, "_load_more"), "Load More"))
+        ))
       }
+      
+      do.call(tagList, c(img_tags, extra_ui))
     })
+    ## ------------------------------------------------------------------------- ##
+    
+    ## register (only once) the observer that shows the next 200 rows
+    if (is.null(observer_created[[displayId]])) {
+      observer_created[[displayId]] <<- TRUE
+      observeEvent(input[[paste0(displayId, "_load_more")]], {
+        renderThumbnails(displayId,
+                         data_cache[[displayId]],
+                         data_source,
+                         side_sel_cache[[displayId]],
+                         reset = FALSE)          # just extend, don't reset counter
+      }, ignoreNULL = TRUE, ignoreInit = TRUE)
+    }
   }
   
   # Function to update selectize inputs
