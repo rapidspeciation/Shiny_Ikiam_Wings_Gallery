@@ -7,49 +7,8 @@ library(readr)
 library(tidyr)  # Added to use separate()
 Sys.setlocale(locale = "en_US.UTF-8")  # Ensure date parsing in English
 
-# Define constants
-gsheet_id <- "1QZj6YgHAJ9NmFXFPCtu-i-1NDuDmAdMF2Wogts7S2_4"
-rds_paths <- list(
-  Collection_data = "Collection_data.rds",
-  PhotoLinks = "PhotoLinks.rds",
-  CRISPR = "CRISPR.rds",
-  Insectary_data = "Insectary_data.rds"
-)
-
-# Function to download data from Google Sheets and save as raw rds files
-Download_and_save_raw_data <- function() {
-  sheets <- c("Collection_data", "Photo_links", "CRISPR", "Insectary_data")
-  data_list <- lapply(sheets, function(sheet_name) {
-    # Show notification for starting download
-    showNotification(paste("Downloading", sheet_name, "sheet..."), 
-                    type = "message", 
-                    duration = NULL,
-                    id = "downloading")
-    
-    url <- paste0("https://docs.google.com/spreadsheets/d/", gsheet_id, "/gviz/tq?tqx=out:csv&sheet=", URLencode(sheet_name))
-    df <- read_csv(url, col_types = cols(.default = "c"))
-    
-    # Show notification for completed download
-    showNotification(paste("Finished downloading", sheet_name, "sheet"), 
-                    type = "message", 
-                    duration = 5,
-                    id = "finished")
-    
-    return(df)
-  })
-  names(data_list) <- c("Collection_data", "PhotoLinks", "CRISPR", "Insectary_data")
-  
-  # Save raw data as rds files
-  mapply(saveRDS, data_list, rds_paths)
-  
-  # Show final completion notification with 5 second duration
-  showNotification("All sheets downloaded and saved successfully!", 
-                  type = "message", 
-                  duration = 5,
-                  id = "downloading")
-  
-  return(data_list)
-}
+# Source the download function and its constants
+source("download_data.R")
 
 # Function to process date columns
 process_date_columns <- function(df) {
@@ -60,14 +19,14 @@ process_date_columns <- function(df) {
 
 # Function to process data
 process_data <- function(data) {
-  data$PhotoLinks <- data$PhotoLinks %>%
+  data$Photo_links <- data$Photo_links %>%
     mutate(URL_to_view = gsub("https://drive.google.com/file/d/(.*)/view\\?usp=drivesdk",
                               "https://drive.google.com/thumbnail?id=\\1&sz=w2000", URL),
            CAM_ID = str_extract(Name, ".*(?=[dv]\\.JPG)"))
   
   # Create Dorsal and Ventral links
   create_links <- function(side) {
-    data$PhotoLinks %>%
+    data$Photo_links %>%
       filter(str_detect(Name, paste0(side, "\\.JPG"))) %>%
       select(CAM_ID, URL = URL_to_view) %>%
       rename_with(~ paste0("URL", side), "URL")
@@ -110,7 +69,7 @@ process_data <- function(data) {
 
 # Load or download raw data
 if (!all(file.exists(unlist(rds_paths)))) {
-  rawData <- Download_and_save_raw_data()
+  rawData <- download_and_save_data(show_toasts = FALSE)
 } else {
   rawData <- lapply(rds_paths, readRDS)
   names(rawData) <- names(rds_paths)
@@ -121,7 +80,7 @@ data <- process_data(rawData)
 
 # Helper function to get photo URLs
 get_photo_urls <- function(cam_id) {
-  data$PhotoLinks %>% 
+  data$Photo_links %>% 
     filter(str_detect(Name, cam_id) & !str_detect(Name, regex("(ORF|CR2)$", ignore_case = TRUE))) %>% 
     select(Name, URL_to_view)
 }
@@ -313,7 +272,7 @@ server <- function(input, output, session) {
   
   # Update database button
   observeEvent(input$update_database, {
-    rawData <- Download_and_save_raw_data()
+    rawData <- download_and_save_data(show_toasts = TRUE)
     data <<- process_data(rawData)
   })
   
