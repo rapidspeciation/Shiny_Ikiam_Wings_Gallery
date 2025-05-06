@@ -20,14 +20,34 @@ rds_paths <- list(
 Download_and_save_raw_data <- function() {
   sheets <- c("Collection_data", "Photo_links", "CRISPR", "Insectary_data")
   data_list <- lapply(sheets, function(sheet_name) {
+    # Show notification for starting download
+    showNotification(paste("Downloading", sheet_name, "sheet..."), 
+                    type = "message", 
+                    duration = NULL,
+                    id = "downloading")
+    
     url <- paste0("https://docs.google.com/spreadsheets/d/", gsheet_id, "/gviz/tq?tqx=out:csv&sheet=", URLencode(sheet_name))
-    read_csv(url, col_types = cols(.default = "c"))
+    df <- read_csv(url, col_types = cols(.default = "c"))
+    
+    # Show notification for completed download
+    showNotification(paste("Finished downloading", sheet_name, "sheet"), 
+                    type = "message", 
+                    duration = 5,
+                    id = "finished")
+    
+    return(df)
   })
   names(data_list) <- c("Collection_data", "PhotoLinks", "CRISPR", "Insectary_data")
-  message("Data loaded from Google Sheets.")
   
   # Save raw data as rds files
   mapply(saveRDS, data_list, rds_paths)
+  
+  # Show final completion notification with 5 second duration
+  showNotification("All sheets downloaded and saved successfully!", 
+                  type = "message", 
+                  duration = 5,
+                  id = "downloading")
+  
   return(data_list)
 }
 
@@ -62,10 +82,12 @@ process_data <- function(data) {
     left_join(Dorsal_links, by = "CAM_ID") %>%
     left_join(Ventral_links, by = "CAM_ID") %>%
     mutate(Preservation_date_formatted = format(as.Date(Preservation_date), "%d/%b/%Y")) %>% 
-    rename(Species = SPECIES)
+    rename(Species = SPECIES) %>%
+    mutate(ID_status = if_else(is.na(ID_status), "NA", ID_status))
   
   data$CRISPR <- data$CRISPR %>% process_date_columns() %>% 
-    mutate(Preservation_date = Emerge_date)
+    mutate(Preservation_date = Emerge_date) %>% 
+    mutate(Mutant = if_else(is.na(Mutant), "NA", Mutant))
   
   # Process Insectary_data
   data$Insectary_data <- data$Insectary_data %>%
@@ -100,7 +122,7 @@ data <- process_data(rawData)
 # Helper function to get photo URLs
 get_photo_urls <- function(cam_id) {
   data$PhotoLinks %>% 
-    filter(str_detect(Name, cam_id) & !str_detect(Name, "(ORF|CR2)$")) %>% 
+    filter(str_detect(Name, cam_id) & !str_detect(Name, regex("(ORF|CR2)$", ignore_case = TRUE))) %>% 
     select(Name, URL_to_view)
 }
 
@@ -185,7 +207,13 @@ ui <- navbarPage(
                column(3, 
                       selectInput("taxa_sex_selection", "Select Sex", 
                                   choices = c("male", "female", "male and female"), 
-                                  selected = "male and female"))
+                                  selected = "male and female")),
+               column(3,
+                      selectizeInput("taxa_id_status_selection", "Select ID Status",
+                                    choices = NULL,
+                                    multiple = TRUE,
+                                    selected = "All",
+                                    options = list(placeholder = 'Choose ID status')))
              ),
              fluidRow(
                column(3, 
@@ -242,7 +270,7 @@ ui <- navbarPage(
                                   selected = "male and female")),
                column(3, 
                       selectInput("crispr_mutant_selection", "Mutant", 
-                                  choices = c("Yes", "No", "Check", "All"), 
+                                  choices = c("Yes", "No", "Check", "All", "NA"), 
                                   selected = "All"))
              ),
              fluidRow(
@@ -324,6 +352,12 @@ server <- function(input, output, session) {
     ## ----------‑‑‑‑‑‑‑‑‑‑‑‑ ORIGINAL BODY, but use subsetData  ‑‑‑‑‑‑‑‑‑‑‑‑‑‑‑‑ ##
     output[[displayId]] <- renderUI({
       if (nrow(subsetData) == 0) return("No data available for the selected criteria.")
+      
+      # Add the count message before the images
+      count_message <- div(
+        style = "text-align: center; font-size: 18px; margin-bottom: 20px; font-weight: bold;",
+        paste(nrow(subsetData), "individuals found")
+      )
       
       img_tags <- lapply(seq_len(nrow(subsetData)), function(i) {
         # Generate image displays based on data_source
@@ -476,7 +510,7 @@ server <- function(input, output, session) {
         ))
       }
       
-      do.call(tagList, c(img_tags, extra_ui))
+      do.call(tagList, c(list(count_message), img_tags, extra_ui))
     })
     ## ------------------------------------------------------------------------- ##
     
@@ -501,6 +535,7 @@ server <- function(input, output, session) {
   # Reactive expressions for taxa selection
   observe({
     update_selectize("taxa_family_selection", data$Collection_data$Family)
+    update_selectize("taxa_id_status_selection", data$Collection_data$ID_status)
   })
   
   observeEvent(input$taxa_family_selection, {
@@ -536,7 +571,8 @@ server <- function(input, output, session) {
         (Tribe == input$taxa_tribe_selection | input$taxa_tribe_selection == "All"),
         (Species %in% input$taxa_species_selection | "All" %in% input$taxa_species_selection),
         (Subspecies_Form %in% input$taxa_subspecies_selection | "All" %in% input$taxa_subspecies_selection),
-        (Sex == input$taxa_sex_selection | input$taxa_sex_selection == "male and female")
+        (Sex == input$taxa_sex_selection | input$taxa_sex_selection == "male and female"),
+        (ID_status %in% input$taxa_id_status_selection | "All" %in% input$taxa_id_status_selection)
       )
     
     if (input$exclude_without_photos) {
@@ -558,7 +594,6 @@ server <- function(input, output, session) {
     }
     
     renderThumbnails("taxa_photos_display", filteredData, data_source = "Collection", side_selection = input$side_selection)
-    showNotification(paste(nrow(filteredData), "individuals found"), type = "message")
   })
   
   # Observe event for "CRISPR" tab
@@ -681,7 +716,6 @@ server <- function(input, output, session) {
     }
     
     renderThumbnails("insectary_photos_display", filteredData, data_source = "Insectary", side_selection = input$side_selection)
-    showNotification(paste(nrow(filteredData), "individuals found"), type = "message")
   })
 }
 
