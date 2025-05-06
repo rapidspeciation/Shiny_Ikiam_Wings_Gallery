@@ -315,7 +315,8 @@ server <- function(input, output, session) {
       # Add the count message before the images
       count_message <- div(
         style = "text-align: center; font-size: 18px; margin-bottom: 20px; font-weight: bold;",
-        paste(nrow(subsetData), "individuals found")
+        paste(nrow(filteredData), "individuals found", 
+              if (end_row < nrow(filteredData)) paste0("(", end_row, " shown)") else "")
       )
       
       img_tags <- lapply(seq_len(nrow(subsetData)), function(i) {
