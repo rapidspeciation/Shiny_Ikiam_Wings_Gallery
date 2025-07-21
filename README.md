@@ -23,6 +23,16 @@ It downloads from Google Sheets the database and store a local backup. It transf
 
 ## Features
 
+- **Google Drive Data Source**: The application's data is sourced from Google Sheets, which are populated by a custom Google Apps Script, [`list_google_drive_files.gs`](./list_google_drive_files.gs). This script recursively lists files and folders from specified Google Drive locations into a "Photo_links" sheet.
+
+  To handle large numbers of files without exceeding Google's 6-minute script execution limit, the script utilizes the [LongRun](https://github.com/inclu-cat/LongRun/tree/main) library. To set up this script in your own Google Sheet, you will need to:
+
+  1. Create a new Google Apps Script project by navigating to `Extensions > Apps Script` in your Google Sheet.
+  2. Create a script file named `list_google_drive_files.gs` and paste the provided code.
+  3. Create another script file named `LongRun.gs` and paste the content from [this file](https://github.com/inclu-cat/LongRun/blob/main/generated-gs/LongRun.gs).
+  4. Configure the `FOLDER_MAPPING` constant in `list_google_drive_files.gs` with your Google Drive folder IDs.
+  5. Run the `showFolderSelector` function from the Apps Script editor or via the "List Files/Folders" menu in the Google Sheet.
+
 - **Database Update**: Provides a button on the Shiny interface to update the local database. 
 - **Collection Tab**: Filter individuals based on Family, Subfamily, Tribe, Species, Subspecies/Form, and Sex. Options to sort results and display dorsal, ventral, or both sides of the specimens.
 - **Insectary Tab**: View photos of specimens from the insectary. Filter by Species, Subspecies/Form, Sex, and Insectary ID.
