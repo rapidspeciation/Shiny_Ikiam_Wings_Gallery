@@ -30,8 +30,9 @@ It downloads from Google Sheets the database and store a local backup. It transf
   1. Create a new Google Apps Script project by navigating to `Extensions > Apps Script` in your Google Sheet.
   2. Create a script file named `list_google_drive_files.gs` and paste the provided code.
   3. Create another script file named `LongRun.gs` and paste the content from [this file](https://github.com/inclu-cat/LongRun/blob/main/generated-gs/LongRun.gs).
-  4. Configure the `FOLDER_MAPPING` constant in `list_google_drive_files.gs` with your Google Drive folder IDs.
-  5. Run the `showFolderSelector` function from the Apps Script editor or via the "List Files/Folders" menu in the Google Sheet.
+  4. Enable the Drive API service. In the Apps Script editor, click on 'Services +' in the left-hand menu, select 'Drive API', and click 'Add'. This is required to fetch the 'Capture Date' for photos.
+  5. Configure the `FOLDER_MAPPING` constant in `list_google_drive_files.gs` with your Google Drive folder IDs.
+  6. Run the `showFolderSelector` function from the Apps Script editor or via the "List Files/Folders" menu in the Google Sheet.
 
 - **Database Update**: Provides a button on the Shiny interface to update the local database. 
 - **Collection Tab**: Filter individuals based on Family, Subfamily, Tribe, Species, Subspecies/Form, and Sex. Options to sort results and display dorsal, ventral, or both sides of the specimens.
