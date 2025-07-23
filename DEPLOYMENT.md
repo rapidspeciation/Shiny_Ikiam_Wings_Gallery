@@ -145,3 +145,33 @@ That's it! This approach means you only need to build the image once, and after 
 ## Step 5: Access Your Shiny App
 
 Open your web browser and navigate to your custom domain (e.g., http://wings.gallery.info.gf). You should see your Shiny app running. If website is not loading, wait for a few minutes until DNS changes take effect.
+
+
+## Step 6: (Recommended) Enable HTTPS with Certbot
+
+To secure your application with a free SSL certificate from Let's Encrypt, follow these steps.
+
+### 6.1. Update Security Group for HTTPS
+Before running Certbot, allow HTTPS traffic to your instance.
+1.  In the **EC2 Console**, navigate to **Security Groups** and select the one attached to your instance.
+2.  Click **Edit inbound rules**.
+3.  Add a new rule:
+    *   **Type**: `HTTPS`
+    *   **Port range**: `443`
+    *   **Source**: `Anywhere-IPv4` (`0.0.0.0/0`)
+4.  Save the rules.
+
+### 6.2. Install and Run Certbot
+Connect to your instance and run the following commands.
+
+```bash
+# Install Certbot and the Nginx plugin for Amazon Linux 2023
+sudo dnf install certbot python3-certbot-nginx -y
+
+# Request a certificate and have Certbot configure Nginx automatically
+sudo certbot --nginx -d wings.gallery.info.gf
+```
+
+Certbot will ask for an email and for you to agree to the terms of service. When prompted, choose the option to **redirect** HTTP traffic to HTTPS.
+
+Once complete, Certbot will automatically update your Nginx configuration and reload the server. You can now securely access your Shiny app at `https://wings.gallery.info.gf`.
