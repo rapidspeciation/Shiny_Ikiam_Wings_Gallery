@@ -487,39 +487,48 @@ server <- function(input, output, session) {
     }
   }
   
-  # Function to update selectize inputs
-  update_selectize <- function(inputId, choices, default_selected = 'All', server = FALSE) {
-    updateSelectizeInput(session, inputId, choices = c("All" = "All", sort(unique(choices))), selected = default_selected, server = server)
+  # Small, explicit helper for selectize inputs
+  set_selectize <- function(inputId, choices, selected = "All", add_all = TRUE, server = FALSE) {
+    ch <- sort(unique(na.omit(choices)))
+    if (add_all) ch <- c("All" = "All", ch)
+    updateSelectizeInput(session, inputId, choices = ch, selected = selected, server = server)
+  }
+  
+  # Centralized sorting function
+  apply_sort <- function(df, sort_by, sort_order, date_col_map = NULL) {
+    if (identical(sort_by, "Row Number")) return(df)
+    col <- rlang::sym(if (!is.null(date_col_map) && sort_by %in% names(date_col_map)) date_col_map[[sort_by]] else sort_by)
+    if (identical(sort_order, "asc")) arrange(df, !!col, CAM_ID) else arrange(df, desc(!!col), desc(CAM_ID))
   }
   
   # Reactive expressions for taxa selection
   observe({
-    update_selectize("taxa_family_selection", data$Collection_data$Family)
-    update_selectize("taxa_id_status_selection", data$Collection_data$ID_status)
+    set_selectize("taxa_family_selection", data$Collection_data$Family)
+    set_selectize("taxa_id_status_selection", data$Collection_data$ID_status)
   })
   
   observeEvent(input$taxa_family_selection, {
     filteredData <- data$Collection_data %>%
       filter(Family == input$taxa_family_selection | input$taxa_family_selection == "All")
-    update_selectize("taxa_subfamily_selection", filteredData$Subfamily)
+    set_selectize("taxa_subfamily_selection", filteredData$Subfamily)
   })
   
   observeEvent(input$taxa_subfamily_selection, {
     filteredData <- data$Collection_data %>%
       filter(Subfamily == input$taxa_subfamily_selection | input$taxa_subfamily_selection == "All")
-    update_selectize("taxa_tribe_selection", filteredData$Tribe)
+    set_selectize("taxa_tribe_selection", filteredData$Tribe)
   })
   
   observeEvent(input$taxa_tribe_selection, {
     filteredData <- data$Collection_data %>%
       filter(Tribe == input$taxa_tribe_selection | input$taxa_tribe_selection == "All")
-    update_selectize("taxa_species_selection", filteredData$Species, default_selected = NULL)
+    set_selectize("taxa_species_selection", filteredData$Species, selected = NULL)
   })
   
   observeEvent(input$taxa_species_selection, {
     filteredData <- data$Collection_data %>%
       filter(Species %in% input$taxa_species_selection | "All" %in% input$taxa_species_selection)
-    update_selectize("taxa_subspecies_selection", filteredData$Subspecies_Form)
+    set_selectize("taxa_subspecies_selection", filteredData$Subspecies_Form)
   })
   
   # Observe event for "Search by Taxa"
@@ -544,23 +553,15 @@ server <- function(input, output, session) {
     }
     
     # Apply sorting
-    if (input$sort_by != "Row Number") {
-      sortByColumn <- sym(input$sort_by)
-      filteredData <- if (input$sort_order == "asc") {
-        filteredData %>% arrange(!!sortByColumn, CAM_ID)
-      } else {
-        filteredData %>% arrange(desc(!!sortByColumn), desc(CAM_ID))
-      }
-    }
+    filteredData <- apply_sort(filteredData, input$sort_by, input$sort_order,
+                               date_col_map = c(Preservation_date = "Preservation_date"))
     
     renderThumbnails("taxa_photos_display", filteredData, data_source = "Collection", side_selection = input$side_selection)
   })
   
   # Observe event for "CRISPR" tab
   observe({
-    updateSelectizeInput(session, "crispr_species_selection", 
-                         choices = c("All", unique(data$CRISPR$Species)), 
-                         selected = "All")
+    set_selectize("crispr_species_selection", data$CRISPR$Species)
   })
   
   observeEvent(input$crispr_show_photos, {
@@ -579,14 +580,8 @@ server <- function(input, output, session) {
     }
     
     # Apply sorting
-    if (input$sort_by != "Row Number") {
-      sortByColumn <- sym(ifelse(input$sort_by == "Preservation_date", "Emerge_date", input$sort_by))
-      filteredCRISPR <- if (input$sort_order == "asc") {
-        filteredCRISPR %>% arrange(!!sortByColumn, CAM_ID)
-      } else {
-        filteredCRISPR %>% arrange(desc(!!sortByColumn), desc(CAM_ID))
-      }
-    }
+    filteredCRISPR <- apply_sort(filteredCRISPR, input$sort_by, input$sort_order,
+                                 date_col_map = c(Preservation_date = "Emerge_date"))
     
     renderThumbnails("crispr_photos_display", filteredCRISPR, data_source = "CRISPR", side_selection = input$side_selection)
   })
@@ -632,17 +627,14 @@ server <- function(input, output, session) {
   
   # Insectary Gallery tab
   observe({
-    update_selectize("insectary_species_selection",
-                     choices = data$Insectary_data$Species)
+    set_selectize("insectary_species_selection", data$Insectary_data$Species)
   })
   
   observeEvent(input$insectary_species_selection, {
     filteredData <- data$Insectary_data %>%
       filter(Species == input$insectary_species_selection | input$insectary_species_selection == "All")
-    update_selectize("insectary_subspecies_selection",
-                     choices = filteredData$Subspecies_Form)
-    update_selectize("insectary_id_selection",
-                     choices = filteredData$Insectary_ID, server = TRUE)
+    set_selectize("insectary_subspecies_selection", filteredData$Subspecies_Form)
+    set_selectize("insectary_id_selection", filteredData$Insectary_ID, server = TRUE)
   })
   
   observeEvent(input$insectary_show_photos, {
@@ -666,14 +658,8 @@ server <- function(input, output, session) {
     }
     
     # Apply sorting
-    if (input$sort_by != "Row Number") {
-      sortByColumn <- sym(input$sort_by)
-      filteredData <- if (input$sort_order == "asc") {
-        filteredData %>% arrange(!!sortByColumn, CAM_ID)
-      } else {
-        filteredData %>% arrange(desc(!!sortByColumn), desc(CAM_ID))
-      }
-    }
+    filteredData <- apply_sort(filteredData, input$sort_by, input$sort_order,
+                               date_col_map = c(Preservation_date = "Preservation_date"))
     
     renderThumbnails("insectary_photos_display", filteredData, data_source = "Insectary", side_selection = input$side_selection)
   })
