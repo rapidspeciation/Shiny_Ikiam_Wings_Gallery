@@ -531,17 +531,19 @@ server <- function(input, output, session) {
     set_selectize("taxa_subspecies_selection", filteredData$Subspecies_Form)
   })
   
+  # Helper for filtering
+  `%in_all%` <- function(taxa, select) { ("All" %in% select) | (taxa %in% select) }
   # Observe event for "Search by Taxa"
   observeEvent(input$taxa_show_photos, {
     filteredData <- data$Collection_data %>%
       filter(
-        (Family == input$taxa_family_selection | input$taxa_family_selection == "All"),
-        (Subfamily == input$taxa_subfamily_selection | input$taxa_subfamily_selection == "All"),
-        (Tribe == input$taxa_tribe_selection | input$taxa_tribe_selection == "All"),
-        (Species %in% input$taxa_species_selection | "All" %in% input$taxa_species_selection),
-        (Subspecies_Form %in% input$taxa_subspecies_selection | "All" %in% input$taxa_subspecies_selection),
-        (Sex == input$taxa_sex_selection | input$taxa_sex_selection == "male and female"),
-        (ID_status %in% input$taxa_id_status_selection | "All" %in% input$taxa_id_status_selection)
+        Family          %in_all% input$taxa_family_selection,
+        Subfamily       %in_all% input$taxa_subfamily_selection,
+        Tribe           %in_all% input$taxa_tribe_selection,
+        Species         %in_all% input$taxa_species_selection,
+        Subspecies_Form %in_all% input$taxa_subspecies_selection,
+        if (identical(input$taxa_sex_selection, "male and female")) TRUE else Sex %in_all% input$taxa_sex_selection,
+        ID_status       %in_all% input$taxa_id_status_selection
       )
     
     if (input$exclude_without_photos) {
