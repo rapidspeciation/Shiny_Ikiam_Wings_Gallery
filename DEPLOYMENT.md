@@ -175,3 +175,13 @@ sudo certbot --nginx -d wings.gallery.info.gf
 Certbot will ask for an email and for you to agree to the terms of service. When prompted, choose the option to **redirect** HTTP traffic to HTTPS.
 
 Once complete, Certbot will automatically update your Nginx configuration and reload the server. You can now securely access your Shiny app at `https://wings.gallery.info.gf`.
+
+### 6.3. Enable automatic certificate renewal (systemd timer)
+
+On Amazon Linux 2023, the `certbot` package ships with a `certbot-renew.timer`
+unit that periodically runs `certbot renew`. Enable it once on each new server:
+
+```bash
+sudo systemctl enable --now certbot-renew.timer
+systemctl list-timers | grep certbot
+```
