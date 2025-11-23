@@ -67,7 +67,6 @@ const displayPhotos = () => {
     const nameA = a.Name.toLowerCase()
     const nameB = b.Name.toLowerCase()
     
-    // Check for standard endings
     const isDorsalA = nameA.includes('d.jpg')
     const isDorsalB = nameB.includes('d.jpg')
     const isVentralA = nameA.includes('v.jpg')
@@ -75,10 +74,8 @@ const displayPhotos = () => {
 
     if (isDorsalA && !isDorsalB) return -1
     if (!isDorsalA && isDorsalB) return 1
-    
     if (isVentralA && !isVentralB) return -1
     if (!isVentralA && isVentralB) return 1
-    
     return nameA.localeCompare(nameB)
   })
 }
@@ -104,14 +101,31 @@ const displayPhotos = () => {
     <!-- Metadata Footer -->
     <div class="mt-2 text-start small bg-light p-2 rounded-bottom border-top">
       <div class="row g-1">
-        <div class="col-12"><strong>Species:</strong> {{ item.Species }}</div>
-        <div class="col-12" v-if="item.Subspecies_Form && item.Subspecies_Form !== 'None'">
+        <!-- Species: Always Full Width -->
+        <div class="col-12">
+          <strong>Species:</strong> {{ item.Species }}
+        </div>
+        
+        <!-- Subspecies: Full Width, Only if exists -->
+        <div class="col-12" v-if="item.Subspecies_Form && item.Subspecies_Form !== 'None' && item.Subspecies_Form !== 'NA'">
             <strong>Subsp:</strong> {{ item.Subspecies_Form }}
         </div>
-        <div class="col-6"><strong>Sex:</strong> {{ item.Sex }}</div>
-        <div class="col-6 text-end">{{ item.Preservation_date_formatted }}</div>
-        <div class="col-12" v-if="item.Insectary_ID"><strong>Ins. ID:</strong> {{ item.Insectary_ID }}</div>
-        <div class="col-12" v-if="item.Mutant && item.Mutant !== 'NA'"><strong>Mutant:</strong> {{ item.Mutant }}</div>
+
+        <!-- Sex & Date: Always split 50/50 -->
+        <div class="col-6">
+          <strong>Sex:</strong> {{ item.Sex || 'NA' }}
+        </div>
+        <div class="col-6 text-end">
+          {{ item.Preservation_date_formatted }}
+        </div>
+
+        <!-- Extra Info (Insectary/CRISPR specific) -->
+        <div class="col-6" v-if="item.Insectary_ID">
+          <strong>Ins. ID:</strong> {{ item.Insectary_ID }}
+        </div>
+        <div class="col-6 text-end" v-if="item.Mutant && item.Mutant !== 'NA'">
+          <strong>Mutant:</strong> {{ item.Mutant }}
+        </div>
       </div>
     </div>
   </div>
@@ -133,14 +147,8 @@ const displayPhotos = () => {
   align-items: center;
   overflow: hidden;
   width: 100%;
-  /* Optional: Add max-height to keep cards uniform, or remove to let them grow */
 }
 
-/* 
-   Special Case: If there is only 1 photo, verify if we want it centered 
-   spanning 2 columns or just on the left.
-   The :only-child pseudo-class makes single photos bigger/centered.
-*/
 .img-wrapper:only-child {
   grid-column: span 2;
 }

@@ -26,7 +26,8 @@ attachGlobalListeners()
 <template>
   <div>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+    <!-- Changed to navbar-expand-md for better tablet support -->
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark sticky-top">
       <div class="container-fluid">
         <a class="navbar-brand" href="#">Ikiam Wings Gallery</a>
         
@@ -39,11 +40,10 @@ attachGlobalListeners()
         <div class="collapse navbar-collapse" id="navbarContent">
           
           <!-- Tabs List -->
-          <!-- Removed me-auto so items stack to the left -->
-          <ul class="navbar-nav mb-2 mb-lg-0">
+          <ul class="navbar-nav mb-2 mb-md-0">
             <li class="nav-item" v-for="(component, name) in tabs" :key="name">
               <a 
-                class="nav-link" 
+                class="nav-link px-2 small-text" 
                 :class="{ active: currentTab === name }" 
                 href="#" 
                 @click.prevent="currentTab = name"
@@ -53,9 +53,9 @@ attachGlobalListeners()
             </li>
           </ul>
           
-          <!-- Reset Button (Now sits immediately next to tabs) -->
-          <div class="d-flex ms-lg-3">
-            <button class="btn btn-sm btn-outline-light" @click="resetAll">
+          <!-- Reset Button -->
+          <div class="d-flex ms-md-3 mt-2 mt-md-0">
+            <button class="btn btn-sm btn-outline-light text-nowrap" @click="resetAll">
               Reset Zoom
             </button>
           </div>
@@ -90,5 +90,9 @@ attachGlobalListeners()
 }
 .nav-link {
   cursor: pointer;
+}
+/* Slightly smaller text for tabs to fit more on screen */
+.small-text {
+  font-size: 0.95rem;
 }
 </style>

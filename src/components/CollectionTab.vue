@@ -149,13 +149,14 @@ const onShowPhotos = () => {
     </div>
 
     <!-- Filters -->
+    <!-- Updated classes to col-6 col-md-3 -->
     <div class="row g-3 mb-4">
-      <div class="col-md-3"><FilterSelect label="Family" v-model="filters.family" :options="families" /></div>
-      <div class="col-md-3"><FilterSelect label="Subfamily" v-model="filters.subfamily" :options="subfamilies" /></div>
-      <div class="col-md-3"><FilterSelect label="Tribe" v-model="filters.tribe" :options="tribes" /></div>
-      <div class="col-md-3"><FilterSelect label="Species" v-model="filters.species" :options="speciesList" :multiple="true" /></div>
-      <div class="col-md-3"><FilterSelect label="Subspecies" v-model="filters.subspecies" :options="subspeciesList" :multiple="true" /></div>
-      <div class="col-md-3">
+      <div class="col-6 col-md-3"><FilterSelect label="Family" v-model="filters.family" :options="families" /></div>
+      <div class="col-6 col-md-3"><FilterSelect label="Subfamily" v-model="filters.subfamily" :options="subfamilies" /></div>
+      <div class="col-6 col-md-3"><FilterSelect label="Tribe" v-model="filters.tribe" :options="tribes" /></div>
+      <div class="col-6 col-md-3"><FilterSelect label="Species" v-model="filters.species" :options="speciesList" :multiple="true" /></div>
+      <div class="col-6 col-md-3"><FilterSelect label="Subspecies" v-model="filters.subspecies" :options="subspeciesList" :multiple="true" /></div>
+      <div class="col-6 col-md-3">
          <label class="form-label small fw-bold">Sex</label>
          <select class="form-select" v-model="filters.sex">
            <option>male and female</option>
@@ -163,7 +164,7 @@ const onShowPhotos = () => {
            <option>female</option>
          </select>
       </div>
-      <div class="col-md-3"><FilterSelect label="ID Status" v-model="filters.idStatus" :options="idStatuses" :multiple="true" /></div>
+      <div class="col-6 col-md-3"><FilterSelect label="ID Status" v-model="filters.idStatus" :options="idStatuses" :multiple="true" /></div>
     </div>
 
     <!-- Action -->
