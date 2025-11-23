@@ -1,6 +1,6 @@
 <script setup>
 import Panzoom from '@panzoom/panzoom'
-import { onMounted, onBeforeUnmount, ref } from 'vue'
+import { onMounted, onBeforeUnmount, ref, nextTick } from 'vue'
 import { usePanzoomRegistry } from '../composables/usePanzoomRegistry.js'
 
 const props = defineProps({
@@ -9,62 +9,79 @@ const props = defineProps({
 })
 
 const { register, unregister, zoomAll } = usePanzoomRegistry()
-
-// Refs
-const imgD = ref(null)
-const imgV = ref(null)
-let pzD = null
-let pzV = null
+const imgRefs = ref([]) // Array to store multiple image refs
 
 const initZoom = (el) => {
   if (!el) return null
-
   const pz = Panzoom(el, { maxScale: 5, minScale: 0.5 })
-
-  // Register globally
   register(pz)
-
-  // Attach Listener to the PARENT container
   el.parentElement.addEventListener('wheel', (e) => {
-    // Only handle Ctrl (Zoom One) locally.
-    // Shift (Zoom All) is now handled globally in App.vue
     if (e.ctrlKey) {
       e.preventDefault()
       pz.zoomWithWheel(e)
     }
   })
-
   return pz
 }
 
-onMounted(() => {
-  if (imgD.value) pzD = initZoom(imgD.value)
-  if (imgV.value) pzV = initZoom(imgV.value)
+const pzInstances = []
+
+onMounted(async () => {
+  await nextTick() // Wait for v-for to render
+  imgRefs.value.forEach(el => {
+    if (el) pzInstances.push(initZoom(el))
+  })
 })
 
 onBeforeUnmount(() => {
-  if (pzD) { pzD.destroy(); unregister(pzD) }
-  if (pzV) { pzV.destroy(); unregister(pzV) }
+  pzInstances.forEach(pz => {
+    pz.destroy()
+    unregister(pz)
+  })
 })
+
+// Helper to decide which photos to show
+const displayPhotos = () => {
+  // If specific 'all_photos' list exists (CRISPR/Insectary new logic)
+  if (props.item.all_photos && props.item.all_photos.length > 0) {
+    // For Collection tab, we might still want to respect the "side" filter loosely
+    // But for CRISPR, we usually want to show everything. 
+    // Let's filter based on the 'side' prop if it looks like a standard D/V photo.
+    
+    return props.item.all_photos.filter(p => {
+      // If side is strict Dorsal, only show matching names
+      if (props.side === 'Dorsal' && !p.Name.includes('d.JPG')) return false
+      if (props.side === 'Ventral' && !p.Name.includes('v.JPG')) return false
+      return true
+    })
+  }
+  
+  // Fallback for legacy objects
+  const list = []
+  if ((props.side.includes('Dorsal') || props.side === 'Dorsal and Ventral') && props.item.URLd) {
+    list.push({ URL_to_view: props.item.URLd, Name: 'Dorsal' })
+  }
+  if ((props.side.includes('Ventral') || props.side === 'Dorsal and Ventral') && props.item.URLv) {
+    list.push({ URL_to_view: props.item.URLv, Name: 'Ventral' })
+  }
+  return list
+}
 </script>
 
 <template>
   <div class="gallery-card h-100 border rounded bg-white d-flex flex-column">
-    <h5 class="fw-bold text-center mt-2">CAM ID: {{ item.CAM_ID }}</h5>
-
+    <h5 class="fw-bold text-center mt-2">{{ item.CAM_ID }}</h5>
+    
     <!-- Images Area -->
-    <!-- 'gap-2' adds space between images if both are shown -->
-    <div class="d-flex justify-content-center align-items-center flex-grow-1 gap-2 px-2" style="min-height: 200px; overflow: hidden;">
-
-       <!-- Dorsal -->
-       <!-- 'flex-fill' makes it expand to fill space. 'mw-100' ensures it doesn't overflow container -->
-       <div v-if="(side.includes('Dorsal') || side === 'Dorsal and Ventral') && item.URLd" class="img-container flex-fill">
-         <img ref="imgD" :src="item.URLd" class="panzoom-img" loading="lazy" alt="Dorsal">
-       </div>
-
-       <!-- Ventral -->
-       <div v-if="(side.includes('Ventral') || side === 'Dorsal and Ventral') && item.URLv" class="img-container flex-fill">
-         <img ref="imgV" :src="item.URLv" class="panzoom-img" loading="lazy" alt="Ventral">
+    <div class="d-flex flex-wrap justify-content-center align-items-center flex-grow-1 gap-2 px-2 py-2" style="min-height: 200px;">
+       <div v-for="(photo, index) in displayPhotos()" :key="index" class="img-container flex-fill">
+         <img 
+           :ref="el => imgRefs[index] = el" 
+           :src="photo.URL_to_view" 
+           class="panzoom-img" 
+           loading="lazy" 
+           :alt="photo.Name"
+         >
        </div>
     </div>
 
@@ -90,13 +107,13 @@ onBeforeUnmount(() => {
   display: flex;
   justify-content: center;
   align-items: center;
-  /* Ensure container doesn't exceed parent width but allows shrinking */
-  min-width: 0;
+  min-width: 45%; /* Ensure images don't get too tiny */
+  max-width: 100%;
 }
 .panzoom-img {
-  width: 100%;       /* Force image to take container width */
-  height: auto;      /* Maintain aspect ratio */
-  object-fit: contain; /* Ensure entire butterfly is visible */
+  width: 100%;
+  height: auto;
+  object-fit: contain;
   cursor: grab;
 }
 </style>

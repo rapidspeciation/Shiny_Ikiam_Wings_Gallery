@@ -21,24 +21,42 @@ def process_photo_links(df):
     print("Processing Photo Links...")
     # Convert Drive links to Thumbnail links
     df['URL_to_view'] = df['URL'].apply(
-        lambda x: re.sub(r"https://drive.google.com/file/d/(.*)/view\?usp=drivesdk",
+        lambda x: re.sub(r"https://drive.google.com/file/d/(.*)/view\?usp=drivesdk", 
                          r"https://drive.google.com/thumbnail?id=\1&sz=w2000", str(x))
     )
     # Extract CAM_ID
     df['CAM_ID'] = df['Name'].str.extract(r'(.*)(?=[dv]\.JPG)')
+    
+    # Fallback: If regex failed (e.g. photo is 'CAM123_head.JPG'), try looser match
+    # This logic mimics the R 'str_extract' more broadly if needed, but for now 
+    # we assume most follow the pattern. If CAM_ID is NaN, try extracting first word:
+    mask = df['CAM_ID'].isna()
+    df.loc[mask, 'CAM_ID'] = df.loc[mask, 'Name'].str.extract(r'(CAM\d+)')
+    
     return df
 
-def get_side_links(photo_df, side_char):
-    # Filter for 'd' or 'v' photos
-    side_df = photo_df[photo_df['Name'].str.contains(f"{side_char}\.JPG", na=False)].copy()
-    side_df = side_df[['CAM_ID', 'URL_to_view']]
-    side_df = side_df.rename(columns={'URL_to_view': f'URL{side_char}'})
-    return side_df
+def process_photos_list(photo_df):
+    # Group ALL photos by CAM_ID
+    # Result: { 'CAM123': [ { 'url': '...', 'name': '...' }, ... ] }
+    grouped = photo_df.groupby('CAM_ID').apply(
+        lambda x: x[['URL_to_view', 'Name']].to_dict('records')
+    ).reset_index(name='all_photos')
+    return grouped
 
-def merge_photos(df, dorsal, ventral):
-    # Helper to merge photos into any dataframe based on CAM_ID
-    df = pd.merge(df, dorsal, on='CAM_ID', how='left')
-    df = pd.merge(df, ventral, on='CAM_ID', how='left')
+def merge_data(df, photo_lookup):
+    # Merge the list of all photos
+    df = pd.merge(df, photo_lookup, on='CAM_ID', how='left')
+    
+    # Helper for legacy d/v columns (for Collection view convenience)
+    def extract_dv(row):
+        d, v = None, None
+        if isinstance(row['all_photos'], list):
+            for p in row['all_photos']:
+                if 'd.JPG' in p['Name']: d = p['URL_to_view']
+                if 'v.JPG' in p['Name']: v = p['URL_to_view']
+        return pd.Series([d, v])
+
+    df[['URLd', 'URLv']] = df.apply(extract_dv, axis=1)
     return df
 
 def process_collection(df):
@@ -49,28 +67,27 @@ def process_collection(df):
 
     if 'CAM_ID_insectary' in df.columns:
         df['CAM_ID'] = df.apply(
-            lambda row: row['CAM_ID_insectary'] if pd.notna(row['CAM_ID_insectary']) and row['CAM_ID_insectary'] != "NA" else row['CAM_ID'],
+            lambda row: row['CAM_ID_insectary'] if pd.notna(row['CAM_ID_insectary']) and row['CAM_ID_insectary'] != "NA" else row['CAM_ID'], 
             axis=1
         )
 
     df = df.rename(columns={'SPECIES': 'Species'})
     if 'Preservation_date' in df.columns:
         df['Preservation_date_formatted'] = pd.to_datetime(df['Preservation_date'], errors='coerce').dt.strftime('%d/%b/%Y')
-
+    
     df['ID_status'] = df['ID_status'].fillna("NA")
     return df
 
 def process_insectary(df):
     print("Processing Insectary Data...")
     df = df[ (df['CAM_ID'] != "") & (df['CAM_ID'] != "NA") & (df['CAM_ID'].notna()) ].copy()
-
+    
     if 'CAM_ID_CollData' in df.columns:
          df['CAM_ID'] = df.apply(
-            lambda row: row['CAM_ID_CollData'] if pd.notna(row['CAM_ID_CollData']) and row['CAM_ID_CollData'] != "NA" else row['CAM_ID'],
+            lambda row: row['CAM_ID_CollData'] if pd.notna(row['CAM_ID_CollData']) and row['CAM_ID_CollData'] != "NA" else row['CAM_ID'], 
             axis=1
         )
-
-    # Split Taxonomy
+    
     def split_species(row):
         full_s = str(row.get('SPECIES', ''))
         parts = full_s.split()
@@ -82,18 +99,17 @@ def process_insectary(df):
     if 'SPECIES' in df.columns:
         df[['Species', 'Subspecies_Form']] = df.apply(split_species, axis=1)
 
-    # Format date
     if 'Preservation_date' in df.columns:
         df['Preservation_date_formatted'] = pd.to_datetime(df['Preservation_date'], errors='coerce').dt.strftime('%d/%b/%Y')
-
+        
     return df
 
 def process_crispr(df):
     print("Processing CRISPR Data...")
     if 'Emerge_date' in df.columns:
-        df['Preservation_date'] = df['Emerge_date'] # Use Emerge date as sort key
+        df['Preservation_date'] = df['Emerge_date']
         df['Preservation_date_formatted'] = pd.to_datetime(df['Emerge_date'], errors='coerce').dt.strftime('%d/%b/%Y')
-
+        
     df['Mutant'] = df['Mutant'].fillna("NA")
     return df
 
@@ -109,23 +125,14 @@ def main():
         print(f"Error downloading data: {e}")
         sys.exit(1)
 
-    # 1. Prepare Photos
-    photos = process_photo_links(raw_photos)
-    dorsal_links = get_side_links(photos, 'd')
-    ventral_links = get_side_links(photos, 'v')
-
+    # 1. Prepare Photo Lookup (Group by CAM_ID)
+    photos_df = process_photo_links(raw_photos)
+    photo_lookup = process_photos_list(photos_df)
+    
     # 2. Process & Merge
-    # Collection
-    collection = process_collection(raw_collection)
-    collection = merge_photos(collection, dorsal_links, ventral_links)
-
-    # Insectary
-    insectary = process_insectary(raw_insectary)
-    insectary = merge_photos(insectary, dorsal_links, ventral_links)
-
-    # CRISPR
-    crispr = process_crispr(raw_crispr)
-    crispr = merge_photos(crispr, dorsal_links, ventral_links)
+    collection = merge_data(process_collection(raw_collection), photo_lookup)
+    insectary = merge_data(process_insectary(raw_insectary), photo_lookup)
+    crispr = merge_data(process_crispr(raw_crispr), photo_lookup)
 
     # 3. Save
     collection.to_json(f"{OUTPUT_DIR}/collection.json", orient='records')
