@@ -1,8 +1,8 @@
 import { createApp } from 'vue'
-// Import Bootstrap CSS
 import 'bootstrap/dist/css/bootstrap.min.css'
-// Import Bootstrap JS (for dropdowns/tooltips)
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'
+// Import standard styles for the multiselect component
+import 'vue-multiselect/dist/vue-multiselect.css'
 
 import App from './App.vue'
 
