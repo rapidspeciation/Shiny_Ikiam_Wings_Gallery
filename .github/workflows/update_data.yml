@@ -1,0 +1,46 @@
+name: Update Database
+
+on:
+  # Allows you to run this manually from the GitHub Actions tab
+  workflow_dispatch:
+  
+  # Allows the Website "Update Database" button to trigger this
+  repository_dispatch:
+    types: [update_database_trigger]
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Important: allows the action to push changes
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: |
+          pip install -r scripts/requirements.txt
+
+      - name: Run Data Processing Script
+        run: |
+          python scripts/process_data.py
+
+      - name: Commit and Push Changes
+        run: |
+          git config --global user.name "GitHub Action"
+          git config --global user.email "action@github.com"
+          
+          # Check if there are changes
+          if [[ -n $(git status -s public/data) ]]; then
+            git add public/data/*.json
+            git commit -m "Auto-update database from Google Sheets"
+            git push
+          else
+            echo "No changes in data detected."
+          fi
