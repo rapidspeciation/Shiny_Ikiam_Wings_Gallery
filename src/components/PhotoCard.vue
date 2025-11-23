@@ -11,6 +11,24 @@ const props = defineProps({
 const { register, unregister } = usePanzoomRegistry()
 const imgRefs = ref([]) 
 
+// --- IMAGE PROXY LOGIC ---
+// Use wsrv.nl to cache Google Drive images and prevent 429 Errors
+const getProxiedUrl = (originalUrl) => {
+  if (!originalUrl) return ''
+  // Encode the Google URL so it passes safely as a parameter
+  const encoded = encodeURIComponent(originalUrl)
+  // Request a 800px wide optimized version (w=800) at 80% quality (q=80)
+  return `https://wsrv.nl/?url=${encoded}&w=800&q=80&output=webp`
+}
+
+// Fallback: If proxy fails, try original Google URL
+const handleImgError = (e, originalUrl) => {
+  if (e.target.src !== originalUrl) {
+    e.target.src = originalUrl
+  }
+}
+// -------------------------
+
 const initZoom = (el) => {
   if (!el) return null
   const pz = Panzoom(el, { maxScale: 5, minScale: 0.5 })
@@ -80,7 +98,15 @@ const displayPhotos = () => {
     
     <div class="photo-grid-container flex-grow-1 p-2">
        <div v-for="(photo, index) in displayPhotos()" :key="index" class="img-wrapper">
-         <img :ref="el => imgRefs[index] = el" :src="photo.URL_to_view" class="panzoom-img" loading="lazy" :alt="photo.Name">
+         <!-- UPDATED IMG TAG WITH PROXY AND ERROR HANDLING -->
+         <img 
+           :ref="el => imgRefs[index] = el" 
+           :src="getProxiedUrl(photo.URL_to_view)" 
+           class="panzoom-img" 
+           loading="lazy" 
+           :alt="photo.Name"
+           @error="(e) => handleImgError(e, photo.URL_to_view)"
+         >
        </div>
     </div>
 

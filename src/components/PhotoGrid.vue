@@ -33,7 +33,6 @@ defineEmits(['loadMore'])
       </p>
 
       <!-- Dynamic Grid System -->
-      <!-- We change Auto logic to cap at 3 columns -->
       <div class="custom-grid" :class="`cols-${columns}`">
         <div class="grid-item" v-for="item in items" :key="item.CAM_ID">
           <PhotoCard :item="item" :side="side" />
@@ -66,11 +65,24 @@ defineEmits(['loadMore'])
 /* 3 Columns */
 .cols-3 { grid-template-columns: repeat(3, 1fr); }
 
-/* Auto: Min 350px width, but Max 3 columns (roughly 33%) */
+/* 
+   Auto Configuration 
+   ------------------
+   OLD: minmax(max(350px, 30%), 1fr)
+   NEW: minmax(max(560px, 30%), 1fr)
+   
+   Logic:
+   1. max(560px, 30%): Ensures we never have more than 3 columns (because 30% * 4 > 100%).
+   2. 560px Min Width:
+      - On your 1460px effective screen: Fits 2 columns (1120px), but not 3 (1680px). -> DEFAULT 2 COLS.
+      - Zoomed to 130% (~1120px screen): Fits 1 column comfortably, edges into 2. 
+      - Any further zoom drops strictly to 1 column.
+*/
 .cols-Auto {
-  grid-template-columns: repeat(auto-fill, minmax(max(350px, 30%), 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(max(560px, 30%), 1fr));
 }
 
+/* Force 1 column on mobile devices regardless of calculations */
 @media (max-width: 768px) {
   .cols-Auto, .cols-2, .cols-3 { grid-template-columns: 1fr; }
 }

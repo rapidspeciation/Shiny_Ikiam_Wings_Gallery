@@ -32,13 +32,26 @@ def format_all_date_columns(df):
 
 def process_photo_links(df):
     print("Processing Photo Links...")
+    # 1. Filter RAW files
     mask_raw = df['Name'].str.contains(r'\.(?:ORF|CR2|NEF|ARW)$', case=False, regex=True, na=False)
     df = df[~mask_raw].copy()
-    df['URL_to_view'] = df['URL'].str.replace(
-        r"https://drive.google.com/file/d/(.*)/view\?usp=drivesdk", 
-        r"https://drive.google.com/thumbnail?id=\1&sz=w2000", regex=True
-    )
+
+    # 2. Extract CAM_ID
     df['CAM_ID'] = df['Name'].str.extract(r'(CAM\d+)', flags=re.IGNORECASE)
+
+    # 3. EXTRACT GOOGLE FILE ID (The most robust way)
+    # We grab the ID from the URL and create a clean "uc?id=" link
+    # This format is required for the Image Proxy to work correctly.
+    df['Google_ID'] = df['URL'].str.extract(r'file/d/(.*?)/view', expand=False)
+    
+    # Fallback if URL format is different
+    mask_fail = df['Google_ID'].isna()
+    if mask_fail.any():
+        df.loc[mask_fail, 'Google_ID'] = df.loc[mask_fail, 'URL'].str.extract(r'id=(.*?)(?:&|$)', expand=False)
+
+    # Create the clean URL
+    df['URL_to_view'] = "https://drive.google.com/uc?id=" + df['Google_ID']
+    
     return df
 
 def get_photo_lookup(photo_df):
