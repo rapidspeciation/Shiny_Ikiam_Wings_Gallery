@@ -1,6 +1,5 @@
-import { ref } from 'vue'
+import { onMounted, onUnmounted } from 'vue'
 
-// Global state to hold references to all active Panzoom instances
 const instances = new Set()
 
 export function usePanzoomRegistry() {
@@ -14,20 +13,38 @@ export function usePanzoomRegistry() {
   }
 
   const zoomAll = (e) => {
-    // Determine zoom direction
     const delta = e.deltaY === 0 && e.deltaX ? e.deltaX : e.deltaY
     const scaleMultiplier = delta < 0 ? 1.1 : 0.9 // Zoom In vs Out
 
     instances.forEach(pz => {
-      // Get current scale to calculate new scale
       const currentScale = pz.getScale()
       pz.zoom(currentScale * scaleMultiplier, { animate: true })
+    })
+  }
+
+  // --- NEW: Global Listener Logic ---
+  const attachGlobalListeners = () => {
+    const handler = (e) => {
+      // Check for Shift key
+      if (e.shiftKey) {
+        e.preventDefault() // Stop page scroll
+        zoomAll(e)
+      }
+    }
+
+    onMounted(() => {
+      window.addEventListener('wheel', handler, { passive: false })
+    })
+
+    onUnmounted(() => {
+      window.removeEventListener('wheel', handler)
     })
   }
 
   return {
     register,
     unregister,
-    zoomAll
+    zoomAll,
+    attachGlobalListeners
   }
 }

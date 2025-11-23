@@ -1,5 +1,7 @@
 <script setup>
 import { ref } from 'vue'
+import { usePanzoomRegistry } from './composables/usePanzoomRegistry.js' // Import registry
+
 import CollectionTab from './components/CollectionTab.vue'
 import InsectaryTab from './components/InsectaryTab.vue'
 import CrisprTab from './components/CrisprTab.vue'
@@ -13,6 +15,10 @@ const tabs = {
   'CRISPR': CrisprTab,
   'Update DB': UpdateTab
 }
+
+// Activate Global Zoom Listeners (Shift + Scroll)
+const { attachGlobalListeners } = usePanzoomRegistry()
+attachGlobalListeners()
 </script>
 
 <template>

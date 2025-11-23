@@ -26,15 +26,11 @@ const initZoom = (el) => {
 
   // Attach Listener to the PARENT container
   el.parentElement.addEventListener('wheel', (e) => {
-    // Zoom One (Ctrl)
+    // Only handle Ctrl (Zoom One) locally.
+    // Shift (Zoom All) is now handled globally in App.vue
     if (e.ctrlKey) {
       e.preventDefault()
       pz.zoomWithWheel(e)
-    }
-    // Zoom All (Shift)
-    if (e.shiftKey) {
-      e.preventDefault()
-      zoomAll(e)
     }
   })
 
