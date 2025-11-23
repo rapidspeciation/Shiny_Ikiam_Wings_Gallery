@@ -1,14 +1,15 @@
 <script setup>
 import PhotoCard from './PhotoCard.vue'
 
-defineProps({
+const props = defineProps({
   loading: Boolean,
   isFiltered: Boolean,
-  items: Array,         // The paginated data
-  totalCount: Number,   // Total matches
+  items: Array,
+  totalCount: Number,
   hasMore: Boolean,
   side: String,
-  error: String
+  error: String,
+  columns: { type: [String, Number], default: 'Auto' }
 })
 
 defineEmits(['loadMore'])
@@ -31,8 +32,11 @@ defineEmits(['loadMore'])
         Showing {{ items.length }} of {{ totalCount }} photos
       </p>
 
-      <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
-        <div class="col" v-for="item in items" :key="item.CAM_ID">
+      <!-- Dynamic Grid System -->
+      <div class="custom-grid" :style="{
+        '--col-count': columns === 'Auto' ? 'auto-fill' : columns
+      }">
+        <div class="grid-item" v-for="item in items" :key="item.CAM_ID">
           <PhotoCard :item="item" :side="side" />
         </div>
       </div>
@@ -50,3 +54,21 @@ defineEmits(['loadMore'])
     </div>
   </div>
 </template>
+
+<style scoped>
+.custom-grid {
+  display: grid;
+  gap: 1.5rem; /* Matches Bootstrap g-4 */
+}
+
+/*
+   If Auto: Use minmax to make them responsive (approx 300px wide).
+   If Number: Split 1fr equally X times.
+*/
+.custom-grid {
+  grid-template-columns: repeat(
+    var(--col-count, auto-fill),
+    minmax(v-bind("columns === 'Auto' ? '300px' : '0px'"), 1fr)
+  );
+}
+</style>
