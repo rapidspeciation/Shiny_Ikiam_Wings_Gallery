@@ -28,13 +28,13 @@ const handleImgError = (e, originalUrl) => {
 const initZoom = (el) => {
   if (!el) return null
   
-  // 1. Initialize with touchAction: 'pan-y'
-  // This tells the browser: "Let the user scroll the page Vertically (Y axis), 
-  // but capture Horizontal swipes for the image."
+  // 1. Initialize Panzoom
+  // disablePan: true -> Prevents the "slight movement" when scrolling the page.
   const pz = Panzoom(el, { 
     maxScale: 5, 
     minScale: 0.5,
-    touchAction: 'pan-y' 
+    touchAction: 'pan-y',
+    disablePan: true 
   })
 
   register(pz)
@@ -47,17 +47,23 @@ const initZoom = (el) => {
     }
   })
 
-  // 3. Dynamic Behavior: Lock page scroll ONLY when zoomed in
+  // 3. Dynamic Behavior: Unlock Pan ONLY when zoomed in
   el.addEventListener('panzoomzoom', (e) => {
     const currentScale = e.detail.scale
     
+    // We use a small buffer (1.05) to account for floating point math
     if (currentScale > 1.05) {
-      // If Zoomed IN: Disable page scroll ('none') so user can pan the image freely
-      pz.setOptions({ touchAction: 'none' })
+      // Zoomed IN: Unlock Panning, Lock Page Scroll
+      pz.setOptions({ disablePan: false, touchAction: 'none', cursor: 'move' })
     } else {
-      // If Zoomed OUT (Normal): Re-enable page scroll ('pan-y')
-      pz.setOptions({ touchAction: 'pan-y' })
+      // Zoomed OUT: Lock Panning (Fixes jitter), Allow Page Scroll
+      pz.setOptions({ disablePan: true, touchAction: 'pan-y', cursor: 'grab' })
     }
+  })
+  
+  // 4. Ensure Pan is disabled on Reset (when zooming out completely)
+  el.addEventListener('panzoomreset', () => {
+    pz.setOptions({ disablePan: true, touchAction: 'pan-y', cursor: 'grab' })
   })
 
   return pz
