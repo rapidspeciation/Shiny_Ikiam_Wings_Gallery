@@ -3,8 +3,8 @@ import { ref, computed } from 'vue'
 export function useGallery(rawData) {
   // --- State ---
   const isFiltered = ref(false)      // Has "Show Photos" been clicked?
-  const allMatches = ref([])         // All 7000+ (or filtered subset) items
-  const displayedCount = ref(200)    // How many we are currently showing
+  const allMatches = ref([])         // All items matching filters
+  const displayedCount = ref(200)    // How many are currently rendered
 
   // Options
   const sortBy = ref('Preservation_date')
@@ -19,8 +19,16 @@ export function useGallery(rawData) {
   const applyFilters = (filterFn) => {
     // A. Run the specific filter function provided by the Tab
     let results = rawData.value.filter(item => {
+      
       // Global check: Only Photos
-      if (onlyPhotos.value && !item.URLd && !item.URLv) return false
+      if (onlyPhotos.value) {
+        // Check for legacy D/V links OR the new list of all photos
+        const hasLegacy = item.URLd || item.URLv
+        const hasList = item.all_photos && item.all_photos.length > 0
+        
+        // If neither exists, filter this item out
+        if (!hasLegacy && !hasList) return false
+      }
 
       // Run specific tab logic
       return filterFn(item)
@@ -46,6 +54,7 @@ export function useGallery(rawData) {
 
       if (sortBy.value === 'Preservation_date') {
         // Parse dates (handling potential formats)
+        // We default to 0 (epoch) if date is missing so they drop to bottom/top
         valA = new Date(a.Preservation_date_formatted || 0)
         valB = new Date(b.Preservation_date_formatted || 0)
       } else {

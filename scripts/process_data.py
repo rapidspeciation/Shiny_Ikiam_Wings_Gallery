@@ -2,6 +2,12 @@ import pandas as pd
 import re
 import os
 import sys
+import warnings
+
+# Suppress specific warnings for cleaner output
+# 1. Date parsing warning (because we have mixed formats, this is expected)
+# 2. Regex match groups warning (we use str.contains just for filtering)
+warnings.filterwarnings("ignore", category=UserWarning, module='pandas')
 
 # --- Configuration ---
 SHEET_ID = "1QZj6YgHAJ9NmFXFPCtu-i-1NDuDmAdMF2Wogts7S2_4"
@@ -19,52 +25,66 @@ def get_export_url(gid):
 
 def process_photo_links(df):
     print("Processing Photo Links...")
-    # Convert Drive links to Thumbnail links
-    df['URL_to_view'] = df['URL'].apply(
-        lambda x: re.sub(r"https://drive.google.com/file/d/(.*)/view\?usp=drivesdk", 
-                         r"https://drive.google.com/thumbnail?id=\1&sz=w2000", str(x))
-    )
-    # Extract CAM_ID
-    df['CAM_ID'] = df['Name'].str.extract(r'(.*)(?=[dv]\.JPG)')
     
-    # Fallback: If regex failed (e.g. photo is 'CAM123_head.JPG'), try looser match
-    # This logic mimics the R 'str_extract' more broadly if needed, but for now 
-    # we assume most follow the pattern. If CAM_ID is NaN, try extracting first word:
-    mask = df['CAM_ID'].isna()
-    df.loc[mask, 'CAM_ID'] = df.loc[mask, 'Name'].str.extract(r'(CAM\d+)')
+    # 1. Filter out RAW images (ORF, CR2, etc)
+    # na=False treats empty rows as False (keep them initially, though they lack data)
+    mask_raw = df['Name'].str.contains(r'\.(?:ORF|CR2|NEF|ARW)$', case=False, regex=True, na=False)
+    df = df[~mask_raw].copy()
+
+    # 2. Convert Drive links to Thumbnail links
+    # Helper to safely replace logic
+    def make_thumb(url):
+        if pd.isna(url): return ""
+        return re.sub(r"https://drive.google.com/file/d/(.*)/view\?usp=drivesdk", 
+                      r"https://drive.google.com/thumbnail?id=\1&sz=w2000", str(url))
+
+    df['URL_to_view'] = df['URL'].apply(make_thumb)
+    
+    # 3. Extract CAM_ID (Loose Strategy: "CAM" followed by digits)
+    df['CAM_ID'] = df['Name'].str.extract(r'(CAM\d+)', flags=re.IGNORECASE)
     
     return df
 
 def process_photos_list(photo_df):
-    # Group ALL photos by CAM_ID
-    # Result: { 'CAM123': [ { 'url': '...', 'name': '...' }, ... ] }
-    grouped = photo_df.groupby('CAM_ID').apply(
-        lambda x: x[['URL_to_view', 'Name']].to_dict('records')
+    # Group ALL photos by CAM_ID into a list of dicts
+    # include_groups=False suppresses the FutureWarning in newer pandas
+    return photo_df.groupby('CAM_ID')[['URL_to_view', 'Name']].apply(
+        lambda x: x.to_dict('records'), 
+        include_groups=False
     ).reset_index(name='all_photos')
-    return grouped
 
 def merge_data(df, photo_lookup):
     # Merge the list of all photos
     df = pd.merge(df, photo_lookup, on='CAM_ID', how='left')
     
-    # Helper for legacy d/v columns (for Collection view convenience)
+    # Helper to populate legacy columns (URLd, URLv) for standard display
     def extract_dv(row):
         d, v = None, None
         if isinstance(row['all_photos'], list):
             for p in row['all_photos']:
-                if 'd.JPG' in p['Name']: d = p['URL_to_view']
-                if 'v.JPG' in p['Name']: v = p['URL_to_view']
+                name = str(p['Name']).lower()
+                # Simple check for d.jpg / v.jpg
+                if 'd.jpg' in name and not d: d = p['URL_to_view']
+                if 'v.jpg' in name and not v: v = p['URL_to_view']
         return pd.Series([d, v])
 
     df[['URLd', 'URLv']] = df.apply(extract_dv, axis=1)
     return df
 
+def clean_dates(series):
+    # dayfirst=True helps with 01/02/2023 being Feb 1st vs Jan 2nd ambiguity
+    # errors='coerce' turns garbage into NaT (safe null)
+    return pd.to_datetime(series, errors='coerce', dayfirst=True).dt.strftime('%d/%b/%Y')
+
 def process_collection(df):
     print("Processing Collection Data...")
+    
+    # Handle mixed date formats
     date_cols = [c for c in df.columns if 'date' in c.lower()]
     for col in date_cols:
-        df[col] = pd.to_datetime(df[col], errors='coerce').dt.strftime('%d-%b-%y')
+        df[col] = clean_dates(df[col])
 
+    # Logic: if CAM_ID_insectary exists, use it
     if 'CAM_ID_insectary' in df.columns:
         df['CAM_ID'] = df.apply(
             lambda row: row['CAM_ID_insectary'] if pd.notna(row['CAM_ID_insectary']) and row['CAM_ID_insectary'] != "NA" else row['CAM_ID'], 
@@ -72,9 +92,6 @@ def process_collection(df):
         )
 
     df = df.rename(columns={'SPECIES': 'Species'})
-    if 'Preservation_date' in df.columns:
-        df['Preservation_date_formatted'] = pd.to_datetime(df['Preservation_date'], errors='coerce').dt.strftime('%d/%b/%Y')
-    
     df['ID_status'] = df['ID_status'].fillna("NA")
     return df
 
@@ -88,6 +105,7 @@ def process_insectary(df):
             axis=1
         )
     
+    # Taxonomy Split
     def split_species(row):
         full_s = str(row.get('SPECIES', ''))
         parts = full_s.split()
@@ -100,7 +118,7 @@ def process_insectary(df):
         df[['Species', 'Subspecies_Form']] = df.apply(split_species, axis=1)
 
     if 'Preservation_date' in df.columns:
-        df['Preservation_date_formatted'] = pd.to_datetime(df['Preservation_date'], errors='coerce').dt.strftime('%d/%b/%Y')
+        df['Preservation_date_formatted'] = clean_dates(df['Preservation_date'])
         
     return df
 
@@ -108,15 +126,17 @@ def process_crispr(df):
     print("Processing CRISPR Data...")
     if 'Emerge_date' in df.columns:
         df['Preservation_date'] = df['Emerge_date']
-        df['Preservation_date_formatted'] = pd.to_datetime(df['Emerge_date'], errors='coerce').dt.strftime('%d/%b/%Y')
+        df['Preservation_date_formatted'] = clean_dates(df['Emerge_date'])
         
     df['Mutant'] = df['Mutant'].fillna("NA")
     return df
 
 def main():
+    # Ensure output directory exists
     os.makedirs(OUTPUT_DIR, exist_ok=True)
 
     try:
+        # dtype=str protects IDs like "007" from becoming "7"
         raw_photos = pd.read_csv(get_export_url(SHEET_GIDS["Photo_links"]), dtype=str)
         raw_collection = pd.read_csv(get_export_url(SHEET_GIDS["Collection_data"]), dtype=str)
         raw_crispr = pd.read_csv(get_export_url(SHEET_GIDS["CRISPR"]), dtype=str)
@@ -125,16 +145,16 @@ def main():
         print(f"Error downloading data: {e}")
         sys.exit(1)
 
-    # 1. Prepare Photo Lookup (Group by CAM_ID)
+    # 1. Process Photos
     photos_df = process_photo_links(raw_photos)
     photo_lookup = process_photos_list(photos_df)
     
-    # 2. Process & Merge
+    # 2. Process Sheets & Merge Photos
     collection = merge_data(process_collection(raw_collection), photo_lookup)
     insectary = merge_data(process_insectary(raw_insectary), photo_lookup)
     crispr = merge_data(process_crispr(raw_crispr), photo_lookup)
 
-    # 3. Save
+    # 3. Save JSONs
     collection.to_json(f"{OUTPUT_DIR}/collection.json", orient='records')
     insectary.to_json(f"{OUTPUT_DIR}/insectary.json", orient='records')
     crispr.to_json(f"{OUTPUT_DIR}/crispr.json", orient='records')

@@ -5,11 +5,11 @@ import { usePanzoomRegistry } from '../composables/usePanzoomRegistry.js'
 
 const props = defineProps({
   item: Object,
-  side: String // 'Dorsal', 'Ventral', or 'Dorsal and Ventral'
+  side: String 
 })
 
-const { register, unregister, zoomAll } = usePanzoomRegistry()
-const imgRefs = ref([]) // Array to store multiple image refs
+const { register, unregister } = usePanzoomRegistry()
+const imgRefs = ref([]) 
 
 const initZoom = (el) => {
   if (!el) return null
@@ -27,7 +27,7 @@ const initZoom = (el) => {
 const pzInstances = []
 
 onMounted(async () => {
-  await nextTick() // Wait for v-for to render
+  await nextTick()
   imgRefs.value.forEach(el => {
     if (el) pzInstances.push(initZoom(el))
   })
@@ -40,31 +40,47 @@ onBeforeUnmount(() => {
   })
 })
 
-// Helper to decide which photos to show
+// Logic to Get AND Sort photos
 const displayPhotos = () => {
-  // If specific 'all_photos' list exists (CRISPR/Insectary new logic)
+  let list = []
+
+  // A. New Logic (List based)
   if (props.item.all_photos && props.item.all_photos.length > 0) {
-    // For Collection tab, we might still want to respect the "side" filter loosely
-    // But for CRISPR, we usually want to show everything. 
-    // Let's filter based on the 'side' prop if it looks like a standard D/V photo.
-    
-    return props.item.all_photos.filter(p => {
-      // If side is strict Dorsal, only show matching names
+    list = props.item.all_photos.filter(p => {
       if (props.side === 'Dorsal' && !p.Name.includes('d.JPG')) return false
       if (props.side === 'Ventral' && !p.Name.includes('v.JPG')) return false
       return true
     })
+  } 
+  // B. Legacy Fallback
+  else {
+    if ((props.side.includes('Dorsal') || props.side === 'Dorsal and Ventral') && props.item.URLd) {
+      list.push({ URL_to_view: props.item.URLd, Name: 'Dorsal' })
+    }
+    if ((props.side.includes('Ventral') || props.side === 'Dorsal and Ventral') && props.item.URLv) {
+      list.push({ URL_to_view: props.item.URLv, Name: 'Ventral' })
+    }
   }
-  
-  // Fallback for legacy objects
-  const list = []
-  if ((props.side.includes('Dorsal') || props.side === 'Dorsal and Ventral') && props.item.URLd) {
-    list.push({ URL_to_view: props.item.URLd, Name: 'Dorsal' })
-  }
-  if ((props.side.includes('Ventral') || props.side === 'Dorsal and Ventral') && props.item.URLv) {
-    list.push({ URL_to_view: props.item.URLv, Name: 'Ventral' })
-  }
-  return list
+
+  // C. Sort: Dorsal first, Ventral second, others later
+  return list.sort((a, b) => {
+    const nameA = a.Name.toLowerCase()
+    const nameB = b.Name.toLowerCase()
+    
+    // Check for standard endings
+    const isDorsalA = nameA.includes('d.jpg')
+    const isDorsalB = nameB.includes('d.jpg')
+    const isVentralA = nameA.includes('v.jpg')
+    const isVentralB = nameB.includes('v.jpg')
+
+    if (isDorsalA && !isDorsalB) return -1
+    if (!isDorsalA && isDorsalB) return 1
+    
+    if (isVentralA && !isVentralB) return -1
+    if (!isVentralA && isVentralB) return 1
+    
+    return nameA.localeCompare(nameB)
+  })
 }
 </script>
 
@@ -73,8 +89,8 @@ const displayPhotos = () => {
     <h5 class="fw-bold text-center mt-2">{{ item.CAM_ID }}</h5>
     
     <!-- Images Area -->
-    <div class="d-flex flex-wrap justify-content-center align-items-center flex-grow-1 gap-2 px-2 py-2" style="min-height: 200px;">
-       <div v-for="(photo, index) in displayPhotos()" :key="index" class="img-container flex-fill">
+    <div class="photo-grid-container flex-grow-1 p-2">
+       <div v-for="(photo, index) in displayPhotos()" :key="index" class="img-wrapper">
          <img 
            :ref="el => imgRefs[index] = el" 
            :src="photo.URL_to_view" 
@@ -102,14 +118,33 @@ const displayPhotos = () => {
 </template>
 
 <style scoped>
-.img-container {
-  overflow: hidden;
+/* Enforce 2 columns, centered images */
+.photo-grid-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Exact 2 columns */
+  gap: 8px;
+  align-content: center; /* Vertically center content block */
+  min-height: 200px;
+}
+
+.img-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-width: 45%; /* Ensure images don't get too tiny */
-  max-width: 100%;
+  overflow: hidden;
+  width: 100%;
+  /* Optional: Add max-height to keep cards uniform, or remove to let them grow */
 }
+
+/* 
+   Special Case: If there is only 1 photo, verify if we want it centered 
+   spanning 2 columns or just on the left.
+   The :only-child pseudo-class makes single photos bigger/centered.
+*/
+.img-wrapper:only-child {
+  grid-column: span 2;
+}
+
 .panzoom-img {
   width: 100%;
   height: auto;

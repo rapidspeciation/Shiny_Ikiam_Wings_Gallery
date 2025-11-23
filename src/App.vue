@@ -1,10 +1,11 @@
 <script setup>
 import { ref } from 'vue'
-import { usePanzoomRegistry } from './composables/usePanzoomRegistry.js' // Import registry
+import { usePanzoomRegistry } from './composables/usePanzoomRegistry.js' 
 
 import CollectionTab from './components/CollectionTab.vue'
 import InsectaryTab from './components/InsectaryTab.vue'
 import CrisprTab from './components/CrisprTab.vue'
+import SearchTab from './components/SearchTab.vue'
 import UpdateTab from './components/UpdateTab.vue'
 
 const currentTab = ref('Collection')
@@ -13,25 +14,33 @@ const tabs = {
   'Collection': CollectionTab,
   'Insectary': InsectaryTab,
   'CRISPR': CrisprTab,
+  'Search by CAMID': SearchTab,
   'Update DB': UpdateTab
 }
 
-// Activate Global Zoom Listeners (Shift + Scroll)
-const { attachGlobalListeners } = usePanzoomRegistry()
+// Zoom Logic
+const { attachGlobalListeners, resetAll } = usePanzoomRegistry()
 attachGlobalListeners()
 </script>
 
 <template>
   <div>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
       <div class="container-fluid">
         <a class="navbar-brand" href="#">Ikiam Wings Gallery</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        
+        <!-- Mobile Toggler -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
           <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav">
+
+        <!-- Collapsible Content -->
+        <div class="collapse navbar-collapse" id="navbarContent">
+          
+          <!-- Tabs List -->
+          <!-- Removed me-auto so items stack to the left -->
+          <ul class="navbar-nav mb-2 mb-lg-0">
             <li class="nav-item" v-for="(component, name) in tabs" :key="name">
               <a 
                 class="nav-link" 
@@ -43,22 +52,25 @@ attachGlobalListeners()
               </a>
             </li>
           </ul>
+          
+          <!-- Reset Button (Now sits immediately next to tabs) -->
+          <div class="d-flex ms-lg-3">
+            <button class="btn btn-sm btn-outline-light" @click="resetAll">
+              Reset Zoom
+            </button>
+          </div>
+          
         </div>
       </div>
     </nav>
 
     <!-- Main Content -->
     <div class="container-fluid mt-3">
-      <!-- Header Info -->
-      <div class="alert alert-light border text-center" role="alert">
+      <div class="alert alert-light border text-center py-2 small" role="alert">
         Navigation: Shift + Scroll = Zoom all | Ctrl + Scroll = Zoom one | Drag = Move
-        <br>
-        <small>
-          Github: <a href='https://github.com/rapidspeciation/Shiny_Ikiam_Wings_Gallery/' target='_blank'>rapidspeciation/Shiny_Ikiam_Wings_Gallery</a>
-        </small>
+        <span class="d-none d-md-inline"> | Github: <a href='https://github.com/rapidspeciation/Shiny_Ikiam_Wings_Gallery/' target='_blank'>rapidspeciation/Shiny_Ikiam_Wings_Gallery</a></span>
       </div>
 
-      <!-- Dynamic Tab Component -->
       <keep-alive>
         <component :is="tabs[currentTab]" />
       </keep-alive>
@@ -67,6 +79,7 @@ attachGlobalListeners()
 </template>
 
 <style>
+/* Global Styles */
 .gallery-card {
   height: 100%;
   text-align: center;
@@ -75,16 +88,7 @@ attachGlobalListeners()
   border-radius: 8px;
   background: #fff;
 }
-.img-container {
-  overflow: hidden;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  margin-bottom: 10px;
-}
-.panzoom-img {
-  max-width: 100%;
-  height: auto;
-  cursor: grab;
+.nav-link {
+  cursor: pointer;
 }
 </style>
