@@ -101,29 +101,35 @@ const displayPhotos = () => {
     <!-- Metadata Footer -->
     <div class="mt-2 text-start small bg-light p-2 rounded-bottom border-top">
       <div class="row g-1">
-        <!-- Species: Always Full Width -->
-        <div class="col-12">
-          <strong>Species:</strong> {{ item.Species }}
+        <!-- 
+           Restored 2-Column Layout for Species/Subspecies 
+           Matches the "Old App" screenshot style better.
+        -->
+        <div :class="[item.Subspecies_Form && item.Subspecies_Form !== 'None' ? 'col-6' : 'col-12']">
+          <strong>Species:</strong><br> {{ item.Species }}
         </div>
         
-        <!-- Subspecies: Full Width, Only if exists -->
-        <div class="col-12" v-if="item.Subspecies_Form && item.Subspecies_Form !== 'None' && item.Subspecies_Form !== 'NA'">
-            <strong>Subsp:</strong> {{ item.Subspecies_Form }}
+        <div class="col-6" v-if="item.Subspecies_Form && item.Subspecies_Form !== 'None' && item.Subspecies_Form !== 'NA'">
+            <strong>Subsp:</strong><br> {{ item.Subspecies_Form }}
         </div>
 
-        <!-- Sex & Date: Always split 50/50 -->
+        <div class="w-100"></div> <!-- Force new row -->
+
+        <!-- Sex & Date -->
         <div class="col-6">
           <strong>Sex:</strong> {{ item.Sex || 'NA' }}
         </div>
-        <div class="col-6 text-end">
-          {{ item.Preservation_date_formatted }}
+        <div class="col-6">
+          <strong>Date:</strong> {{ item.Preservation_date_formatted }}
         </div>
+
+        <div class="w-100" v-if="item.Insectary_ID || item.Mutant"></div>
 
         <!-- Extra Info (Insectary/CRISPR specific) -->
         <div class="col-6" v-if="item.Insectary_ID">
           <strong>Ins. ID:</strong> {{ item.Insectary_ID }}
         </div>
-        <div class="col-6 text-end" v-if="item.Mutant && item.Mutant !== 'NA'">
+        <div class="col-6" v-if="item.Mutant && item.Mutant !== 'NA'">
           <strong>Mutant:</strong> {{ item.Mutant }}
         </div>
       </div>

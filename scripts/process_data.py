@@ -5,8 +5,6 @@ import sys
 import warnings
 
 # Suppress specific warnings for cleaner output
-# 1. Date parsing warning (because we have mixed formats, this is expected)
-# 2. Regex match groups warning (we use str.contains just for filtering)
 warnings.filterwarnings("ignore", category=UserWarning, module='pandas')
 
 # --- Configuration ---
@@ -27,12 +25,10 @@ def process_photo_links(df):
     print("Processing Photo Links...")
     
     # 1. Filter out RAW images (ORF, CR2, etc)
-    # na=False treats empty rows as False (keep them initially, though they lack data)
     mask_raw = df['Name'].str.contains(r'\.(?:ORF|CR2|NEF|ARW)$', case=False, regex=True, na=False)
     df = df[~mask_raw].copy()
 
     # 2. Convert Drive links to Thumbnail links
-    # Helper to safely replace logic
     def make_thumb(url):
         if pd.isna(url): return ""
         return re.sub(r"https://drive.google.com/file/d/(.*)/view\?usp=drivesdk", 
@@ -47,14 +43,12 @@ def process_photo_links(df):
 
 def process_photos_list(photo_df):
     # Group ALL photos by CAM_ID into a list of dicts
-    # include_groups=False suppresses the FutureWarning in newer pandas
     return photo_df.groupby('CAM_ID')[['URL_to_view', 'Name']].apply(
         lambda x: x.to_dict('records'), 
         include_groups=False
     ).reset_index(name='all_photos')
 
 def merge_data(df, photo_lookup):
-    # Merge the list of all photos
     df = pd.merge(df, photo_lookup, on='CAM_ID', how='left')
     
     # Helper to populate legacy columns (URLd, URLv) for standard display
@@ -63,7 +57,6 @@ def merge_data(df, photo_lookup):
         if isinstance(row['all_photos'], list):
             for p in row['all_photos']:
                 name = str(p['Name']).lower()
-                # Simple check for d.jpg / v.jpg
                 if 'd.jpg' in name and not d: d = p['URL_to_view']
                 if 'v.jpg' in name and not v: v = p['URL_to_view']
         return pd.Series([d, v])
@@ -72,8 +65,6 @@ def merge_data(df, photo_lookup):
     return df
 
 def clean_dates(series):
-    # dayfirst=True helps with 01/02/2023 being Feb 1st vs Jan 2nd ambiguity
-    # errors='coerce' turns garbage into NaT (safe null)
     return pd.to_datetime(series, errors='coerce', dayfirst=True).dt.strftime('%d/%b/%Y')
 
 def process_collection(df):
@@ -83,6 +74,11 @@ def process_collection(df):
     date_cols = [c for c in df.columns if 'date' in c.lower()]
     for col in date_cols:
         df[col] = clean_dates(df[col])
+
+    # --- FIX: Create the formatted date column expected by Vue ---
+    if 'Preservation_date' in df.columns:
+        df['Preservation_date_formatted'] = df['Preservation_date']
+    # -------------------------------------------------------------
 
     # Logic: if CAM_ID_insectary exists, use it
     if 'CAM_ID_insectary' in df.columns:
@@ -132,11 +128,9 @@ def process_crispr(df):
     return df
 
 def main():
-    # Ensure output directory exists
     os.makedirs(OUTPUT_DIR, exist_ok=True)
 
     try:
-        # dtype=str protects IDs like "007" from becoming "7"
         raw_photos = pd.read_csv(get_export_url(SHEET_GIDS["Photo_links"]), dtype=str)
         raw_collection = pd.read_csv(get_export_url(SHEET_GIDS["Collection_data"]), dtype=str)
         raw_crispr = pd.read_csv(get_export_url(SHEET_GIDS["CRISPR"]), dtype=str)
