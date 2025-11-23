@@ -7,7 +7,7 @@ export default defineConfig({
   // -----------------------------------------------------------------------
   // FORK CONFIGURATION (Use this for testing)
   // -----------------------------------------------------------------------
-  base: '/Static_hiny_Ikiam_Wings_Gallery/', 
+  base: '/Shiny_Ikiam_Wings_Gallery/', 
   
   build: {
     outDir: 'dist',

@@ -6,8 +6,7 @@ const status = ref('')
 const isAuthorized = ref(false)
 
 // --- CONFIGURATION FOR FORK TESTING ---
-// When moving to official repo, change to: "https://github.com/rapidspeciation/Shiny_Ikiam_Wings_Gallery/actions/workflows/update_data.yml"
-const repoUrl = "https://github.com/Fr4nzz/Static_hiny_Ikiam_Wings_Gallery/actions/workflows/update_data.yml"
+const repoUrl = "https://github.com/rapidspeciation/Shiny_Ikiam_Wings_Gallery/actions/workflows/update_data.yml"
 
 const checkPassword = () => {
   if (password.value === 'Hyalyris') { 
