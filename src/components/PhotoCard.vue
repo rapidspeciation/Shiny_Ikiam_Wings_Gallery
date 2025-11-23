@@ -12,16 +12,12 @@ const { register, unregister } = usePanzoomRegistry()
 const imgRefs = ref([]) 
 
 // --- IMAGE PROXY LOGIC ---
-// Use wsrv.nl to cache Google Drive images and prevent 429 Errors
 const getProxiedUrl = (originalUrl) => {
   if (!originalUrl) return ''
-  // Encode the Google URL so it passes safely as a parameter
   const encoded = encodeURIComponent(originalUrl)
-  // Request a 800px wide optimized version (w=800) at 80% quality (q=80)
   return `https://wsrv.nl/?url=${encoded}&w=800&q=80&output=webp`
 }
 
-// Fallback: If proxy fails, try original Google URL
 const handleImgError = (e, originalUrl) => {
   if (e.target.src !== originalUrl) {
     e.target.src = originalUrl
@@ -31,14 +27,39 @@ const handleImgError = (e, originalUrl) => {
 
 const initZoom = (el) => {
   if (!el) return null
-  const pz = Panzoom(el, { maxScale: 5, minScale: 0.5 })
+  
+  // 1. Initialize with touchAction: 'pan-y'
+  // This tells the browser: "Let the user scroll the page Vertically (Y axis), 
+  // but capture Horizontal swipes for the image."
+  const pz = Panzoom(el, { 
+    maxScale: 5, 
+    minScale: 0.5,
+    touchAction: 'pan-y' 
+  })
+
   register(pz)
+
+  // 2. Add Wheel Listener (Desktop)
   el.parentElement.addEventListener('wheel', (e) => {
     if (e.ctrlKey) {
       e.preventDefault()
       pz.zoomWithWheel(e)
     }
   })
+
+  // 3. Dynamic Behavior: Lock page scroll ONLY when zoomed in
+  el.addEventListener('panzoomzoom', (e) => {
+    const currentScale = e.detail.scale
+    
+    if (currentScale > 1.05) {
+      // If Zoomed IN: Disable page scroll ('none') so user can pan the image freely
+      pz.setOptions({ touchAction: 'none' })
+    } else {
+      // If Zoomed OUT (Normal): Re-enable page scroll ('pan-y')
+      pz.setOptions({ touchAction: 'pan-y' })
+    }
+  })
+
   return pz
 }
 
@@ -98,7 +119,6 @@ const displayPhotos = () => {
     
     <div class="photo-grid-container flex-grow-1 p-2">
        <div v-for="(photo, index) in displayPhotos()" :key="index" class="img-wrapper">
-         <!-- UPDATED IMG TAG WITH PROXY AND ERROR HANDLING -->
          <img 
            :ref="el => imgRefs[index] = el" 
            :src="getProxiedUrl(photo.URL_to_view)" 
