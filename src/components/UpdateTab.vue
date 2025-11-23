@@ -4,9 +4,13 @@ import { ref } from 'vue'
 const password = ref('')
 const status = ref('')
 const isAuthorized = ref(false)
+const loading = ref(false)
 
-// --- CONFIGURATION FOR FORK TESTING ---
-const repoUrl = "https://github.com/rapidspeciation/Shiny_Ikiam_Wings_Gallery/actions/workflows/update_data.yml"
+// ---------------------------------------------------------
+// REPLACE THIS WITH YOUR CLOUDFLARE WORKER URL
+// Example: "https://ikiam-updater.your-name.workers.dev"
+// ---------------------------------------------------------
+const workerUrl = "https://ikiam-db-updater.franz-chandi.workers.dev/" 
 
 const checkPassword = () => {
   if (password.value === 'Hyalyris') { 
@@ -18,9 +22,28 @@ const checkPassword = () => {
   }
 }
 
-const triggerUpdate = () => {
-  status.value = 'Redirecting to GitHub Actions...'
-  window.open(repoUrl, '_blank')
+const triggerUpdate = async () => {
+  loading.value = true
+  status.value = 'Contacting server...'
+  
+  try {
+    const response = await fetch(workerUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: 'Hyalyris' }) // Sending password for worker verification
+    })
+
+    if (response.ok) {
+      status.value = '✅ Success! The database is updating in the background. Check back in 3 minutes.'
+    } else {
+      const data = await response.json()
+      status.value = `❌ Error: ${data.message || 'Unknown error'}`
+    }
+  } catch (e) {
+    status.value = '❌ Network Error. Could not reach update server.'
+  } finally {
+    loading.value = false
+  }
 }
 </script>
 
@@ -30,10 +53,6 @@ const triggerUpdate = () => {
       <div class="card-header bg-dark text-white fw-bold">Update Database</div>
       <div class="card-body text-center">
         
-        <p class="text-muted small mb-4">
-          Because this is a static site, updating the database requires triggering the process manually on GitHub.
-        </p>
-
         <div v-if="!isAuthorized">
           <input type="password" v-model="password" class="form-control mb-3" placeholder="Enter Password to Unlock" @keyup.enter="checkPassword">
           <button class="btn btn-primary w-100" @click="checkPassword">Unlock</button>
@@ -41,15 +60,17 @@ const triggerUpdate = () => {
 
         <div v-else>
           <div class="alert alert-info small text-start">
-            <strong>Instructions:</strong>
-            <ol class="mb-0 ps-3 mt-1">
-              <li>Click the button below.</li>
-              <li>On the GitHub page, click the grey <strong>"Run workflow"</strong> button.</li>
-              <li>Wait ~2 minutes. The site will rebuild automatically.</li>
-            </ol>
+            <strong>Ready to Update:</strong>
+            <ul class="mb-0 ps-3 mt-1">
+              <li>This will fetch new data from Google Sheets.</li>
+              <li>The process takes about 2 minutes.</li>
+              <li>The website will refresh automatically when done.</li>
+            </ul>
           </div>
-          <button class="btn btn-success btn-lg w-100" @click="triggerUpdate">
-            🚀 Go to Update Page
+          
+          <button class="btn btn-success btn-lg w-100" @click="triggerUpdate" :disabled="loading">
+            <span v-if="loading" class="spinner-border spinner-border-sm me-2"></span>
+            {{ loading ? 'Starting Update...' : '🚀 Start Update Now' }}
           </button>
         </div>
 
