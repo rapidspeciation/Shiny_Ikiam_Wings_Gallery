@@ -40,20 +40,15 @@ onBeforeUnmount(() => {
   })
 })
 
-// Logic to Get AND Sort photos
 const displayPhotos = () => {
   let list = []
-
-  // A. New Logic (List based)
   if (props.item.all_photos && props.item.all_photos.length > 0) {
     list = props.item.all_photos.filter(p => {
       if (props.side === 'Dorsal' && !p.Name.includes('d.JPG')) return false
       if (props.side === 'Ventral' && !p.Name.includes('v.JPG')) return false
       return true
     })
-  } 
-  // B. Legacy Fallback
-  else {
+  } else {
     if ((props.side.includes('Dorsal') || props.side === 'Dorsal and Ventral') && props.item.URLd) {
       list.push({ URL_to_view: props.item.URLd, Name: 'Dorsal' })
     }
@@ -62,11 +57,9 @@ const displayPhotos = () => {
     }
   }
 
-  // C. Sort: Dorsal first, Ventral second, others later
   return list.sort((a, b) => {
     const nameA = a.Name.toLowerCase()
     const nameB = b.Name.toLowerCase()
-    
     const isDorsalA = nameA.includes('d.jpg')
     const isDorsalB = nameB.includes('d.jpg')
     const isVentralA = nameA.includes('v.jpg')
@@ -85,68 +78,39 @@ const displayPhotos = () => {
   <div class="gallery-card h-100 border rounded bg-white d-flex flex-column">
     <h5 class="fw-bold text-center mt-2">{{ item.CAM_ID }}</h5>
     
-    <!-- Images Area -->
     <div class="photo-grid-container flex-grow-1 p-2">
        <div v-for="(photo, index) in displayPhotos()" :key="index" class="img-wrapper">
-         <img 
-           :ref="el => imgRefs[index] = el" 
-           :src="photo.URL_to_view" 
-           class="panzoom-img" 
-           loading="lazy" 
-           :alt="photo.Name"
-         >
+         <img :ref="el => imgRefs[index] = el" :src="photo.URL_to_view" class="panzoom-img" loading="lazy" :alt="photo.Name">
        </div>
     </div>
 
-    <!-- Metadata Footer -->
     <div class="mt-2 text-start small bg-light p-2 rounded-bottom border-top">
       <div class="row g-1">
-        <!-- 
-           Restored 2-Column Layout for Species/Subspecies 
-           Matches the "Old App" screenshot style better.
-        -->
         <div :class="[item.Subspecies_Form && item.Subspecies_Form !== 'None' ? 'col-6' : 'col-12']">
           <strong>Species:</strong><br> {{ item.Species }}
         </div>
-        
         <div class="col-6" v-if="item.Subspecies_Form && item.Subspecies_Form !== 'None' && item.Subspecies_Form !== 'NA'">
             <strong>Subsp:</strong><br> {{ item.Subspecies_Form }}
         </div>
-
-        <div class="w-100"></div> <!-- Force new row -->
-
-        <!-- Sex & Date -->
-        <div class="col-6">
-          <strong>Sex:</strong> {{ item.Sex || 'NA' }}
-        </div>
-        <div class="col-6">
-          <strong>Date:</strong> {{ item.Preservation_date_formatted }}
-        </div>
-
+        <div class="w-100"></div>
+        <div class="col-6"><strong>Sex:</strong> {{ item.Sex || 'NA' }}</div>
+        <div class="col-6"><strong>Date:</strong> {{ item.Preservation_date_formatted }}</div>
         <div class="w-100" v-if="item.Insectary_ID || item.Mutant"></div>
-
-        <!-- Extra Info (Insectary/CRISPR specific) -->
-        <div class="col-6" v-if="item.Insectary_ID">
-          <strong>Ins. ID:</strong> {{ item.Insectary_ID }}
-        </div>
-        <div class="col-6" v-if="item.Mutant && item.Mutant !== 'NA'">
-          <strong>Mutant:</strong> {{ item.Mutant }}
-        </div>
+        <div class="col-6" v-if="item.Insectary_ID"><strong>Ins. ID:</strong> {{ item.Insectary_ID }}</div>
+        <div class="col-6" v-if="item.Mutant && item.Mutant !== 'NA'"><strong>Mutant:</strong> {{ item.Mutant }}</div>
       </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-/* Enforce 2 columns, centered images */
 .photo-grid-container {
   display: grid;
-  grid-template-columns: 1fr 1fr; /* Exact 2 columns */
+  grid-template-columns: 1fr 1fr;
   gap: 8px;
-  align-content: center; /* Vertically center content block */
+  align-content: center;
   min-height: 200px;
 }
-
 .img-wrapper {
   display: flex;
   justify-content: center;
@@ -154,11 +118,7 @@ const displayPhotos = () => {
   overflow: hidden;
   width: 100%;
 }
-
-.img-wrapper:only-child {
-  grid-column: span 2;
-}
-
+.img-wrapper:only-child { grid-column: span 2; }
 .panzoom-img {
   width: 100%;
   height: auto;
