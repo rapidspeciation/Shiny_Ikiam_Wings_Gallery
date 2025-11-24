@@ -2,12 +2,11 @@
 
 A static Vue.js application to view butterfly wing photos of specimens from the ongoing project at Ikiam - Ecuador.
 
-## 🔗 [Live Application](https://fr4nzz.github.io/Static_hiny_Ikiam_Wings_Gallery/)
-*(Note: Update this link to your final URL)*
+## 🔗 [Live Application](https://rapidspeciation.github.io/Shiny_Ikiam_Wings_Gallery/)
 
 ## Overview
 
-This project is a modern, static reimplementation of the original R-Shiny application. It was migrated to **Vue 3 + Vite** to improve performance, reduce hosting costs, and ensure high availability.
+This project is a modern, static reimplementation of the original R-Shiny application. It was migrated to **Vue 3 + Vite** to improve performance, host it for free on GitHub Pages, and ensure high availability.
 
 - **Previous Architecture:** R-Shiny running on AWS EC2 (Dockerized).
 - **Current Architecture:** Static Single Page Application (SPA) hosted on GitHub Pages. Data is pre-processed via Python and GitHub Actions.
@@ -18,7 +17,7 @@ This project is a modern, static reimplementation of the original R-Shiny applic
 - **Collection Tab**: Filter individuals based on Taxonomy (Family, Subfamily, Tribe, Species, Subspecies) and Sex.
 - **Insectary Tab**: View specimens from the insectary, filtered by Insectary ID and biological data.
 - **CRISPR Tab**: Specialized view for CRISPR-injected individuals, filtering by mutants.
-- **Search**: fast lookup by CAMID (e.g., `CAM12345`).
+- **Search**: Fast lookup by CAMID (e.g., `CAM012345`).
 
 ### ⚡ Performance & UX
 - **Image Proxying**: Uses `wsrv.nl` to cache and optimize images from Google Drive, preventing HTTP 429 (Rate Limit) errors and speeding up load times.
@@ -27,13 +26,26 @@ This project is a modern, static reimplementation of the original R-Shiny applic
   - **Mobile**: Native-feel gestures. One finger scrolls the page; pinch-to-zoom enables panning the image.
 - **Responsive Grid**: Automatically adjusts columns based on screen width and zoom level.
 
-### 🔄 Data Pipeline
-The application allows users to trigger a database update directly from the UI.
-1. User clicks "Update Database" (protected by password).
-2. The app triggers a **GitHub Action** (`update_data.yml`).
-3. A Python script downloads data from Google Sheets, processes dates/links, and generates optimized JSON files.
-4. The Action commits the new JSON files to the repository.
-5. A second Action (`deploy.yml`) automatically rebuilds and deploys the website.
+### 📂 Google Drive Data Source
+The application's data is sourced from Google Sheets, which are populated by the custom Google Apps Script included in this repository: [`list_google_drive_files.gs`](./list_google_drive_files.gs).
+
+This script recursively lists files from specified Google Drive folders into a `Photo_links` sheet and includes features like **Dead Link Cleaning** and **Batch Processing** to handle thousands of images.
+
+**To set this up in your Google Sheet:**
+1.  Open your Google Sheet and navigate to `Extensions > Apps Script`.
+2.  Create a file named `list_google_drive_files.gs` and paste the content from the file in this repo.
+3.  **Install LongRun Library**: Create another script file named `LongRun.gs` and paste the content from [this library](https://github.com/inclu-cat/LongRun/blob/main/generated-gs/LongRun.gs). This is required to bypass Google's 6-minute execution limit.
+4.  **Enable Drive API**: In the Apps Script editor, click `Services +` (left menu), select **Drive API**, and click Add.
+5.  **Configure Folders**: Update the `FOLDER_MAPPING` constant in `list_google_drive_files.gs` with your specific Google Drive Folder IDs.
+6.  **Run**: Refresh your Google Sheet. A new menu `Photo Database Tools` will appear to run the sync.
+
+### 🔄 Secure Database Updates
+The application allows users to trigger a database update directly from the UI without exposing API keys.
+1. **User Authentication**: Users enter a password in the "Update DB" tab.
+2. **Secure Proxy**: The app sends the request to a **Cloudflare Worker** (serverless function).
+3. **Trigger**: The Worker verifies the password and uses a hidden token to trigger a **GitHub Action** (`update_data.yml`).
+4. **Processing**: A Python script downloads data from Google Sheets, processes dates/links, and generates optimized JSON files.
+5. **Deployment**: The new data is committed to the repository, automatically triggering a rebuild and deployment of the website.
 
 ## Tech Stack
 
@@ -50,8 +62,8 @@ To run this application locally:
 
 1. **Clone the Repository**
    ```bash
-   git clone https://github.com/fr4nzz/Static_hiny_Ikiam_Wings_Gallery
-   cd Static_hiny_Ikiam_Wings_Gallery
+   git clone https://github.com/rapidspeciation/Shiny_Ikiam_Wings_Gallery.git
+   cd Shiny_Ikiam_Wings_Gallery
    ```
 
 2. **Install Dependencies**
@@ -79,5 +91,6 @@ For detailed configuration and setup instructions, see [DEPLOYMENT.md](DEPLOYMEN
 
 ## Credits
 
-- **Original App**: [rapidspeciation/Shiny_Ikiam_Wings_Gallery](https://github.com/rapidspeciation/Shiny_Ikiam_Wings_Gallery)
-- **Google Drive Script**: Utilizes `list_google_drive_files.gs` to map Drive photos to sheets.
+- **Idea & Development**: Franz Chandi
+- **AI Assistance (Original App)**: ChatGPT (OpenAI) - Assisted in the development of the initial R-Shiny codebase.
+- **AI Assistance (Migration)**: Gemini 3 Pro (Google) - Assisted in the complete architecture migration from R-Shiny to the modern static web stack.
