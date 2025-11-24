@@ -15,7 +15,7 @@ const imgRefs = ref([])
 const getProxiedUrl = (originalUrl) => {
   if (!originalUrl) return ''
   const encoded = encodeURIComponent(originalUrl)
-  return `https://wsrv.nl/?url=${encoded}&w=800&q=80&output=webp`
+  return `https://wsrv.nl/?url=${encoded}&w=2000&q=85&output=webp`
 }
 
 const handleImgError = (e, originalUrl) => {
