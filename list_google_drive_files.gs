@@ -10,22 +10,21 @@ Modifications:
 05/05/2025 Added folder selection and 'Replace .(jpg|HEIC|heic) with .JPG for CRISPR' column and
   Optimized performance by caching existing rows in memory and writing new data in batches instead of row-by-row.
 04/07/2025 Implemented LongRun (https://github.com/inclu-cat/LongRun) to avoid 6-minute Apps Script time limit.
-  Folder selector now accepts *multiple* indices/IDs separated by commas or
- *     spaces, e.g. `1,2,4` or `1 2  4`
+  Folder selector now accepts *multiple* indices/IDs separated by commas or spaces, e.g. `1,2,4` or `1 2  4`
 20/11/2025 Clean Dead Links: Checks URLs, deletes rows if file is missing. Includes Runtime & ETA calculation.
+08/12/2025 Improved performance by getting Google Drive files in batches. And fix running in the background.
+  Queue-based folder processing for reliable resume across subprocesses.
 */
 
-// ───────────────────────────────────────────────────────────────────────────────
-//  USER CONFIG
-// ───────────────────────────────────────────────────────────────────────────────
+// ─── CONFIG ───
 const FOLDER_MAPPING = {
   "Photos... collected butterflies/JPG_photos": "1EFzjLdjWT-4-BDqACxfrpfYIY78Pmcp0",
-  "PERU_2024/JPG":                            "19x8wnj1ZW_8axmsjuIuhF6lI25wGeteA",
-  "Photos CRISPR butterflies":                "1fswAA9nyKIDfAQr03bv5DmaCWcZ6-Rzu",
-  "Photos Kim took":                          "1XjcfuwpmgPvCy5cwfrtYpnxNrpCMwrcX",
-  "Wings of reared butterflies":              "1KzAuIAsKKAMVblp6ShNOYEiF59gu9u3F",
-  "Photos... collected butterflies/Raw_photos":"123X-DrY0uIQ8fkNwymCTba4wVkDQl2nC",
-  "PERU_2024/RAW":                            "1WnWyDhg2zA6Rh_wvbg-_nYosr9TKZkI-"
+  "PERU_2024/JPG":                              "19x8wnj1ZW_8axmsjuIuhF6lI25wGeteA",
+  "Photos CRISPR butterflies":                  "1fswAA9nyKIDfAQr03bv5DmaCWcZ6-Rzu",
+  "Photos Kim took":                            "1XjcfuwpmgPvCy5cwfrtYpnxNrpCMwrcX",
+  "Wings of reared butterflies":                "1KzAuIAsKKAMVblp6ShNOYEiF59gu9u3F",
+  "Photos... collected butterflies/Raw_photos": "123X-DrY0uIQ8fkNwymCTba4wVkDQl2nC",
+  "PERU_2024/RAW":                              "1WnWyDhg2zA6Rh_wvbg-_nYosr9TKZkI-"
 };
 
 const HEADERS = [
@@ -34,495 +33,751 @@ const HEADERS = [
   "Replace .(jpg|HEIC|heic) with .JPG for CRISPR"
 ];
 
-const CHUNK_SIZE_DEFAULT      = 20;   
-const MAX_EXEC_SECONDS_DEFAULT = 250; // Safe buffer (Apps Script limit is 360s)
-const TRIGGER_DELAY_MINUTES    = 1;   
+const CHUNK_SIZE    = 50;   // Rows per flush (larger = faster but more memory)
+const BATCH_CHECK   = 100;  // URLs to check per batch when cleaning
+const MAX_EXEC_SEC  = 250;  // 4 min 10s (buffer for API calls that can take 90s+)
+const TRIGGER_DELAY = 0.1;  // Minimal delay between triggers
 
-// ──────────────────────────────────────────────────────────────────────────────
-//  MENU
-// ──────────────────────────────────────────────────────────────────────────────
+// ─── MENU ───
 function onOpen() {
   SpreadsheetApp.getUi()
-    .createMenu('Photo Database Tools')
-    .addItem('🔄 Full Sync (Clean Dead Links + Add New)', 'startFullSync')
+    .createMenu('📷 Photo Database Tools')
+    .addItem('🔄 Full Sync (Clean + Add New)', 'startFullSync')
     .addItem('➕ Append New Files Only', 'startAppendOnly')
     .addSeparator()
-    .addItem('⚠️ Stop/Reset Script', 'resetScript')
+    .addItem('📊 Check Status', 'checkStatus')
+    .addItem('🛑 Stop Script', 'stopScript')
     .addToUi();
 }
 
-// ──────────────────────────────────────────────────────────────────────────────
-//  ENTRY POINTS
-// ──────────────────────────────────────────────────────────────────────────────
-
-/** 
- * OPTION 1: Full Sync
- * Asks for folders ONCE, then runs CleanTask -> ListTask 
- */
+// ─── ENTRY POINTS ───
 function startFullSync() {
-  const folderIds = promptForFolders();
-  if (!folderIds) return;
-
-  // Store folder IDs for the second step
-  PropertiesService.getScriptProperties().setProperty('PENDING_FOLDER_IDS', folderIds.join('|'));
-
-  // Start Step 1: Cleaning
-  initLongRunTask('CleanDeadLinksTask', [
-    true, // isChained (should run listing after?)
-    MAX_EXEC_SECONDS_DEFAULT,
-    TRIGGER_DELAY_MINUTES
-  ]);
+  if (!canStart_()) return;
+  const ids = promptFolders_();
+  if (!ids) return;
+  setProp_('FOLDERS', ids.join('|'));
+  setUser_();
+  SpreadsheetApp.getActiveSpreadsheet().toast('🔄 Starting Full Sync...', '📷 Photo Database', 5);
+  initTask_('CleanTask', ['true', MAX_EXEC_SEC, TRIGGER_DELAY]);
 }
 
-/** 
- * OPTION 2: Append Only (Skip cleaning)
- */
 function startAppendOnly() {
-  const folderIds = promptForFolders();
-  if (!folderIds) return;
-
-  // Start Step 2 directly
-  initLongRunTask('ListFilesTask', [
-    folderIds.join('|'),
-    true, // listAll
-    CHUNK_SIZE_DEFAULT,
-    MAX_EXEC_SECONDS_DEFAULT,
-    TRIGGER_DELAY_MINUTES
-  ]);
+  if (!canStart_()) return;
+  const ids = promptFolders_();
+  if (!ids) return;
+  setProp_('FOLDERS', ids.join('|'));
+  setUser_();
+  SpreadsheetApp.getActiveSpreadsheet().toast('➕ Starting Append...', '📷 Photo Database', 5);
+  initTask_('ListTask', [ids.join('|'), 'true', CHUNK_SIZE, MAX_EXEC_SEC, TRIGGER_DELAY]);
 }
 
-/**
- * RESETS all timers, states and logs.
- */
-function resetScript() {
-  const sheet = SpreadsheetApp.getActiveSheet();
+function checkStatus() {
   const props = PropertiesService.getScriptProperties();
+  const user = props.getProperty('RUN_USER');
+  const task = props.getProperty('RUN_TASK');
+  const started = props.getProperty('RUN_START');
+  const folders = props.getProperty('FOLDERS');
+  const triggers = ScriptApp.getProjectTriggers().length;
   
-  removeTransientLog(sheet);
+  let msg;
+  if (!user && !task) {
+    msg = '✅ No script currently running.';
+  } else {
+    let runtime = 'N/A';
+    if (started) {
+      const sec = Math.floor((Date.now() - parseInt(started)) / 1000);
+      runtime = formatTime_(sec);
+    }
+    msg = '👤 User: ' + user + '\n' +
+          '📋 Task: ' + task + '\n' +
+          '⏱️ Runtime: ' + runtime + '\n' +
+          '🔄 Triggers: ' + triggers + '\n' +
+          '📁 Folders: ' + (folders ? folders.split('|').length : 0);
+  }
+  SpreadsheetApp.getUi().alert('📊 Script Status', msg, SpreadsheetApp.getUi().ButtonSet.OK);
+}
+
+function stopScript() {
+  const ui = SpreadsheetApp.getUi();
+  if (ui.alert('🛑 Stop Script', 'Stop all running tasks?', ui.ButtonSet.YES_NO) !== ui.Button.YES) return;
+  
+  setProp_('ABORT', 'true');
+  
+  // Delete all triggers
+  ScriptApp.getProjectTriggers().forEach(t => {
+    try { ScriptApp.deleteTrigger(t); } catch(e) {}
+  });
   
   // Reset LongRun
-  LongRun.instance.reset('CleanDeadLinksTask');
-  LongRun.instance.reset('ListFilesTask');
+  try {
+    LongRun.instance.reset('CleanTask');
+    LongRun.instance.reset('ListTask');
+  } catch(e) {}
   
-  // Reset Custom Properties
-  props.deleteProperty('PENDING_FOLDER_IDS');
-  props.deleteProperty('CLEAN_CURRENT_ROW');
-  props.deleteProperty('CLEAN_START_TIME');
-  props.deleteProperty('CLEAN_START_ROW');
-  props.deleteProperty('CLEAN_DELETED_COUNT');
-
-  SpreadsheetApp.getActiveSpreadsheet().toast("Script reset. Timers cleared.");
+  // Clear props
+  ['FOLDERS','CLEAN_IDX','CLEAN_START','CLEAN_DEL','CLEAN_BATCH','CLEAN_CHECKED',
+   'LIST_ADDED','LIST_FOLDER','LIST_START','LIST_BATCH','LIST_FOLDER_QUEUE','LIST_CHECKED',
+   'RUN_USER','RUN_TASK','RUN_START'].forEach(k => delProp_(k));
+  
+  // Mark abort in sheet
+  const sheet = getSheet_();
+  if (sheet) {
+    removeLog_(sheet);
+    const lastRow = sheet.getLastRow();
+    sheet.getRange(lastRow + 1, 1).setValue('🛑 Aborted by user at row ' + lastRow);
+    SpreadsheetApp.flush();
+  }
+  
+  SpreadsheetApp.getActiveSpreadsheet().toast('🛑 Script stopped.', '📷 Photo Database', 5);
 }
 
-// ──────────────────────────────────────────────────────────────────────────────
-//  TASK 1: CLEAN DEAD LINKS (Bottom-Up Deletion with ETA)
-// ──────────────────────────────────────────────────────────────────────────────
-function CleanDeadLinksTask() {
-  const funcName = 'CleanDeadLinksTask';
+// ─── CLEAN TASK ───
+function CleanTask() {
+  const funcName = 'CleanTask';
   const longRun = LongRun.instance;
   
-  // Get Params
-  const p = longRun.getParameters(funcName);
-  const isChained = (p[0] === 'true' || p[0] === true);
-  const maxExec = Number(p[1]) || MAX_EXEC_SECONDS_DEFAULT;
-  const delay = Number(p[2]) || TRIGGER_DELAY_MINUTES;
-
-  longRun.setMaxExecutionSeconds(maxExec);
-  longRun.setTriggerDelayMinutes(delay);
-
-  // Start/Resume
-  const startIndex = longRun.startOrResume(funcName); 
+  const isResuming = !!PropertiesService.getScriptProperties().getProperty('CLEAN_IDX');
+  console.log('DEBUG: CleanTask started, isResuming=' + isResuming);
   
-  const sheet = SpreadsheetApp.getActiveSheet();
-  validateSheet(sheet);
+  if (shouldAbort_()) { cleanup_('CleanTask'); return; }
+  
+  const p = longRun.getParameters(funcName);
+  const isChained = p[0] === 'true';
+  longRun.setMaxExecutionSeconds(Number(p[1]) || MAX_EXEC_SEC);
+  longRun.setTriggerDelayMinutes(Number(p[2]) || TRIGGER_DELAY);
+  longRun.startOrResume(funcName);
+  
+  const sheet = getSheet_();
+  if (!sheet) { longRun.end(funcName); return; }
   
   const props = PropertiesService.getScriptProperties();
+  const user = props.getProperty('RUN_USER') || 'Unknown';
   
-  // --- INITIALIZATION & STATE RESTORATION ---
-  let currentRow = parseInt(props.getProperty('CLEAN_CURRENT_ROW'));
-  let startTime  = parseInt(props.getProperty('CLEAN_START_TIME'));
-  let startRow   = parseInt(props.getProperty('CLEAN_START_ROW'));
-  let deletedCount = parseInt(props.getProperty('CLEAN_DELETED_COUNT')) || 0;
-
-  // If this is the VERY first run (no state saved)
-  if (isNaN(currentRow)) {
-    let lastRow = sheet.getLastRow();
-    // Ignore existing transient log if present (starts with hourglass)
+  // Remove status rows first
+  let lastRow = sheet.getLastRow();
+  while (lastRow > 1) {
     const lastVal = sheet.getRange(lastRow, 1).getValue();
-    if (typeof lastVal === 'string' && lastVal.startsWith("⏳")) {
-      lastRow--; 
+    if (typeof lastVal === 'string' && (lastVal.startsWith('⏳') || lastVal.startsWith('🛑') || lastVal.startsWith('✓'))) {
+      sheet.deleteRow(lastRow);
+      lastRow--;
+    } else {
+      break;
     }
-    
-    currentRow = lastRow;
-    startRow = lastRow;
-    startTime = Date.now();
-    
-    // Save Initial State
-    props.setProperty('CLEAN_START_TIME', startTime.toString());
-    props.setProperty('CLEAN_START_ROW', startRow.toString());
   }
-
-  let suspended = false;
-  let checkedInThisRun = 0;
-
-  try {
-    // Loop backwards from bottom to row 2 (skip header)
-    for (let r = currentRow; r >= 2; r--) {
-      
-      // Check Time / Suspend every 5 rows
-      if (checkedInThisRun > 0 && checkedInThisRun % 5 === 0) {
-        if (longRun.checkShouldSuspend(funcName, 1)) {
-          suspended = true;
-          // Save state before quitting
-          props.setProperty('CLEAN_CURRENT_ROW', r.toString());
-          props.setProperty('CLEAN_DELETED_COUNT', deletedCount.toString());
-          break;
-        }
+  SpreadsheetApp.flush();
+  
+  // Get checked IDs from previous runs (to skip)
+  const checkedStr = props.getProperty('CLEAN_CHECKED') || '';
+  const checkedIds = new Set(checkedStr ? checkedStr.split(',') : []);
+  
+  // Read all URLs, filter out already checked
+  let urlData = [];
+  if (lastRow > 1) {
+    const allData = sheet.getRange(2, 5, lastRow - 1, 1).getValues().flat();
+    for (let i = 0; i < allData.length; i++) {
+      const id = extractFileId_(allData[i]);
+      if (id && !checkedIds.has(id)) {
+        urlData.push({ row: i + 2, id: id });
       }
-
-      // Update Log every 10 rows (Calculate Stats)
-      if (checkedInThisRun % 10 === 0) {
-        const now = Date.now();
-        const elapsedSeconds = (now - startTime) / 1000;
-        const rowsProcessed = startRow - r; // Total rows scanned so far
-        
-        let etaText = "Calculating...";
-        if (rowsProcessed > 0 && elapsedSeconds > 0) {
-          const speed = rowsProcessed / elapsedSeconds; // rows per second
-          const remainingRows = r - 1; // rows left to check
-          const etaSeconds = remainingRows / speed;
-          etaText = formatTime_(etaSeconds);
-        }
-
-        const statusMsg = `⏳ Row ${r} | Deleted: ${deletedCount} | Run: ${formatTime_(elapsedSeconds)} | ETA: ${etaText}`;
-        updateTransientLog(sheet, statusMsg);
-      }
-
-      const url = sheet.getRange(r, 5).getValue(); // Column E is URL
-      
-      if (isDeadLink_(url)) {
-        sheet.deleteRow(r);
-        deletedCount++;
-      }
-      
-      checkedInThisRun++;
     }
-
-    if (!suspended) {
-      // FINISHED CLEANING
-      removeTransientLog(sheet);
+  }
+  
+  // Get or init state
+  let startTime = parseInt(props.getProperty('CLEAN_START')) || Date.now();
+  let deleted = parseInt(props.getProperty('CLEAN_DEL')) || 0;
+  let batchIdx = parseInt(props.getProperty('CLEAN_BATCH')) || 0;
+  let totalChecked = checkedIds.size;
+  
+  if (!isResuming) {
+    setProp_('CLEAN_START', startTime.toString());
+  }
+  
+  const totalUrls = urlData.length + checkedIds.size;
+  const deadIds = [];
+  
+  // Status helper
+  const getStatus = () => {
+    const runtime = formatTime_((Date.now() - startTime) / 1000);
+    const checked = totalChecked;
+    const eta = checked > 0 ? formatTime_((totalUrls - checked) * (Date.now() - startTime) / 1000 / checked) : '...';
+    return '⏳ ' + user + ' | Clean: ' + checked + '/' + totalUrls + ' | Dead: ' + deleted + ' | Run: ' + runtime + ' | ETA: ' + eta;
+  };
+  
+  updateLog_(sheet, getStatus());
+  console.log('DEBUG: CleanTask, toCheck=' + urlData.length + ', alreadyChecked=' + checkedIds.size);
+  
+  let suspended = false;
+  let currentIdx = 0;
+  
+  try {
+    // Process URLs
+    while (currentIdx < urlData.length && !suspended) {
+      if (shouldAbort_()) break;
       
-      // Clear all temp properties
-      props.deleteProperty('CLEAN_CURRENT_ROW');
-      props.deleteProperty('CLEAN_START_TIME');
-      props.deleteProperty('CLEAN_START_ROW');
-      props.deleteProperty('CLEAN_DELETED_COUNT');
+      // Check suspend
+      if (longRun.checkShouldSuspend(funcName, batchIdx)) {
+        console.log('DEBUG: CleanTask suspending at idx=' + currentIdx);
+        suspended = true;
+        break;
+      }
       
-      longRun.end(funcName);
+      // Check batch of URLs
+      const batchEnd = Math.min(currentIdx + BATCH_CHECK, urlData.length);
       
-      const totalTime = (Date.now() - startTime) / 1000;
-      SpreadsheetApp.getActiveSpreadsheet().toast(`Cleanup Done! Removed ${deletedCount} rows in ${formatTime_(totalTime)}.`);
+      for (let i = currentIdx; i < batchEnd; i++) {
+        const item = urlData[i];
+        checkedIds.add(item.id);
+        totalChecked++;
+        if (isFileDeleted_(item.id)) {
+          deadIds.push(item.id);
+          deleted++;
+        }
+      }
       
-      // Trigger Step 2 if chained
+      currentIdx = batchEnd;
+      batchIdx++;
+      
+      // Update progress
+      updateLog_(sheet, getStatus());
+      
+      // Save state
+      setProp_('CLEAN_DEL', deleted.toString());
+      setProp_('CLEAN_BATCH', batchIdx.toString());
+      
+      console.log('DEBUG: CleanTask batch ' + batchIdx + ', checked=' + totalChecked + '/' + totalUrls + ', dead=' + deadIds.length);
+      
+      // Delete dead rows found in this subprocess (every few batches or at end)
+      if (deadIds.length >= 10 || currentIdx >= urlData.length) {
+        deleteRowsByFileId_(sheet, deadIds);
+        deadIds.length = 0; // Clear after deletion
+      }
+    }
+    
+    // Save checked IDs (limit to avoid property size limit)
+    const checkedArr = Array.from(checkedIds).slice(-5000);
+    setProp_('CLEAN_CHECKED', checkedArr.join(','));
+    
+    // Delete any remaining dead rows
+    if (deadIds.length > 0) {
+      deleteRowsByFileId_(sheet, deadIds);
+    }
+    
+    if (!suspended && currentIdx >= urlData.length) {
+      // Finished
+      removeLog_(sheet);
+      const elapsed = formatTime_((Date.now() - startTime) / 1000);
+      sheet.getRange(sheet.getLastRow() + 1, 1).setValue('✓ Clean done: ' + deleted + ' removed in ' + elapsed);
+      
+      // Clear clean state
+      ['CLEAN_IDX','CLEAN_START','CLEAN_DEL','CLEAN_BATCH','CLEAN_CHECKED'].forEach(k => delProp_(k));
+      console.log('DEBUG: CleanTask completed, deleted=' + deleted);
+      
+      // Chain to list task
       if (isChained) {
-        const savedIds = props.getProperty('PENDING_FOLDER_IDS');
-        if (savedIds) {
-          initLongRunTask('ListFilesTask', [
-            savedIds,
-            true,
-            CHUNK_SIZE_DEFAULT,
-            MAX_EXEC_SECONDS_DEFAULT,
-            TRIGGER_DELAY_MINUTES
-          ]);
+        const folders = props.getProperty('FOLDERS');
+        if (folders) {
+          console.log('DEBUG: CleanTask chaining to ListTask');
+          initTask_('ListTask', [folders, 'true', CHUNK_SIZE, MAX_EXEC_SEC, TRIGGER_DELAY]);
         }
+      } else {
+        clearUser_();
       }
-    }
-
-  } catch (e) {
-    updateTransientLog(sheet, `❌ Error: ${e.message}`);
-  }
-}
-
-// Helper: Check if file exists using Drive API
-function isDeadLink_(url) {
-  if (!url || url === "") return false; // Empty is not "dead"
-  
-  // Extract ID from URL
-  const match = url.match(/id=([a-zA-Z0-9_-]+)/) || url.match(/\/d\/([a-zA-Z0-9_-]+)/);
-  if (!match) return false; // Can't parse ID, skip
-  
-  const id = match[1];
-  
-  try {
-    // Fast check using Advanced Drive API
-    // If this throws 404, file is gone.
-    const file = Drive.Files.get(id, { fields: "trashed" });
-    if (file.trashed) return true; // File exists but is in trash -> Treat as dead
-    return false; // File exists and is active
-  } catch (e) {
-    // If error is "File not found" or 404, it's dead.
-    if (e.message.includes('File not found') || e.message.includes('404')) {
-      return true;
-    }
-    return false; 
-  }
-}
-
-// ──────────────────────────────────────────────────────────────────────────────
-//  TASK 2: LIST FILES
-// ──────────────────────────────────────────────────────────────────────────────
-function ListFilesTask() {
-  const funcName = 'ListFilesTask';
-  const longRun  = LongRun.instance;
-
-  // Retrieve parameters
-  const p            = longRun.getParameters(funcName);
-  const rootIds      = (p[0] || '').split('|').filter(Boolean); 
-  const listAll      = (p[1] === true || p[1] === 'true');
-  const CHUNK_SIZE   = Number(p[2]) || CHUNK_SIZE_DEFAULT;
-  const maxExec      = Number(p[3]) || MAX_EXEC_SECONDS_DEFAULT;
-  const triggerDelay = Number(p[4]) || TRIGGER_DELAY_MINUTES;
-
-  longRun.setMaxExecutionSeconds(maxExec);
-  longRun.setTriggerDelayMinutes(triggerDelay);
-
-  longRun.startOrResume(funcName);
-
-  let suspended = false;
-
-  try {
-    for (let id of rootIds) {
-      suspended = crawlDriveLongRun_(id, listAll, CHUNK_SIZE, longRun, funcName);
-      if (suspended) break; 
+    } else if (suspended) {
+      const triggers = ScriptApp.getProjectTriggers().length;
+      console.log('DEBUG: CleanTask suspended, triggers=' + triggers);
     }
   } finally {
-    if (!suspended) {
-      longRun.end(funcName); 
-      const sheet = SpreadsheetApp.getActiveSheet();
-      removeTransientLog(sheet);
-      SpreadsheetApp.getActiveSpreadsheet().toast("Sync Complete!");
-    }
+    longRun.end(funcName);
   }
 }
 
-function crawlDriveLongRun_(rootId, listAll, CHUNK_SIZE, longRun, funcName) {
-  const ui    = SpreadsheetApp.getActiveSpreadsheet();
-  const sheet = SpreadsheetApp.getActiveSheet();
-  validateSheet(sheet);
-
-  if (sheet.getLastRow() === 0) sheet.appendRow(HEADERS);
-
-  // Cache existing names to avoid duplicates
-  let lastRealRow = sheet.getLastRow();
-  const lastVal = sheet.getRange(lastRealRow, 1).getValue();
-  if (typeof lastVal === 'string' && lastVal.startsWith("⏳")) {
-    lastRealRow--;
-  }
-
-  let seen = new Set();
-  if (lastRealRow > 1) {
-    const data = sheet.getRange(2, 2, lastRealRow - 1, 1).getValues();
-    seen = new Set(data.flat().filter(String));
-  }
-
-  const buffer    = [];
-  let   nextRow   = lastRealRow + 1;
-  let   written   = 0;
-  let   chunkIdx  = 0;
-  let   suspended = false; 
-
-  const root     = DriveApp.getFolderById(rootId);
-  const rootName = root.getName();
-
-  updateTransientLog(sheet, `⏳ Status: Scanning folder "${rootName}"...`);
-
-  if (!seen.has(rootName)) {
-    buffer.push(buildRow_('', rootName, 'Folder', root));
-    seen.add(rootName);
-  }
-
-  // Flush helper
-  const maybeFlush = () => {
-    if (buffer.length >= CHUNK_SIZE) {
-      nextRow = flushBuffer_(sheet, buffer, nextRow);
-      written += CHUNK_SIZE;
-      chunkIdx++;
-      
-      updateTransientLog(sheet, `⏳ Status: Scanning "${rootName}"... Added ${written} items.`);
-      
-      if (longRun.checkShouldSuspend(funcName, chunkIdx)) suspended = true;
-    }
-  };
-
-  // Traversal
-  const walk = (folder, path) => {
-    if (suspended) return;
-
-    const subFolders = folder.getFolders();
-    while (!suspended && subFolders.hasNext()) {
-      const f = subFolders.next();
-      const n = f.getName();
-      if (n.endsWith('_temp')) continue;
-      if (!seen.has(n)) {
-        buffer.push(buildRow_(path, n, 'Folder', f));
-        seen.add(n);
-        maybeFlush();
-      }
-      walk(f, path ? `${path}/${n}` : n);
-    }
-
-    if (listAll && !suspended) {
-      const files = folder.getFiles();
-      while (!suspended && files.hasNext()) {
-        const file = files.next();
-        const n    = file.getName();
-        if (seen.has(n)) continue;
-        buffer.push(buildRow_(path, n, 'File', file));
-        seen.add(n);
-        maybeFlush();
-      }
-    }
-  };
-
-  walk(root, rootName);
-
-  if (buffer.length && !suspended) {
-    flushBuffer_(sheet, buffer, nextRow);
-    written += buffer.length;
-  }
-
-  return suspended; 
-}
-
-
-// ──────────────────────────────────────────────────────────────────────────────
-//  UI & HELPERS
-// ──────────────────────────────────────────────────────────────────────────────
-
-function promptForFolders() {
-  const sheet = SpreadsheetApp.getActiveSheet();
-  validateSheet(sheet);
-
-  let prompt = "Enter number(s) separated by commas (e.g., 1, 3):\\n";
-  const keys = Object.keys(FOLDER_MAPPING);
-  keys.forEach((k, i) => prompt += `${i + 1}. ${k}\\n`);
-
-  const resp = Browser.inputBox('Select Folders to Scan', prompt, Browser.Buttons.OK_CANCEL);
-  if (resp === 'cancel' || resp === '') return null;
-
-  const tokens = resp.split(/[ ,]+/).map(t => t.trim()).filter(Boolean);
-  if (!tokens.length) return null;
-
-  const folderIds = tokens.map(t => {
-    if (!isNaN(t) && +t >= 1 && +t <= keys.length) {
-      return FOLDER_MAPPING[keys[+t - 1]];
-    }
-    return t; 
-  });
-
-  return folderIds;
-}
-
-function initLongRunTask(funcName, paramsArray) {
-  LongRun.instance.setParameters(funcName, paramsArray);
-  if (funcName === 'CleanDeadLinksTask') CleanDeadLinksTask();
-  if (funcName === 'ListFilesTask') ListFilesTask();
-}
-
-function validateSheet(sheet) {
-  if (sheet.getName() !== 'Photo_links') {
-    SpreadsheetApp.getUi().alert('Error: This script must run on the "Photo_links" sheet.');
-    throw new Error('Wrong Sheet');
-  }
-}
-
-// ─── TRANSIENT LOG HELPERS ───
-
-function updateTransientLog(sheet, message) {
+// Delete rows by file ID (searches URL column for matching IDs)
+function deleteRowsByFileId_(sheet, deadIds) {
+  if (!deadIds || deadIds.length === 0) return;
+  
+  const deadSet = new Set(deadIds);
   const lastRow = sheet.getLastRow();
-  if (lastRow < 1) return;
-
-  const lastCell = sheet.getRange(lastRow, 1);
-  const val = lastCell.getValue();
-
-  // If last row is already a status log (starts with hourglass), overwrite it
-  if (typeof val === 'string' && val.startsWith("⏳")) {
-    lastCell.setValue(message);
+  if (lastRow <= 1) return;
+  
+  const urls = sheet.getRange(2, 5, lastRow - 1, 1).getValues().flat();
+  const rowsToDelete = [];
+  
+  for (let i = 0; i < urls.length; i++) {
+    const id = extractFileId_(urls[i]);
+    if (id && deadSet.has(id)) {
+      rowsToDelete.push(i + 2);
+    }
+  }
+  
+  // Delete from bottom up
+  rowsToDelete.sort((a, b) => b - a);
+  for (const row of rowsToDelete) {
+    sheet.deleteRow(row);
+  }
+  
+  if (rowsToDelete.length > 0) {
     SpreadsheetApp.flush();
-  } else {
-    // Append new status log
-    const newRow = lastRow + 1;
-    sheet.getRange(newRow, 1).setValue(message)
-         .setFontStyle("italic")
-         .setFontColor("#666666");
-    try { sheet.getRange(newRow, 1, 1, 5).merge(); } catch(e){}
-    SpreadsheetApp.flush();
+    console.log('DEBUG: deleted ' + rowsToDelete.length + ' dead rows');
   }
 }
 
-function removeTransientLog(sheet) {
+// Extract file ID from Google Drive URL
+function extractFileId_(url) {
+  if (!url) return null;
+  const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/) || url.match(/id=([a-zA-Z0-9_-]+)/);
+  return match ? match[1] : null;
+}
+
+// Check if file is deleted
+function isFileDeleted_(fileId) {
+  if (!fileId) return false;
+  try {
+    const file = Drive.Files.get(fileId, { fields: 'trashed' });
+    return file.trashed === true;
+  } catch(e) {
+    return e.message.includes('File not found') || e.message.includes('404');
+  }
+}
+
+// ─── LIST TASK ───
+function ListTask() {
+  const funcName = 'ListTask';
+  const longRun = LongRun.instance;
+  
+  const isResuming = longRun.isRunning(funcName) || PropertiesService.getScriptProperties().getProperty('LIST_BATCH');
+  console.log('DEBUG: ListTask started, isResuming=' + !!isResuming);
+  
+  if (shouldAbort_()) { cleanup_('ListTask'); return; }
+  
+  const p = longRun.getParameters(funcName);
+  const rootIds = (p[0] || '').split('|').filter(Boolean);
+  const listAll = p[1] === 'true';
+  const chunkSize = Number(p[2]) || CHUNK_SIZE;
+  longRun.setMaxExecutionSeconds(Number(p[3]) || MAX_EXEC_SEC);
+  longRun.setTriggerDelayMinutes(Number(p[4]) || TRIGGER_DELAY);
+  longRun.startOrResume(funcName);
+  
+  // Init start time if first run
+  const props = PropertiesService.getScriptProperties();
+  if (!props.getProperty('LIST_START')) {
+    setProp_('LIST_START', Date.now().toString());
+  }
+  
+  let suspended = false;
+  let aborted = false;
+  
+  try {
+    // Get current folder index
+    let folderIdx = parseInt(props.getProperty('LIST_FOLDER')) || 0;
+    
+    for (let i = folderIdx; i < rootIds.length; i++) {
+      if (shouldAbort_()) { aborted = true; break; }
+      setProp_('LIST_FOLDER', i.toString());
+      const result = crawlFolder_(rootIds[i], listAll, chunkSize, longRun, funcName, i + 1, rootIds.length);
+      if (result === 'suspended') { suspended = true; break; }
+      if (result === 'aborted') { aborted = true; break; }
+    }
+    
+    if (!suspended && !aborted) {
+      const sheet = getSheet_();
+      if (sheet) {
+        removeLog_(sheet);
+        const added = parseInt(props.getProperty('LIST_ADDED')) || 0;
+        const startTime = parseInt(props.getProperty('LIST_START')) || Date.now();
+        const runtime = formatTime_((Date.now() - startTime) / 1000);
+        sheet.getRange(sheet.getLastRow() + 1, 1).setValue('✓ Sync done: ' + added + ' files added in ' + runtime);
+      }
+      ['FOLDERS','LIST_ADDED','LIST_FOLDER','LIST_START','LIST_BATCH','LIST_FOLDER_QUEUE','LIST_CHECKED'].forEach(k => delProp_(k));
+      clearUser_();
+      console.log('DEBUG: ListTask completed');
+    } else if (suspended) {
+      const triggers = ScriptApp.getProjectTriggers().length;
+      console.log('DEBUG: ListTask suspended, triggers=' + triggers + ', will resume in ' + TRIGGER_DELAY + ' min');
+    } else if (aborted) {
+      console.log('DEBUG: ListTask aborted by user');
+    }
+  } finally {
+    longRun.end(funcName);
+  }
+}
+
+function crawlFolder_(rootId, listAll, chunkSize, longRun, funcName, folderNum, totalFolders) {
+  const sheet = getSheet_();
+  if (!sheet) return 'error';
+  if (sheet.getLastRow() === 0) sheet.appendRow(HEADERS);
+  
+  const props = PropertiesService.getScriptProperties();
+  const user = props.getProperty('RUN_USER') || 'Unknown';
+  const startTime = parseInt(props.getProperty('LIST_START')) || Date.now();
+  let batchIdx = parseInt(props.getProperty('LIST_BATCH')) || 0;
+  let totalCheckedPersisted = parseInt(props.getProperty('LIST_CHECKED')) || 0;
+  
+  const elapsedSec = Math.floor((Date.now() - startTime) / 1000);
+  console.log('DEBUG: crawlFolder_ started, batchIdx=' + batchIdx + ', totalElapsed=' + elapsedSec + 's, totalChecked=' + totalCheckedPersisted);
+  
+  // Remove ALL status/abort rows at bottom
+  let lastRow = sheet.getLastRow();
+  let deletedRows = 0;
+  while (lastRow > 1) {
+    const lastVal = sheet.getRange(lastRow, 1).getValue();
+    if (typeof lastVal === 'string' && (lastVal.startsWith('⏳') || lastVal.startsWith('🛑') || lastVal.startsWith('✓'))) {
+      sheet.deleteRow(lastRow);
+      lastRow--;
+      deletedRows++;
+    } else {
+      break;
+    }
+  }
+  if (deletedRows > 0) {
+    console.log('DEBUG: deleted ' + deletedRows + ' status row(s)');
+    SpreadsheetApp.flush();
+  }
+  
+  // Build seen set from existing names (column B)
+  // Using just filename ensures no duplicates across folders
+  const seen = new Set();
+  if (lastRow > 1) {
+    sheet.getRange(2, 2, lastRow - 1, 1).getValues().flat().filter(String).forEach(n => seen.add(n));
+  }
+  console.log('DEBUG: seen set built with ' + seen.size + ' entries');
+  
+  const root = DriveApp.getFolderById(rootId);
+  const rootName = root.getName();
+  
+  const buffer = [];
+  let nextRow = lastRow + 1;
+  let added = parseInt(props.getProperty('LIST_ADDED')) || 0;
+  let suspended = false;
+  let checkedCount = 0;
+  
+  // Status helper
+  const getStatus = () => {
+    const runtime = formatTime_((Date.now() - startTime) / 1000);
+    return '⏳ ' + user + ' | Folder ' + folderNum + '/' + totalFolders + ' "' + rootName + '" | Added: ' + added + ' | Run: ' + runtime;
+  };
+  
+  updateLog_(sheet, getStatus());
+  
+  // Add root folder if not seen
+  if (!seen.has(rootName)) {
+    buffer.push(buildRowFromMeta_(rootName, rootName, 'Folder', root.getUrl(), root.getDateCreated(), root.getDescription(), 0, root.getOwner().getEmail(), ''));
+    seen.add(rootName);
+    added++;
+  }
+  
+  const fields = 'nextPageToken, files(id, name, mimeType, webViewLink, createdTime, description, size, owners, imageMediaMetadata)';
+  
+  // Use a queue of folders to process (persisted in properties)
+  // Each queue item: { id, path, pageToken (optional) }
+  let folderQueueStr = props.getProperty('LIST_FOLDER_QUEUE') || '';
+  let folderQueue = folderQueueStr ? JSON.parse(folderQueueStr) : [{ id: rootId, path: rootName }];
+  
+  // Persisted total checked count (across all subprocesses)
+  let totalChecked = parseInt(props.getProperty('LIST_CHECKED')) || 0;
+  
+  // Save state helper
+  const saveState = (pageToken) => {
+    // Save pageToken in current folder item so we resume from correct page
+    if (folderQueue.length > 0 && pageToken) {
+      folderQueue[0].pageToken = pageToken;
+    }
+    setProp_('LIST_FOLDER_QUEUE', JSON.stringify(folderQueue));
+    setProp_('LIST_CHECKED', totalChecked.toString());
+  };
+  
+  // Process folders from queue (breadth-first)
+  while (folderQueue.length > 0 && !suspended) {
+    if (shouldAbort_()) break;
+    
+    const current = folderQueue[0]; // Peek at first item
+    const folderId = current.id;
+    const path = current.path;
+    let folderPageToken = current.pageToken || null; // Resume from saved page token
+    
+    // Check suspend before processing folder
+    if (longRun.checkShouldSuspend(funcName, batchIdx)) {
+      console.log('DEBUG: checkShouldSuspend TRUE, saving state');
+      setProp_('LIST_BATCH', batchIdx.toString());
+      setProp_('LIST_ADDED', added.toString());
+      saveState(folderPageToken);
+      suspended = true;
+      break;
+    }
+    
+    if (folderPageToken) {
+      console.log('DEBUG: resuming folder "' + path + '" from saved page token');
+    }
+    
+    do {
+      if (suspended || shouldAbort_()) break;
+      
+      // Get batch of files/folders from this folder
+      const response = Drive.Files.list({
+        q: "'" + folderId + "' in parents and trashed = false",
+        fields: fields,
+        pageSize: 1000,
+        pageToken: folderPageToken
+      });
+      
+      const files = response.files || [];
+      totalChecked += files.length;
+      checkedCount += files.length;
+      console.log('DEBUG: API returned ' + files.length + ' items, totalChecked=' + totalChecked);
+      
+      // Save the next page token for potential resume
+      folderPageToken = response.nextPageToken;
+      
+      // Check suspend AFTER each API call (API calls can take 30-90s each)
+      if (longRun.checkShouldSuspend(funcName, batchIdx)) {
+        console.log('DEBUG: checkShouldSuspend TRUE after API call');
+        setProp_('LIST_BATCH', batchIdx.toString());
+        setProp_('LIST_ADDED', added.toString());
+        saveState(folderPageToken);
+        suspended = true;
+        break;
+      }
+      
+      for (const file of files) {
+        if (suspended || shouldAbort_()) break;
+        
+        const name = file.name;
+        const isFolder = file.mimeType === 'application/vnd.google-apps.folder';
+        
+        // Skip _temp folders
+        if (isFolder && name.endsWith('_temp')) continue;
+        
+        // Queue subfolders for later processing
+        if (isFolder && listAll) {
+          folderQueue.push({ id: file.id, path: path ? path + '/' + name : name });
+        }
+        
+        if (!seen.has(name)) {
+          const kind = isFolder ? 'Folder' : 'File';
+          const capture = (file.imageMediaMetadata && file.imageMediaMetadata.time) ? parseCaptureDate_(file.imageMediaMetadata.time) : '';
+          const ownerEmail = (file.owners && file.owners.length > 0) ? file.owners[0].emailAddress : '';
+          
+          buffer.push(buildRowFromMeta_(path ? path + '/' + name : name, name, kind, file.webViewLink, new Date(file.createdTime), file.description || '', (file.size || 0) / 1024, ownerEmail, capture));
+          seen.add(name);
+          added++;
+          
+          // Flush if buffer full
+          if (buffer.length >= chunkSize) {
+            batchIdx++;
+            setProp_('LIST_ADDED', added.toString());
+            setProp_('LIST_BATCH', batchIdx.toString());
+            nextRow = flushBufferWithStatus_(sheet, buffer, nextRow, getStatus());
+            console.log('DEBUG: flushed batch, batchIdx=' + batchIdx + ', added=' + added);
+            
+            if (longRun.checkShouldSuspend(funcName, batchIdx)) {
+              console.log('DEBUG: checkShouldSuspend TRUE after flush');
+              saveState(folderPageToken);
+              suspended = true;
+              break;
+            }
+          }
+        }
+      }
+      
+    } while (folderPageToken && !suspended && !shouldAbort_());
+    
+    // Remove completed folder from queue (only if not suspended mid-folder)
+    if (!suspended && !folderPageToken) {
+      folderQueue.shift();
+      console.log('DEBUG: folder "' + path + '" done, queue size=' + folderQueue.length);
+    }
+  }
+  
+  console.log('DEBUG: processFolder finished, suspended=' + suspended + ', buffer.length=' + buffer.length + ', added=' + added + ', totalChecked=' + totalChecked + ', queueLeft=' + folderQueue.length);
+  
+  // Flush remaining buffer
+  if (buffer.length) {
+    setProp_('LIST_ADDED', added.toString());
+    flushBufferWithStatus_(sheet, buffer, nextRow, getStatus());
+    console.log('DEBUG: final flush, total added=' + added);
+  }
+  
+  // Final status update
+  if (!suspended && folderQueue.length === 0) {
+    updateLog_(sheet, getStatus());
+    console.log('DEBUG: folder "' + rootName + '" completed');
+    delProp_('LIST_FOLDER_QUEUE');
+    delProp_('LIST_CHECKED');
+  } else if (suspended) {
+    saveState(null); // Save queue state without changing pageToken
+  }
+  
+  if (shouldAbort_()) return 'aborted';
+  return suspended ? 'suspended' : 'done';
+}
+
+// Build row from API metadata (no extra API calls needed)
+function buildRowFromMeta_(fullPath, name, kind, url, createdDate, description, sizeKb, ownerEmail, captureDate) {
+  return [fullPath, name, kind, captureDate, url, createdDate, description, sizeKb, ownerEmail];
+}
+
+// Parse EXIF date string
+function parseCaptureDate_(timeStr) {
+  if (!timeStr) return '';
+  const m = timeStr.match(/(\d{4}):(\d{2}):(\d{2}) (\d{2}):(\d{2}):(\d{2})/);
+  return m ? new Date(m[1] + '-' + m[2] + '-' + m[3] + 'T' + m[4] + ':' + m[5] + ':' + m[6] + 'Z') : timeStr;
+}
+
+// ─── HELPERS ───
+function getSheet_() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  return ss.getSheetByName('Photo_links');
+}
+
+function promptFolders_() {
+  const ui = SpreadsheetApp.getUi();
+  const sheet = SpreadsheetApp.getActiveSheet();
+  if (sheet.getName() !== 'Photo_links') {
+    ui.alert('⚠️ Error', 'Please run this on the "Photo_links" sheet.', ui.ButtonSet.OK);
+    return null;
+  }
+  
+  const keys = Object.keys(FOLDER_MAPPING);
+  let prompt = 'Enter folder numbers (e.g. 1,3,5):\n\n';
+  keys.forEach((k, i) => prompt += (i + 1) + '. ' + k + '\n');
+  
+  const resp = ui.prompt('📁 Select Folders', prompt, ui.ButtonSet.OK_CANCEL);
+  if (resp.getSelectedButton() !== ui.Button.OK) return null;
+  
+  const text = resp.getResponseText();
+  if (!text) return null;
+  
+  const tokens = text.split(/[ ,]+/).map(t => t.trim()).filter(Boolean);
+  if (!tokens.length) return null;
+  
+  return tokens.map(t => {
+    if (!isNaN(t) && +t >= 1 && +t <= keys.length) return FOLDER_MAPPING[keys[+t - 1]];
+    return t;
+  });
+}
+
+function canStart_() {
+  const props = PropertiesService.getScriptProperties();
+  const runningUser = props.getProperty('RUN_USER');
+  const currentUser = Session.getActiveUser().getEmail() || 'Unknown';
+  
+  if (runningUser && runningUser !== currentUser) {
+    const started = props.getProperty('RUN_START');
+    const runtime = started ? formatTime_((Date.now() - parseInt(started)) / 1000) : 'unknown';
+    SpreadsheetApp.getUi().alert('⏳ Script Busy', 
+      '👤 Script is being run by: ' + runningUser + '\n' +
+      '⏱️ Runtime: ' + runtime + '\n\n' +
+      'Wait for it to finish or use Stop Script.', 
+      SpreadsheetApp.getUi().ButtonSet.OK);
+    return false;
+  }
+  
+  // Clear stale abort flag
+  delProp_('ABORT');
+  return true;
+}
+
+function setUser_() {
+  const user = Session.getActiveUser().getEmail() || 'Unknown';
+  setProp_('RUN_USER', user);
+  setProp_('RUN_START', Date.now().toString());
+}
+
+function clearUser_() {
+  delProp_('RUN_USER');
+  delProp_('RUN_TASK');
+  delProp_('RUN_START');
+}
+
+function initTask_(funcName, params) {
+  setProp_('RUN_TASK', funcName);
+  LongRun.instance.setParameters(funcName, params);
+  if (funcName === 'CleanTask') CleanTask();
+  else if (funcName === 'ListTask') ListTask();
+}
+
+function cleanup_(funcName) {
+  delProp_('ABORT');
+  try { LongRun.instance.reset(funcName); } catch(e) {}
+  clearUser_();
+}
+
+function shouldAbort_() {
+  return PropertiesService.getScriptProperties().getProperty('ABORT') === 'true';
+}
+
+function setProp_(key, val) {
+  PropertiesService.getScriptProperties().setProperty(key, val);
+}
+
+function delProp_(key) {
+  PropertiesService.getScriptProperties().deleteProperty(key);
+}
+
+function updateLog_(sheet, msg) {
+  const lastRow = sheet.getLastRow();
+  if (lastRow < 1) {
+    sheet.getRange(1, 1).setValue(msg);
+    SpreadsheetApp.flush();
+    return;
+  }
+  const val = sheet.getRange(lastRow, 1).getValue();
+  if (typeof val === 'string' && val.startsWith('⏳')) {
+    sheet.getRange(lastRow, 1).setValue(msg);
+  } else {
+    sheet.getRange(lastRow + 1, 1).setValue(msg);
+  }
+  SpreadsheetApp.flush();
+}
+
+function removeLog_(sheet) {
   const lastRow = sheet.getLastRow();
   if (lastRow > 0) {
     const val = sheet.getRange(lastRow, 1).getValue();
-    if (typeof val === 'string' && val.startsWith("⏳")) {
+    if (typeof val === 'string' && val.startsWith('⏳')) {
       sheet.deleteRow(lastRow);
       SpreadsheetApp.flush();
     }
   }
 }
 
-function formatTime_(seconds) {
-  if (!seconds || seconds < 0) return "0s";
-  const h = Math.floor(seconds / 3600);
-  const m = Math.floor((seconds % 3600) / 60);
-  const s = Math.floor(seconds % 60);
-  
-  if (h > 0) return `${h}h ${m}m ${s}s`;
-  return `${m}m ${s}s`;
+function formatTime_(sec) {
+  if (!sec || sec < 0) return '0s';
+  const h = Math.floor(sec / 3600);
+  const m = Math.floor((sec % 3600) / 60);
+  const s = Math.floor(sec % 60);
+  if (h > 0) return h + 'h ' + m + 'm';
+  if (m > 0) return m + 'm ' + s + 's';
+  return s + 's';
 }
 
-// ─── DATA HELPERS ───
-
-function buildRow_(path, name, kind, entry) {
-  const capture = (kind === 'File') ? getCaptureDate_(entry.getId()) : '';
-  return [
-    (path ? `${path}/` : '') + name,
-    name,
-    kind,
-    capture,
-    entry.getUrl(),
-    entry.getDateCreated(),
-    entry.getDescription(),
-    entry.getSize() / 1024,
-    entry.getOwner().getEmail()
-  ];
-}
-
-function flushBuffer_(sheet, buffer, startRow) {
-  removeTransientLog(sheet);
+function flushBufferWithStatus_(sheet, buffer, startRow, statusMsg) {
+  // Check if last row is status row, if so overwrite it
+  const lastRow = sheet.getLastRow();
+  let writeRow = startRow;
+  if (lastRow > 0) {
+    const val = sheet.getRange(lastRow, 1).getValue();
+    if (typeof val === 'string' && val.startsWith('⏳')) {
+      writeRow = lastRow; // Overwrite status row with data
+    }
+  }
   
+  // Build data rows
   const rows = buffer.map((row, i) => {
-    const r = startRow + i;
+    const r = writeRow + i;
     const formula = (row[2] === 'File')
-      ? `=REGEXREPLACE(REGEXREPLACE(B${r},"\\.(jpg|HEIC|heic)$",".JPG"),"([vd])1\\.(JPG)$","$1.JPG")`
+      ? '=REGEXREPLACE(REGEXREPLACE(B' + r + ',\"\\.(jpg|HEIC|heic)$\",\".JPG\"),\"([vd])1\\.(JPG)$\",\"$1.JPG\")'
       : '';
     return [...row, formula];
   });
   
-  sheet.getRange(startRow, 1, rows.length, HEADERS.length).setValues(rows);
+  // Add status row at the end
+  const statusRow = [statusMsg, '', '', '', '', '', '', '', '', ''];
+  rows.push(statusRow);
+  
+  // Write all rows at once (data + status)
+  sheet.getRange(writeRow, 1, rows.length, HEADERS.length).setValues(rows);
   SpreadsheetApp.flush();
+  
   buffer.length = 0;
-  return startRow + rows.length;
-}
-
-function getCaptureDate_(fileId) {
-  try {
-    const meta = Drive.Files.get(fileId, { fields: 'imageMediaMetadata/time' });
-    const t = meta.imageMediaMetadata && meta.imageMediaMetadata.time;
-    if (!t) return '';
-    const m = t.match(/(\d{4}):(\d{2}):(\d{2}) (\d{2}):(\d{2}):(\d{2})/);
-    return m ? new Date(`${m[1]}-${m[2]}-${m[3]}T${m[4]}:${m[5]}:${m[6]}Z`) : t;
-  } catch (e) {
-    return '';
-  }
+  return writeRow + rows.length - 1; // Return next data row (excluding status)
 }
