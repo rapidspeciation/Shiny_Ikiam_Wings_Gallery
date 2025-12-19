@@ -123,6 +123,7 @@ def main():
     collection.to_json(f"{OUTPUT_DIR}/collection.json", orient='records')
     insectary.to_json(f"{OUTPUT_DIR}/insectary.json", orient='records')
     crispr.to_json(f"{OUTPUT_DIR}/crispr.json", orient='records')
+    photo_lookup.to_json(f"{OUTPUT_DIR}/photo_lookup.json", orient="records")
     print(f"Success! Database updated in {OUTPUT_DIR}")
 
 if __name__ == "__main__":
