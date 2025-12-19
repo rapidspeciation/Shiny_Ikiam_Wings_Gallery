@@ -1,18 +1,18 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
+import { useDataset } from '../composables/useDataset.js'
 import { useGallery } from '../composables/useGallery.js'
+import { useGlobalGalleryOptions } from '../composables/useGlobalGalleryOptions.js'
 import FilterSelect from './FilterSelect.vue'
 import PhotoGrid from './PhotoGrid.vue'
 
-const rawData = ref([])
-const loading = ref(true)
-const error = ref(null)
-const selectedColumns = ref('Auto')
+const { data: rawData, loading, error, ensureLoaded } = useDataset('crispr', './data/crispr.json')
+
+const { columns, sortBy, sortOrder, side, onlyPhotos, onePerSubspecies } = useGlobalGalleryOptions()
 
 const {
-  isFiltered, allMatches, paginatedData, hasMore, loadMore, applyFilters,
-  sortBy, sortOrder, side, onlyPhotos
-} = useGallery(rawData)
+  isFiltered, allMatches, paginatedData, hasMore, loadMore, applyFilters
+} = useGallery(rawData, { sortBy, sortOrder, side, onlyPhotos, onePerSubspecies })
 
 const filters = ref({
   species: [],
@@ -25,15 +25,7 @@ const getUnique = (field, data) => Array.from(new Set(data.map(i => i[field]).fi
 const speciesList = computed(() => getUnique('Species', rawData.value))
 
 onMounted(async () => {
-  try {
-    const res = await fetch('./data/crispr.json')
-    if (!res.ok) throw new Error("Failed to load data")
-    rawData.value = await res.json()
-  } catch (e) {
-    error.value = "Error loading CRISPR data."
-  } finally {
-    loading.value = false
-  }
+  await ensureLoaded()
 })
 
 const onShowPhotos = () => {
@@ -50,47 +42,6 @@ const onShowPhotos = () => {
 
 <template>
   <div>
-    <!-- Options Row -->
-    <div class="row g-2 mb-3 align-items-end bg-light p-3 rounded border">
-      <div class="col-6 col-md-2">
-        <label class="form-label small fw-bold">Columns</label>
-        <select class="form-select form-select-sm" v-model="selectedColumns">
-          <option value="Auto">Auto</option>
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-        </select>
-      </div>
-      <div class="col-6 col-md-2">
-        <label class="form-label small fw-bold">Sort By</label>
-        <select class="form-select form-select-sm" v-model="sortBy">
-          <option value="Preservation_date">Date</option>
-          <option value="CAM_ID">CAM_ID</option>
-        </select>
-      </div>
-      <div class="col-6 col-md-2">
-        <label class="form-label small fw-bold">Order</label>
-        <select class="form-select form-select-sm" v-model="sortOrder">
-          <option value="desc">Desc</option>
-          <option value="asc">Asc</option>
-        </select>
-      </div>
-      <div class="col-6 col-md-2">
-        <label class="form-label small fw-bold">Side</label>
-        <select class="form-select form-select-sm" v-model="side">
-          <option>Dorsal</option>
-          <option>Ventral</option>
-          <option>Dorsal and Ventral</option>
-        </select>
-      </div>
-      <div class="col-12 col-md-3">
-         <div class="form-check">
-           <input class="form-check-input" type="checkbox" v-model="onlyPhotos" id="chkPhotos">
-           <label class="form-check-label small" for="chkPhotos">Only Indiv. With Photos</label>
-         </div>
-      </div>
-    </div>
-
     <!-- Filters -->
     <!-- Updated classes to col-6 col-md-3 -->
     <div class="row g-3 mb-4">
@@ -122,7 +73,7 @@ const onShowPhotos = () => {
     <PhotoGrid
       :loading="loading" :error="error" :isFiltered="isFiltered"
       :items="paginatedData" :totalCount="allMatches.length" :hasMore="hasMore"
-      :side="side" :columns="selectedColumns" @loadMore="loadMore"
+      :side="side" :columns="columns" @loadMore="loadMore"
     />
   </div>
 </template>

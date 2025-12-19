@@ -7,6 +7,7 @@ import InsectaryTab from './components/InsectaryTab.vue'
 import CrisprTab from './components/CrisprTab.vue'
 import SearchTab from './components/SearchTab.vue'
 import UpdateTab from './components/UpdateTab.vue'
+import GalleryOptionsBar from './components/GalleryOptionsBar.vue'
 
 const currentTab = ref('Collection')
 
@@ -70,6 +71,8 @@ attachGlobalListeners()
         Navigation: Shift + Scroll = Zoom all | Ctrl + Scroll = Zoom one | Drag = Move
         <span class="d-none d-md-inline"> | Github: <a href='https://github.com/rapidspeciation/Shiny_Ikiam_Wings_Gallery/' target='_blank'>rapidspeciation/Shiny_Ikiam_Wings_Gallery</a></span>
       </div>
+
+      <GalleryOptionsBar />
 
       <keep-alive>
         <component :is="tabs[currentTab]" />

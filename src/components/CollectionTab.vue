@@ -1,20 +1,20 @@
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
+import { useDataset } from '../composables/useDataset.js'
 import { useGallery } from '../composables/useGallery.js'
+import { useGlobalGalleryOptions } from '../composables/useGlobalGalleryOptions.js'
 import FilterSelect from './FilterSelect.vue'
 import PhotoGrid from './PhotoGrid.vue'
 
 // --- State ---
-const rawData = ref([])
-const loading = ref(true)
-const error = ref(null)
-const selectedColumns = ref('Auto') // New State
+const { data: rawData, loading, error, ensureLoaded } = useDataset('collection', './data/collection.json')
+
+const { columns, sortBy, sortOrder, side, onlyPhotos, onePerSubspecies } = useGlobalGalleryOptions()
 
 // Initialize the Gallery Logic
 const {
-  isFiltered, allMatches, paginatedData, hasMore, loadMore, applyFilters,
-  sortBy, sortOrder, side, onlyPhotos, onePerSubspecies
-} = useGallery(rawData)
+  isFiltered, allMatches, paginatedData, hasMore, loadMore, applyFilters
+} = useGallery(rawData, { sortBy, sortOrder, side, onlyPhotos, onePerSubspecies })
 
 const filters = ref({
   family: null,
@@ -75,15 +75,7 @@ watch(() => filters.value.subfamily, () => { filters.value.tribe = null; filters
 watch(() => filters.value.tribe, () => { filters.value.species = []; filters.value.subspecies = [] })
 
 onMounted(async () => {
-  try {
-    const res = await fetch('./data/collection.json')
-    if (!res.ok) throw new Error("Failed to load data")
-    rawData.value = await res.json()
-  } catch (e) {
-    error.value = "Error loading data."
-  } finally {
-    loading.value = false
-  }
+  await ensureLoaded()
 })
 
 const onShowPhotos = () => {
@@ -102,52 +94,6 @@ const onShowPhotos = () => {
 
 <template>
   <div>
-    <!-- Top Options Row -->
-    <div class="row g-2 mb-3 align-items-end bg-light p-3 rounded border">
-      <div class="col-6 col-md-2">
-        <label class="form-label small fw-bold">Columns</label>
-        <select class="form-select form-select-sm" v-model="selectedColumns">
-          <option value="Auto">Auto</option>
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-        </select>
-      </div>
-      <div class="col-6 col-md-2">
-        <label class="form-label small fw-bold">Sort By</label>
-        <select class="form-select form-select-sm" v-model="sortBy">
-          <option value="Preservation_date">Date</option>
-          <option value="CAM_ID">CAM_ID</option>
-          <option value="Row Number">Row #</option>
-        </select>
-      </div>
-      <div class="col-6 col-md-2">
-        <label class="form-label small fw-bold">Order</label>
-        <select class="form-select form-select-sm" v-model="sortOrder">
-          <option value="desc">Desc</option>
-          <option value="asc">Asc</option>
-        </select>
-      </div>
-      <div class="col-6 col-md-2">
-        <label class="form-label small fw-bold">Side</label>
-        <select class="form-select form-select-sm" v-model="side">
-          <option>Dorsal</option>
-          <option>Ventral</option>
-          <option>Dorsal and Ventral</option>
-        </select>
-      </div>
-      <div class="col-12 col-md-4">
-         <div class="form-check form-check-inline">
-           <input class="form-check-input" type="checkbox" v-model="onlyPhotos" id="chkPhotos">
-           <label class="form-check-label small" for="chkPhotos">Has Photos</label>
-         </div>
-         <div class="form-check form-check-inline">
-           <input class="form-check-input" type="checkbox" v-model="onePerSubspecies" id="chkOne">
-           <label class="form-check-label small" for="chkOne">Unique Subsp</label>
-         </div>
-      </div>
-    </div>
-
     <!-- Filters -->
     <!-- Updated classes to col-6 col-md-3 -->
     <div class="row g-3 mb-4">
@@ -181,7 +127,7 @@ const onShowPhotos = () => {
       :totalCount="allMatches.length"
       :hasMore="hasMore"
       :side="side"
-      :columns="selectedColumns"
+      :columns="columns"
       @loadMore="loadMore"
     />
   </div>
