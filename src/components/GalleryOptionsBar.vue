@@ -1,5 +1,6 @@
 <script setup>
 import { useGlobalGalleryOptions } from '../composables/useGlobalGalleryOptions.js'
+import { getProxyState, setProxyMode } from '../utils/imageProxy.js'
 
 const {
   columns,
@@ -9,6 +10,22 @@ const {
   onlyPhotos,
   onePerSubspecies
 } = useGlobalGalleryOptions()
+
+const { mode: proxyMode, tierStatus } = getProxyState()
+
+const proxyOptions = [
+  { value: 'auto', label: 'Auto' },
+  { value: 'wsrv', label: 'wsrv.nl' },
+  { value: 'lh3', label: 'Google CDN' },
+  { value: 'thumbnail', label: 'Thumbnail' }
+]
+
+function statusClass(tier) {
+  const s = tierStatus.value[tier]
+  if (s === 'ok') return 'bg-success'
+  if (s === 'blocked') return 'bg-danger'
+  return 'bg-secondary'
+}
 </script>
 
 <template>
@@ -53,6 +70,36 @@ const {
       <div class="form-check form-check-inline">
         <input class="form-check-input" type="checkbox" v-model="onePerSubspecies" id="chkOneGlobal">
         <label class="form-check-label small" for="chkOneGlobal">Unique Subsp</label>
+      </div>
+    </div>
+
+    <div class="col-12 mt-1">
+      <a class="small fw-bold text-decoration-none" data-bs-toggle="collapse" href="#imageCacheCollapse" role="button" aria-expanded="false" aria-controls="imageCacheCollapse">
+        Image Cache <span class="small">&#9660;</span>
+      </a>
+      <div class="collapse" id="imageCacheCollapse">
+        <div class="d-flex flex-wrap gap-2 mt-1">
+          <div v-for="opt in proxyOptions" :key="opt.value" class="form-check form-check-inline mb-0">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="proxyMode"
+              :id="'proxy-' + opt.value"
+              :value="opt.value"
+              :checked="proxyMode === opt.value"
+              @change="setProxyMode(opt.value)"
+            >
+            <label class="form-check-label small" :for="'proxy-' + opt.value">
+              {{ opt.label }}
+              <span
+                v-if="opt.value !== 'auto'"
+                class="d-inline-block rounded-circle ms-1"
+                :class="statusClass(opt.value)"
+                style="width: 8px; height: 8px;"
+              ></span>
+            </label>
+          </div>
+        </div>
       </div>
     </div>
   </div>

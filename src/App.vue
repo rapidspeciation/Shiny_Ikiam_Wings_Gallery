@@ -1,6 +1,8 @@
 <script setup>
-import { ref } from 'vue'
-import { usePanzoomRegistry } from './composables/usePanzoomRegistry.js' 
+import { ref, onMounted } from 'vue'
+import { usePanzoomRegistry } from './composables/usePanzoomRegistry.js'
+import { useDataset } from './composables/useDataset.js'
+import { extractGoogleDriveFileId, checkAllTiers } from './utils/imageProxy.js'
 
 import CollectionTab from './components/CollectionTab.vue'
 import InsectaryTab from './components/InsectaryTab.vue'
@@ -22,6 +24,21 @@ const tabs = {
 // Zoom Logic
 const { attachGlobalListeners, resetAll } = usePanzoomRegistry()
 attachGlobalListeners()
+
+// Startup probe: test which image tiers are reachable
+const { ensureLoaded } = useDataset('collection', './data/collection.json')
+
+onMounted(async () => {
+  try {
+    const data = await ensureLoaded()
+    const sample = data.find(item => item.URLd || item.URLv)
+    if (sample) {
+      const url = sample.URLd || sample.URLv
+      const fileId = extractGoogleDriveFileId(url)
+      if (fileId) checkAllTiers(fileId)
+    }
+  } catch { /* dataset load handled elsewhere */ }
+})
 </script>
 
 <template>

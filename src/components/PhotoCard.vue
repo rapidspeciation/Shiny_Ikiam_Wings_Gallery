@@ -1,27 +1,49 @@
 <script setup>
 import Panzoom from '@panzoom/panzoom'
-import { onMounted, onBeforeUnmount, ref, nextTick } from 'vue'
+import { onMounted, onBeforeUnmount, ref, computed, nextTick } from 'vue'
 import { usePanzoomRegistry } from '../composables/usePanzoomRegistry.js'
+import { getProxiedUrl, notifyTierFailed, getProxyState } from '../utils/imageProxy.js'
 
 const props = defineProps({
   item: Object,
-  side: String 
+  side: String
 })
 
 const { register, unregister } = usePanzoomRegistry()
-const imgRefs = ref([]) 
+const imgRefs = ref([])
 
 // --- IMAGE PROXY LOGIC ---
-const getProxiedUrl = (originalUrl) => {
-  if (!originalUrl) return ''
-  const encoded = encodeURIComponent(originalUrl)
-  return `https://wsrv.nl/?url=${encoded}&w=2000&q=85&output=webp`
+const { mode: proxyModeRef, tierStatus: tierStatusRef } = getProxyState()
+
+// Forces reactive re-evaluation when mode or tier statuses change
+const proxyVersion = computed(() => JSON.stringify({
+  mode: proxyModeRef.value,
+  tiers: tierStatusRef.value
+}))
+
+const resolvePhotoUrl = (url) => {
+  // Read proxyVersion to establish reactive dependency
+  void proxyVersion.value
+  return getProxiedUrl(url)
 }
 
 const handleImgError = (e, originalUrl) => {
-  if (e.target.src !== originalUrl) {
-    e.target.src = originalUrl
+  const currentSrc = e.target.src
+
+  if (proxyModeRef.value === 'auto') {
+    // Check if a lower tier is available before giving up
+    const canFallToLh3 = currentSrc.includes('wsrv.nl') && tierStatusRef.value.lh3 !== 'blocked'
+    const canFallToThumb = (currentSrc.includes('wsrv.nl') || currentSrc.includes('lh3.google')) && tierStatusRef.value.thumbnail !== 'blocked'
+
+    if (canFallToLh3 || canFallToThumb) {
+      notifyTierFailed(currentSrc)
+      e.target.src = resolvePhotoUrl(originalUrl)
+      return
+    }
   }
+
+  // No fallback left — mark as failed (show broken image)
+  notifyTierFailed(currentSrc)
 }
 // -------------------------
 
@@ -125,11 +147,12 @@ const displayPhotos = () => {
     
     <div class="photo-grid-container flex-grow-1 p-2">
        <div v-for="(photo, index) in displayPhotos()" :key="index" class="img-wrapper">
-         <img 
-           :ref="el => imgRefs[index] = el" 
-           :src="getProxiedUrl(photo.URL_to_view)" 
-           class="panzoom-img" 
-           loading="lazy" 
+         <img
+           :ref="el => imgRefs[index] = el"
+           :src="resolvePhotoUrl(photo.URL_to_view)"
+           class="panzoom-img"
+           loading="lazy"
+           referrerpolicy="no-referrer"
            :alt="photo.Name"
            @error="(e) => handleImgError(e, photo.URL_to_view)"
          >
