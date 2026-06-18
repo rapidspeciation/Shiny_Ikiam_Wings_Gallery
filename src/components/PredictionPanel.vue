@@ -110,6 +110,9 @@ const toggleSpecies = (s) => { openSpecies.has(s) ? openSpecies.delete(s) : open
 const extraSubspecies = ref({})
 const extraSpecies = ref({})
 const loadingShowAll = reactive(new Set())   // keys: 'ss:<species>' / 'sp:<genus>'
+// whether the region has MORE taxa than already shown (else hide the "+ all" button)
+const moreSubsp = ref({})    // "Genus species" -> bool
+const moreSpecies = ref({})  // genus -> bool
 
 // prob lookups so region taxa show a % only if the model predicted them
 const subspProbMap = computed(() => {
@@ -169,6 +172,10 @@ async function toggleAllSpecies(genusNode) {
     })
     extraSpecies.value = { ...extraSpecies.value, [g]: rows }
     rows.forEach(r => loadLinks(r.taxon))
+    // does each revealed species have region subspecies to offer?
+    const ms = { ...moreSubsp.value }
+    for (const r of rows) ms[r.taxon] = (await regionSubspeciesOf(r.taxon, side.value)).length > 0
+    moreSubsp.value = ms
   } finally {
     loadingShowAll.delete('sp:' + g)
   }
@@ -192,6 +199,8 @@ async function load() {
   state.value = 'loading'
   extraSubspecies.value = {}
   extraSpecies.value = {}
+  moreSubsp.value = {}
+  moreSpecies.value = {}
   try {
     const p = await getPredictions(camid.value)
     if (!p) { pred.value = null; state.value = 'none'; return }
@@ -209,6 +218,18 @@ async function load() {
       })
     })
     taxa.forEach(loadLinks)
+    // figure out which "+ all" buttons have anything to reveal (memoised lookups)
+    const ms = {}, mg = {}
+    for (const g of tree.value) {
+      const shownSp = new Set(g.species.map(s => s.taxon))
+      mg[g.taxon] = (await regionSpeciesOf(g.taxon, side.value)).some(x => !shownSp.has(x))
+      for (const s of g.species) {
+        const shownSs = new Set(s.subspecies.map(ss => ss.taxon))
+        ms[s.taxon] = (await regionSubspeciesOf(s.taxon, side.value)).some(x => !shownSs.has(x))
+      }
+    }
+    moreSubsp.value = ms
+    moreSpecies.value = mg
   } catch {
     state.value = 'error'
   }
@@ -321,7 +342,7 @@ watch(camid, load, { immediate: true })
                     </span>
                   </div>
                   <!-- + all subspecies button -->
-                  <div class="pred-row pred-subsp pred-showall">
+                  <div v-if="moreSubsp[s.taxon] || extraSubspecies[s.taxon]" class="pred-row pred-subsp pred-showall">
                     <button type="button" class="showall-btn" @click="toggleAllSubspecies(s)"
                       :disabled="loadingShowAll.has('ss:' + s.taxon)"
                       :aria-expanded="!!extraSubspecies[s.taxon]">
@@ -363,7 +384,7 @@ watch(camid, load, { immediate: true })
                       >{{ SOURCE_LABELS[c.src] }}</a>
                     </span>
                   </div>
-                  <div class="pred-row pred-subsp pred-showall">
+                  <div v-if="moreSubsp[s.taxon] || extraSubspecies[s.taxon]" class="pred-row pred-subsp pred-showall">
                     <button type="button" class="showall-btn" @click="toggleAllSubspecies(s)"
                       :disabled="loadingShowAll.has('ss:' + s.taxon)"
                       :aria-expanded="!!extraSubspecies[s.taxon]">
@@ -375,7 +396,7 @@ watch(camid, load, { immediate: true })
               </template>
 
               <!-- + all species button -->
-              <div class="pred-row pred-species pred-showall">
+              <div v-if="moreSpecies[g.taxon] || extraSpecies[g.taxon]" class="pred-row pred-species pred-showall">
                 <button type="button" class="showall-btn" @click="toggleAllSpecies(g)"
                   :disabled="loadingShowAll.has('sp:' + g.taxon)"
                   :aria-expanded="!!extraSpecies[g.taxon]">

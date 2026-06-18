@@ -131,8 +131,12 @@ export function predictionDiffers(item, pred) {
 // Region subspecies of a species, side-filtered. Returns the checklist keys `k`
 // where k startsWith "<species> ", k has exactly 3 words, and it is present on
 // the given side (or on EITHER side when side is empty/falsy).
+const _regionCache = new Map()   // memoise enumerations (reused across many cards)
+
 export async function regionSubspeciesOf(species, side) {
   if (!species) return []
+  const ck = 'ss|' + species + '|' + (side || '')
+  if (_regionCache.has(ck)) return _regionCache.get(ck)
   const checklist = await getChecklist()
   const prefix = `${species} `
   const out = []
@@ -141,7 +145,9 @@ export async function regionSubspeciesOf(species, side) {
     if (k.split(/\s+/).length !== 3) continue
     if (onSide(checklist[k], side)) out.push(k)
   }
-  return out.sort()
+  out.sort()
+  _regionCache.set(ck, out)
+  return out
 }
 
 // Region species of a genus, side-filtered. Returns the distinct first-2-words
@@ -149,6 +155,8 @@ export async function regionSubspeciesOf(species, side) {
 // key is present on the given side (or either side when side is empty).
 export async function regionSpeciesOf(genus, side) {
   if (!genus) return []
+  const ck = 'sp|' + genus + '|' + (side || '')
+  if (_regionCache.has(ck)) return _regionCache.get(ck)
   const checklist = await getChecklist()
   const prefix = `${genus} `
   const set = new Set()
@@ -159,7 +167,9 @@ export async function regionSpeciesOf(genus, side) {
     if (parts.length < 2) continue
     set.add(`${parts[0]} ${parts[1]}`)
   }
-  return Array.from(set).sort()
+  const out = Array.from(set).sort()
+  _regionCache.set(ck, out)
+  return out
 }
 
 // --- internal helpers -----------------------------------------------------
