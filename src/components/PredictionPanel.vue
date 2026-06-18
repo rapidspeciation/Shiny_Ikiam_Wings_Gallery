@@ -27,6 +27,7 @@ const recordedTaxon = computed(() => {
 })
 const hasRecordedSubsp = computed(() => !!recordedSubsp.value)
 
+const side = computed(() => pred.value?.side || '')
 const topSubspecies = computed(() => (pred.value?.subspecies || []).slice(0, 3))
 const topSpecies = computed(() => (pred.value?.species || []).slice(0, 3))
 const topGenus = computed(() => (pred.value?.genus || []).slice(0, 2))
@@ -88,6 +89,7 @@ watch(camid, load, { immediate: true })
     >
       <span class="d-flex align-items-center gap-2 flex-wrap">
         <span class="fw-bold small">Model predictions</span>
+        <span v-if="state === 'ready' && side" class="badge text-bg-light border text-secondary fw-normal" :title="`Suggestions weighted to ${side}-of-Andes taxa`">{{ side }} of Andes</span>
         <span
           v-if="state === 'ready' && !hasRecordedSubsp && topSubspName"
           class="badge text-bg-info-subtle text-info-emphasis border border-info-subtle fw-normal"
@@ -116,13 +118,14 @@ watch(camid, load, { immediate: true })
         <div v-if="topSubspecies.length" class="pred-group">
           <div class="pred-group-title">Subspecies</div>
           <div
-            v-for="([taxon, conf], i) in topSubspecies"
+            v-for="([taxon, conf, oor], i) in topSubspecies"
             :key="'ss-' + i"
             class="pred-row"
             :class="{ 'pred-suggest': i === 0 && !hasRecordedSubsp }"
           >
             <span class="pred-name" :title="taxon">{{ taxon }}</span>
             <span class="pred-pct">{{ fmtPct(conf) }}</span>
+            <span v-if="oor" class="oor-tag" title="Documented only on the other side of the Andes">off-region</span>
             <span class="pred-chips">
               <a v-for="c in chipsFor(taxon)" :key="c.src" class="src-chip" :href="c.url"
                  target="_blank" rel="noopener noreferrer"
@@ -134,9 +137,10 @@ watch(camid, load, { immediate: true })
 
         <div v-if="topSpecies.length" class="pred-group">
           <div class="pred-group-title">Species</div>
-          <div v-for="([taxon, conf], i) in topSpecies" :key="'sp-' + i" class="pred-row">
+          <div v-for="([taxon, conf, oor], i) in topSpecies" :key="'sp-' + i" class="pred-row">
             <span class="pred-name" :title="taxon">{{ taxon }}</span>
             <span class="pred-pct">{{ fmtPct(conf) }}</span>
+            <span v-if="oor" class="oor-tag" title="Documented only on the other side of the Andes">off-region</span>
             <span class="pred-chips">
               <a v-for="c in chipsFor(taxon)" :key="c.src" class="src-chip" :href="c.url"
                  target="_blank" rel="noopener noreferrer"
@@ -148,9 +152,10 @@ watch(camid, load, { immediate: true })
 
         <div v-if="topGenus.length" class="pred-group">
           <div class="pred-group-title">Genus</div>
-          <div v-for="([taxon, conf], i) in topGenus" :key="'g-' + i" class="pred-row">
+          <div v-for="([taxon, conf, oor], i) in topGenus" :key="'g-' + i" class="pred-row">
             <span class="pred-name" :title="taxon">{{ taxon }}</span>
             <span class="pred-pct">{{ fmtPct(conf) }}</span>
+            <span v-if="oor" class="oor-tag" title="Documented only on the other side of the Andes">off-region</span>
             <span class="pred-chips">
               <a v-for="c in chipsFor(taxon)" :key="c.src" class="src-chip" :href="c.url"
                  target="_blank" rel="noopener noreferrer"
@@ -243,5 +248,14 @@ watch(camid, load, { immediate: true })
 .src-chip:focus-visible { outline: 2px solid #0d6efd; outline-offset: 1px; }
 .diff-chip { color: #b45309; flex: 0 0 auto; }
 
+.oor-tag {
+  font-size: 0.6rem;
+  color: #b45309;
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  border-radius: 4px;
+  padding: 0 3px;
+  flex: 0 0 auto;
+}
 @media (max-width: 768px) { .pred-panel { font-size: 0.78rem; } }
 </style>
