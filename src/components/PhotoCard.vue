@@ -243,7 +243,7 @@ const displayPhotos = () => {
   <div class="gallery-card h-100 border rounded bg-white d-flex flex-column">
     <h5 class="fw-bold text-center mt-2">{{ item.CAM_ID }}</h5>
 
-    <div class="photo-grid-container flex-grow-1 p-2">
+    <div class="photo-grid-container p-2">
        <div v-for="(photo, index) in displayPhotos()" :key="index" class="img-wrapper">
          <!-- zoom-layer holds img + overlay together so the SVG zooms WITH the image -->
          <div
@@ -321,7 +321,7 @@ const displayPhotos = () => {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 8px;
-  align-content: center;
+  align-content: start;   /* top-align images so cards in a row line up (don't centre in stretched height) */
   min-height: 200px;
 }
 .img-wrapper {

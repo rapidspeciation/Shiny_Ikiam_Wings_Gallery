@@ -33,11 +33,13 @@ const recordedTaxon = computed(() => {
 })
 const hasRecordedSubsp = computed(() => !!recordedSubsp.value)
 
-// mark where the database (recorded) taxon sits in the model's tree
-const recSpeciesLc = computed(() => recordedSpecies.value.toLowerCase())
-const recTaxonLc = computed(() => recordedTaxon.value.toLowerCase())
+// mark where the database (recorded) taxon sits in the model's tree.
+// Prefer the canonical recorded label (pred.rec, matches the leaf names); fall back
+// to the raw collection.json values.
+const recSpeciesLc = computed(() => (pred.value?.rec?.species || recordedSpecies.value || '').toLowerCase())
+const recSubspLc = computed(() => (pred.value?.rec?.subsp || (hasRecordedSubsp.value ? recordedTaxon.value : '') || '').toLowerCase())
 const isRecSpecies = (t) => !!recSpeciesLc.value && t.toLowerCase() === recSpeciesLc.value
-const isRecSubsp = (t) => !!recTaxonLc.value && t.toLowerCase() === recTaxonLc.value
+const isRecSubsp = (t) => !!recSubspLc.value && t.toLowerCase() === recSubspLc.value
 
 const side = computed(() => pred.value?.side || '')
 const oof = computed(() => !!(pred.value && pred.value.oof))
@@ -77,7 +79,7 @@ const tree = computed(() => {
     return a.localeCompare(b)
   })
 
-  return generaOrdered.map((g) => {
+  const treeArr = generaOrdered.map((g) => {
     const speciesNodes = speciesArr
       .filter(([sp]) => genusOf(sp) === g)
       .map(([sp, c, oor, subs]) => ({
@@ -93,6 +95,25 @@ const tree = computed(() => {
       .sort((a, b) => b.prob - a.prob)
     return { taxon: g, pct: genusProb.has(g) ? fmtPct(genusProb.get(g)) : '', species: speciesNodes }
   })
+
+  // ensure the RECORDED taxon is always present (even outside top-k) so its model
+  // rank/confidence is visible for curation
+  const rec = p.rec
+  if (rec && rec.species) {
+    const rg = rec.genus || genusOf(rec.species)
+    let gNode = treeArr.find(x => x.taxon === rg)
+    if (!gNode) { gNode = { taxon: rg, pct: fmtPct(rec.genus_p), species: [] }; treeArr.push(gNode) }
+    let sNode = gNode.species.find(x => x.taxon === rec.species)
+    if (!sNode) {
+      sNode = { taxon: rec.species, pct: fmtPct(rec.species_p), prob: rec.species_p || 0, oor: !!rec.oor, subspecies: [] }
+      gNode.species.push(sNode)
+      gNode.species.sort((a, b) => b.prob - a.prob)
+    }
+    if (rec.subsp && !sNode.subspecies.find(x => x.taxon === rec.subsp)) {
+      sNode.subspecies.push({ taxon: rec.subsp, pct: fmtPct(rec.subsp_p), oor: !!rec.oor })
+    }
+  }
+  return treeArr
 })
 
 // --- Default expansion: top genus open, its top species open ---------------
@@ -474,7 +495,7 @@ watch(camid, load, { immediate: true })
   margin-left: 0.35rem;
 }
 .pred-subsp {
-  padding: 1px 6px 1px 2.25rem;
+  padding: 1px 6px 1px 3.6rem;   /* one tab past the species NAME (species has a chevron) */
   border-left: 2px solid #e2e8f0;
   margin-left: 0.35rem;
 }
