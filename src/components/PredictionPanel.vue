@@ -33,6 +33,12 @@ const recordedTaxon = computed(() => {
 })
 const hasRecordedSubsp = computed(() => !!recordedSubsp.value)
 
+// mark where the database (recorded) taxon sits in the model's tree
+const recSpeciesLc = computed(() => recordedSpecies.value.toLowerCase())
+const recTaxonLc = computed(() => recordedTaxon.value.toLowerCase())
+const isRecSpecies = (t) => !!recSpeciesLc.value && t.toLowerCase() === recSpeciesLc.value
+const isRecSubsp = (t) => !!recTaxonLc.value && t.toLowerCase() === recTaxonLc.value
+
 const side = computed(() => pred.value?.side || '')
 const oof = computed(() => !!(pred.value && pred.value.oof))
 const topSubspName = computed(() => pred.value?.subspecies?.[0]?.[0] || '')
@@ -99,6 +105,11 @@ function resetExpansion() {
   if (t.length) {
     openGenera.add(t[0].taxon)
     if (t[0].species.length) openSpecies.add(t[0].species[0].taxon)
+  }
+  // also reveal the recorded taxon's branch so its model rank is visible at a glance
+  const rs = recSpeciesLc.value
+  if (rs) for (const g of t) for (const s of g.species) {
+    if (s.taxon.toLowerCase() === rs) { openGenera.add(g.taxon); openSpecies.add(s.taxon) }
   }
 }
 const toggleGenus = (g) => { openGenera.has(g) ? openGenera.delete(g) : openGenera.add(g) }
@@ -298,7 +309,7 @@ watch(camid, load, { immediate: true })
             <template v-if="openGenera.has(g.taxon)">
               <!-- Species under this genus (model-predicted) -->
               <template v-for="s in g.species" :key="'sp-' + s.taxon">
-                <div class="pred-row pred-species">
+                <div class="pred-row pred-species" :class="{ 'rec-hit': isRecSpecies(s.taxon) }">
                   <button
                     type="button" class="tree-toggle"
                     :aria-expanded="openSpecies.has(s.taxon)"
@@ -307,6 +318,7 @@ watch(camid, load, { immediate: true })
                   ><span class="chev" :class="{ open: openSpecies.has(s.taxon) }" aria-hidden="true">&#9656;</span></button>
                   <span class="pred-name italic" :title="s.taxon">{{ s.taxon }}</span>
                   <span v-if="s.pct" class="pred-pct">{{ s.pct }}</span>
+                  <span v-if="isRecSpecies(s.taxon)" class="rec-badge" title="Recorded ID in the database">recorded</span>
                   <span v-if="s.oor" class="oor-tag" title="Documented only on the other side of the Andes">off-region</span>
                   <span class="pred-chips">
                     <a v-for="c in chipsFor(s.taxon)" :key="c.src" class="src-chip" :href="c.url"
@@ -318,9 +330,10 @@ watch(camid, load, { immediate: true })
 
                 <template v-if="openSpecies.has(s.taxon)">
                   <!-- Predicted subspecies -->
-                  <div v-for="ss in s.subspecies" :key="'ss-' + ss.taxon" class="pred-row pred-subsp">
+                  <div v-for="ss in s.subspecies" :key="'ss-' + ss.taxon" class="pred-row pred-subsp" :class="{ 'rec-hit': isRecSubsp(ss.taxon) }">
                     <span class="pred-name italic" :title="ss.taxon">{{ ss.taxon }}</span>
                     <span v-if="ss.pct" class="pred-pct">{{ ss.pct }}</span>
+                    <span v-if="isRecSubsp(ss.taxon)" class="rec-badge" title="Recorded ID in the database">recorded</span>
                     <span v-if="ss.oor" class="oor-tag" title="Documented only on the other side of the Andes">off-region</span>
                     <span class="pred-chips">
                       <a v-for="c in chipsFor(ss.taxon)" :key="c.src" class="src-chip" :href="c.url"
@@ -548,6 +561,20 @@ watch(camid, load, { immediate: true })
   border: 1px solid #fed7aa;
   border-radius: 4px;
   padding: 0 3px;
+  flex: 0 0 auto;
+}
+/* the recorded (database) taxon, shown in context within the model's ranking */
+.rec-hit { background: #fff8e1 !important; box-shadow: inset 3px 0 0 #f59e0b; border-radius: 3px; }
+.rec-badge {
+  font-size: 0.58rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: #92400e;
+  background: #fef3c7;
+  border: 1px solid #fde68a;
+  border-radius: 4px;
+  padding: 0 4px;
   flex: 0 0 auto;
 }
 @media (max-width: 768px) { .pred-panel { font-size: 0.78rem; } }
