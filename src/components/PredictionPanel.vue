@@ -1,7 +1,8 @@
 <script setup>
 // Feature 2: compact, collapsible model-predictions panel (curation aid).
+// Feature 3: per-taxon source cross-links (BoA / Sangay / Noreste / Cotacachi).
 import { ref, computed, watch } from 'vue'
-import { getPredictions } from '../composables/useCurationData.js'
+import { getPredictions, getLinks, SOURCE_KEYS, SOURCE_LABELS, SOURCE_FULL_NAMES } from '../composables/useCurationData.js'
 
 const props = defineProps({
   item: { type: Object, required: true }
@@ -10,6 +11,7 @@ const props = defineProps({
 const state = ref('loading')   // 'loading' | 'ready' | 'none' | 'error'
 const pred = ref(null)
 const open = ref(false)        // compact by default; detail on demand
+const linksCache = ref({})     // taxon -> { boa, sangay, noreste, cotacachi }
 
 const camid = computed(() => props.item && props.item.CAM_ID)
 
@@ -59,6 +61,24 @@ const barWidth = (c) => {
   return `${Math.max(0, Math.min(100, c * 100))}%`
 }
 
+async function loadLinks(taxon) {
+  if (!taxon) return
+  if (linksCache.value[taxon]) return
+  const links = await getLinks(taxon)
+  linksCache.value = { ...linksCache.value, [taxon]: links }
+}
+
+// Fetch links for the visible taxa once the panel is first expanded.
+watch(open, (isOpen) => {
+  if (!isOpen) return
+  const taxa = new Set()
+  if (recordedTaxon.value) taxa.add(recordedTaxon.value)
+  topSubspecies.value.forEach(([t]) => t && taxa.add(t))
+  topSpecies.value.forEach(([t]) => t && taxa.add(t))
+  topGenus.value.forEach(([t]) => t && taxa.add(t))
+  taxa.forEach(loadLinks)
+})
+
 async function load() {
   state.value = 'loading'
   try {
@@ -72,6 +92,10 @@ async function load() {
 }
 
 watch(camid, load, { immediate: true })
+
+function linkFor(taxon, src) {
+  return linksCache.value[taxon] ? linksCache.value[taxon][src] : null
+}
 </script>
 
 <template>
@@ -132,6 +156,17 @@ watch(camid, load, { immediate: true })
               <span class="pred-pct">{{ fmtPct(conf) }}</span>
             </div>
             <div class="pred-bar"><span class="pred-bar-fill" :style="{ width: barWidth(conf) }"></span></div>
+            <div class="pred-chips">
+              <a
+                v-for="src in SOURCE_KEYS"
+                :key="src"
+                class="src-chip"
+                :href="linkFor(taxon, src) || '#'"
+                target="_blank"
+                rel="noopener noreferrer"
+                :aria-label="`Open ${taxon} on ${SOURCE_FULL_NAMES[src]} (opens in new tab)`"
+              >{{ SOURCE_LABELS[src] }}</a>
+            </div>
           </div>
         </div>
 
@@ -144,6 +179,17 @@ watch(camid, load, { immediate: true })
               <span class="pred-pct">{{ fmtPct(conf) }}</span>
             </div>
             <div class="pred-bar"><span class="pred-bar-fill" :style="{ width: barWidth(conf) }"></span></div>
+            <div class="pred-chips">
+              <a
+                v-for="src in SOURCE_KEYS"
+                :key="src"
+                class="src-chip"
+                :href="linkFor(taxon, src) || '#'"
+                target="_blank"
+                rel="noopener noreferrer"
+                :aria-label="`Open ${taxon} on ${SOURCE_FULL_NAMES[src]} (opens in new tab)`"
+              >{{ SOURCE_LABELS[src] }}</a>
+            </div>
           </div>
         </div>
 
@@ -159,13 +205,24 @@ watch(camid, load, { immediate: true })
           </div>
         </div>
 
-        <!-- Recorded ID (for comparison with the model) -->
+        <!-- Recorded ID with its own source chips -->
         <div v-if="recordedTaxon" class="pred-group pred-recorded">
           <div class="pred-group-title">Recorded ID</div>
           <div class="pred-row">
             <div class="pred-row-main">
               <span class="pred-name" :title="recordedTaxon">{{ recordedTaxon }}</span>
               <span v-if="speciesDiffers || subspDiffers" class="diff-chip" aria-hidden="true">&#9888;</span>
+            </div>
+            <div class="pred-chips">
+              <a
+                v-for="src in SOURCE_KEYS"
+                :key="src"
+                class="src-chip"
+                :href="linkFor(recordedTaxon, src) || '#'"
+                target="_blank"
+                rel="noopener noreferrer"
+                :aria-label="`Open ${recordedTaxon} on ${SOURCE_FULL_NAMES[src]} (opens in new tab)`"
+              >{{ SOURCE_LABELS[src] }}</a>
             </div>
           </div>
         </div>
@@ -244,6 +301,32 @@ watch(camid, load, { immediate: true })
 .pred-recorded {
   border-top: 1px solid #e2e8f0;
   padding-top: 0.4rem;
+}
+
+/* Source cross-link chips (Feature 3) */
+.pred-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin-top: 0.2rem;
+}
+.src-chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 22px;
+  padding: 1px 6px;
+  font-size: 0.68rem;
+  line-height: 1.2;
+  text-decoration: none;
+  color: #0d6efd;
+  background: #eef4ff;
+  border: 1px solid #cfe0ff;
+  border-radius: 999px;
+}
+.src-chip:hover { background: #dbe8ff; }
+.src-chip:focus-visible {
+  outline: 2px solid #0d6efd;
+  outline-offset: 1px;
 }
 .diff-chip {
   color: #b45309;
