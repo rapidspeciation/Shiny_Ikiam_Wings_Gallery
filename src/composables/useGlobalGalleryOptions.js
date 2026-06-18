@@ -9,7 +9,8 @@ const state = reactive({
   onePerSubspecies: false,
   // --- Curation tools (off by default; compact-by-default UI) ---
   showBoxes: false,        // Feature 1: wing-box SVG overlays
-  zoomWings: false         // Feature 1: zoom each image to its wings
+  zoomWings: false,        // Feature 1: zoom each image to its wings
+  expandPredictions: false // Feature 2: open + fully expand every prediction panel
   // (predictions panel is always present per card, collapsed by default — no toggle)
 })
 

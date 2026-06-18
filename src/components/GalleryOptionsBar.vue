@@ -10,7 +10,8 @@ const {
   onlyPhotos,
   onePerSubspecies,
   showBoxes,
-  zoomWings
+  zoomWings,
+  expandPredictions
 } = useGlobalGalleryOptions()
 
 const { mode: proxyMode, tierStatus } = getProxyState()
@@ -88,12 +89,18 @@ function statusClass(tier) {
                  v-model="zoomWings" aria-describedby="chkZoomWingsHelp">
           <label class="form-check-label small" for="chkZoomWings">Zoom to wings</label>
         </div>
-        <a class="small fw-bold text-decoration-none ms-auto" data-bs-toggle="collapse" href="#imageCacheCollapse" role="button" aria-expanded="false" aria-controls="imageCacheCollapse">
+        <div class="form-check form-switch mb-0">
+          <input class="form-check-input" type="checkbox" role="switch" id="chkExpandPred"
+                 v-model="expandPredictions" aria-describedby="chkExpandPredHelp">
+          <label class="form-check-label small" for="chkExpandPred">Show predictions</label>
+        </div>
+        <a class="small fw-bold text-decoration-none" data-bs-toggle="collapse" href="#imageCacheCollapse" role="button" aria-expanded="false" aria-controls="imageCacheCollapse">
           Image Cache <span class="small">&#9660;</span>
         </a>
       </div>
       <span id="chkShowBoxesHelp" class="visually-hidden">Draw detected wing bounding boxes over each photo</span>
       <span id="chkZoomWingsHelp" class="visually-hidden">Zoom each photo so the detected wings fill the frame</span>
+      <span id="chkExpandPredHelp" class="visually-hidden">Open and fully expand every specimen's model-prediction panel</span>
       <div class="collapse" id="imageCacheCollapse">
         <div class="d-flex flex-wrap gap-2 mt-1">
           <div v-for="opt in proxyOptions" :key="opt.value" class="form-check form-check-inline mb-0">

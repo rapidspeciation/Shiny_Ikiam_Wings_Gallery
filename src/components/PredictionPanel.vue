@@ -4,6 +4,7 @@
 // region-checklist "show all" browsing. Compact: one line per row
 // (name · % · oor flag · source chips). British spelling throughout.
 import { ref, reactive, computed, watch } from 'vue'
+import { useGlobalGalleryOptions } from '../composables/useGlobalGalleryOptions.js'
 import {
   getPredictions, getLinks, predictionDiffers,
   regionSubspeciesOf, regionSpeciesOf,
@@ -12,9 +13,11 @@ import {
 
 const props = defineProps({ item: { type: Object, required: true } })
 
+const { expandPredictions } = useGlobalGalleryOptions()
+
 const state = ref('loading')   // 'loading' | 'ready' | 'none' | 'error'
 const pred = ref(null)
-const open = ref(false)        // compact by default; detail on demand
+const open = ref(expandPredictions.value)   // compact by default; "Show predictions" opens all
 const linksCache = ref({})     // taxon -> { boa, sangay, noreste, cotacachi }
 
 const camid = computed(() => props.item && props.item.CAM_ID)
@@ -133,6 +136,18 @@ function resetExpansion() {
     if (s.taxon.toLowerCase() === rs) { openGenera.add(g.taxon); openSpecies.add(s.taxon) }
   }
 }
+function expandAll() {
+  for (const g of tree.value) {
+    openGenera.add(g.taxon)
+    for (const s of g.species) openSpecies.add(s.taxon)
+  }
+}
+// "Show predictions" global toggle: open + fully expand every panel (or revert)
+watch(expandPredictions, (on) => {
+  open.value = on
+  if (state.value !== 'ready') return
+  if (on) expandAll(); else resetExpansion()
+})
 const toggleGenus = (g) => { openGenera.has(g) ? openGenera.delete(g) : openGenera.add(g) }
 const toggleSpecies = (s) => { openSpecies.has(s) ? openSpecies.delete(s) : openSpecies.add(s) }
 
@@ -239,6 +254,7 @@ async function load() {
     pred.value = p
     state.value = 'ready'
     resetExpansion()
+    if (expandPredictions.value) { open.value = true; expandAll() }
     // preload chips for every taxon in the tree + recorded ID
     const taxa = new Set()
     if (recordedTaxon.value) taxa.add(recordedTaxon.value)
