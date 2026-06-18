@@ -83,15 +83,19 @@ export async function getPredictions(camid) {
   }
 }
 
-// Returns { boa, sangay, noreste, cotacachi } for a taxon. Per source we take the
-// most specific real page available: subspecies (trinomial) -> species (binomial)
-// -> genus page. A source the reference sites don't have for this taxon stays
-// null (no dead link / no useless search) — the UI just omits that chip.
+const EU = ['sangay', 'noreste', 'cotacachi']
+
+// Returns { boa, sangay, noreste, cotacachi } for a taxon, resolved per the
+// prediction LEVEL and how each site is structured (see build_taxon_links.py):
+//   subspecies -> BoA species page + each .eu site's EXACT fiche (epithet match) only
+//   species    -> BoA species page + each .eu site's genus thumbnails
+//   genus      -> BoA genus page  + each .eu site's genus thumbnails
+// A source the sites don't have for this taxon stays null -> the UI omits the chip.
 export async function getLinks(taxon) {
   const result = { boa: null, sangay: null, noreste: null, cotacachi: null }
   if (!taxon || typeof taxon !== 'string') return result
-  const parts = taxon.trim().split(/\s+/).filter(Boolean)
-  if (!parts.length) return result
+  const p = taxon.trim().split(/\s+/).filter(Boolean)
+  if (!p.length) return result
 
   let data
   try {
@@ -99,18 +103,19 @@ export async function getLinks(taxon) {
   } catch {
     return result
   }
+  const boa = data.boa || {}, thumb = data.eu_thumb || {}, fiche = data.eu_fiche || {}
+  const genus = p[0]
 
-  // most-specific-first lookup keys: trinomial, binomial, genus
-  const keys = []
-  if (parts.length >= 3) keys.push(parts.slice(0, 3).join(' '))
-  if (parts.length >= 2) keys.push(parts.slice(0, 2).join(' '))
-  keys.push(parts[0])
-  const entries = keys.map(k => data[k]).filter(Boolean)
-
-  for (const src of SOURCE_KEYS) {
-    for (const entry of entries) {
-      if (entry[src]) { result[src] = entry[src]; break }
-    }
+  if (p.length >= 3) {            // subspecies: exact fiche by epithet only
+    const ssp = p[2]
+    result.boa = boa[`${genus} ${p[1]} ${ssp}`] || boa[`${genus} ${p[1]}`] || null
+    for (const s of EU) result[s] = (fiche[s] && fiche[s][`${genus} ${ssp}`]) || null
+  } else if (p.length === 2) {    // species: BoA species page + .eu genus thumbnails
+    result.boa = boa[`${genus} ${p[1]}`] || null
+    for (const s of EU) result[s] = (thumb[s] && thumb[s][genus]) || null
+  } else {                        // genus: BoA genus page + .eu genus thumbnails
+    result.boa = boa[genus] || null
+    for (const s of EU) result[s] = (thumb[s] && thumb[s][genus]) || null
   }
   return result
 }
