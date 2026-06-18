@@ -51,27 +51,18 @@ const speciesOf = (t) => t.split(/\s+/).slice(0, 2).join(' ')
 //   species under a genus = species[] entries of that genus + parent species of
 //            any subspecies[] entry under that genus not already listed.
 //   subspecies under a species = subspecies[] entries whose first two words === species.
+const SUBSP_MIN = 0.05   // show the 2nd/3rd subspecies only if >= 5% confidence
 const tree = computed(() => {
   const p = pred.value
   if (!p) return []
   const genusArr = p.genus || []
-  const speciesArr = p.species || []
-  const subspArr = p.subspecies || []
+  const speciesArr = p.species || []   // each: [name, prob, oor, [[ssp, p, oor], ...]]
 
-  const genusProb = new Map()        // genus -> prob (from genus[])
-  const genusOrder = []              // genus names in genus[] order
+  const genusProb = new Map(), genusOrder = []
   genusArr.forEach(([g, c]) => { if (!genusProb.has(g)) { genusProb.set(g, c); genusOrder.push(g) } })
 
-  const speciesProb = new Map()      // "Genus species" -> prob
-  const speciesOor = new Map()       // "Genus species" -> oor flag
-  speciesArr.forEach(([sp, c, oor]) => { if (!speciesProb.has(sp)) { speciesProb.set(sp, c); speciesOor.set(sp, oor) } })
-
-  // collect all genera referenced anywhere
   const allGenera = new Set(genusOrder)
   speciesArr.forEach(([sp]) => allGenera.add(genusOf(sp)))
-  subspArr.forEach(([ss]) => allGenera.add(genusOf(ss)))
-
-  // order genera by genus[] prob; genera not in genus[] go last (alphabetical)
   const generaOrdered = Array.from(allGenera).sort((a, b) => {
     const pa = genusProb.has(a), pb = genusProb.has(b)
     if (pa && pb) return genusProb.get(b) - genusProb.get(a)
@@ -81,30 +72,20 @@ const tree = computed(() => {
   })
 
   return generaOrdered.map((g) => {
-    // species under this genus: species[] of this genus + parent species of
-    // subspecies[] of this genus not already listed
-    const spNames = new Set()
-    speciesArr.forEach(([sp]) => { if (genusOf(sp) === g) spNames.add(sp) })
-    subspArr.forEach(([ss]) => { if (genusOf(ss) === g) spNames.add(speciesOf(ss)) })
-
-    const speciesNodes = Array.from(spNames).map((sp) => {
-      const subspecies = subspArr
-        .filter(([ss]) => speciesOf(ss) === sp)
-        .map(([ss, c, oor]) => ({ taxon: ss, pct: fmtPct(c), oor: !!oor }))
-      return {
+    const speciesNodes = speciesArr
+      .filter(([sp]) => genusOf(sp) === g)
+      .map(([sp, c, oor, subs]) => ({
         taxon: sp,
-        pct: speciesProb.has(sp) ? fmtPct(speciesProb.get(sp)) : '',
-        prob: speciesProb.has(sp) ? speciesProb.get(sp) : -1,
-        oor: !!speciesOor.get(sp),
-        subspecies
-      }
-    }).sort((a, b) => b.prob - a.prob)
-
-    return {
-      taxon: g,
-      pct: genusProb.has(g) ? fmtPct(genusProb.get(g)) : '',
-      species: speciesNodes
-    }
+        pct: fmtPct(c),
+        prob: c,
+        oor: !!oor,
+        // top-3 subspecies of THIS species; keep the 1st always, drop weak 2nd/3rd
+        subspecies: (subs || [])
+          .filter((x, i) => i === 0 || x[1] >= SUBSP_MIN)
+          .map(([t, p2, o]) => ({ taxon: t, pct: fmtPct(p2), oor: !!o }))
+      }))
+      .sort((a, b) => b.prob - a.prob)
+    return { taxon: g, pct: genusProb.has(g) ? fmtPct(genusProb.get(g)) : '', species: speciesNodes }
   })
 })
 
@@ -444,9 +425,25 @@ watch(camid, load, { immediate: true })
   gap: 0.4rem;
   padding: 1px 0;
 }
-.pred-genus { margin-top: 0.15rem; }
-.pred-species { padding-left: 1rem; }
-.pred-subsp { padding-left: 2rem; }
+/* tint by level so the eye reads genus > species > subspecies grouping */
+.pred-genus {
+  margin-top: 0.3rem;
+  background: #e6ecf3;
+  border-radius: 4px;
+  padding: 2px 6px;
+}
+.pred-genus .genus-name, .pred-genus .pred-pct { font-weight: 700; color: #1e293b; }
+.pred-species {
+  padding: 1px 6px 1px 1.25rem;
+  background: #f2f6fb;
+  border-left: 2px solid #d3def0;
+  margin-left: 0.35rem;
+}
+.pred-subsp {
+  padding: 1px 6px 1px 2.25rem;
+  border-left: 2px solid #e2e8f0;
+  margin-left: 0.35rem;
+}
 
 .tree-toggle {
   flex: 0 0 auto;
@@ -464,7 +461,7 @@ watch(camid, load, { immediate: true })
 .chev.open { transform: rotate(90deg); }
 
 .pred-name {
-  flex: 1 1 auto;
+  flex: 0 1 auto;          /* don't grow -> the % sits right next to the name */
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -490,7 +487,7 @@ watch(camid, load, { immediate: true })
 }
 .pred-recorded { border-top: 1px solid #e2e8f0; margin-top: 0.5rem; padding-top: 0.35rem; }
 
-.pred-chips { display: flex; flex-wrap: wrap; gap: 0.2rem; flex: 0 0 auto; }
+.pred-chips { display: flex; flex-wrap: wrap; gap: 0.2rem; flex: 0 0 auto; margin-left: auto; }
 .src-chip {
   display: inline-flex;
   align-items: center;

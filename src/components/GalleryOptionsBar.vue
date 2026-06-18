@@ -75,43 +75,25 @@ function statusClass(tier) {
       </div>
     </div>
 
-    <!-- Curation tools (Feature 1 boxes + zoom, Feature 2 predictions) -->
-    <div class="col-12">
-      <fieldset>
-        <legend class="form-label small fw-bold mb-1 curation-legend">Curation tools</legend>
-        <div class="d-flex flex-wrap gap-3 align-items-center">
-          <div class="form-check form-switch curation-switch mb-0">
-            <input
-              class="form-check-input"
-              type="checkbox"
-              role="switch"
-              id="chkShowBoxes"
-              v-model="showBoxes"
-              aria-describedby="chkShowBoxesHelp"
-            >
-            <label class="form-check-label small" for="chkShowBoxes">Wing boxes</label>
-          </div>
-          <div class="form-check form-switch curation-switch mb-0">
-            <input
-              class="form-check-input"
-              type="checkbox"
-              role="switch"
-              id="chkZoomWings"
-              v-model="zoomWings"
-              aria-describedby="chkZoomWingsHelp"
-            >
-            <label class="form-check-label small" for="chkZoomWings">Zoom to wings</label>
-          </div>
-        </div>
-        <span id="chkShowBoxesHelp" class="visually-hidden">Draw detected wing bounding boxes over each photo</span>
-        <span id="chkZoomWingsHelp" class="visually-hidden">Zoom each photo so the detected wings fill the frame</span>
-      </fieldset>
-    </div>
-
+    <!-- Curation toggles + Image Cache on a single row -->
     <div class="col-12 mt-1">
-      <a class="small fw-bold text-decoration-none" data-bs-toggle="collapse" href="#imageCacheCollapse" role="button" aria-expanded="false" aria-controls="imageCacheCollapse">
-        Image Cache <span class="small">&#9660;</span>
-      </a>
+      <div class="d-flex flex-wrap align-items-center gap-3">
+        <div class="form-check form-switch mb-0">
+          <input class="form-check-input" type="checkbox" role="switch" id="chkShowBoxes"
+                 v-model="showBoxes" aria-describedby="chkShowBoxesHelp">
+          <label class="form-check-label small" for="chkShowBoxes">Wing boxes</label>
+        </div>
+        <div class="form-check form-switch mb-0">
+          <input class="form-check-input" type="checkbox" role="switch" id="chkZoomWings"
+                 v-model="zoomWings" aria-describedby="chkZoomWingsHelp">
+          <label class="form-check-label small" for="chkZoomWings">Zoom to wings</label>
+        </div>
+        <a class="small fw-bold text-decoration-none ms-auto" data-bs-toggle="collapse" href="#imageCacheCollapse" role="button" aria-expanded="false" aria-controls="imageCacheCollapse">
+          Image Cache <span class="small">&#9660;</span>
+        </a>
+      </div>
+      <span id="chkShowBoxesHelp" class="visually-hidden">Draw detected wing bounding boxes over each photo</span>
+      <span id="chkZoomWingsHelp" class="visually-hidden">Zoom each photo so the detected wings fill the frame</span>
       <div class="collapse" id="imageCacheCollapse">
         <div class="d-flex flex-wrap gap-2 mt-1">
           <div v-for="opt in proxyOptions" :key="opt.value" class="form-check form-check-inline mb-0">
