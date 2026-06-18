@@ -5,6 +5,7 @@ import { usePanzoomRegistry } from '../composables/usePanzoomRegistry.js'
 import { useGlobalGalleryOptions } from '../composables/useGlobalGalleryOptions.js'
 import { getBoxes } from '../composables/useCurationData.js'
 import { getProxiedUrl, notifyTierFailed, getProxyState } from '../utils/imageProxy.js'
+import PredictionPanel from './PredictionPanel.vue'
 
 const props = defineProps({
   item: Object,
@@ -12,7 +13,7 @@ const props = defineProps({
 })
 
 const { register, unregister } = usePanzoomRegistry()
-const { showBoxes, zoomWings } = useGlobalGalleryOptions()
+const { showBoxes, zoomWings, showPredictions } = useGlobalGalleryOptions()
 
 const imgRefs = ref([])
 const layerRefs = ref([])
@@ -308,6 +309,9 @@ const displayPhotos = () => {
         <div class="col-6" v-if="item.Insectary_ID"><strong>Ins. ID:</strong> {{ item.Insectary_ID }}</div>
         <div class="col-6" v-if="item.Mutant && item.Mutant !== 'NA'"><strong>Mutant:</strong> {{ item.Mutant }}</div>
       </div>
+
+      <!-- Curation aid: model predictions + source cross-links -->
+      <PredictionPanel v-if="showPredictions" :item="item" />
     </div>
   </div>
 </template>
