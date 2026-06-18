@@ -12,7 +12,8 @@ const BASE = import.meta.env.BASE_URL
 const fileCache = {
   wing_boxes: null,
   predictions: null,
-  taxon_links: null
+  taxon_links: null,
+  region_checklist: null
 }
 
 function loadFile(name) {
@@ -83,6 +84,99 @@ export async function getPredictions(camid) {
   }
 }
 
+// Returns the whole predictions map ({ CAM_ID -> pred }), cached. {} on failure.
+export async function getAllPredictions() {
+  try {
+    return await loadFile('predictions')
+  } catch {
+    return {}
+  }
+}
+
+// Returns the region checklist map keyed at genus / "Genus species" /
+// "Genus species subspecies", cached. {} on failure.
+export async function getChecklist() {
+  try {
+    return await loadFile('region_checklist')
+  } catch {
+    return {}
+  }
+}
+
+// True when the prediction's top species/subspecies disagrees with the recorded
+// ID. SHARED by the panel's "differs" badge and the gallery filter so they agree.
+//   item: a collection row (uses .Species and .Subspecies_Form)
+//   pred: a predictions.json entry (or null)
+export function predictionDiffers(item, pred) {
+  if (!item || !pred) return false
+  const recSp = cleanTaxon(item.Species)
+  const recSsp = cleanTaxon(item.Subspecies_Form)
+  const topSp = pred.species && pred.species[0] && pred.species[0][0]
+  const topSsp = pred.subspecies && pred.subspecies[0] && pred.subspecies[0][0]
+
+  if (recSp && topSp && topSp.toLowerCase() !== recSp.toLowerCase()) return true
+
+  if (recSsp && topSsp) {
+    // recSsp may be the bare epithet or the full trinomial; reduce to the epithet
+    const recEpithet = recSsp.includes(' ') ? recSsp.split(/\s+/).pop() : recSsp
+    const topParts = topSsp.split(/\s+/)
+    const topSpecies = topParts.slice(0, 2).join(' ')   // "Genus species"
+    const topEpithet = topParts.slice(2).join(' ')      // remainder (handles "type b")
+    const speciesMatches = recSp && topSpecies.toLowerCase() === recSp.toLowerCase()
+    if (speciesMatches && topEpithet.toLowerCase() !== recEpithet.toLowerCase()) return true
+  }
+  return false
+}
+
+// Region subspecies of a species, side-filtered. Returns the checklist keys `k`
+// where k startsWith "<species> ", k has exactly 3 words, and it is present on
+// the given side (or on EITHER side when side is empty/falsy).
+export async function regionSubspeciesOf(species, side) {
+  if (!species) return []
+  const checklist = await getChecklist()
+  const prefix = `${species} `
+  const out = []
+  for (const k in checklist) {
+    if (!k.startsWith(prefix)) continue
+    if (k.split(/\s+/).length !== 3) continue
+    if (onSide(checklist[k], side)) out.push(k)
+  }
+  return out.sort()
+}
+
+// Region species of a genus, side-filtered. Returns the distinct first-2-words
+// ("Genus species") of checklist keys `k` where k startsWith "<genus> " and the
+// key is present on the given side (or either side when side is empty).
+export async function regionSpeciesOf(genus, side) {
+  if (!genus) return []
+  const checklist = await getChecklist()
+  const prefix = `${genus} `
+  const set = new Set()
+  for (const k in checklist) {
+    if (!k.startsWith(prefix)) continue
+    if (!onSide(checklist[k], side)) continue
+    const parts = k.split(/\s+/)
+    if (parts.length < 2) continue
+    set.add(`${parts[0]} ${parts[1]}`)
+  }
+  return Array.from(set).sort()
+}
+
+// --- internal helpers -----------------------------------------------------
+
+function cleanTaxon(v) {
+  if (v === null || v === undefined) return ''
+  const s = String(v).trim()
+  return (!s || s === 'NA' || s === 'None') ? '' : s
+}
+
+function onSide(entry, side) {
+  if (!entry) return false
+  if (side === 'East') return entry.East > 0
+  if (side === 'West') return entry.West > 0
+  return entry.East > 0 || entry.West > 0   // unknown side: either side counts
+}
+
 const EU = ['sangay', 'noreste', 'cotacachi']
 
 // Returns { boa, sangay, noreste, cotacachi } for a taxon, resolved per the
@@ -121,5 +215,8 @@ export async function getLinks(taxon) {
 }
 
 export function useCurationData() {
-  return { getBoxes, getPredictions, getLinks, boxKeyFromName }
+  return {
+    getBoxes, getPredictions, getAllPredictions, getLinks, boxKeyFromName,
+    getChecklist, regionSubspeciesOf, regionSpeciesOf, predictionDiffers
+  }
 }
