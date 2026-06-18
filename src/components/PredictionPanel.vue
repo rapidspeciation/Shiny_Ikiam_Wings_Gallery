@@ -28,6 +28,7 @@ const recordedTaxon = computed(() => {
 const hasRecordedSubsp = computed(() => !!recordedSubsp.value)
 
 const side = computed(() => pred.value?.side || '')
+const oof = computed(() => !!(pred.value && pred.value.oof))
 const topSubspecies = computed(() => (pred.value?.subspecies || []).slice(0, 3))
 const topSpecies = computed(() => (pred.value?.species || []).slice(0, 3))
 const topGenus = computed(() => (pred.value?.genus || []).slice(0, 2))
@@ -89,6 +90,7 @@ watch(camid, load, { immediate: true })
     >
       <span class="d-flex align-items-center gap-2 flex-wrap">
         <span class="fw-bold small">Model predictions</span>
+        <span v-if="state === 'ready' && oof" class="badge text-bg-light border text-secondary fw-normal" title="Out-of-fold: scored by a model that never trained on this specimen (honest for spotting mislabels)">out-of-fold</span>
         <span v-if="state === 'ready' && side" class="badge text-bg-light border text-secondary fw-normal" :title="`Suggestions weighted to ${side}-of-Andes taxa`">{{ side }} of Andes</span>
         <span
           v-if="state === 'ready' && !hasRecordedSubsp && topSubspName"
