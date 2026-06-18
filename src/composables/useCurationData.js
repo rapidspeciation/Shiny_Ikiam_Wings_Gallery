@@ -41,15 +41,6 @@ export function boxKeyFromName(name) {
   return dot === -1 ? name : name.slice(0, dot)
 }
 
-// --- Google-scoped fallback links ----------------------------------------
-
-const SOURCE_DOMAINS = {
-  boa: 'butterfliesofamerica.com',
-  sangay: 'sangay.eu',
-  noreste: 'noreste.eu',
-  cotacachi: 'cotacachi.eu'
-}
-
 export const SOURCE_KEYS = ['boa', 'sangay', 'noreste', 'cotacachi']
 
 export const SOURCE_LABELS = {
@@ -64,11 +55,6 @@ export const SOURCE_FULL_NAMES = {
   sangay: 'Sangay',
   noreste: 'Noreste',
   cotacachi: 'Cotacachi'
-}
-
-function googleFallback(source, taxon) {
-  const domain = SOURCE_DOMAINS[source]
-  return `https://www.google.com/search?q=${encodeURIComponent(`site:${domain} ${taxon}`)}`
 }
 
 // --- Async getters --------------------------------------------------------
@@ -97,37 +83,34 @@ export async function getPredictions(camid) {
   }
 }
 
-// Returns { boa, sangay, noreste, cotacachi } for a taxon, with:
-//   trinomial -> binomial fallback for the lookup, then a Google-scoped
-//   fallback URL for any source missing from the matched entry.
-// `taxon` should be the most specific name available ("Genus species subspecies"
-// or "Genus species"). Always returns a full set of 4 URLs (never null).
+// Returns { boa, sangay, noreste, cotacachi } for a taxon. Per source we take the
+// most specific real page available: subspecies (trinomial) -> species (binomial)
+// -> genus page. A source the reference sites don't have for this taxon stays
+// null (no dead link / no useless search) — the UI just omits that chip.
 export async function getLinks(taxon) {
   const result = { boa: null, sangay: null, noreste: null, cotacachi: null }
   if (!taxon || typeof taxon !== 'string') return result
+  const parts = taxon.trim().split(/\s+/).filter(Boolean)
+  if (!parts.length) return result
 
-  const trimmed = taxon.trim()
-  if (!trimmed) return result
-
-  let entry = null
+  let data
   try {
-    const data = await loadFile('taxon_links')
-    // Try the full taxon first (could be trinomial), then binomial fallback.
-    entry = data[trimmed] || null
-    if (!entry) {
-      const parts = trimmed.split(/\s+/)
-      if (parts.length >= 2) {
-        const binomial = `${parts[0]} ${parts[1]}`
-        entry = data[binomial] || null
-      }
-    }
+    data = await loadFile('taxon_links')
   } catch {
-    entry = null
+    return result
   }
 
+  // most-specific-first lookup keys: trinomial, binomial, genus
+  const keys = []
+  if (parts.length >= 3) keys.push(parts.slice(0, 3).join(' '))
+  if (parts.length >= 2) keys.push(parts.slice(0, 2).join(' '))
+  keys.push(parts[0])
+  const entries = keys.map(k => data[k]).filter(Boolean)
+
   for (const src of SOURCE_KEYS) {
-    const url = entry && entry[src]
-    result[src] = url || googleFallback(src, trimmed)
+    for (const entry of entries) {
+      if (entry[src]) { result[src] = entry[src]; break }
+    }
   }
   return result
 }

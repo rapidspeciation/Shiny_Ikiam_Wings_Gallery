@@ -13,7 +13,7 @@ const props = defineProps({
 })
 
 const { register, unregister } = usePanzoomRegistry()
-const { showBoxes, zoomWings, showPredictions } = useGlobalGalleryOptions()
+const { showBoxes, zoomWings } = useGlobalGalleryOptions()
 
 const imgRefs = ref([])
 const layerRefs = ref([])
@@ -311,7 +311,7 @@ const displayPhotos = () => {
       </div>
 
       <!-- Curation aid: model predictions + source cross-links -->
-      <PredictionPanel v-if="showPredictions" :item="item" />
+      <PredictionPanel :item="item" />
     </div>
   </div>
 </template>

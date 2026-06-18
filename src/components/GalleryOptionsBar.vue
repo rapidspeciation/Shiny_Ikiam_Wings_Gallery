@@ -10,8 +10,7 @@ const {
   onlyPhotos,
   onePerSubspecies,
   showBoxes,
-  zoomWings,
-  showPredictions
+  zoomWings
 } = useGlobalGalleryOptions()
 
 const { mode: proxyMode, tierStatus } = getProxyState()
@@ -102,16 +101,6 @@ function statusClass(tier) {
               aria-describedby="chkZoomWingsHelp"
             >
             <label class="form-check-label small" for="chkZoomWings">Zoom to wings</label>
-          </div>
-          <div class="form-check form-switch curation-switch mb-0">
-            <input
-              class="form-check-input"
-              type="checkbox"
-              role="switch"
-              id="chkShowPredictions"
-              v-model="showPredictions"
-            >
-            <label class="form-check-label small" for="chkShowPredictions">Predictions</label>
           </div>
         </div>
         <span id="chkShowBoxesHelp" class="visually-hidden">Draw detected wing bounding boxes over each photo</span>
