@@ -81,11 +81,13 @@ onMounted(async () => {
 })
 
 const onShowPhotos = async () => {
-  // "Model vs recorded" needs the predictions map; load (cached) before filtering
-  // so the result set is complete on first render. Uses the SAME predictionDiffers
-  // helper as the panel's "differs" badge, so the two always agree.
+  // "Model vs recorded" filtering AND "Model confidence" sorting both need the
+  // predictions map; load (cached) before filtering so the result set + order are
+  // complete on first render. Uses the SAME predictionDiffers helper as the panel's
+  // "differs" badge, so the two always agree.
   const mvr = filters.value.modelVsRecorded
-  const predictions = mvr === 'All' ? null : await getAllPredictions()
+  const needPred = mvr !== 'All' || sortBy.value === 'ModelConfidence'
+  const predictions = needPred ? await getAllPredictions() : null
 
   applyFilters((item) => {
     if (filters.value.family && item.Family !== filters.value.family) return false
@@ -109,6 +111,12 @@ const onShowPhotos = async () => {
     return true
   })
 }
+
+// switching the sort to "Model confidence" after photos are shown needs the
+// predictions map loaded; re-run the query so it's fetched and passed through.
+watch(() => sortBy.value, (val) => {
+  if (val === 'ModelConfidence' && isFiltered.value) onShowPhotos()
+})
 </script>
 
 <template>

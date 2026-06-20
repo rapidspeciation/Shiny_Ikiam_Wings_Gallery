@@ -51,9 +51,18 @@ const topSubspName = computed(() => pred.value?.subspecies?.[0]?.[0] || '')
 // "differs from recorded" badge uses the SAME helper as the gallery filter.
 const differs = computed(() => predictionDiffers(props.item, pred.value))
 
+// the model's single highest-confidence calls, tagged "predicted" in the tree
+// (mirrors the "recorded" badge). topSubspName is the top subspecies (above).
+const topSpeciesName = computed(() => pred.value?.species?.[0]?.[0] || '')
+const isPredSpecies = (t) => !!topSpeciesName.value && t.toLowerCase() === topSpeciesName.value.toLowerCase()
+const isPredSubsp = (t) => !!topSubspName.value && t.toLowerCase() === topSubspName.value.toLowerCase()
+
 const fmtPct = (c) => (typeof c === 'number' && !Number.isNaN(c)) ? `${Math.round(c * 100)}%` : ''
 const genusOf = (t) => t.split(/\s+/)[0]
 const speciesOf = (t) => t.split(/\s+/).slice(0, 2).join(' ')
+// region "+ all" rows: those the model gave a probability to (prob >= 0) come
+// first, highest confidence on top; the rest (prob = -1) stay alphabetical.
+const byProbThenName = (a, b) => (b.prob - a.prob) || a.taxon.localeCompare(b.taxon)
 
 // --- Tree construction ----------------------------------------------------
 // Built from the prediction's own (proper trinomial) entries:
@@ -100,20 +109,24 @@ const tree = computed(() => {
   })
 
   // ensure the RECORDED taxon is always present (even outside top-k) so its model
-  // rank/confidence is visible for curation
+  // rank/confidence is visible for curation. Prefer pred.rec (canonical, carries the
+  // model probs); fall back to the raw collection.json values when rec is absent
+  // (~20% of specimens) so the recorded ID is never hidden once the bottom block is gone.
   const rec = p.rec
-  if (rec && rec.species) {
-    const rg = rec.genus || genusOf(rec.species)
+  const recSp = rec?.species || recordedSpecies.value
+  if (recSp) {
+    const rg = rec?.genus || genusOf(recSp)
+    const recSubspFull = rec?.subsp || (hasRecordedSubsp.value ? recordedTaxon.value : '')
     let gNode = treeArr.find(x => x.taxon === rg)
-    if (!gNode) { gNode = { taxon: rg, pct: fmtPct(rec.genus_p), species: [] }; treeArr.push(gNode) }
-    let sNode = gNode.species.find(x => x.taxon === rec.species)
+    if (!gNode) { gNode = { taxon: rg, pct: fmtPct(rec?.genus_p), species: [] }; treeArr.push(gNode) }
+    let sNode = gNode.species.find(x => x.taxon === recSp)
     if (!sNode) {
-      sNode = { taxon: rec.species, pct: fmtPct(rec.species_p), prob: rec.species_p || 0, oor: !!rec.oor, subspecies: [] }
+      sNode = { taxon: recSp, pct: fmtPct(rec?.species_p), prob: rec?.species_p || 0, oor: !!rec?.oor, subspecies: [] }
       gNode.species.push(sNode)
       gNode.species.sort((a, b) => b.prob - a.prob)
     }
-    if (rec.subsp && !sNode.subspecies.find(x => x.taxon === rec.subsp)) {
-      sNode.subspecies.push({ taxon: rec.subsp, pct: fmtPct(rec.subsp_p), oor: !!rec.oor })
+    if (recSubspFull && !sNode.subspecies.find(x => x.taxon === recSubspFull)) {
+      sNode.subspecies.push({ taxon: recSubspFull, pct: fmtPct(rec?.subsp_p), oor: !!rec?.oor })
     }
   }
   return treeArr
@@ -169,7 +182,9 @@ const subspProbMap = computed(() => {
 })
 const speciesProbMap = computed(() => {
   const m = new Map()
-  ;(pred.value?.species || []).forEach(([t, c, oor]) => { if (!m.has(t)) m.set(t, { c, oor }) })
+  // species_all (every species >= 1%) backs the "+ all species" % lookup; fall back
+  // to the displayed top-k species for older prediction files without it.
+  ;(pred.value?.species_all || pred.value?.species || []).forEach(([t, c, oor]) => { if (!m.has(t)) m.set(t, { c, oor }) })
   return m
 })
 
@@ -187,8 +202,8 @@ async function toggleAllSubspecies(speciesNode) {
     const keys = (await regionSubspeciesOf(sp, side.value)).filter(k => !already.has(k))
     const rows = keys.map((k) => {
       const hit = subspProbMap.value.get(k)
-      return { taxon: k, pct: hit ? fmtPct(hit.c) : '', oor: hit ? !!hit.oor : false }
-    })
+      return { taxon: k, pct: hit ? fmtPct(hit.c) : '', prob: hit ? hit.c : -1, oor: hit ? !!hit.oor : false }
+    }).sort(byProbThenName)
     extraSubspecies.value = { ...extraSubspecies.value, [sp]: rows }
     rows.forEach(r => loadLinks(r.taxon))
   } finally {
@@ -213,10 +228,11 @@ async function toggleAllSpecies(genusNode) {
       return {
         taxon: k,
         pct: hit ? fmtPct(hit.c) : '',
+        prob: hit ? hit.c : -1,
         oor: hit ? !!hit.oor : false,
         subspecies: []   // region species rows are collapsible but list nothing until "+ all subspecies"
       }
-    })
+    }).sort(byProbThenName)
     extraSpecies.value = { ...extraSpecies.value, [g]: rows }
     rows.forEach(r => loadLinks(r.taxon))
     // does each revealed species have region subspecies to offer?
@@ -295,8 +311,7 @@ watch(camid, load, { immediate: true })
       @click="open = !open"
     >
       <span class="d-flex align-items-center gap-2 flex-wrap">
-        <span class="fw-bold small">Model predictions</span>
-        <span v-if="state === 'ready' && oof" class="badge text-bg-light border text-secondary fw-normal" title="Out-of-fold: scored by a model that never trained on this specimen (honest for spotting mislabels)">out-of-fold</span>
+        <span class="fw-bold small" title="Out-of-fold model predictions: each specimen is scored by a model that never trained on it — an honest signal for spotting mislabels.">Model predictions</span>
         <span v-if="state === 'ready' && side" class="badge text-bg-light border text-secondary fw-normal" :title="`Suggestions weighted to ${side}-of-Andes taxa`">{{ side }} of Andes</span>
         <span
           v-if="state === 'ready' && !hasRecordedSubsp && topSubspName"
@@ -356,6 +371,7 @@ watch(camid, load, { immediate: true })
                   <span class="pred-name italic" :title="s.taxon">{{ s.taxon }}</span>
                   <span v-if="s.pct" class="pred-pct">{{ s.pct }}</span>
                   <span v-if="isRecSpecies(s.taxon)" class="rec-badge" title="Recorded ID in the database">recorded</span>
+                  <span v-if="isPredSpecies(s.taxon)" class="pred-badge" title="Model's top species prediction">predicted</span>
                   <span v-if="s.oor" class="oor-tag" title="Documented only on the other side of the Andes">off-region</span>
                   <span class="pred-chips">
                     <a v-for="c in chipsFor(s.taxon)" :key="c.src" class="src-chip" :href="c.url"
@@ -371,6 +387,7 @@ watch(camid, load, { immediate: true })
                     <span class="pred-name italic" :title="ss.taxon">{{ ss.taxon }}</span>
                     <span v-if="ss.pct" class="pred-pct">{{ ss.pct }}</span>
                     <span v-if="isRecSubsp(ss.taxon)" class="rec-badge" title="Recorded ID in the database">recorded</span>
+                    <span v-if="isPredSubsp(ss.taxon)" class="pred-badge" title="Model's top subspecies prediction">predicted</span>
                     <span v-if="ss.oor" class="oor-tag" title="Documented only on the other side of the Andes">off-region</span>
                     <span class="pred-chips">
                       <a v-for="c in chipsFor(ss.taxon)" :key="c.src" class="src-chip" :href="c.url"
@@ -458,19 +475,6 @@ watch(camid, load, { immediate: true })
           </template>
         </div>
 
-        <div v-if="recordedTaxon" class="pred-group pred-recorded">
-          <div class="pred-group-title">Recorded ID</div>
-          <div class="pred-row">
-            <span class="pred-name italic" :title="recordedTaxon">{{ recordedTaxon }}</span>
-            <span v-if="differs" class="diff-chip" aria-hidden="true">&#9888;</span>
-            <span class="pred-chips">
-              <a v-for="c in chipsFor(recordedTaxon)" :key="c.src" class="src-chip" :href="c.url"
-                 target="_blank" rel="noopener noreferrer"
-                 :aria-label="`Open ${recordedTaxon} on ${SOURCE_FULL_NAMES[c.src]} (opens in new tab)`"
-              >{{ SOURCE_LABELS[c.src] }}</a>
-            </span>
-          </div>
-        </div>
       </template>
     </div>
   </div>
@@ -610,6 +614,19 @@ watch(camid, load, { immediate: true })
   color: #92400e;
   background: #fef3c7;
   border: 1px solid #fde68a;
+  border-radius: 4px;
+  padding: 0 4px;
+  flex: 0 0 auto;
+}
+/* the model's single top species/subspecies call */
+.pred-badge {
+  font-size: 0.58rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: #166534;
+  background: #dcfce7;
+  border: 1px solid #bbf7d0;
   border-radius: 4px;
   padding: 0 4px;
   flex: 0 0 auto;

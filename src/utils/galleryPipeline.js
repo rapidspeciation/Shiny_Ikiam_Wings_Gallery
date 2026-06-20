@@ -14,8 +14,25 @@ export function applyOnePerSubspeciesSex(items) {
   })
 }
 
-export function sortItems(items, sortBy, sortOrder) {
+// Model's top-species confidence for a row, or -1 if it has no prediction.
+// Pairs with the "Differs" filter: sort desc to surface the model's most
+// confident disagreements (the clearest mislabel candidates) first.
+function modelConfidence(item, predictions) {
+  const pred = predictions && predictions[item.CAM_ID]
+  const top = pred && pred.species && pred.species[0]
+  return (top && typeof top[1] === 'number') ? top[1] : -1
+}
+
+export function sortItems(items, sortBy, sortOrder, predictions) {
   if (sortBy === 'Row Number') return items
+
+  if (sortBy === 'ModelConfidence') {
+    if (!predictions) return items   // map not loaded -> leave order untouched
+    return items.slice().sort((a, b) => {
+      const d = modelConfidence(a, predictions) - modelConfidence(b, predictions)
+      return sortOrder === 'asc' ? d : -d
+    })
+  }
 
   return items.slice().sort((a, b) => {
     let valA
@@ -46,5 +63,5 @@ export function applyGlobalPipeline(items, options) {
     results = applyOnePerSubspeciesSex(results)
   }
 
-  return sortItems(results, options.sortBy, options.sortOrder)
+  return sortItems(results, options.sortBy, options.sortOrder, options.predictions)
 }

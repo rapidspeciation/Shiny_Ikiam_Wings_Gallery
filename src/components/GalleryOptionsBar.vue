@@ -48,6 +48,7 @@ function statusClass(tier) {
         <option value="Preservation_date">Date</option>
         <option value="CAM_ID">CAM_ID</option>
         <option value="Row Number">Row #</option>
+        <option value="ModelConfidence">Model confidence</option>
       </select>
     </div>
     <div class="col-6 col-md-2">
