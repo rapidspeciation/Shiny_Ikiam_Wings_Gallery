@@ -109,7 +109,7 @@ const onShowPhotos = async () => {
       }
     }
     return true
-  })
+  }, predictions)
 }
 
 // switching the sort to "Model confidence" after photos are shown needs the

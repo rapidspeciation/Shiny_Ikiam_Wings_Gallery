@@ -1,6 +1,9 @@
 <script setup>
+import { computed, watch } from 'vue'
 import { useGlobalGalleryOptions } from '../composables/useGlobalGalleryOptions.js'
 import { getProxyState, setProxyMode } from '../utils/imageProxy.js'
+
+const props = defineProps({ currentTab: { type: String, default: '' } })
 
 const {
   columns,
@@ -9,10 +12,18 @@ const {
   side,
   onlyPhotos,
   onePerSubspecies,
-  showBoxes,
-  zoomWings,
-  expandPredictions
+  showBoxes
+  // zoomWings + expandPredictions live in the top navbar now (App.vue)
 } = useGlobalGalleryOptions()
+
+// Only the Collection tab carries model predictions, so "Model confidence" sort is
+// offered there alone. Leaving it (or any tab without predictions) reverts the sort
+// to the default so other tabs don't silently keep an inapplicable sort.
+const DEFAULT_SORT = 'Preservation_date'
+const supportsModelConfidence = computed(() => props.currentTab === 'Collection')
+watch(supportsModelConfidence, (ok) => {
+  if (!ok && sortBy.value === 'ModelConfidence') sortBy.value = DEFAULT_SORT
+}, { immediate: true })
 
 const { mode: proxyMode, tierStatus } = getProxyState()
 
@@ -48,7 +59,7 @@ function statusClass(tier) {
         <option value="Preservation_date">Date</option>
         <option value="CAM_ID">CAM_ID</option>
         <option value="Row Number">Row #</option>
-        <option value="ModelConfidence">Model confidence</option>
+        <option v-if="supportsModelConfidence" value="ModelConfidence">Model confidence</option>
       </select>
     </div>
     <div class="col-6 col-md-2">
@@ -85,23 +96,11 @@ function statusClass(tier) {
                  v-model="showBoxes" aria-describedby="chkShowBoxesHelp">
           <label class="form-check-label small" for="chkShowBoxes">Wing boxes</label>
         </div>
-        <div class="form-check form-switch mb-0">
-          <input class="form-check-input" type="checkbox" role="switch" id="chkZoomWings"
-                 v-model="zoomWings" aria-describedby="chkZoomWingsHelp">
-          <label class="form-check-label small" for="chkZoomWings">Zoom to wings</label>
-        </div>
-        <div class="form-check form-switch mb-0">
-          <input class="form-check-input" type="checkbox" role="switch" id="chkExpandPred"
-                 v-model="expandPredictions" aria-describedby="chkExpandPredHelp">
-          <label class="form-check-label small" for="chkExpandPred">Show predictions</label>
-        </div>
         <a class="small fw-bold text-decoration-none" data-bs-toggle="collapse" href="#imageCacheCollapse" role="button" aria-expanded="false" aria-controls="imageCacheCollapse">
           Image Cache <span class="small">&#9660;</span>
         </a>
       </div>
       <span id="chkShowBoxesHelp" class="visually-hidden">Draw detected wing bounding boxes over each photo</span>
-      <span id="chkZoomWingsHelp" class="visually-hidden">Zoom each photo so the detected wings fill the frame</span>
-      <span id="chkExpandPredHelp" class="visually-hidden">Open and fully expand every specimen's model-prediction panel</span>
       <div class="collapse" id="imageCacheCollapse">
         <div class="d-flex flex-wrap gap-2 mt-1">
           <div v-for="opt in proxyOptions" :key="opt.value" class="form-check form-check-inline mb-0">

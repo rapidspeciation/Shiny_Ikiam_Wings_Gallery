@@ -55,13 +55,16 @@ const handleImgError = (e, originalUrl) => {
 // -------------------------
 
 // --- Panzoom ---
-const pzInstances = []   // parallels imgRefs by index (null while suspended)
+// Attached to the .zoom-layer (NOT the <img>) so the image and its wing-box
+// overlay pan/zoom together. Stays live in every mode; "zoom to wings" just sets
+// the initial frame via panzoom (see applyWingFrame) instead of replacing it.
+const pzInstances = []   // parallels layerRefs by index
 
 const initZoom = (el) => {
   if (!el) return null
 
   const pz = Panzoom(el, {
-    maxScale: 5,
+    maxScale: 8,
     minScale: 0.5,
     touchAction: 'pan-y',
     disablePan: true
@@ -104,7 +107,7 @@ const destroyPz = (pz, el) => {
 }
 
 const attachPanzoomAll = () => {
-  imgRefs.value.forEach((el, i) => {
+  layerRefs.value.forEach((el, i) => {
     if (el && !pzInstances[i]) {
       pzInstances[i] = initZoom(el)
     }
@@ -112,7 +115,7 @@ const attachPanzoomAll = () => {
 }
 
 const detachPanzoomAll = () => {
-  pzInstances.forEach((pz, i) => destroyPz(pz, imgRefs.value[i]))
+  pzInstances.forEach((pz, i) => destroyPz(pz, layerRefs.value[i]))
   pzInstances.length = 0
 }
 
@@ -145,19 +148,33 @@ const unionBox = (boxes) => {
   return { x1, y1, x2, y2 }
 }
 
-// CSS transform that frames the union bbox (transform-origin: 0 0).
-const zoomTransform = (index) => {
+// Frame the union wing bbox THROUGH panzoom, so the user can keep zooming/panning
+// from there. Panzoom transform is `scale(S) translate(Xpx,Ypx)` about the layer's
+// centre, so to put the bbox centre (cx,cy) at the viewport centre: X=W(0.5-cx),
+// Y=H(0.5-cy). No-op (and retried later) until both boxes and image size are ready.
+const applyWingFrame = (index) => {
+  const el = layerRefs.value[index]
+  const pz = pzInstances[index]
   const st = photoState[index]
-  if (!st || !st.loaded) return null
+  if (!el || !pz || !st || !st.loaded) return
   const u = unionBox(st.boxes)
-  if (!u) return null
-  const w = u.x2 - u.x1
-  const h = u.y2 - u.y1
-  const scale = Math.min(5, 0.95 / Math.max(w, h))
-  // translate so (x1,y1) maps to origin, then scale. Order: scale then translate
-  // in percentages of the (untransformed) element box.
-  return `scale(${scale}) translate(${(-u.x1 * 100).toFixed(4)}%, ${(-u.y1 * 100).toFixed(4)}%)`
+  if (!u) { pz.reset({ animate: false }); return }
+  const W = el.offsetWidth, H = el.offsetHeight
+  if (!W || !H) return
+  const cx = (u.x1 + u.x2) / 2, cy = (u.y1 + u.y2) / 2
+  const scale = Math.min(8, 0.95 / Math.max(u.x2 - u.x1, u.y2 - u.y1))
+  pz.zoom(scale, { animate: false })
+  // force: true — pan() is a no-op while disablePan is set (the panel's default),
+  // which would frame off-centre wings on the image middle instead of the bbox.
+  pz.pan(W * (0.5 - cx), H * (0.5 - cy), { animate: false, force: true })
+  // we're zoomed in now, so allow dragging straight away (don't wait on the event)
+  pz.setOptions({ disablePan: false, touchAction: 'none', cursor: 'move' })
 }
+
+const applyWingFramesAll = () => displayPhotos().forEach((_, i) => applyWingFrame(i))
+
+// img onload: dimensions are now known, so (re)apply the wing frame if active.
+const onImgLoad = (index) => { if (zoomWings.value) applyWingFrame(index) }
 
 const boxesFor = (index) => {
   const st = photoState[index]
@@ -171,17 +188,15 @@ const fmtConf = (conf) => {
 
 // --- Reactive orchestration --------------------------------------------
 
-// When zoom-to-wings turns on, suspend panzoom + reset existing transforms,
-// then apply CSS zoom. When off, restore panzoom.
+// Zoom-to-wings keeps panzoom LIVE and just sets the initial frame. When it turns
+// on, load boxes then frame each photo; when off, reset every instance to neutral.
 watch(zoomWings, async (on) => {
   if (on) {
-    // reset any panzoom transform before suspending so the layer is clean
-    pzInstances.forEach(pz => pz && pz.reset({ animate: false }))
-    detachPanzoomAll()
     await loadVisibleBoxes()
-  } else {
     await nextTick()
-    attachPanzoomAll()
+    applyWingFramesAll()
+  } else {
+    pzInstances.forEach(pz => pz && pz.reset({ animate: false }))
   }
 })
 
@@ -192,12 +207,11 @@ watch([showBoxes, zoomWings], ([sb, zw]) => {
 
 onMounted(async () => {
   await nextTick()
-  if (!zoomWings.value) attachPanzoomAll()
+  attachPanzoomAll()
   if (showBoxes.value || zoomWings.value) {
     await loadVisibleBoxes()
-    if (zoomWings.value) {
-      // nothing else: transform binding reacts to photoState
-    }
+    await nextTick()
+    if (zoomWings.value) applyWingFramesAll()
   }
 })
 
@@ -249,8 +263,6 @@ const displayPhotos = () => {
          <div
            class="zoom-layer"
            :ref="el => layerRefs[index] = el"
-           :class="{ 'is-wing-zoom': zoomWings && zoomTransform(index) }"
-           :style="zoomWings && zoomTransform(index) ? { transform: zoomTransform(index) } : null"
          >
            <img
              :ref="el => imgRefs[index] = el"
@@ -259,6 +271,7 @@ const displayPhotos = () => {
              loading="lazy"
              referrerpolicy="no-referrer"
              :alt="photo.Name"
+             @load="onImgLoad(index)"
              @error="(e) => handleImgError(e, photo.URL_to_view)"
            >
 
@@ -334,15 +347,12 @@ const displayPhotos = () => {
 }
 .img-wrapper:only-child { grid-column: span 2; }
 
-/* The zoom-layer wraps img + overlay so wing-zoom transforms them together. */
+/* The zoom-layer wraps img + overlay so panzoom transforms them together. */
 .zoom-layer {
   position: relative;
   width: 100%;
   line-height: 0;
-}
-.zoom-layer.is-wing-zoom {
-  transform-origin: 0 0;
-  will-change: transform;
+  cursor: grab;
 }
 
 .panzoom-img {

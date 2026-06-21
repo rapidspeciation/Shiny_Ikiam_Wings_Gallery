@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { usePanzoomRegistry } from './composables/usePanzoomRegistry.js'
+import { useGlobalGalleryOptions } from './composables/useGlobalGalleryOptions.js'
 import { useDataset } from './composables/useDataset.js'
 import { extractGoogleDriveFileId, checkAllTiers } from './utils/imageProxy.js'
 
@@ -12,6 +13,9 @@ import UpdateTab from './components/UpdateTab.vue'
 import GalleryOptionsBar from './components/GalleryOptionsBar.vue'
 
 const currentTab = ref('Collection')
+
+// Pinned in the top navbar so they stay reachable while scrolling through photos.
+const { zoomWings, expandPredictions } = useGlobalGalleryOptions()
 
 const tabs = {
   'Collection': CollectionTab,
@@ -71,8 +75,16 @@ onMounted(async () => {
             </li>
           </ul>
           
-          <!-- Reset Button -->
-          <div class="d-flex ms-md-3 mt-2 mt-md-0">
+          <!-- Pinned curation toggles + Reset (stay reachable while scrolling) -->
+          <div class="d-flex flex-wrap align-items-center gap-3 ms-md-auto mt-2 mt-md-0">
+            <div class="form-check form-switch mb-0">
+              <input class="form-check-input" type="checkbox" role="switch" id="navZoomWings" v-model="zoomWings">
+              <label class="form-check-label small text-light" for="navZoomWings">Zoom to wings</label>
+            </div>
+            <div class="form-check form-switch mb-0">
+              <input class="form-check-input" type="checkbox" role="switch" id="navShowPred" v-model="expandPredictions">
+              <label class="form-check-label small text-light" for="navShowPred">Show predictions</label>
+            </div>
             <button class="btn btn-sm btn-outline-light text-nowrap" @click="resetAll">
               Reset Zoom
             </button>
@@ -89,7 +101,7 @@ onMounted(async () => {
         <span class="d-none d-md-inline"> | Github: <a href='https://github.com/rapidspeciation/Shiny_Ikiam_Wings_Gallery/' target='_blank'>rapidspeciation/Shiny_Ikiam_Wings_Gallery</a></span>
       </div>
 
-      <GalleryOptionsBar />
+      <GalleryOptionsBar :current-tab="currentTab" />
 
       <keep-alive>
         <component :is="tabs[currentTab]" />
