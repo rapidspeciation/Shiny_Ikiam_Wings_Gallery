@@ -60,6 +60,13 @@ export const SOURCE_FULL_NAMES = {
 
 // --- Async getters --------------------------------------------------------
 
+// Warm the wing-boxes cache in the background so the first "Zoom to wings" /
+// "Wing boxes" toggle doesn't pay for the ~2 MB cold fetch. Safe to call repeatedly
+// (loadFile dedupes to a single request). Errors are swallowed; getBoxes retries.
+export function preloadBoxes() {
+  return loadFile('wing_boxes').catch(() => {})
+}
+
 // Returns the array of boxes for a photo Name, or [] if none / not loaded yet.
 export async function getBoxes(name) {
   const key = boxKeyFromName(name)
@@ -226,7 +233,7 @@ export async function getLinks(taxon) {
 
 export function useCurationData() {
   return {
-    getBoxes, getPredictions, getAllPredictions, getLinks, boxKeyFromName,
+    getBoxes, preloadBoxes, getPredictions, getAllPredictions, getLinks, boxKeyFromName,
     getChecklist, regionSubspeciesOf, regionSpeciesOf, predictionDiffers
   }
 }

@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue'
 import { usePanzoomRegistry } from './composables/usePanzoomRegistry.js'
 import { useGlobalGalleryOptions } from './composables/useGlobalGalleryOptions.js'
 import { useDataset } from './composables/useDataset.js'
+import { preloadBoxes } from './composables/useCurationData.js'
 import { extractGoogleDriveFileId, checkAllTiers } from './utils/imageProxy.js'
 
 import CollectionTab from './components/CollectionTab.vue'
@@ -42,6 +43,12 @@ onMounted(async () => {
       if (fileId) checkAllTiers(fileId)
     }
   } catch { /* dataset load handled elsewhere */ }
+
+  // Warm the wing-boxes cache during idle so the first "Zoom to wings" / "Wing
+  // boxes" toggle is instant instead of waiting on a ~2 MB cold fetch.
+  const warm = () => preloadBoxes()
+  if (typeof requestIdleCallback === 'function') requestIdleCallback(warm, { timeout: 4000 })
+  else setTimeout(warm, 2000)
 })
 </script>
 

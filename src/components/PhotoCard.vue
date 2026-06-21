@@ -127,9 +127,12 @@ const ensureBoxes = async (index, name) => {
   photoState[index] = { boxes, loaded: true }
 }
 
+// Returns a promise that resolves once every visible photo's boxes are in
+// photoState, so callers can `await` it before framing (avoids a race where
+// framing runs before the boxes have loaded).
 const loadVisibleBoxes = () => {
   const photos = displayPhotos()
-  photos.forEach((photo, index) => ensureBoxes(index, photo.Name))
+  return Promise.all(photos.map((photo, index) => ensureBoxes(index, photo.Name)))
 }
 
 // Union bbox of all boxes for a photo, or null if none.
