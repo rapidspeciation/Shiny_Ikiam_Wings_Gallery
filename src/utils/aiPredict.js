@@ -1,14 +1,13 @@
 // AI ID prediction pipeline (client side).
 //
 // The backend (HF Space) returns RAW per-leaf probabilities (no geographic prior).
-// Here we (1) apply the country + side-of-Andes prior from region_checklist.json,
-// then (2) marginalise the weighted leaves into the genus/species/subspecies shape
-// that PredictionPanel.vue already renders. This keeps the prior fully client-side
-// and flexible (any country) without backend taxa tables.
+// Inference runs ONCE per photo; the geographic prior is a *pure* client-side
+// re-rank (rankLeaves) so the user can change country/side after the fact — or let
+// us guess it — without re-running the model. rankLeaves marginalises the weighted
+// leaves into the genus/species/subspecies shape PredictionPanel.vue renders.
 //
 // Set VITE_AIID_API to the HF Space origin to use the real model; otherwise a
 // deterministic mock (real Ithomiini taxa) runs so the whole flow is demoable.
-import { getChecklist } from '../composables/useCurationData.js'
 import { entryFor, geoWeight, isOffRegion, DEFAULT_EPS } from './geoPrior.js'
 
 const API_BASE = (import.meta.env.VITE_AIID_API || '').replace(/\/$/, '')
@@ -43,14 +42,22 @@ function mockRawLeaves(filename) {
   return raw.map(([name, p]) => [name, p / s])
 }
 
-async function fetchRawLeaves(files) {
-  if (!API_BASE) return files.map((f) => ({ filename: f.name, leaves: mockRawLeaves(f.name), mock: true }))
+// Fetch RAW leaves for prepared image items. Returns
+//   [{ id, filename, leaves: [[taxon, prob], ...], mock }]
+export async function predictRaw(files) {
+  if (!API_BASE) {
+    return files.map((f, i) => ({
+      id: f.id || `img_${i}`, filename: f.name, leaves: mockRawLeaves(f.name), mock: true,
+    }))
+  }
   const form = new FormData()
   for (const f of files) form.append('images', f.blob || f.file || f, f.name)
   const res = await fetch(`${API_BASE}/predict_raw`, { method: 'POST', body: form })
   if (!res.ok) throw new Error(`Backend ${res.status}`)
   const json = await res.json()
-  return json.results.map((r) => ({ filename: r.filename, leaves: r.leaves, mock: !!json.mock }))
+  return json.results.map((r, i) => ({
+    id: files[i]?.id || `img_${i}`, filename: r.filename, leaves: r.leaves, mock: !!json.mock,
+  }))
 }
 
 const genusOf = (t) => t.split(/\s+/)[0]
@@ -58,9 +65,10 @@ const speciesOf = (t) => t.split(/\s+/).slice(0, 2).join(' ')
 const isSubsp = (t) => t.split(/\s+/).length >= 3
 const round = (x) => Math.round(x * 1e4) / 1e4
 
-// Apply the geographic prior to raw leaves, renormalise, then marginalise into
-// the { genus, species, subspecies, species_all, side } shape PredictionPanel uses.
-function rankAndMarginalise(rawLeaves, checklist, country, side, eps) {
+// Pure re-rank: apply the geographic prior to raw leaves, renormalise, then
+// marginalise into the { genus, species, subspecies, species_all, side } shape
+// PredictionPanel uses. No I/O — safe to call on every country/side change.
+export function rankLeaves(rawLeaves, checklist, { country = '', side = '', eps = DEFAULT_EPS } = {}) {
   // 1. weight + renormalise
   const weighted = rawLeaves.map(([name, p]) => {
     const w = geoWeight(entryFor(checklist, name), country, side, eps)
@@ -104,21 +112,4 @@ function rankAndMarginalise(rawLeaves, checklist, country, side, eps) {
     side: side || '',
     n_views: 1,
   }
-}
-
-// Public: predict an array of prepared image items -> array of
-// { id, filename, pred, mock, top } (pred is PredictionPanel-ready).
-export async function predictImages(files, { country = '', side = '', eps = DEFAULT_EPS } = {}) {
-  const [checklist, raws] = await Promise.all([getChecklist(), fetchRawLeaves(files)])
-  return raws.map((r, i) => {
-    const pred = rankAndMarginalise(r.leaves, checklist, country, side, eps)
-    const top = pred.subspecies[0] || pred.species[0] || pred.genus[0] || null
-    return {
-      id: files[i]?.id || `img_${i}`,
-      filename: r.filename,
-      mock: r.mock,
-      pred,
-      top: top ? { name: top[0], pct: Math.round(top[1] * 100) } : null,
-    }
-  })
 }

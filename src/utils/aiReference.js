@@ -121,11 +121,31 @@ async function gbifPhotos(taxon, max = 6) {
 
 const dedupe = (a) => [...new Set(a)]
 
-// Public: Sanger first; GBIF only if Sanger has nothing.
-export async function referencesFor(taxon) {
+// Per-taxon cache so re-rendering / re-expanding a group never re-hits GBIF.
+// Keyed by `${taxon}|${max}` — a bigger request is a superset, so we cache the
+// largest fetched and slice down for smaller asks.
+const _refCache = new Map()
+
+// Public: Sanger first; GBIF only if Sanger has nothing. `max` caps how many
+// photos we fetch per taxon (anti-hammer: collapsed gallery groups request 1,
+// expanded groups request the full cap).
+export async function referencesFor(taxon, max = 6) {
   if (!taxon) return { photos: [], source: 'none', level: 'none' }
-  const sanger = await sangerPhotos(taxon)
-  if (sanger.photos.length) return { ...sanger, source: 'sanger' }
-  const gbif = await gbifPhotos(taxon)
-  return { ...gbif, source: gbif.photos.length ? 'gbif' : 'none' }
+  // Serve from a same-or-larger cached fetch.
+  for (const [key, promise] of _refCache) {
+    const [t, m] = key.split('|')
+    if (t === taxon && Number(m) >= max) {
+      const r = await promise
+      return { ...r, photos: r.photos.slice(0, max) }
+    }
+  }
+  const key = `${taxon}|${max}`
+  const job = (async () => {
+    const sanger = await sangerPhotos(taxon, max)
+    if (sanger.photos.length) return { ...sanger, source: 'sanger' }
+    const gbif = await gbifPhotos(taxon, max)
+    return { ...gbif, source: gbif.photos.length ? 'gbif' : 'none' }
+  })()
+  _refCache.set(key, job)
+  return job
 }

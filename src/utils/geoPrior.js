@@ -35,6 +35,47 @@ export function isOffRegion(checklist, taxon, country, side, eps = DEFAULT_EPS) 
   return geoWeight(entryFor(checklist, taxon), country, side, eps) < 1
 }
 
+// Guess the most likely region from the model's RAW (un-weighted) leaf
+// probabilities, by asking the checklist where those taxa actually occur:
+//   score(region) = Σ_leaf  P(leaf) · 1[leaf documented in region]
+// Returns { country, countryConf, side, sideConf } — '' when undecidable. Used
+// for the "I don't know — guess from photo" option. Side is only inferred among
+// leaves present in the guessed country (defaults to Ecuador), since the East/
+// West split is an Ecuador concept here.
+export function guessRegion(checklist, rawLeaves) {
+  const total = rawLeaves.reduce((a, [, p]) => a + p, 0) || 1
+  const countryMass = new Map()
+  for (const [name, p] of rawLeaves) {
+    const e = entryFor(checklist, name)
+    if (!e || !e.countries) continue
+    for (const c in e.countries) {
+      if (e.countries[c] > 0) countryMass.set(c, (countryMass.get(c) || 0) + p)
+    }
+  }
+  let country = '', countryConf = 0
+  for (const [c, m] of countryMass) if (m > countryConf) { country = c; countryConf = m }
+  countryConf = countryConf / total
+
+  // Side: weigh East vs West among leaves present in the guessed country.
+  const sideCountry = country || 'Ecuador'
+  let east = 0, west = 0
+  for (const [name, p] of rawLeaves) {
+    const e = entryFor(checklist, name)
+    if (!e) continue
+    const inCountry = !e.countries || e.countries[sideCountry] > 0
+    if (!inCountry) continue
+    if (e.East > 0) east += p
+    if (e.West > 0) west += p
+  }
+  let side = '', sideConf = 0
+  const sideSum = east + west
+  if (sideSum > 0) {
+    side = east >= west ? 'East' : 'West'
+    sideConf = Math.max(east, west) / sideSum
+  }
+  return { country, countryConf, side, sideConf }
+}
+
 // Sorted list of countries present in the checklist (for the Country dropdown).
 let _countriesPromise = null
 export function loadCountries() {

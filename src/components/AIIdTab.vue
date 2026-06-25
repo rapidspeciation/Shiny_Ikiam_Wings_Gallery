@@ -1,13 +1,17 @@
 <script setup>
 // AI ID tab: upload butterfly photo(s) -> BioCLIP 2.5-H prediction (genus ▸ species
-// ▸ subspecies) re-ranked by an optional country + side-of-Andes prior (client-side
-// from region_checklist.json), with Sanger/GBIF reference photos for comparison.
+// ▸ subspecies). Inference runs ONCE per photo (raw leaf probabilities); the
+// country + side-of-Andes prior is a pure client-side re-rank, so each result can
+// change its location after the fact — or let us guess it from the photo — with no
+// re-inference. Reference photos (Sanger first, GBIF museum-first fallback) are
+// shown in a large-image gallery for visual comparison.
 import { ref, computed, onMounted } from 'vue'
 import FilterSelect from './FilterSelect.vue'
 import PredictionPanel from './PredictionPanel.vue'
-import AIReferenceImages from './AIReferenceImages.vue'
-import { predictImages } from '../utils/aiPredict.js'
-import { loadCountries } from '../utils/geoPrior.js'
+import AIReferenceGallery from './AIReferenceGallery.vue'
+import { predictRaw, rankLeaves } from '../utils/aiPredict.js'
+import { loadCountries, guessRegion } from '../utils/geoPrior.js'
+import { getChecklist } from '../composables/useCurationData.js'
 
 // ---- intake ----
 const items = ref([])              // { id, name, previewUrl, blob, status, error }
@@ -70,27 +74,46 @@ function clearAll() {
 }
 const validItems = computed(() => items.value.filter((i) => i.status === 'ready' && i.blob))
 
-// ---- geographic prior ----
-const country = ref('Any')
-const countryOptions = ref(['Any'])
+// ---- geographic prior (defaults applied to every new run) ----
 const REGION_OPTS = ['West of Andes (Pacific / Chocó)', 'East of Andes (Amazon)']
+const ANY = 'Any'
+const country = ref(ANY)
 const region = ref(null)
-const side = computed(() => region.value?.startsWith('West') ? 'West' : region.value?.startsWith('East') ? 'East' : '')
-const countryParam = computed(() => (country.value && country.value !== 'Any') ? country.value : '')
-onMounted(async () => { countryOptions.value = ['Any', ...(await loadCountries())] })
+const countryOptions = ref([ANY])
+const checklist = ref({})
+const sideOf = (r) => (r?.startsWith('West') ? 'West' : r?.startsWith('East') ? 'East' : '')
+const regionForSide = (s) => (s === 'West' ? REGION_OPTS[0] : s === 'East' ? REGION_OPTS[1] : null)
+const cParam = (c) => (c && c !== ANY ? c : '')
+
+onMounted(async () => {
+  checklist.value = await getChecklist()
+  countryOptions.value = [ANY, ...(await loadCountries())]
+})
 
 // ---- run ----
-const results = ref([])
+const results = ref([])   // { id, filename, mock, leaves, previewUrl, country, region, guess, pred }
 const running = ref(false)
 const errorMsg = ref('')
+
+function rerank(r) {
+  r.pred = rankLeaves(r.leaves, checklist.value, { country: cParam(r.country), side: sideOf(r.region) })
+}
 
 async function run() {
   if (!validItems.value.length || running.value) return
   running.value = true; errorMsg.value = ''; results.value = []
   try {
-    const preds = await predictImages(validItems.value, { country: countryParam.value, side: side.value })
-    // attach preview URL by id for display
-    results.value = preds.map((r) => ({ ...r, previewUrl: items.value.find((it) => it.id === r.id)?.previewUrl }))
+    const raws = await predictRaw(validItems.value)
+    results.value = raws.map((raw) => {
+      const r = {
+        id: raw.id, filename: raw.filename, mock: raw.mock, leaves: raw.leaves,
+        previewUrl: items.value.find((it) => it.id === raw.id)?.previewUrl,
+        country: country.value, region: country.value === 'Ecuador' ? region.value : null, guess: null,
+        pred: null,
+      }
+      rerank(r)
+      return r
+    })
   } catch (e) {
     errorMsg.value = e.message || 'Prediction failed.'
   } finally {
@@ -98,13 +121,32 @@ async function run() {
   }
 }
 
-// taxon to fetch reference photos for: top subspecies if it has real confidence,
-// else top species.
-function refTaxon(r) {
-  const ss = r.pred.subspecies?.[0]
-  if (ss && ss[1] >= 0.05) return ss[0]
-  return r.pred.species?.[0]?.[0] || ss?.[0] || ''
+// per-card location change
+function setCountry(r, v) { r.country = v; if (v !== 'Ecuador') r.region = null; r.guess = null; rerank(r) }
+function setRegion(r, v) { r.region = v; r.guess = null; rerank(r) }
+
+// "I don't know" -> infer location from the photo's raw leaves
+function guess(r) {
+  const g = guessRegion(checklist.value, r.leaves)
+  r.country = g.country || ANY
+  r.region = g.country === 'Ecuador' ? regionForSide(g.side) : null
+  r.guess = g
+  rerank(r)
 }
+
+// Candidate groups for the reference gallery: top predicted species, each fetched
+// at subspecies level when confident, else species level.
+function groupsFor(r) {
+  const out = []
+  for (const sp of (r.pred?.species || []).slice(0, 3)) {
+    const [name, prob, , subs] = sp
+    const topSub = subs && subs[0]
+    const taxon = topSub && topSub[1] >= 0.05 ? topSub[0] : name
+    out.push({ id: name, label: name, sublabel: `${Math.round(prob * 100)}%`, taxon })
+  }
+  return out
+}
+
 const showAbout = ref(false)
 </script>
 
@@ -150,7 +192,7 @@ const showAbout = ref(false)
         <div class="card h-100">
           <div class="card-body">
             <h6 class="card-title">Where was it photographed? <span class="text-muted fw-normal small">(optional)</span></h6>
-            <p class="text-muted small mb-2">Helps when look-alikes occur — down-weights butterflies not recorded in your region.</p>
+            <p class="text-muted small mb-2">Helps when look-alikes occur — down-weights butterflies not recorded in your region. You can change this per photo after identifying, or let the model guess.</p>
             <FilterSelect label="Country" :options="countryOptions" v-model="country" placeholder="Any country" />
             <div v-if="country === 'Ecuador'" class="mt-2">
               <FilterSelect label="Region (side of the Andes)" :options="REGION_OPTS" v-model="region" placeholder="Either side" />
@@ -173,13 +215,41 @@ const showAbout = ref(false)
     <div v-for="r in results" :key="r.id" class="card mt-3">
       <div class="card-body">
         <div v-if="r.mock" class="badge text-bg-secondary mb-2">demo — backend not connected</div>
+
+        <!-- per-photo location override -->
+        <div class="loc-bar mb-3">
+          <div class="loc-field">
+            <FilterSelect label="Country" :options="countryOptions" :model-value="r.country"
+              placeholder="Any country" @update:model-value="(v) => setCountry(r, v)" />
+          </div>
+          <div v-if="r.country === 'Ecuador'" class="loc-field">
+            <FilterSelect label="Region (side of the Andes)" :options="REGION_OPTS" :model-value="r.region"
+              placeholder="Either side" @update:model-value="(v) => setRegion(r, v)" />
+          </div>
+          <div class="loc-guess">
+            <button class="btn btn-outline-secondary btn-sm" @click="guess(r)" title="Infer the most likely location from the photo">
+              I don't know — guess
+            </button>
+            <div v-if="r.guess" class="small text-muted mt-1">
+              <template v-if="r.guess.country">
+                Guessed <strong>{{ r.guess.country }}</strong>
+                <span v-if="r.guess.countryConf">({{ Math.round(r.guess.countryConf * 100) }}%)</span><!--
+                --><span v-if="r.guess.side">, <strong>{{ r.guess.side }}</strong> of the Andes
+                  <span v-if="r.guess.sideConf">({{ Math.round(r.guess.sideConf * 100) }}%)</span></span>
+              </template>
+              <template v-else>Not enough signal to guess a location.</template>
+            </div>
+          </div>
+        </div>
+
         <div class="row g-3">
           <div class="col-12 col-lg-6">
             <img v-if="r.previewUrl" :src="r.previewUrl" class="uploaded" :alt="r.filename" />
             <PredictionPanel :item="{ CAM_ID: r.id }" :prediction="r.pred" :start-open="true" />
           </div>
           <div class="col-12 col-lg-6">
-            <AIReferenceImages :taxon="refTaxon(r)" />
+            <div class="fw-bold small mb-1">Reference photos <span class="text-muted fw-normal">— compare with your photo</span></div>
+            <AIReferenceGallery :groups="groupsFor(r)" />
           </div>
         </div>
       </div>
@@ -231,5 +301,8 @@ const showAbout = ref(false)
 .preview.invalid { border-color: #dc3545; }
 .preview img { width: 100%; height: 84px; object-fit: cover; display: block; }
 .preview .rm { position: absolute; top: 2px; right: 2px; width: 26px; height: 26px; border: none; border-radius: 50%; background: rgba(0,0,0,.6); color: #fff; line-height: 1; cursor: pointer; }
-.uploaded { width: 100%; max-height: 340px; object-fit: contain; background: #f1f5f9; border-radius: 8px; border: 1px solid #e2e8f0; }
+.uploaded { width: 100%; max-height: 340px; object-fit: contain; background: #f1f5f9; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: .5rem; }
+.loc-bar { display: flex; flex-wrap: wrap; align-items: flex-end; gap: .75rem; }
+.loc-field { min-width: 200px; flex: 0 1 240px; }
+.loc-guess { display: flex; flex-direction: column; }
 </style>
