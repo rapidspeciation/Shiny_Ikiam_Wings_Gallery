@@ -125,12 +125,21 @@ async function run() {
 function setCountry(r, v) { r.country = v; if (v !== 'Ecuador') r.region = null; r.guess = null; rerank(r) }
 function setRegion(r, v) { r.region = v; r.guess = null; rerank(r) }
 
-// "I don't know" -> infer location from the photo's raw leaves
+// "I don't know" -> infer location from the photo's raw leaves and show the
+// ranked countries those predictions come from (auto-applying the top one).
 function guess(r) {
   const g = guessRegion(checklist.value, r.leaves)
   r.country = g.country || ANY
   r.region = g.country === 'Ecuador' ? regionForSide(g.side) : null
   r.guess = g
+  rerank(r)
+}
+
+// Apply a country the user tapped from the guessed list (keeps the list visible).
+function applyGuessCountry(r, name) {
+  r.country = name
+  if (name !== 'Ecuador') r.region = null
+  else r.region = regionForSide(r.guess?.side)
   rerank(r)
 }
 
@@ -230,14 +239,18 @@ const showAbout = ref(false)
             <button class="btn btn-outline-secondary btn-sm" @click="guess(r)" title="Infer the most likely location from the photo">
               I don't know — guess
             </button>
-            <div v-if="r.guess" class="small text-muted mt-1">
-              <template v-if="r.guess.country">
-                Guessed <strong>{{ r.guess.country }}</strong>
-                <span v-if="r.guess.countryConf">({{ Math.round(r.guess.countryConf * 100) }}%)</span><!--
-                --><span v-if="r.guess.side">, <strong>{{ r.guess.side }}</strong> of the Andes
-                  <span v-if="r.guess.sideConf">({{ Math.round(r.guess.sideConf * 100) }}%)</span></span>
+            <div v-if="r.guess" class="small mt-1">
+              <template v-if="r.guess.countries && r.guess.countries.length">
+                <span class="text-muted">Top predictions are recorded from <span v-if="r.guess.side">(<strong>{{ r.guess.side }}</strong> of the Andes, {{ Math.round(r.guess.sideConf * 100) }}%)</span> — tap to apply:</span>
+                <div class="guess-chips mt-1">
+                  <button v-for="[name, conf] in r.guess.countries" :key="name"
+                    class="btn btn-sm guess-chip" :class="r.country === name ? 'btn-success' : 'btn-outline-success'"
+                    @click="applyGuessCountry(r, name)">
+                    {{ name }} <span class="chip-pct">{{ Math.round(conf * 100) }}%</span>
+                  </button>
+                </div>
               </template>
-              <template v-else>Not enough signal to guess a location.</template>
+              <span v-else class="text-muted">Not enough signal to guess a location.</span>
             </div>
           </div>
         </div>
@@ -305,4 +318,7 @@ const showAbout = ref(false)
 .loc-bar { display: flex; flex-wrap: wrap; align-items: flex-end; gap: .75rem; }
 .loc-field { min-width: 200px; flex: 0 1 240px; }
 .loc-guess { display: flex; flex-direction: column; }
+.guess-chips { display: flex; flex-wrap: wrap; gap: .35rem; }
+.guess-chip { --bs-btn-padding-y: .15rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem; }
+.guess-chip .chip-pct { opacity: .7; font-variant-numeric: tabular-nums; }
 </style>

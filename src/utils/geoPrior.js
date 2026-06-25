@@ -42,7 +42,7 @@ export function isOffRegion(checklist, taxon, country, side, eps = DEFAULT_EPS) 
 // for the "I don't know — guess from photo" option. Side is only inferred among
 // leaves present in the guessed country (defaults to Ecuador), since the East/
 // West split is an Ecuador concept here.
-export function guessRegion(checklist, rawLeaves) {
+export function guessRegion(checklist, rawLeaves, topN = 6) {
   const total = rawLeaves.reduce((a, [, p]) => a + p, 0) || 1
   const countryMass = new Map()
   for (const [name, p] of rawLeaves) {
@@ -52,9 +52,14 @@ export function guessRegion(checklist, rawLeaves) {
       if (e.countries[c] > 0) countryMass.set(c, (countryMass.get(c) || 0) + p)
     }
   }
-  let country = '', countryConf = 0
-  for (const [c, m] of countryMass) if (m > countryConf) { country = c; countryConf = m }
-  countryConf = countryConf / total
+  // Ranked list of the countries the top predictions are recorded from
+  // (share of prediction mass documented in each), so the user can see and pick.
+  const countries = [...countryMass.entries()]
+    .map(([name, m]) => [name, m / total])
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, topN)
+  const country = countries[0]?.[0] || ''
+  const countryConf = countries[0]?.[1] || 0
 
   // Side: weigh East vs West among leaves present in the guessed country.
   const sideCountry = country || 'Ecuador'
@@ -73,7 +78,7 @@ export function guessRegion(checklist, rawLeaves) {
     side = east >= west ? 'East' : 'West'
     sideConf = Math.max(east, west) / sideSum
   }
-  return { country, countryConf, side, sideConf }
+  return { country, countryConf, countries, side, sideConf }
 }
 
 // Sorted list of countries present in the checklist (for the Country dropdown).
