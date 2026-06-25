@@ -11,6 +11,7 @@ import InsectaryTab from './components/InsectaryTab.vue'
 import CrisprTab from './components/CrisprTab.vue'
 import SearchTab from './components/SearchTab.vue'
 import UpdateTab from './components/UpdateTab.vue'
+import AIIdTab from './components/AIIdTab.vue'
 import GalleryOptionsBar from './components/GalleryOptionsBar.vue'
 
 const currentTab = ref('Collection')
@@ -23,7 +24,8 @@ const tabs = {
   'Insectary': InsectaryTab,
   'CRISPR': CrisprTab,
   'Search by CAMID': SearchTab,
-  'Update DB': UpdateTab
+  'Update DB': UpdateTab,
+  'AI ID': AIIdTab
 }
 
 // Zoom Logic
@@ -108,7 +110,7 @@ onMounted(async () => {
         <span class="d-none d-md-inline"> | Github: <a href='https://github.com/rapidspeciation/Shiny_Ikiam_Wings_Gallery/' target='_blank'>rapidspeciation/Shiny_Ikiam_Wings_Gallery</a></span>
       </div>
 
-      <GalleryOptionsBar :current-tab="currentTab" />
+      <GalleryOptionsBar v-if="currentTab !== 'AI ID'" :current-tab="currentTab" />
 
       <keep-alive>
         <component :is="tabs[currentTab]" />

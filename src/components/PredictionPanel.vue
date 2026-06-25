@@ -6,18 +6,26 @@
 import { ref, reactive, computed, watch } from 'vue'
 import { useGlobalGalleryOptions } from '../composables/useGlobalGalleryOptions.js'
 import {
-  getPredictions, getLinks, predictionDiffers,
+  getPredictions, getFormPrediction, getLinks, predictionDiffers,
   regionSubspeciesOf, regionSpeciesOf,
   SOURCE_KEYS, SOURCE_LABELS, SOURCE_FULL_NAMES
 } from '../composables/useCurationData.js'
 
-const props = defineProps({ item: { type: Object, required: true } })
+// `item` drives the existing CAMID-based curation flow (Collection tab).
+// `prediction` lets the AI ID tab pass a model result directly (no CAMID, no
+// recorded taxon) and reuse this exact tree renderer.
+const props = defineProps({
+  item: { type: Object, default: () => ({}) },
+  prediction: { type: Object, default: null },
+  startOpen: { type: Boolean, default: false },
+})
 
 const { expandPredictions } = useGlobalGalleryOptions()
 
 const state = ref('loading')   // 'loading' | 'ready' | 'none' | 'error'
 const pred = ref(null)
-const open = ref(expandPredictions.value)   // compact by default; "Show predictions" opens all
+const formPred = ref(null)     // model FORM prediction (polymorphic morph), or null
+const open = ref(props.startOpen || expandPredictions.value)   // compact by default; "Show predictions" opens all
 const linksCache = ref({})     // taxon -> { boa, sangay, noreste, cotacachi }
 
 const camid = computed(() => props.item && props.item.CAM_ID)
@@ -51,11 +59,32 @@ const topSubspName = computed(() => pred.value?.subspecies?.[0]?.[0] || '')
 // "differs from recorded" badge uses the SAME helper as the gallery filter.
 const differs = computed(() => predictionDiffers(props.item, pred.value))
 
+// model form (colour morph) disagrees with a recorded form
+const formDiffers = computed(() => {
+  const f = formPred.value
+  return !!(f && f.recorded && f.recorded !== f.form)
+})
+
 // the model's single highest-confidence calls, tagged "predicted" in the tree
 // (mirrors the "recorded" badge). topSubspName is the top subspecies (above).
 const topSpeciesName = computed(() => pred.value?.species?.[0]?.[0] || '')
 const isPredSpecies = (t) => !!topSpeciesName.value && t.toLowerCase() === topSpeciesName.value.toLowerCase()
 const isPredSubsp = (t) => !!topSubspName.value && t.toLowerCase() === topSubspName.value.toLowerCase()
+
+// A subspecies suggestion only makes sense when the model's top subspecies belongs
+// to its top predicted species AND has real confidence. The flat subspecies list
+// always holds *some* trinomial, so without this guard a confident species-level
+// call (e.g. Echydna punctata 99.7%, a species with no subspecies) would wrongly
+// "suggest" an unrelated ~0% subspecies. '' when there's nothing sensible to suggest.
+const SUGGEST_MIN = 0.05
+const suggestedSubsp = computed(() => {
+  const top = pred.value?.subspecies?.[0]
+  if (!top) return ''
+  const [name, prob] = top
+  if (!(prob >= SUGGEST_MIN)) return ''
+  if (speciesOf(name).toLowerCase() !== topSpeciesName.value.toLowerCase()) return ''
+  return name
+})
 
 const fmtPct = (c) => (typeof c === 'number' && !Number.isNaN(c)) ? `${Math.round(c * 100)}%` : ''
 const genusOf = (t) => t.split(/\s+/)[0]
@@ -264,8 +293,11 @@ async function load() {
   extraSpecies.value = {}
   moreSubsp.value = {}
   moreSpecies.value = {}
+  formPred.value = null
   try {
-    const p = await getPredictions(camid.value)
+    // AI ID tab supplies the prediction directly; Collection tab fetches by CAMID.
+    if (!props.prediction) getFormPrediction(camid.value).then(f => { formPred.value = f })
+    const p = props.prediction || await getPredictions(camid.value)
     if (!p) { pred.value = null; state.value = 'none'; return }
     pred.value = p
     state.value = 'ready'
@@ -298,7 +330,7 @@ async function load() {
     state.value = 'error'
   }
 }
-watch(camid, load, { immediate: true })
+watch([camid, () => props.prediction], load, { immediate: true })
 </script>
 
 <template>
@@ -314,7 +346,7 @@ watch(camid, load, { immediate: true })
         <span class="fw-bold small" title="Out-of-fold model predictions: each specimen is scored by a model that never trained on it — an honest signal for spotting mislabels.">Model predictions</span>
         <span v-if="state === 'ready' && side" class="badge text-bg-light border text-secondary fw-normal" :title="`Suggestions weighted to ${side}-of-Andes taxa`">{{ side }} of Andes</span>
         <span
-          v-if="state === 'ready' && !hasRecordedSubsp && topSubspName"
+          v-if="state === 'ready' && !hasRecordedSubsp && suggestedSubsp"
           class="badge text-bg-info-subtle text-info-emphasis border border-info-subtle fw-normal"
         >No subspecies recorded</span>
         <span
@@ -334,8 +366,8 @@ watch(camid, load, { immediate: true })
       <div v-else-if="state === 'none'" class="text-muted small py-2">No model prediction available for this specimen.</div>
 
       <template v-else>
-        <p v-if="!hasRecordedSubsp && topSubspName" class="small text-info-emphasis mb-1 mt-1">
-          No subspecies recorded &mdash; model suggests <em>{{ topSubspName }}</em>.
+        <p v-if="!hasRecordedSubsp && suggestedSubsp" class="small text-info-emphasis mb-1 mt-1">
+          No subspecies recorded &mdash; model suggests <em>{{ suggestedSubsp }}</em>.
         </p>
 
         <div class="pred-tree mt-1">
@@ -475,6 +507,21 @@ watch(camid, load, { immediate: true })
           </template>
         </div>
 
+        <!-- Model FORM prediction (colour morph) — a sub-level within the species -->
+        <div v-if="formPred" class="pred-form mt-2">
+          <div class="pred-group-title">
+            Model form &mdash; <em>{{ formPred.species }}</em>
+            <span v-if="formDiffers" class="rec-badge ms-1" :title="`Recorded form: f. ${formPred.recorded}`">&#9888; recorded f. {{ formPred.recorded }}</span>
+          </div>
+          <div v-for="(a, i) in formPred.alts" :key="'fm-' + a[0]" class="pred-row pred-subsp"
+               :class="{ 'rec-hit': formPred.recorded && a[0] === formPred.recorded }">
+            <span class="pred-name italic">f. {{ a[0] }}</span>
+            <span class="pred-pct">{{ Math.round(a[1] * 100) }}%</span>
+            <span v-if="i === 0" class="pred-badge" title="Model's top form prediction">predicted</span>
+            <span v-if="formPred.recorded && a[0] === formPred.recorded" class="rec-badge" title="Recorded form in the database">recorded</span>
+          </div>
+        </div>
+
       </template>
     </div>
   </div>
@@ -561,6 +608,7 @@ watch(camid, load, { immediate: true })
   margin-bottom: 0.1rem;
 }
 .pred-recorded { border-top: 1px solid #e2e8f0; margin-top: 0.5rem; padding-top: 0.35rem; }
+.pred-form { border-top: 1px dashed #cbd5e1; padding-top: 0.35rem; }
 
 .pred-chips { display: flex; flex-wrap: wrap; gap: 0.2rem; flex: 0 0 auto; margin-left: auto; }
 .src-chip {

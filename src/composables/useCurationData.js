@@ -12,6 +12,7 @@ const BASE = import.meta.env.BASE_URL
 const fileCache = {
   wing_boxes: null,
   predictions: null,
+  form_predictions: null,
   taxon_links: null,
   region_checklist: null
 }
@@ -97,6 +98,18 @@ export async function getAllPredictions() {
     return await loadFile('predictions')
   } catch {
     return {}
+  }
+}
+
+// Returns the model FORM prediction for a CAM_ID, or null. Shape:
+// { species, form, conf, alts:[[form,score],...], recorded }  (out-of-fold).
+// Only specimens in separable polymorphic species (e.g. Heliconius doris) have one.
+export async function getFormPrediction(camid) {
+  if (!camid) return null
+  try {
+    return (await loadFile('form_predictions'))[camid] || null
+  } catch {
+    return null
   }
 }
 

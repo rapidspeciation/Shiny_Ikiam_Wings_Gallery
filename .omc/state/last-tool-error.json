@@ -1,0 +1,7 @@
+{
+  "tool_name": "Bash",
+  "tool_input_preview": "{\"command\":\"echo \\\"=== LAN IP(s) ===\\\" && ip -4 addr show scope global | grep -oP '(?<=inet\\\\s)\\\\d+(\\\\.\\\\d+){3}' \\necho \\\"=== stop localhost-only dev server ===\\\" && pkill -f \\\"vite\\\" 2>/dev/null; ech...",
+  "error": "Exit code 144\n=== LAN IP(s) ===\n192.168.100.28\n100.83.134.33\n=== stop localhost-only dev server ===",
+  "timestamp": "2026-06-20T19:51:06.030Z",
+  "retry_count": 1
+}
