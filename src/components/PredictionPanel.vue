@@ -172,6 +172,14 @@ function resetExpansion() {
     openGenera.add(t[0].taxon)
     if (t[0].species.length) openSpecies.add(t[0].species[0].taxon)
   }
+  // also open the genus + species of the model's TOP species call — the top genus
+  // by marginal mass (t[0]) can differ from the genus of the single highest species
+  // (e.g. Heliconius numata 12% sits under Heliconius while Melinaea is the top genus
+  // by mass), and the predicted species' branch should always be visible.
+  const ps = topSpeciesName.value.toLowerCase()
+  if (ps) for (const g of t) for (const s of g.species) {
+    if (s.taxon.toLowerCase() === ps) { openGenera.add(g.taxon); openSpecies.add(s.taxon) }
+  }
   // also reveal the recorded taxon's branch so its model rank is visible at a glance
   const rs = recSpeciesLc.value
   if (rs) for (const g of t) for (const s of g.species) {

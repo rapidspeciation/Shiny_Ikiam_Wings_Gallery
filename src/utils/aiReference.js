@@ -25,9 +25,11 @@ function buildSangerIndex() {
       for (const r of rows) {
         const sp = clean(r.Species)
         if (!sp) continue
+        // Ventral first: that's the wing surface visible when the wings are closed,
+        // i.e. what a field photo of a perched/collected butterfly usually shows.
         const photos = []
-        if (clean(r.URLd)) photos.push({ url: r.URLd, view: 'dorsal' })
         if (clean(r.URLv)) photos.push({ url: r.URLv, view: 'ventral' })
+        if (clean(r.URLd)) photos.push({ url: r.URLd, view: 'dorsal' })
         if (!photos.length) continue
         const entry = { camid: clean(r.CAM_ID), photos }
         const push = (map, key) => { if (!map.has(key)) map.set(key, []); map.get(key).push(entry) }
@@ -58,6 +60,9 @@ async function sangerPhotos(taxon, max = 6) {
         caption: `${sp.camid} · ${ph.view}`,
         credit: 'Sanger / Ikiam collection',
         source: 'sanger',
+        // wing_boxes.json key (CAMID + d/v) so the gallery can "zoom to wings" on
+        // these reference photos too — GBIF photos have no boxes (boxKey stays null).
+        boxKey: sp.camid ? `${sp.camid}${ph.view === 'dorsal' ? 'd' : 'v'}` : null,
       })
       if (photos.length >= max) return { photos, level }
     }

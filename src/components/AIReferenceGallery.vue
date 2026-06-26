@@ -7,6 +7,8 @@
 // scraped training images.
 import { ref, watch, computed } from 'vue'
 import { referencesFor } from '../utils/aiReference.js'
+import { getBoxes } from '../composables/useCurationData.js'
+import AIPhotoView from './AIPhotoView.vue'
 
 const props = defineProps({
   // Ordered candidate groups: [{ id, label, sublabel, taxon }]
@@ -22,6 +24,7 @@ const PREVIEW = 1
 const loaded = ref({})
 const collapsed = ref(new Set())
 const hero = ref(null)            // active { photo, groupId, index }
+const heroBoxes = ref([])         // wing boxes for the hero (Sanger only), for zoom-to-wings
 
 const sourceLabel = (s) => (s === 'sanger' ? 'Sanger / Ikiam collection' : s === 'gbif' ? 'GBIF' : '')
 
@@ -40,11 +43,17 @@ async function loadGroup(g, max) {
   }
 }
 
-function setHero(groupId, index) {
+async function setHero(groupId, index) {
   const grp = loaded.value[groupId]
   if (!grp?.photos?.length) return
   const i = Math.max(0, Math.min(index, grp.photos.length - 1))
-  hero.value = { photo: grp.photos[i], groupId, index: i }
+  const photo = grp.photos[i]
+  hero.value = { photo, groupId, index: i }
+  // Sanger photos carry a wing_boxes key -> enable "zoom to wings" on the hero.
+  heroBoxes.value = []
+  if (photo.boxKey) {
+    try { heroBoxes.value = await getBoxes(photo.boxKey) } catch { heroBoxes.value = [] }
+  }
 }
 
 async function expand(g) {
@@ -95,14 +104,14 @@ watch(() => props.groups.map((g) => g.id).join('|'), async () => {
     <!-- Hero -->
     <div class="hero">
       <div v-if="hero" class="hero-img-wrap">
-        <component :is="hero.photo.link ? 'a' : 'div'" :href="hero.photo.link" target="_blank" rel="noopener noreferrer" class="hero-link">
-          <img :src="hero.photo.url" :alt="`Reference photo`" referrerpolicy="no-referrer" decoding="async" />
-        </component>
+        <AIPhotoView :key="hero.photo.url" :src="hero.photo.url" :boxes="heroBoxes"
+          :used-index="-1" :show-masks="false" dark :alt="hero.photo.caption" />
         <button v-if="hasPrev" class="hnav hprev" @click="heroStep(-1)" aria-label="Previous reference photo">‹</button>
         <button v-if="hasNext" class="hnav hnext" @click="heroStep(1)" aria-label="Next reference photo">›</button>
         <div class="hero-cap">
           <span class="hcap">{{ hero.photo.caption }}</span>
-          <span class="hcredit">{{ hero.photo.credit }}</span>
+          <a v-if="hero.photo.link" :href="hero.photo.link" target="_blank" rel="noopener noreferrer" class="hcredit src-link">{{ hero.photo.credit }} ↗</a>
+          <span v-else class="hcredit">{{ hero.photo.credit }}</span>
         </div>
       </div>
       <div v-else class="hero-empty text-muted small">No reference photo found yet.</div>
@@ -151,9 +160,11 @@ watch(() => props.groups.map((g) => g.id).join('|'), async () => {
 
 /* Hero */
 .hero { background: #0f172a; border-radius: 8px; overflow: hidden; }
-.hero-img-wrap { position: relative; display: flex; align-items: center; justify-content: center; height: 340px; }
-.hero-link { display: flex; width: 100%; height: 100%; align-items: center; justify-content: center; }
-.hero-img-wrap img { max-width: 100%; max-height: 100%; object-fit: contain; }
+.hero-img-wrap { position: relative; height: 340px; }
+.hero-img-wrap > :deep(.ai-photo) { height: 340px; margin-bottom: 0; border-radius: 8px; }
+.hnav, .hero-cap { z-index: 3; }
+.src-link { color: #93c5fd; text-decoration: none; }
+.src-link:hover { text-decoration: underline; }
 .hero-empty { height: 200px; display: flex; align-items: center; justify-content: center; background: #f1f5f9; border-radius: 8px; }
 .hnav { position: absolute; top: 50%; transform: translateY(-50%); width: 38px; height: 64px; border: none; background: rgba(0,0,0,.4); color: #fff; font-size: 1.6rem; line-height: 1; cursor: pointer; }
 .hnav:hover { background: rgba(0,0,0,.65); }
@@ -181,5 +192,9 @@ watch(() => props.groups.map((g) => g.id).join('|'), async () => {
 .thumb .more { position: absolute; bottom: 2px; right: 2px; width: 18px; height: 18px; line-height: 18px; text-align: center; background: rgba(0,0,0,.7); color: #fff; border-radius: 3px; font-weight: 700; font-size: 12px; }
 .ph { width: 70px; height: 70px; display: flex; align-items: center; justify-content: center; }
 .src-note { font-size: 0.7rem; }
-@media (max-width: 575px) { .hero-img-wrap { height: 240px; } .thumb, .ph { width: 60px; height: 60px; } }
+@media (max-width: 575px) {
+  .hero-img-wrap { height: 240px; }
+  .hero-img-wrap > :deep(.ai-photo) { height: 240px; }
+  .thumb, .ph { width: 60px; height: 60px; }
+}
 </style>

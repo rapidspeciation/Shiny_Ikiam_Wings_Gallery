@@ -3,14 +3,16 @@
 // species ▸ subspecies). Inference runs ONCE per photo (raw leaf probabilities);
 // the country + side-of-Andes prior is a pure client-side re-rank, so each result
 // can change its location after the fact — or let us guess it — with no re-inference.
-// Photos stream in one-by-one as the model finishes each (concurrency pool), so the
-// first result shows fast instead of waiting for the whole batch. Reference photos
-// (Sanger first, GBIF museum-first fallback) are shown for visual comparison.
-import { ref, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
+// Photos stream in one-by-one as the model finishes each (concurrency pool). The
+// YOLO wing-crop returns selectable masks: the largest runs on Identify, others run
+// lazily when their bbox is clicked. Reference photos (Sanger first, GBIF fallback)
+// are shown for visual comparison.
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import FilterSelect from './FilterSelect.vue'
 import PredictionPanel from './PredictionPanel.vue'
 import AIReferenceGallery from './AIReferenceGallery.vue'
-import { predictStream, rankLeaves } from '../utils/aiPredict.js'
+import AIPhotoView from './AIPhotoView.vue'
+import { predictStream, predictOne, rankLeaves } from '../utils/aiPredict.js'
 import { loadCountries, guessRegion } from '../utils/geoPrior.js'
 import { getChecklist } from '../composables/useCurationData.js'
 
@@ -70,6 +72,8 @@ function onPick(e) { if (e.target.files?.length) addFiles(e.target.files); e.tar
 function removeItem(id) {
   const i = items.value.findIndex((x) => x.id === id)
   if (i >= 0) { if (items.value[i].previewUrl) URL.revokeObjectURL(items.value[i].previewUrl); items.value.splice(i, 1) }
+  const ri = results.value.findIndex((x) => x.id === id)
+  if (ri >= 0) results.value.splice(ri, 1)
 }
 function clearAll() {
   items.value.forEach((it) => it.previewUrl && URL.revokeObjectURL(it.previewUrl))
@@ -94,7 +98,6 @@ function onPaste(e) {
     .filter(Boolean)
   if (files.length) { e.preventDefault(); addFiles(files) }
 }
-function onResize() { results.value.forEach((r) => { if (r.zoom) computeZoom(r) }) }
 
 onMounted(async () => {
   window.addEventListener('dragenter', onWinDragEnter)
@@ -102,7 +105,6 @@ onMounted(async () => {
   window.addEventListener('dragleave', onWinDragLeave)
   window.addEventListener('drop', onWinDrop)
   window.addEventListener('paste', onPaste)
-  window.addEventListener('resize', onResize)
   checklist.value = await getChecklist()
   countryOptions.value = [ANY, ...(await loadCountries())]
 })
@@ -112,7 +114,6 @@ onBeforeUnmount(() => {
   window.removeEventListener('dragleave', onWinDragLeave)
   window.removeEventListener('drop', onWinDrop)
   window.removeEventListener('paste', onPaste)
-  window.removeEventListener('resize', onResize)
   items.value.forEach((it) => it.previewUrl && URL.revokeObjectURL(it.previewUrl))
 })
 
@@ -130,16 +131,13 @@ const hasLocation = computed(() => country.value !== ANY || !!region.value)
 function resetLocation() { country.value = ANY; region.value = null }
 
 // ---- run ----
-const results = ref([])   // { id, filename, mock, leaves, wingBox, previewUrl, country, region, guess, pred, loading, error, zoom, transform }
+const results = ref([])   // see placeholder shape in run()
 const running = ref(false)
 const errorMsg = ref('')
 
 function rerank(r) {
   r.pred = rankLeaves(r.leaves, checklist.value, { country: cParam(r.country), side: sideOf(r.region) })
 }
-
-// Infer location from the photo's raw leaves and show the ranked countries those
-// predictions come from (auto-applying the top one).
 function applyGuess(r) {
   const g = guessRegion(checklist.value, r.leaves)
   r.country = g.country || ANY
@@ -147,25 +145,45 @@ function applyGuess(r) {
   r.guess = g
   rerank(r)
 }
+// re-rank after the leaves change (mask switch): keep the guess flow if it's active.
+function applyLeaves(r, leaves, forceGuess = false) {
+  r.leaves = leaves
+  if (forceGuess || r.guess) applyGuess(r); else rerank(r)
+}
+
+const byId = (id) => results.value.find((r) => r.id === id)
+function alreadyDone(id) { const r = byId(id); return !!(r && !r.loading && !r.error) }
+// only photos not yet (successfully) analysed are sent on Identify, so re-clicking
+// after adding one more photo doesn't re-run the model on the earlier ones.
+const pendingItems = computed(() => validItems.value.filter((it) => !alreadyDone(it.id)))
 
 async function run() {
-  if (!validItems.value.length || running.value) return
+  if (running.value) return
+  const pending = pendingItems.value
+  if (!pending.length) return
   running.value = true; errorMsg.value = ''
   const noLoc = !hasLocation.value
-  // Placeholders in upload order; each fills in as its inference lands (streaming).
-  results.value = validItems.value.map((it) => ({
-    id: it.id, filename: it.name, previewUrl: it.previewUrl,
-    loading: true, error: null, mock: false, leaves: null, wingBox: null,
-    country: country.value, region: country.value === 'Ecuador' ? region.value : null,
-    guess: null, pred: null, zoom: false, transform: '',
-  }))
-  const byId = (id) => results.value.find((r) => r.id === id)
+  for (const it of pending) {
+    const placeholder = {
+      id: it.id, filename: it.name, previewUrl: it.previewUrl, file: it,
+      loading: true, error: null, mock: false, leaves: null,
+      boxes: [], usedIndex: -1, predCache: {}, maskLoading: false,
+      country: country.value, region: country.value === 'Ecuador' ? region.value : null,
+      guess: null, pred: null,
+    }
+    const existing = byId(it.id)
+    if (existing) Object.assign(existing, placeholder)
+    else results.value.push(placeholder)
+  }
   try {
-    await predictStream(validItems.value, {
+    await predictStream(pending, {
       onResult: (raw) => {
         const r = byId(raw.id); if (!r) return
-        r.leaves = raw.leaves; r.wingBox = raw.wing_box; r.mock = raw.mock; r.loading = false
-        if (noLoc) applyGuess(r); else rerank(r)
+        r.boxes = raw.boxes || []
+        r.usedIndex = r.boxes.length ? 0 : -1
+        r.predCache = { [r.usedIndex >= 0 ? r.usedIndex : 'full']: raw.leaves }
+        r.mock = raw.mock; r.loading = false
+        applyLeaves(r, raw.leaves, noLoc)
       },
       onError: (e, i, file) => {
         const r = byId(file.id); if (r) { r.loading = false; r.error = e.message || 'Prediction failed.' }
@@ -178,6 +196,39 @@ async function run() {
   }
 }
 
+// ---- wing-mask selection (lazy: run BioCLIP on a mask only when it's chosen) ----
+async function selectMask(r, i) {
+  if (i === r.usedIndex || !r.boxes[i] || r.maskLoading) return
+  if (r.predCache[i]) { r.usedIndex = i; applyLeaves(r, r.predCache[i]); return }
+  r.maskLoading = true
+  try {
+    const raw = await predictOne(r.file, 0, { box: r.boxes[i].box })
+    r.predCache[i] = raw.leaves
+    r.usedIndex = i
+    applyLeaves(r, raw.leaves)
+  } catch (e) {
+    errorMsg.value = e.message || 'Mask prediction failed.'
+  } finally {
+    r.maskLoading = false
+  }
+}
+async function useFull(r) {
+  if (r.usedIndex === -1 || r.maskLoading) return
+  if (r.predCache.full) { r.usedIndex = -1; applyLeaves(r, r.predCache.full); return }
+  r.maskLoading = true
+  try {
+    const raw = await predictOne(r.file, 0, { yolo: 'off' })
+    r.predCache.full = raw.leaves
+    r.usedIndex = -1
+    applyLeaves(r, raw.leaves)
+  } catch (e) {
+    errorMsg.value = e.message || 'Full-image prediction failed.'
+  } finally {
+    r.maskLoading = false
+  }
+}
+function useWings(r) { if (r.boxes.length) selectMask(r, 0) }
+
 // per-card location change
 function setCountry(r, v) { r.country = v; if (v !== 'Ecuador') r.region = null; r.guess = null; rerank(r) }
 function setRegion(r, v) { r.region = v; r.guess = null; rerank(r) }
@@ -186,29 +237,6 @@ function applyGuessCountry(r, name) {
   r.country = name
   r.region = name === 'Ecuador' ? regionForSide(r.guess?.side) : null
   rerank(r)
-}
-
-// ---- zoom to wings (frame the uploaded photo to the YOLO wing box) ----
-const imgEls = {}
-function setImgEl(id, el) { if (el) imgEls[id] = el; else delete imgEls[id] }
-function computeZoom(r) {
-  const el = imgEls[r.id]
-  if (!r.wingBox || !el || !el.naturalWidth) { r.transform = ''; return }
-  const CW = el.clientWidth, CH = el.clientHeight
-  const fit = Math.min(CW / el.naturalWidth, CH / el.naturalHeight)   // object-fit: contain
-  const dw = el.naturalWidth * fit, dh = el.naturalHeight * fit
-  const [x1, y1, x2, y2] = r.wingBox
-  const bw = (x2 - x1) * dw, bh = (y2 - y1) * dh
-  if (bw < 4 || bh < 4) { r.transform = ''; return }
-  const z = Math.min(CW / bw, CH / bh) * 0.92                         // small margin
-  // box centre in displayed px (image is centred by object-fit: contain)
-  const pcx = ((x1 + x2) / 2) * dw + (CW - dw) / 2
-  const pcy = ((y1 + y2) / 2) * dh + (CH - dh) / 2
-  r.transform = `scale(${z}) translate(${CW / 2 - pcx}px, ${CH / 2 - pcy}px)`
-}
-function toggleZoom(r) {
-  r.zoom = !r.zoom
-  if (r.zoom) nextTick(() => computeZoom(r)); else r.transform = ''
 }
 
 // Candidate groups for the reference gallery: top predicted species, each fetched
@@ -286,9 +314,9 @@ const showAbout = ref(false)
               <button v-if="hasLocation" class="btn btn-link btn-sm p-0" @click="resetLocation">Reset location</button>
             </div>
             <div class="d-grid mt-2">
-              <button class="btn btn-success" :disabled="!validItems.length || running" @click="run">
+              <button class="btn btn-success" :disabled="!pendingItems.length || running" @click="run">
                 <span v-if="running" class="spinner-border spinner-border-sm" aria-hidden="true"></span>
-                {{ running ? 'Identifying…' : `Identify ${validItems.length > 1 ? validItems.length + ' photos' : 'butterfly'}` }}
+                {{ running ? 'Identifying…' : (pendingItems.length ? `Identify ${pendingItems.length > 1 ? pendingItems.length + ' photos' : 'butterfly'}` : 'All photos identified') }}
               </button>
             </div>
           </div>
@@ -342,15 +370,18 @@ const showAbout = ref(false)
 
           <div class="row g-3">
             <div class="col-12 col-lg-6">
-              <div class="photo-frame" :class="{ zoomed: r.zoom }">
-                <img v-if="r.previewUrl" :ref="(el) => setImgEl(r.id, el)" :src="r.previewUrl"
-                  class="uploaded" :alt="r.filename" :style="{ transform: r.transform }"
-                  @load="r.zoom && computeZoom(r)" />
-                <button v-if="r.wingBox" class="btn btn-sm zoom-btn"
-                  :class="r.zoom ? 'btn-primary' : 'btn-light'" @click="toggleZoom(r)"
-                  :title="r.zoom ? 'Show the whole photo' : 'Zoom to the detected wings'">
-                  {{ r.zoom ? 'Show full photo' : '🔍 Zoom to wings' }}
-                </button>
+              <AIPhotoView :src="r.previewUrl" :boxes="r.boxes" :used-index="r.usedIndex"
+                :loading="r.maskLoading" :alt="r.filename" @select="(i) => selectMask(r, i)" />
+              <!-- mask controls -->
+              <div class="mask-bar small text-muted">
+                <template v-if="r.boxes.length">
+                  {{ r.boxes.length }} wing mask{{ r.boxes.length > 1 ? 's' : '' }} found.
+                  <template v-if="r.boxes.length > 1">Tap a box to use that one.</template>
+                  <button v-if="r.usedIndex !== -1" class="btn btn-link btn-sm p-0 ms-1" @click="useFull(r)">Use full image</button>
+                  <button v-else class="btn btn-link btn-sm p-0 ms-1" @click="useWings(r)">Use wings</button>
+                  <span v-if="r.usedIndex === -1"> · using full image</span>
+                </template>
+                <template v-else>No wings detected — using the full image.</template>
               </div>
               <PredictionPanel :item="{ CAM_ID: r.id }" :prediction="r.pred" :start-open="true" />
             </div>
@@ -393,6 +424,12 @@ const showAbout = ref(false)
           frontier, because Müllerian mimicry produces look-alikes across species — exactly the cases the tool surfaces
           for checking. The backbone is currently frozen with only the head trained; planned backbone fine-tuning is the
           main lever expected to lift species and subspecies accuracy further.</p>
+          <p class="mb-1">
+            <strong>Models &amp; code:</strong>
+            <a href="https://huggingface.co/spaces/fr4nzzch/butterfly-id" target="_blank" rel="noopener noreferrer">Hugging Face Space (inference API + weights)</a>
+            · backbone <a href="https://huggingface.co/imageomics/bioclip-2.5-vith14" target="_blank" rel="noopener noreferrer">BioCLIP 2.5-H</a>
+            · <a href="https://huggingface.co/facebook/sam3" target="_blank" rel="noopener noreferrer">SAM 3</a> (wing-mask training labels).
+          </p>
           <p class="text-muted mb-0"><strong>This is an AI suggestion, not a definitive identification.</strong></p>
         </div>
       </div>
@@ -409,9 +446,7 @@ const showAbout = ref(false)
 .preview.invalid { border-color: #dc3545; }
 .preview img { width: 100%; height: 84px; object-fit: cover; display: block; }
 .preview .rm { position: absolute; top: 2px; right: 2px; width: 26px; height: 26px; border: none; border-radius: 50%; background: rgba(0,0,0,.6); color: #fff; line-height: 1; cursor: pointer; }
-.photo-frame { position: relative; width: 100%; height: 340px; overflow: hidden; background: #f1f5f9; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: .5rem; }
-.uploaded { width: 100%; height: 100%; object-fit: contain; display: block; transform-origin: center center; transition: transform .25s ease; }
-.zoom-btn { position: absolute; bottom: 8px; right: 8px; box-shadow: 0 1px 4px rgba(0,0,0,.25); }
+.mask-bar { margin-bottom: .35rem; }
 .loc-bar { display: flex; flex-wrap: wrap; align-items: flex-end; gap: .75rem; }
 .loc-field { min-width: 200px; flex: 0 1 240px; }
 .loc-guess { display: flex; flex-direction: column; }

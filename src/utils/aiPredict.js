@@ -43,19 +43,26 @@ function mockRawLeaves(filename) {
 }
 
 // Fetch RAW leaves for ONE prepared image item. Returns
-//   { id, filename, leaves: [[taxon, prob], ...], wing_box, mock }
-export async function predictOne(f, i = 0) {
+//   { id, filename, leaves: [[taxon, prob], ...], wing_box, boxes, mock }
+// opts.box  = [x1,y1,x2,y2] normalised -> embed exactly that wing mask (lazy switch)
+// opts.yolo = 'off' -> use the whole image (no wing crop)
+export async function predictOne(f, i = 0, { box = null, yolo = 'auto' } = {}) {
   const id = f.id || `img_${i}`
   if (!API_BASE) {
-    return { id, filename: f.name, leaves: mockRawLeaves(f.name), wing_box: null, mock: true }
+    return { id, filename: f.name, leaves: mockRawLeaves(f.name), wing_box: null, boxes: [], mock: true }
   }
   const form = new FormData()
   form.append('images', f.blob || f.file || f, f.name)
+  if (box) form.append('box', JSON.stringify(box))
+  if (yolo && yolo !== 'auto') form.append('yolo', yolo)
   const res = await fetch(`${API_BASE}/predict_raw`, { method: 'POST', body: form })
   if (!res.ok) throw new Error(`Backend ${res.status}`)
   const json = await res.json()
   const r = json.results?.[0] || {}
-  return { id, filename: r.filename || f.name, leaves: r.leaves || [], wing_box: r.wing_box || null, mock: !!json.mock }
+  return {
+    id, filename: r.filename || f.name, leaves: r.leaves || [],
+    wing_box: r.wing_box || null, boxes: r.boxes || [], mock: !!json.mock,
+  }
 }
 
 // How many photos to infer concurrently. The free HF Space is CPU-bound (2 vCPU,
