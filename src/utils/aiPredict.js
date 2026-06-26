@@ -42,22 +42,49 @@ function mockRawLeaves(filename) {
   return raw.map(([name, p]) => [name, p / s])
 }
 
-// Fetch RAW leaves for prepared image items. Returns
-//   [{ id, filename, leaves: [[taxon, prob], ...], mock }]
-export async function predictRaw(files) {
+// Fetch RAW leaves for ONE prepared image item. Returns
+//   { id, filename, leaves: [[taxon, prob], ...], wing_box, mock }
+export async function predictOne(f, i = 0) {
+  const id = f.id || `img_${i}`
   if (!API_BASE) {
-    return files.map((f, i) => ({
-      id: f.id || `img_${i}`, filename: f.name, leaves: mockRawLeaves(f.name), mock: true,
-    }))
+    return { id, filename: f.name, leaves: mockRawLeaves(f.name), wing_box: null, mock: true }
   }
   const form = new FormData()
-  for (const f of files) form.append('images', f.blob || f.file || f, f.name)
+  form.append('images', f.blob || f.file || f, f.name)
   const res = await fetch(`${API_BASE}/predict_raw`, { method: 'POST', body: form })
   if (!res.ok) throw new Error(`Backend ${res.status}`)
   const json = await res.json()
-  return json.results.map((r, i) => ({
-    id: files[i]?.id || `img_${i}`, filename: r.filename, leaves: r.leaves, mock: !!json.mock,
-  }))
+  const r = json.results?.[0] || {}
+  return { id, filename: r.filename || f.name, leaves: r.leaves || [], wing_box: r.wing_box || null, mock: !!json.mock }
+}
+
+// How many photos to infer concurrently. The free HF Space is CPU-bound (2 vCPU,
+// torch uses all cores per inference), so >2 in flight just contends for the same
+// cores without improving throughput; 2 overlaps each photo's upload + light YOLO
+// step with the previous photo's heavy BioCLIP pass. The real win is STREAMING:
+// onResult fires per photo as it lands, so the first result shows ~1 photo's
+// latency instead of waiting for the whole batch.
+export const PREDICT_CONCURRENCY = 2
+
+// Run inference over `files` with a small concurrency pool, invoking
+// onResult(raw, index) as each finishes (streaming) and onError(err, index, file)
+// on a per-photo failure. Resolves when all are done.
+export async function predictStream(files, { concurrency = PREDICT_CONCURRENCY, onResult, onError } = {}) {
+  const list = Array.from(files || [])
+  let next = 0
+  async function worker() {
+    while (next < list.length) {
+      const i = next++
+      try {
+        const raw = await predictOne(list[i], i)
+        onResult?.(raw, i)
+      } catch (e) {
+        onError?.(e, i, list[i])
+      }
+    }
+  }
+  const n = Math.max(1, Math.min(concurrency, list.length))
+  await Promise.all(Array.from({ length: n }, worker))
 }
 
 const genusOf = (t) => t.split(/\s+/)[0]

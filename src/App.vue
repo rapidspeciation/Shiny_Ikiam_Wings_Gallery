@@ -25,7 +25,7 @@ const tabs = {
   'CRISPR': CrisprTab,
   'Search by CAMID': SearchTab,
   'Update DB': UpdateTab,
-  'AI ID': AIIdTab
+  'AI Identifier': AIIdTab
 }
 
 // Zoom Logic
@@ -110,7 +110,7 @@ onMounted(async () => {
         <span class="d-none d-md-inline"> | Github: <a href='https://github.com/rapidspeciation/Shiny_Ikiam_Wings_Gallery/' target='_blank'>rapidspeciation/Shiny_Ikiam_Wings_Gallery</a></span>
       </div>
 
-      <GalleryOptionsBar v-if="currentTab !== 'AI ID'" :current-tab="currentTab" />
+      <GalleryOptionsBar v-if="currentTab !== 'AI Identifier'" :current-tab="currentTab" />
 
       <keep-alive>
         <component :is="tabs[currentTab]" />
