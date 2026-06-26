@@ -133,8 +133,9 @@ onBeforeUnmount(destroyZoom)
 </template>
 
 <style scoped>
-/* The layer wraps the image tightly (height:auto) so overlay coords == image pixels. */
-.ai-photo { position: relative; width: 100%; max-height: 460px; overflow: hidden; background: #f1f5f9; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: .5rem; }
+/* Mirror PhotoCard: the layer wraps the image tightly (height:auto, NO height cap)
+   so overlay coords == image pixels and zoom-to-wings framing always centres. */
+.ai-photo { position: relative; width: 100%; overflow: hidden; background: #f1f5f9; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: .5rem; }
 .ai-photo.dark { background: #0f172a; border-color: #0f172a; margin-bottom: 0; }
 .zoom-layer { position: relative; width: 100%; line-height: 0; cursor: grab; }
 .panzoom-img { width: 100%; height: auto; display: block; }
