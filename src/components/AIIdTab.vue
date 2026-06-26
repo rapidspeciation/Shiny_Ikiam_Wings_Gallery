@@ -2,7 +2,7 @@
 // AI Identifier tab: upload butterfly photo(s) -> BioCLIP 2.5-H prediction (genus ▸
 // species ▸ subspecies). Inference runs ONCE per photo (raw leaf probabilities);
 // the country + side-of-Andes prior is a pure client-side re-rank, so each result
-// can change its location after the fact — or let us guess it — with no re-inference.
+// can change its location after the fact (or let us guess it) with no re-inference.
 // Photos stream in one-by-one as the model finishes each (concurrency pool). The
 // YOLO wing-crop returns selectable masks: the largest runs on Identify, others run
 // lazily when their bbox is clicked. Reference photos (Sanger first, GBIF fallback)
@@ -54,7 +54,7 @@ async function addFiles(fileList) {
     const id = `img_${++_id}`
     if (!file.type.startsWith('image/') || /\.hei[cf]$/i.test(file.name)) {
       items.value.push({ id, name: file.name || 'image', previewUrl: null, blob: null, status: 'invalid',
-        error: /\.hei[cf]$/i.test(file.name) ? 'HEIC isn\'t supported in browsers — set your camera to "Most Compatible" (JPEG).' : 'Not an image file.' })
+        error: /\.hei[cf]$/i.test(file.name) ? 'HEIC isn\'t supported in browsers; set your camera to "Most Compatible" (JPEG).' : 'Not an image file.' })
       continue
     }
     const previewUrl = URL.createObjectURL(file)
@@ -228,7 +228,7 @@ async function useFull(r) {
     r.maskLoading = false
   }
 }
-// All wings together (union of every detected mask) — the default crop.
+// All wings together (union of every detected mask); the default crop.
 async function useAll(r) {
   if (r.usedIndex === -2 || r.maskLoading || !r.unionBox) return
   if (r.predCache.all) { r.usedIndex = -2; applyLeaves(r, r.predCache.all); return }
@@ -292,7 +292,7 @@ const showAbout = ref(false)
               @drop.prevent="isOver = false" role="button" tabindex="0"
               @keydown.enter.prevent="fileInput.click()" @keydown.space.prevent="fileInput.click()"
               aria-label="Upload images: drag and drop, or activate to choose files">
-              <div class="text-muted mb-2">Drag &amp; drop <em>anywhere</em>, paste from clipboard, or choose photos — best on a clear shot of the open wings.</div>
+              <div class="text-muted mb-2">Drag &amp; drop <em>anywhere</em>, paste from clipboard, or choose photos. Best results come from a clear shot of the open wings.</div>
               <div class="d-flex gap-2 justify-content-center flex-wrap" @click.stop>
                 <button class="btn btn-primary btn-sm" @click="fileInput.click()">Choose photos</button>
                 <button class="btn btn-outline-secondary btn-sm" @click="cameraInput.click()">Take photo</button>
@@ -321,7 +321,7 @@ const showAbout = ref(false)
         <div class="card h-100">
           <div class="card-body">
             <h6 class="card-title">Where was it photographed? <span class="text-muted fw-normal small">(optional)</span></h6>
-            <p class="text-muted small mb-2">Helps when look-alikes occur — down-weights butterflies not recorded in your region. Leave it blank and we'll <strong>guess the location from the photo</strong>. You can change this per photo after identifying.</p>
+            <p class="text-muted small mb-2">Helps when look-alikes occur: it down-weights butterflies not recorded in your region. Leave it blank and we'll <strong>guess the location from the photo</strong>. You can change this per photo after identifying.</p>
             <FilterSelect label="Country" :options="countryOptions" v-model="country" placeholder="Any country" />
             <div v-if="country === 'Ecuador'" class="mt-2">
               <FilterSelect label="Region (side of the Andes)" :options="REGION_OPTS" v-model="region" placeholder="Either side" />
@@ -345,7 +345,7 @@ const showAbout = ref(false)
     <!-- Results -->
     <div v-for="r in results" :key="r.id" class="card mt-3">
       <div class="card-body">
-        <div v-if="r.mock" class="badge text-bg-secondary mb-2">demo — backend not connected</div>
+        <div v-if="r.mock" class="badge text-bg-secondary mb-2">demo: backend not connected</div>
 
         <!-- still running this photo -->
         <div v-if="r.loading" class="d-flex align-items-center gap-2 text-muted small">
@@ -366,11 +366,11 @@ const showAbout = ref(false)
             </div>
             <div class="loc-guess">
               <button v-if="!r.guess" class="btn btn-outline-secondary btn-sm" @click="guess(r)" title="Infer the most likely location from the photo">
-                I don't know — guess
+                I don't know, guess it
               </button>
               <div v-if="r.guess" class="small">
                 <template v-if="r.guess.countries && r.guess.countries.length">
-                  <span class="text-muted">Guessed from the photo — top predictions are recorded from <span v-if="r.guess.side">(<strong>{{ r.guess.side }}</strong> of the Andes, {{ Math.round(r.guess.sideConf * 100) }}%)</span> — tap to apply:</span>
+                  <span class="text-muted">Guessed from the photo. Top predictions are recorded from <span v-if="r.guess.side">(<strong>{{ r.guess.side }}</strong> of the Andes, {{ Math.round(r.guess.sideConf * 100) }}%)</span>. Tap to apply:</span>
                   <div class="guess-chips mt-1">
                     <button v-for="[name, conf] in r.guess.countries" :key="name"
                       class="btn btn-sm guess-chip" :class="r.country === name ? 'btn-success' : 'btn-outline-success'"
@@ -399,12 +399,12 @@ const showAbout = ref(false)
                   <button v-if="r.usedIndex !== -2" class="btn btn-link btn-sm p-0 ms-1" @click="useAll(r)">Use all wings</button>
                   <button v-if="r.usedIndex !== -1" class="btn btn-link btn-sm p-0 ms-1" @click="useFull(r)">Use full image</button>
                 </template>
-                <template v-else>No wings detected — using the full image.</template>
+                <template v-else>No wings detected, using the full image.</template>
               </div>
               <PredictionPanel :item="{ CAM_ID: r.id }" :prediction="r.pred" :start-open="true" />
             </div>
             <div class="col-12 col-lg-6">
-              <div class="fw-bold small mb-1">Reference photos <span class="text-muted fw-normal">— compare with your photo</span></div>
+              <div class="fw-bold small mb-1">Reference photos <span class="text-muted fw-normal">(compare with your photo)</span></div>
               <AIReferenceGallery :groups="groupsFor(r)" />
             </div>
           </div>
@@ -426,10 +426,11 @@ const showAbout = ref(false)
           ranks. To focus it on wing pattern, images are first cropped to the wings by a lightweight wing-segmentation
           model (YOLO26s-seg) trained on wing masks generated with SAM 3.</p>
           <p><strong>Coverage:</strong> the label space spans Neotropical butterflies across all major families
-          (~3,600 species — Nymphalidae, Hesperiidae, Riodinidae, Lycaenidae, Pieridae, Papilionidae, plus the
-          nocturnal <em>Hedylidae</em> and a few castniid moths). Sampling is uneven, though: the model is built
-          around the <em>Ithomiini</em> mimicry system and is most reliable there — a confident call on a
-          sparsely-sampled group (e.g. skippers, hairstreaks, Hedylidae) should be treated with extra caution.</p>
+          (~3,600 species: Nymphalidae, Hesperiidae, Riodinidae, Lycaenidae, Pieridae, Papilionidae, plus the
+          nocturnal <em>Hedylidae</em> and a few castniid moths). Sampling is very uneven: most of the training
+          data sits in the <em>Ithomiini</em> mimicry radiation, so confident calls on sparsely-sampled groups
+          (skippers, hairstreaks, Hedylidae) warrant extra caution. Even within Ithomiini, Müllerian mimicry makes
+          subspecies look-alikes genuinely hard to tell apart.</p>
           <p class="mb-1"><strong>Deployment accuracy</strong> on Sanger specimens (out-of-fold, dorsal+ventral combined,
           with the side-of-Andes + Ecuador prior):</p>
           <table class="table table-sm table-bordered w-auto small">
@@ -444,12 +445,12 @@ const showAbout = ref(false)
             </tbody>
           </table>
           <p class="text-muted">Performance is strong and reliable from genus upward (≥95%); subspecies is the hard
-          frontier, because Müllerian mimicry produces look-alikes across species — exactly the cases the tool surfaces
+          frontier, because Müllerian mimicry produces look-alikes across species, exactly the cases the tool surfaces
           for checking. The backbone is currently frozen with only the head trained; planned backbone fine-tuning is the
           main lever expected to lift species and subspecies accuracy further.</p>
           <p class="mb-1">
             <strong>Models &amp; code:</strong>
-            weights (head + wing-cropper, CC-BY-NC-4.0) &mdash;
+            weights (head + wing-cropper):
             <a href="https://huggingface.co/fr4nzzch/butterfly-id-classifier" target="_blank" rel="noopener noreferrer">fr4nzzch/butterfly-id-classifier</a>
             · <a href="https://huggingface.co/spaces/fr4nzzch/butterfly-id" target="_blank" rel="noopener noreferrer">inference Space</a>
             · backbone <a href="https://huggingface.co/imageomics/bioclip-2.5-vith14" target="_blank" rel="noopener noreferrer">BioCLIP 2.5-H</a>
