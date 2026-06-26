@@ -2,12 +2,12 @@
 // Uploaded-photo viewer for the AI Identifier tab: a FIXED-height frame (like the
 // other tabs) with panzoom + a clickable YOLO-mask overlay + zoom-to-wings.
 //
-// To keep a fixed frame WITHOUT the object-fit:contain letterbox throwing off the
-// overlay/zoom coordinates, the .zoom-layer is sized to the *contained image rect*
-// (computed from the image's natural dimensions and the frame size) and centred in
-// the frame. The image fills the layer exactly, so SVG overlay coords (0..1) map to
-// real pixels, and panzoom framing — which centres the layer in the frame — lands
-// the wings dead-centre.
+// Geometry: .img-box is positioned at the *contained image rect* (computed from the
+// image's natural dimensions + the frame size) and centred in the fixed frame; the
+// panzoom .zoom-layer fills .img-box exactly. Panzoom measures the wheel focal point
+// relative to the element's PARENT (.img-box) — which matches the image — so
+// zoom-to-cursor is accurate, the SVG overlay maps to real pixels, and zoom-to-wings
+// scales the bbox to fill the frame and centres it.
 import Panzoom from '@panzoom/panzoom'
 import { ref, watch, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import { usePanzoomRegistry } from '../composables/usePanzoomRegistry.js'
@@ -34,7 +34,7 @@ const framed = ref(false)                         // is this image framed to its
 const layerBox = ref({ left: '0px', top: '0px', width: '100%', height: '100%' })
 let pz = null
 
-// Size the zoom-layer to the contained image rect, centred in the fixed frame.
+// Size .img-box to the contained image rect, centred in the fixed frame.
 function computeLayer() {
   const fr = frame.value, im = imgEl.value
   if (!fr || !im || !im.naturalWidth) return
@@ -46,7 +46,7 @@ function computeLayer() {
 
 function initZoom() {
   if (!layer.value || pz) return
-  pz = Panzoom(layer.value, { maxScale: 8, minScale: 0.5, touchAction: 'pan-y', disablePan: true })
+  pz = Panzoom(layer.value, { maxScale: 12, minScale: 0.5, touchAction: 'pan-y', disablePan: true })
   register(pz)
   const wheelHandler = (e) => { if (e.ctrlKey) { e.preventDefault(); pz.zoomWithWheel(e) } }
   layer.value.parentElement.addEventListener('wheel', wheelHandler)
@@ -78,13 +78,17 @@ function frameBox() {
   return null
 }
 function applyWingFrame() {
-  if (!pz || !layer.value) return
+  if (!pz || !layer.value || !frame.value) return
   const b = frameBox()
   if (!b) { pz.reset({ animate: false }); return }
-  const W = layer.value.offsetWidth, H = layer.value.offsetHeight   // = contained image px
+  const W = layer.value.offsetWidth, H = layer.value.offsetHeight      // contained image px
+  const CW = frame.value.clientWidth, CH = frame.value.clientHeight     // frame px
   if (!W || !H) return
+  const bw = (b[2] - b[0]) * W, bh = (b[3] - b[1]) * H                  // bbox in image px
+  if (bw < 2 || bh < 2) return
   const cx = (b[0] + b[2]) / 2, cy = (b[1] + b[3]) / 2
-  const scale = Math.min(8, 0.95 / Math.max(b[2] - b[0], b[3] - b[1]))
+  // scale the bbox to fill the frame (limiting dimension touches the edge — no buffer)
+  const scale = Math.min(12, Math.min(CW / bw, CH / bh))
   pz.zoom(scale, { animate: false })
   pz.pan(W * (0.5 - cx), H * (0.5 - cy), { animate: false, force: true })
   pz.setOptions({ disablePan: false, touchAction: 'none', cursor: 'move' })
@@ -115,16 +119,20 @@ onBeforeUnmount(() => { window.removeEventListener('resize', onResize); destroyZ
 
 <template>
   <div ref="frame" class="ai-photo" :class="{ dark }">
-    <div ref="layer" class="zoom-layer" :style="layerBox">
-      <img ref="imgEl" :src="src" class="panzoom-img" :alt="alt" referrerpolicy="no-referrer" @load="onImgLoad" />
-      <!-- clickable wing-mask overlay (aligned to the image; zooms with it) -->
-      <svg v-if="showMasks && boxes.length" class="mask-overlay" viewBox="0 0 1 1" preserveAspectRatio="none">
-        <rect v-for="(b, i) in boxes" :key="i"
-          :x="b.box[0]" :y="b.box[1]"
-          :width="Math.max(0, b.box[2] - b.box[0])" :height="Math.max(0, b.box[3] - b.box[1])"
-          class="mask-rect" :class="{ used: i === usedIndex }"
-          @click.stop="emit('select', i)" />
-      </svg>
+    <!-- .img-box is the panzoom element's parent and matches the image rect exactly,
+         so Panzoom's focal-point math (relative to the parent) is accurate. -->
+    <div class="img-box" :style="layerBox">
+      <div ref="layer" class="zoom-layer">
+        <img ref="imgEl" :src="src" class="panzoom-img" :alt="alt" referrerpolicy="no-referrer" @load="onImgLoad" />
+        <!-- clickable wing-mask overlay (aligned to the image; zooms with it) -->
+        <svg v-if="showMasks && boxes.length" class="mask-overlay" viewBox="0 0 1 1" preserveAspectRatio="none">
+          <rect v-for="(b, i) in boxes" :key="i"
+            :x="b.box[0]" :y="b.box[1]"
+            :width="Math.max(0, b.box[2] - b.box[0])" :height="Math.max(0, b.box[3] - b.box[1])"
+            class="mask-rect" :class="{ used: i === usedIndex }"
+            @click.stop="emit('select', i)" />
+        </svg>
+      </div>
     </div>
     <!-- static mask labels, aligned to the (unzoomed) image rect -->
     <div v-if="showMasks && boxes.length" class="label-layer" :style="layerBox">
@@ -151,7 +159,8 @@ onBeforeUnmount(() => { window.removeEventListener('resize', onResize); destroyZ
 <style scoped>
 .ai-photo { position: relative; width: 100%; height: 380px; overflow: hidden; background: #f1f5f9; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: .5rem; }
 .ai-photo.dark { background: #0f172a; border-color: #0f172a; margin-bottom: 0; }
-.zoom-layer { position: absolute; line-height: 0; cursor: grab; transform-origin: center center; }
+.img-box { position: absolute; }
+.zoom-layer { position: relative; width: 100%; height: 100%; line-height: 0; cursor: grab; transform-origin: center center; }
 .panzoom-img { width: 100%; height: 100%; object-fit: contain; display: block; }
 .mask-overlay { position: absolute; inset: 0; width: 100%; height: 100%; }
 .mask-rect { fill: rgba(120,120,120,.06); stroke: #9aa3ad; stroke-width: 2; vector-effect: non-scaling-stroke; cursor: pointer; transition: stroke .15s; }
