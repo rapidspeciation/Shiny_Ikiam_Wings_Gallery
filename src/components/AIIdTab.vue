@@ -444,7 +444,9 @@ const showAbout = ref(false)
           main lever expected to lift species and subspecies accuracy further.</p>
           <p class="mb-1">
             <strong>Models &amp; code:</strong>
-            <a href="https://huggingface.co/spaces/fr4nzzch/butterfly-id" target="_blank" rel="noopener noreferrer">Hugging Face Space (inference API + weights)</a>
+            weights (head + wing-cropper, CC-BY-NC-4.0) &mdash;
+            <a href="https://huggingface.co/fr4nzzch/butterfly-id-classifier" target="_blank" rel="noopener noreferrer">fr4nzzch/butterfly-id-classifier</a>
+            · <a href="https://huggingface.co/spaces/fr4nzzch/butterfly-id" target="_blank" rel="noopener noreferrer">inference Space</a>
             · backbone <a href="https://huggingface.co/imageomics/bioclip-2.5-vith14" target="_blank" rel="noopener noreferrer">BioCLIP 2.5-H</a>
             · <a href="https://huggingface.co/facebook/sam3" target="_blank" rel="noopener noreferrer">SAM 3</a> (wing-mask training labels).
           </p>
