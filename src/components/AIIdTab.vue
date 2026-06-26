@@ -395,7 +395,7 @@ const showAbout = ref(false)
                   <span v-if="r.usedIndex === -2">Using all wings together.</span>
                   <span v-else-if="r.usedIndex >= 0">Using mask {{ r.usedIndex + 1 }}.</span>
                   <span v-else>Using full image.</span>
-                  <template v-if="r.boxes.length > 1"> Tap a box to use just that one.</template>
+                  <template v-if="r.boxes.length > 1"> Double-click a box to use just that one.</template>
                   <button v-if="r.usedIndex !== -2" class="btn btn-link btn-sm p-0 ms-1" @click="useAll(r)">Use all wings</button>
                   <button v-if="r.usedIndex !== -1" class="btn btn-link btn-sm p-0 ms-1" @click="useFull(r)">Use full image</button>
                 </template>
