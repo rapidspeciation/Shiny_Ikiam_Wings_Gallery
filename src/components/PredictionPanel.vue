@@ -688,4 +688,12 @@ watch([camid, () => props.prediction], load, { immediate: true })
   flex: 0 0 auto;
 }
 @media (max-width: 768px) { .pred-panel { font-size: 0.78rem; } }
+/* Phones: the 3–4 source chips otherwise crush the taxon name to an ellipsis
+   ("Mel…"). Let the row wrap so the chips drop to their own line and the name
+   keeps the full first line. */
+@media (max-width: 576px) {
+  .pred-row { flex-wrap: wrap; }
+  .pred-name { flex: 1 1 auto; }
+  .pred-chips { flex-basis: 100%; margin-left: 1.4rem; margin-top: 1px; }
+}
 </style>
