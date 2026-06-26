@@ -160,8 +160,10 @@ watch(() => props.groups.map((g) => g.id).join('|'), async () => {
 
 /* Hero */
 .hero { background: #0f172a; border-radius: 8px; overflow: hidden; }
-.hero-img-wrap { position: relative; height: 340px; }
-.hero-img-wrap > :deep(.ai-photo) { height: 340px; margin-bottom: 0; border-radius: 8px; }
+/* No fixed height: AIPhotoView wraps the image tightly so "zoom to wings" frames
+   the actual pixels. .ai-photo caps itself at max-height and clips overflow. */
+.hero-img-wrap { position: relative; min-height: 200px; }
+.hero-img-wrap > :deep(.ai-photo) { margin-bottom: 0; border-radius: 8px; }
 .hnav, .hero-cap { z-index: 3; }
 .src-link { color: #93c5fd; text-decoration: none; }
 .src-link:hover { text-decoration: underline; }
@@ -193,8 +195,6 @@ watch(() => props.groups.map((g) => g.id).join('|'), async () => {
 .ph { width: 70px; height: 70px; display: flex; align-items: center; justify-content: center; }
 .src-note { font-size: 0.7rem; }
 @media (max-width: 575px) {
-  .hero-img-wrap { height: 240px; }
-  .hero-img-wrap > :deep(.ai-photo) { height: 240px; }
   .thumb, .ph { width: 60px; height: 60px; }
 }
 </style>
