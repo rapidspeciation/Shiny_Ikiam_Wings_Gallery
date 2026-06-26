@@ -14,8 +14,6 @@ import UpdateTab from './components/UpdateTab.vue'
 import AIIdTab from './components/AIIdTab.vue'
 import GalleryOptionsBar from './components/GalleryOptionsBar.vue'
 
-const currentTab = ref('Collection')
-
 // Pinned in the top navbar so they stay reachable while scrolling through photos.
 const { zoomWings, expandPredictions } = useGlobalGalleryOptions()
 
@@ -28,6 +26,35 @@ const tabs = {
   'AI Identifier': AIIdTab
 }
 
+// --- URL <-> tab routing (shareable deep links, e.g. .../ai_identifier) ---------
+// Path-based under the Vite base (/Shiny_Ikiam_Wings_Gallery/). The dev server and a
+// 404.html SPA fallback (see vite.config.js) serve the app for these deep links.
+const BASE = import.meta.env.BASE_URL
+const slugByTab = {
+  'Collection': 'collection',
+  'Insectary': 'insectary',
+  'CRISPR': 'crispr',
+  'Search by CAMID': 'search',
+  'Update DB': 'update',
+  'AI Identifier': 'ai_identifier'
+}
+const tabBySlug = Object.fromEntries(Object.entries(slugByTab).map(([t, s]) => [s, t]))
+function tabFromUrl() {
+  let p = window.location.pathname
+  if (p.startsWith(BASE)) p = p.slice(BASE.length)
+  const slug = p.replace(/^\/+|\/+$/g, '').toLowerCase()
+  return tabBySlug[slug] || 'Collection'
+}
+const currentTab = ref(tabFromUrl())
+function navigate(name) {
+  currentTab.value = name
+  const url = BASE + (slugByTab[name] || '')
+  if (window.location.pathname.replace(/\/+$/, '') !== url.replace(/\/+$/, '')) {
+    window.history.pushState({}, '', url)
+  }
+}
+function onPopState() { currentTab.value = tabFromUrl() }
+
 // Zoom Logic
 const { attachGlobalListeners, resetAll } = usePanzoomRegistry()
 attachGlobalListeners()
@@ -36,6 +63,7 @@ attachGlobalListeners()
 const { ensureLoaded } = useDataset('collection', './data/collection.json')
 
 onMounted(async () => {
+  window.addEventListener('popstate', onPopState)   // back/forward updates the tab
   try {
     const data = await ensureLoaded()
     const sample = data.find(item => item.URLd || item.URLv)
@@ -75,9 +103,9 @@ onMounted(async () => {
             <li class="nav-item" v-for="(component, name) in tabs" :key="name">
               <a 
                 class="nav-link px-2 small-text" 
-                :class="{ active: currentTab === name }" 
-                href="#" 
-                @click.prevent="currentTab = name"
+                :class="{ active: currentTab === name }"
+                :href="BASE + (slugByTab[name] || '')"
+                @click.prevent="navigate(name)"
               >
                 {{ name }}
               </a>
