@@ -129,7 +129,7 @@ onBeforeUnmount(() => { window.removeEventListener('resize', onResize); destroyZ
           <rect v-for="(b, i) in boxes" :key="i"
             :x="b.box[0]" :y="b.box[1]"
             :width="Math.max(0, b.box[2] - b.box[0])" :height="Math.max(0, b.box[3] - b.box[1])"
-            class="mask-rect" :class="{ used: i === usedIndex }"
+            class="mask-rect" :class="{ used: usedIndex === -2 || i === usedIndex }"
             @click.stop="emit('select', i)" />
         </svg>
       </div>
@@ -137,11 +137,11 @@ onBeforeUnmount(() => { window.removeEventListener('resize', onResize); destroyZ
     <!-- static mask labels, aligned to the (unzoomed) image rect -->
     <div v-if="showMasks && boxes.length" class="label-layer" :style="layerBox">
       <button v-for="(b, i) in boxes" :key="'lbl-' + i" type="button"
-        class="mask-lbl" :class="{ used: i === usedIndex }"
+        class="mask-lbl" :class="{ used: usedIndex === -2 || i === usedIndex }"
         :style="{ left: (b.box[0] * 100) + '%', top: (b.box[1] * 100) + '%' }"
-        :title="i === usedIndex ? 'Mask used for this prediction' : 'Use this mask'"
+        :title="usedIndex === -2 || i === usedIndex ? 'Mask used for this prediction' : 'Use this mask'"
         @click.stop="emit('select', i)">
-        {{ i === usedIndex ? '✓ ' : '' }}mask {{ i + 1 }} {{ fmtConf(b.conf) }}
+        {{ (usedIndex === -2 || i === usedIndex) ? '✓ ' : '' }}mask {{ i + 1 }} {{ fmtConf(b.conf) }}
       </button>
     </div>
     <!-- per-image zoom-to-wings button (in addition to the global navbar toggle) -->

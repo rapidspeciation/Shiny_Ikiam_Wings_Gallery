@@ -167,7 +167,7 @@ async function run() {
     const placeholder = {
       id: it.id, filename: it.name, previewUrl: it.previewUrl, file: it,
       loading: true, error: null, mock: false, leaves: null,
-      boxes: [], usedIndex: -1, predCache: {}, maskLoading: false,
+      boxes: [], unionBox: null, usedIndex: -1, predCache: {}, maskLoading: false,
       country: country.value, region: country.value === 'Ecuador' ? region.value : null,
       guess: null, pred: null,
     }
@@ -180,8 +180,9 @@ async function run() {
       onResult: (raw) => {
         const r = byId(raw.id); if (!r) return
         r.boxes = raw.boxes || []
-        r.usedIndex = r.boxes.length ? 0 : -1
-        r.predCache = { [r.usedIndex >= 0 ? r.usedIndex : 'full']: raw.leaves }
+        r.unionBox = raw.wing_box || null          // union of all masks (the default crop)
+        r.usedIndex = r.boxes.length ? -2 : -1     // -2 = all wings (union), -1 = full image, >=0 = one mask
+        r.predCache = { [r.boxes.length ? 'all' : 'full']: raw.leaves }
         r.mock = raw.mock; r.loading = false
         applyLeaves(r, raw.leaves, noLoc)
       },
@@ -227,7 +228,22 @@ async function useFull(r) {
     r.maskLoading = false
   }
 }
-function useWings(r) { if (r.boxes.length) selectMask(r, 0) }
+// All wings together (union of every detected mask) — the default crop.
+async function useAll(r) {
+  if (r.usedIndex === -2 || r.maskLoading || !r.unionBox) return
+  if (r.predCache.all) { r.usedIndex = -2; applyLeaves(r, r.predCache.all); return }
+  r.maskLoading = true
+  try {
+    const raw = await predictOne(r.file, 0, { box: r.unionBox })
+    r.predCache.all = raw.leaves
+    r.usedIndex = -2
+    applyLeaves(r, raw.leaves)
+  } catch (e) {
+    errorMsg.value = e.message || 'Prediction failed.'
+  } finally {
+    r.maskLoading = false
+  }
+}
 
 // per-card location change
 function setCountry(r, v) { r.country = v; if (v !== 'Ecuador') r.region = null; r.guess = null; rerank(r) }
@@ -376,10 +392,12 @@ const showAbout = ref(false)
               <div class="mask-bar small text-muted">
                 <template v-if="r.boxes.length">
                   {{ r.boxes.length }} wing mask{{ r.boxes.length > 1 ? 's' : '' }} found.
-                  <template v-if="r.boxes.length > 1">Tap a box to use that one.</template>
+                  <span v-if="r.usedIndex === -2">Using all wings together.</span>
+                  <span v-else-if="r.usedIndex >= 0">Using mask {{ r.usedIndex + 1 }}.</span>
+                  <span v-else>Using full image.</span>
+                  <template v-if="r.boxes.length > 1"> Tap a box to use just that one.</template>
+                  <button v-if="r.usedIndex !== -2" class="btn btn-link btn-sm p-0 ms-1" @click="useAll(r)">Use all wings</button>
                   <button v-if="r.usedIndex !== -1" class="btn btn-link btn-sm p-0 ms-1" @click="useFull(r)">Use full image</button>
-                  <button v-else class="btn btn-link btn-sm p-0 ms-1" @click="useWings(r)">Use wings</button>
-                  <span v-if="r.usedIndex === -1"> · using full image</span>
                 </template>
                 <template v-else>No wings detected — using the full image.</template>
               </div>
