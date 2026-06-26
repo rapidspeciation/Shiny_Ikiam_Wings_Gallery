@@ -448,6 +448,14 @@ const showAbout = ref(false)
             · backbone <a href="https://huggingface.co/imageomics/bioclip-2.5-vith14" target="_blank" rel="noopener noreferrer">BioCLIP 2.5-H</a>
             · <a href="https://huggingface.co/facebook/sam3" target="_blank" rel="noopener noreferrer">SAM 3</a> (wing-mask training labels).
           </p>
+          <p class="mb-1">
+            <strong>Training data:</strong> the subspecies-level taxonomic identifications used to train the
+            classifier were compiled from
+            <a href="https://www.butterfliesofamerica.com" target="_blank" rel="noopener noreferrer">Butterflies of America</a>,
+            <a href="https://www.sangay.eu" target="_blank" rel="noopener noreferrer">Sangay</a>,
+            <a href="https://www.noreste.eu" target="_blank" rel="noopener noreferrer">Noreste</a>, and
+            <a href="https://www.cotacachi.eu" target="_blank" rel="noopener noreferrer">Cotacachi</a>.
+          </p>
           <p class="text-muted mb-0"><strong>This is an AI suggestion, not a definitive identification.</strong></p>
         </div>
       </div>
