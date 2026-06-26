@@ -50,19 +50,20 @@ function computeLayer() {
 
 function initZoom() {
   if (!layer.value || pz) return
-  pz = Panzoom(layer.value, { maxScale: 12, minScale: 0.5, touchAction: 'pan-y', disablePan: true })
+  // disablePan:false so the image is draggable at any zoom (incl. full view). On
+  // touch we keep touchAction 'pan-y' when not zoomed so the page can still scroll
+  // over the image, and switch to 'none' once zoomed in.
+  pz = Panzoom(layer.value, { maxScale: 12, minScale: 0.5, touchAction: 'pan-y', disablePan: false, cursor: 'grab' })
   register(pz)
   const wheelHandler = (e) => { if (e.ctrlKey) { e.preventDefault(); pz.zoomWithWheel(e) } }
   layer.value.parentElement.addEventListener('wheel', wheelHandler)
   pz._wheelHandler = wheelHandler
   layer.value.addEventListener('panzoomzoom', (e) => {
     const s = e.detail.scale
-    pz.setOptions(s > 1.05
-      ? { disablePan: false, touchAction: 'none', cursor: 'move' }
-      : { disablePan: true, touchAction: 'pan-y', cursor: 'grab' })
+    pz.setOptions(s > 1.05 ? { touchAction: 'none', cursor: 'move' } : { touchAction: 'pan-y', cursor: 'grab' })
   })
   layer.value.addEventListener('panzoomreset', () => {
-    pz.setOptions({ disablePan: true, touchAction: 'pan-y', cursor: 'grab' })
+    pz.setOptions({ touchAction: 'pan-y', cursor: 'grab' })
   })
 }
 function destroyZoom() {
