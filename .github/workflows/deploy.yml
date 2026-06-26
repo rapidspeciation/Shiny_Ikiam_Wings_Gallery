@@ -31,6 +31,10 @@ jobs:
 
       - name: Build
         run: npm run build
+        env:
+          # Public HF Space inference API for the AI Identifier tab. Public URL (no
+          # secret) so it lives here; unset -> the tab falls back to mock predictions.
+          VITE_AIID_API: https://fr4nzzch-butterfly-id.hf.space
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
