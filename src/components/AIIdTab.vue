@@ -425,6 +425,11 @@ const showAbout = ref(false)
           rolls those predictions up the taxonomy, keeping them consistent across subspecies, species, genus, and higher
           ranks. To focus it on wing pattern, images are first cropped to the wings by a lightweight wing-segmentation
           model (YOLO26s-seg) trained on wing masks generated with SAM 3.</p>
+          <p><strong>Coverage:</strong> the label space spans Neotropical butterflies across all major families
+          (~3,600 species — Nymphalidae, Hesperiidae, Riodinidae, Lycaenidae, Pieridae, Papilionidae, plus the
+          nocturnal <em>Hedylidae</em> and a few castniid moths). Sampling is uneven, though: the model is built
+          around the <em>Ithomiini</em> mimicry system and is most reliable there — a confident call on a
+          sparsely-sampled group (e.g. skippers, hairstreaks, Hedylidae) should be treated with extra caution.</p>
           <p class="mb-1"><strong>Deployment accuracy</strong> on Sanger specimens (out-of-fold, dorsal+ventral combined,
           with the side-of-Andes + Ecuador prior):</p>
           <table class="table table-sm table-bordered w-auto small">
