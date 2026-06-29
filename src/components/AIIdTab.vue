@@ -7,13 +7,13 @@
 // YOLO wing-crop returns selectable masks: the largest runs on Identify, others run
 // lazily when their bbox is clicked. Reference photos (Sanger first, GBIF fallback)
 // are shown for visual comparison.
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
+import { ref, computed, onMounted, onActivated, onBeforeUnmount } from 'vue'
 import FilterSelect from './FilterSelect.vue'
 import PredictionPanel from './PredictionPanel.vue'
 import AIReferenceGallery from './AIReferenceGallery.vue'
 import AIPhotoView from './AIPhotoView.vue'
 import InferenceProgress from './InferenceProgress.vue'
-import { predictStream, predictOne, rankLeaves, getStatus, makeJobId, HAS_BACKEND } from '../utils/aiPredict.js'
+import { predictStream, predictOne, rankLeaves, getStatus, makeJobId, wakeBackend, HAS_BACKEND } from '../utils/aiPredict.js'
 import { loadCountries, guessRegion } from '../utils/geoPrior.js'
 import { getChecklist } from '../composables/useCurationData.js'
 
@@ -101,6 +101,7 @@ function onPaste(e) {
 }
 
 onMounted(async () => {
+  wakeBackend()   // start waking the Space the moment the tab first opens
   window.addEventListener('dragenter', onWinDragEnter)
   window.addEventListener('dragover', onWinDragOver)
   window.addEventListener('dragleave', onWinDragLeave)
@@ -109,6 +110,8 @@ onMounted(async () => {
   checklist.value = await getChecklist()
   countryOptions.value = [ANY, ...(await loadCountries())]
 })
+// keep-alive caches this tab; re-ping on return in case the Space dozed off meanwhile.
+onActivated(() => wakeBackend())
 onBeforeUnmount(() => {
   window.removeEventListener('dragenter', onWinDragEnter)
   window.removeEventListener('dragover', onWinDragOver)

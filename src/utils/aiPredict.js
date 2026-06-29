@@ -65,6 +65,25 @@ export async function getStatus(jobId = '') {
   }
 }
 
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
+
+// A sleeping/booting/rebuilding Space answers with 502/503/504 (or the fetch just
+// fails). Those are transient: keep retrying so the request rides through the wake
+// instead of erroring out. ~75s of patience covers a normal cold start; past that we
+// surface a friendly "try again" rather than spinning indefinitely on a down server.
+// The progress notification keeps the user informed meanwhile.
+const TRANSIENT = new Set([502, 503, 504, 429])
+const WAKE_RETRIES = 25
+const WAKE_DELAY_MS = 3000
+const isTransientErr = (e) => !!e && (e.transient || /Failed to fetch|NetworkError|Load failed/i.test(String(e.message || e)))
+
+// Fire-and-forget nudge to wake a sleeping Space. Call this when the AI Identifier
+// tab opens so the container boots and the model self-warms BEFORE the user uploads,
+// hiding most of the cold start. Any request wakes the Space; /status is the cheapest.
+export function wakeBackend() {
+  if (API_BASE) getStatus().catch(() => {})
+}
+
 // Fetch RAW leaves for ONE prepared image item. Returns
 //   { id, filename, leaves: [[taxon, prob], ...], wing_box, boxes, mock }
 // opts.box   = [x1,y1,x2,y2] normalised -> embed exactly that wing mask (lazy switch)
@@ -80,14 +99,32 @@ export async function predictOne(f, i = 0, { box = null, yolo = 'auto', jobId = 
   if (box) form.append('box', JSON.stringify(box))
   if (yolo && yolo !== 'auto') form.append('yolo', yolo)
   if (jobId) form.append('job', jobId)
-  const res = await fetch(`${API_BASE}/predict_raw`, { method: 'POST', body: form })
-  if (!res.ok) throw new Error(`Backend ${res.status}`)
-  const json = await res.json()
-  const r = json.results?.[0] || {}
-  return {
-    id, filename: r.filename || f.name, leaves: r.leaves || [],
-    wing_box: r.wing_box || null, boxes: r.boxes || [], mock: !!json.mock,
+
+  let lastErr
+  for (let attempt = 0; attempt <= WAKE_RETRIES; attempt++) {
+    try {
+      const res = await fetch(`${API_BASE}/predict_raw`, { method: 'POST', body: form })
+      if (!res.ok) {
+        const err = new Error(`Backend ${res.status}`)
+        err.transient = TRANSIENT.has(res.status)
+        throw err
+      }
+      const json = await res.json()
+      const r = json.results?.[0] || {}
+      return {
+        id, filename: r.filename || f.name, leaves: r.leaves || [],
+        wing_box: r.wing_box || null, boxes: r.boxes || [], mock: !!json.mock,
+      }
+    } catch (e) {
+      lastErr = e
+      if (!isTransientErr(e) || attempt === WAKE_RETRIES) break
+      await sleep(WAKE_DELAY_MS)   // server waking / rebuilding: wait and retry
+    }
   }
+  if (isTransientErr(lastErr)) {
+    throw new Error('The server is still starting up. Please wait a moment and try Identify again.')
+  }
+  throw lastErr
 }
 
 // How many photos to infer concurrently. The free HF Space is CPU-bound (2 vCPU,
