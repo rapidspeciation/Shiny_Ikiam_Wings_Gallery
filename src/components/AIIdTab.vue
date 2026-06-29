@@ -535,29 +535,31 @@ const showAbout = ref(false)
           About this tool {{ showAbout ? '▾' : '▸' }}
         </button>
         <div v-show="showAbout" class="small mt-2">
-          <p>A model that identifies butterflies from wing photos, used as a curation tool to flag uncertain or
-          mislabelled identifications in the image database. It pairs a frozen <strong>BioCLIP 2.5-H</strong> image
-          backbone (released February 2026) with a hierarchical classification head that predicts the finest taxon and
-          rolls those predictions up the taxonomy, keeping them consistent across subspecies, species, genus, and higher
-          ranks. To focus it on wing pattern, images are first cropped to the wings by a lightweight wing-segmentation
-          model (YOLO26s-seg) trained on wing masks generated with SAM 3.</p>
+          <p>A model that identifies butterflies and nocturnal moths from wing photos, used as a curation tool to flag
+          uncertain or mislabelled identifications in the image database. It pairs a frozen <strong>BioCLIP 2.5-H</strong>
+          image backbone (released February 2026) with a hierarchical classification head that predicts the finest taxon
+          and rolls those predictions up the taxonomy, keeping them consistent across subspecies, species, genus, and
+          higher ranks. To focus it on wing pattern, images are first cropped to the wings by a lightweight
+          wing-segmentation model (YOLO26s-seg) trained on wing masks generated with SAM 3.</p>
           <p><strong>Coverage:</strong> the label space spans Neotropical butterflies across all major families
-          (~3,600 species: Nymphalidae, Hesperiidae, Riodinidae, Lycaenidae, Pieridae, Papilionidae, plus the
-          nocturnal <em>Hedylidae</em> and a few castniid moths). Sampling is very uneven: most of the training
-          data sits in the <em>Ithomiini</em> mimicry radiation, so confident calls on sparsely-sampled groups
-          (skippers, hairstreaks, Hedylidae) warrant extra caution. Even within Ithomiini, Müllerian mimicry makes
-          subspecies look-alikes genuinely hard to tell apart.</p>
+          (Nymphalidae, Hesperiidae, Riodinidae, Lycaenidae, Pieridae, Papilionidae) and now a substantial component of
+          <strong>nocturnal moths</strong> — predominantly <em>Sphingidae</em> (hawkmoths), with Saturniidae, Geometridae,
+          Notodontidae, Erebidae and others — for roughly <strong>4,900 species</strong> in total. Sampling is very
+          uneven: most of the butterfly data sits in the <em>Ithomiini</em> mimicry radiation and most of the moth data
+          in <em>Sphingidae</em>, so confident calls on sparsely-sampled groups (skippers, hairstreaks, micromoths)
+          warrant extra caution. Even within Ithomiini, Müllerian mimicry makes subspecies look-alikes genuinely hard to
+          tell apart.</p>
           <p class="mb-1"><strong>Deployment accuracy</strong> on Sanger specimens (out-of-fold, dorsal+ventral combined,
           with the side-of-Andes + Ecuador prior):</p>
           <table class="table table-sm table-bordered w-auto small">
             <thead><tr><th>Rank</th><th>Top-1</th></tr></thead>
             <tbody>
-              <tr><td>Subspecies</td><td>83.3%</td></tr>
-              <tr><td>Species</td><td>88.9%</td></tr>
-              <tr><td>Genus</td><td>95.2%</td></tr>
+              <tr><td>Subspecies</td><td>84.0%</td></tr>
+              <tr><td>Species</td><td>89.7%</td></tr>
+              <tr><td>Genus</td><td>95.4%</td></tr>
               <tr><td>Tribe</td><td>96.8%</td></tr>
-              <tr><td>Subfamily</td><td>98.8%</td></tr>
-              <tr><td>Family</td><td>99.5%</td></tr>
+              <tr><td>Subfamily</td><td>98.9%</td></tr>
+              <tr><td>Family</td><td>99.4%</td></tr>
             </tbody>
           </table>
           <p class="text-muted">Performance is strong and reliable from genus upward (≥95%); subspecies is the hard
@@ -578,7 +580,10 @@ const showAbout = ref(false)
             <a href="https://www.butterfliesofamerica.com" target="_blank" rel="noopener noreferrer">Butterflies of America</a>,
             <a href="https://www.sangay.eu" target="_blank" rel="noopener noreferrer">Sangay</a>,
             <a href="https://www.noreste.eu" target="_blank" rel="noopener noreferrer">Noreste</a>, and
-            <a href="https://www.cotacachi.eu" target="_blank" rel="noopener noreferrer">Cotacachi</a>.
+            <a href="https://www.cotacachi.eu" target="_blank" rel="noopener noreferrer">Cotacachi</a>, expanded with
+            additional Neotropical butterfly photo databases from across the region and, for the nocturnal moths,
+            specialist collections such as the <a href="https://sphingidae.myspecies.info" target="_blank" rel="noopener noreferrer">Sphingidae
+            Taxonomic Inventory</a> and other hawkmoth/saturniid resources.
           </p>
           <p class="text-muted mb-0"><strong>This is an AI suggestion, not a definitive identification.</strong></p>
         </div>
