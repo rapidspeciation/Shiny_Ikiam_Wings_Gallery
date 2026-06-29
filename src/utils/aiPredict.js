@@ -42,11 +42,35 @@ function mockRawLeaves(filename) {
   return raw.map(([name, p]) => [name, p / s])
 }
 
+// Whether a real backend is configured (vs. the offline demo mock).
+export const HAS_BACKEND = !!API_BASE
+
+// Short random id so the backend can report THIS request's progress at /status?job=.
+export function makeJobId(seed = 'job') {
+  return `${seed}-${Math.random().toString(36).slice(2, 8)}`
+}
+
+// Poll backend liveness + progress. Returns the parsed /status JSON
+//   { mode, stage, ready, queue:{active,waiting,concurrency}, job? }
+// or null if the Space is unreachable (asleep / waking) or no backend is set.
+export async function getStatus(jobId = '') {
+  if (!API_BASE) return null
+  try {
+    const u = jobId ? `${API_BASE}/status?job=${encodeURIComponent(jobId)}` : `${API_BASE}/status`
+    const res = await fetch(u, { cache: 'no-store' })
+    if (!res.ok) return null
+    return await res.json()
+  } catch {
+    return null   // network error == Space asleep / waking
+  }
+}
+
 // Fetch RAW leaves for ONE prepared image item. Returns
 //   { id, filename, leaves: [[taxon, prob], ...], wing_box, boxes, mock }
-// opts.box  = [x1,y1,x2,y2] normalised -> embed exactly that wing mask (lazy switch)
-// opts.yolo = 'off' -> use the whole image (no wing crop)
-export async function predictOne(f, i = 0, { box = null, yolo = 'auto' } = {}) {
+// opts.box   = [x1,y1,x2,y2] normalised -> embed exactly that wing mask (lazy switch)
+// opts.yolo  = 'off' -> use the whole image (no wing crop)
+// opts.jobId = id sent as a (CORS-simple) form field so /status can track this request
+export async function predictOne(f, i = 0, { box = null, yolo = 'auto', jobId = null } = {}) {
   const id = f.id || `img_${i}`
   if (!API_BASE) {
     return { id, filename: f.name, leaves: mockRawLeaves(f.name), wing_box: null, boxes: [], mock: true }
@@ -55,6 +79,7 @@ export async function predictOne(f, i = 0, { box = null, yolo = 'auto' } = {}) {
   form.append('images', f.blob || f.file || f, f.name)
   if (box) form.append('box', JSON.stringify(box))
   if (yolo && yolo !== 'auto') form.append('yolo', yolo)
+  if (jobId) form.append('job', jobId)
   const res = await fetch(`${API_BASE}/predict_raw`, { method: 'POST', body: form })
   if (!res.ok) throw new Error(`Backend ${res.status}`)
   const json = await res.json()
@@ -76,14 +101,16 @@ export const PREDICT_CONCURRENCY = 2
 // Run inference over `files` with a small concurrency pool, invoking
 // onResult(raw, index) as each finishes (streaming) and onError(err, index, file)
 // on a per-photo failure. Resolves when all are done.
-export async function predictStream(files, { concurrency = PREDICT_CONCURRENCY, onResult, onError } = {}) {
+export async function predictStream(files, { concurrency = PREDICT_CONCURRENCY, jobs = [], onStart, onResult, onError } = {}) {
   const list = Array.from(files || [])
   let next = 0
   async function worker() {
     while (next < list.length) {
       const i = next++
+      const jobId = jobs[i] || null
       try {
-        const raw = await predictOne(list[i], i)
+        onStart?.(i, jobId)
+        const raw = await predictOne(list[i], i, { jobId })
         onResult?.(raw, i)
       } catch (e) {
         onError?.(e, i, list[i])

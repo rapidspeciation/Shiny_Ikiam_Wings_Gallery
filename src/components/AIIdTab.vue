@@ -12,7 +12,8 @@ import FilterSelect from './FilterSelect.vue'
 import PredictionPanel from './PredictionPanel.vue'
 import AIReferenceGallery from './AIReferenceGallery.vue'
 import AIPhotoView from './AIPhotoView.vue'
-import { predictStream, predictOne, rankLeaves } from '../utils/aiPredict.js'
+import InferenceProgress from './InferenceProgress.vue'
+import { predictStream, predictOne, rankLeaves, getStatus, makeJobId, HAS_BACKEND } from '../utils/aiPredict.js'
 import { loadCountries, guessRegion } from '../utils/geoPrior.js'
 import { getChecklist } from '../composables/useCurationData.js'
 
@@ -114,6 +115,7 @@ onBeforeUnmount(() => {
   window.removeEventListener('dragleave', onWinDragLeave)
   window.removeEventListener('drop', onWinDrop)
   window.removeEventListener('paste', onPaste)
+  stopPolling()
   items.value.forEach((it) => it.previewUrl && URL.revokeObjectURL(it.previewUrl))
 })
 
@@ -134,6 +136,56 @@ function resetLocation() { country.value = ANY; region.value = null }
 const results = ref([])   // see placeholder shape in run()
 const running = ref(false)
 const errorMsg = ref('')
+
+// ---- live progress notification (waking / loading / queue / analyzing) ----
+// While a batch runs we poll the backend's /status: it reports the model load stage
+// (so a cold Space shows "loading the model"), the queue depth (so a busy Space shows
+// "Nth in line"), and the representative request's step ("yolo"/"features"). null from
+// getStatus means the Space is unreachable, i.e. still waking from sleep.
+const statusInfo = ref(null)
+const activeJobId = ref('')      // most recent in-flight job, for the substage line
+const batchTotal = ref(0)
+const batchDone = ref(0)
+let pollTimer = null
+
+async function pollStatus() { statusInfo.value = await getStatus(activeJobId.value) }
+function startPolling() {
+  if (!HAS_BACKEND || pollTimer) return
+  statusInfo.value = null
+  pollStatus()
+  pollTimer = setInterval(pollStatus, 1200)
+}
+function stopPolling() {
+  if (pollTimer) { clearInterval(pollTimer); pollTimer = null }
+  statusInfo.value = null; activeJobId.value = ''
+}
+
+const SUBSTAGE = { yolo: 'detecting the wings', features: 'extracting wing features' }
+const progress = computed(() => {
+  if (!running.value) return null
+  const total = Math.max(1, batchTotal.value)
+  const counter = total > 1 ? ` (photo ${Math.min(batchDone.value + 1, total)} of ${total})` : ''
+  const frac = batchDone.value / total
+  if (!HAS_BACKEND) {
+    return { kind: 'analyzing', title: 'Analyzing' + counter, detail: 'Running the offline demo model.', progress: frac }
+  }
+  const s = statusInfo.value
+  if (s === null) {
+    return { kind: 'waking', title: 'Waking up the server',
+      detail: 'The free server sleeps when idle; the first wake can take up to a minute.', progress: null }
+  }
+  if (!s.ready) {
+    return { kind: 'loading', title: 'Loading the model',
+      detail: 'Getting BioCLIP ready on the server (first run only).', progress: null }
+  }
+  const waiting = s.queue?.waiting || 0
+  if (waiting > 0) {
+    return { kind: 'queued', title: 'Waiting in queue',
+      detail: `${waiting} request${waiting > 1 ? 's' : ''} ahead of you`, progress: null }
+  }
+  const sub = SUBSTAGE[s.job] ? `, ${SUBSTAGE[s.job]}` : ''
+  return { kind: 'analyzing', title: 'Analyzing' + counter, detail: `On the server${sub}.`, progress: frac }
+})
 
 function rerank(r) {
   r.pred = rankLeaves(r.leaves, checklist.value, { country: cParam(r.country), side: sideOf(r.region) })
@@ -162,6 +214,9 @@ async function run() {
   const pending = pendingItems.value
   if (!pending.length) return
   running.value = true; errorMsg.value = ''
+  batchTotal.value = pending.length; batchDone.value = 0
+  const jobs = pending.map((it) => makeJobId(it.id))
+  startPolling()
   const noLoc = !hasLocation.value
   for (const it of pending) {
     const placeholder = {
@@ -177,7 +232,10 @@ async function run() {
   }
   try {
     await predictStream(pending, {
+      jobs,
+      onStart: (i, jobId) => { activeJobId.value = jobId || '' },
       onResult: (raw) => {
+        batchDone.value++
         const r = byId(raw.id); if (!r) return
         r.boxes = raw.boxes || []
         r.unionBox = raw.wing_box || null          // union of all masks (the default crop)
@@ -187,6 +245,7 @@ async function run() {
         applyLeaves(r, raw.leaves, noLoc)
       },
       onError: (e, i, file) => {
+        batchDone.value++
         const r = byId(file.id); if (r) { r.loading = false; r.error = e.message || 'Prediction failed.' }
       },
     })
@@ -194,6 +253,7 @@ async function run() {
     errorMsg.value = e.message || 'Prediction failed.'
   } finally {
     running.value = false
+    stopPolling()
   }
 }
 
@@ -277,6 +337,10 @@ const showAbout = ref(false)
     <div v-show="dragActive" class="drop-overlay" aria-hidden="true">
       <div class="drop-overlay-inner">Drop photo(s) anywhere to add them</div>
     </div>
+
+    <!-- live progress notification (waking / loading / queue / analyzing) -->
+    <InferenceProgress :show="!!progress" :kind="progress?.kind || 'analyzing'"
+      :title="progress?.title || ''" :detail="progress?.detail || ''" :progress="progress?.progress ?? null" />
 
     <!-- Upload + prior controls -->
     <div class="row g-3">
