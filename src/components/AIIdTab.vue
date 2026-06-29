@@ -7,7 +7,7 @@
 // YOLO wing-crop returns selectable masks: the largest runs on Identify, others run
 // lazily when their bbox is clicked. Reference photos (Sanger first, GBIF fallback)
 // are shown for visual comparison.
-import { ref, computed, onMounted, onActivated, onBeforeUnmount } from 'vue'
+import { ref, computed, watch, onMounted, onActivated, onDeactivated, onBeforeUnmount } from 'vue'
 import FilterSelect from './FilterSelect.vue'
 import PredictionPanel from './PredictionPanel.vue'
 import AIReferenceGallery from './AIReferenceGallery.vue'
@@ -101,7 +101,7 @@ function onPaste(e) {
 }
 
 onMounted(async () => {
-  wakeBackend()   // start waking the Space the moment the tab first opens
+  wakeBackend(); startWarm()   // wake the Space + show its warm state the moment the tab opens
   window.addEventListener('dragenter', onWinDragEnter)
   window.addEventListener('dragover', onWinDragOver)
   window.addEventListener('dragleave', onWinDragLeave)
@@ -110,9 +110,12 @@ onMounted(async () => {
   checklist.value = await getChecklist()
   countryOptions.value = [ANY, ...(await loadCountries())]
 })
-// keep-alive caches this tab; re-ping on return in case the Space dozed off meanwhile.
-onActivated(() => wakeBackend())
+// keep-alive caches this tab; re-ping + re-show warm state on return in case it dozed off.
+onActivated(() => { wakeBackend(); startWarm() })
+// leaving the tab: drop the warm notice and stop the idle poll (a running batch keeps its own).
+onDeactivated(() => endWarm())
 onBeforeUnmount(() => {
+  if (readyTimer) { clearTimeout(readyTimer); readyTimer = null }
   window.removeEventListener('dragenter', onWinDragEnter)
   window.removeEventListener('dragover', onWinDragOver)
   window.removeEventListener('dragleave', onWinDragLeave)
@@ -164,8 +167,9 @@ function stopPolling() {
 }
 
 const SUBSTAGE = { yolo: 'detecting the wings', features: 'extracting wing features' }
-const progress = computed(() => {
-  if (!running.value) return null
+
+// Notice shown WHILE a batch is running: analyzing / loading / queue / waking.
+function runningNotice() {
   const total = Math.max(1, batchTotal.value)
   const counter = total > 1 ? ` (photo ${Math.min(batchDone.value + 1, total)} of ${total})` : ''
   const frac = batchDone.value / total
@@ -188,6 +192,49 @@ const progress = computed(() => {
   }
   const sub = SUBSTAGE[s.job] ? `, ${SUBSTAGE[s.job]}` : ''
   return { kind: 'analyzing', title: 'Analyzing' + counter, detail: `On the server${sub}.`, progress: frac }
+}
+
+// ---- pre-identify warm-up indicator ----
+// On tab open we already ping the Space (wakeBackend). This surfaces that state so the
+// user knows whether the server is waking, loading, or already ready BEFORE they upload.
+// The "ready" confirmation auto-dismisses after a couple of seconds.
+const warmActive = ref(false)
+let readyTimer = null
+
+function warmNotice() {
+  const s = statusInfo.value
+  if (s === null) {
+    return { kind: 'waking', title: 'Warming up the server',
+      detail: 'The free server sleeps when idle; getting it ready so identifying is quick.', progress: null }
+  }
+  if (!s.ready) {
+    return { kind: 'loading', title: 'Warming up the model',
+      detail: 'Getting BioCLIP ready on the server (first run only).', progress: null }
+  }
+  return { kind: 'ready', title: 'Server ready', detail: 'Upload a photo and hit Identify.', progress: 1 }
+}
+
+function startWarm() {
+  if (!HAS_BACKEND || running.value || warmActive.value) return
+  warmActive.value = true
+  startPolling()
+  // already known-ready (e.g. returning to the tab): show the brief confirmation
+  if (statusInfo.value?.ready && !readyTimer) readyTimer = setTimeout(endWarm, 2600)
+}
+function endWarm() {
+  warmActive.value = false
+  if (readyTimer) { clearTimeout(readyTimer); readyTimer = null }
+  if (!running.value) stopPolling()
+}
+// When the Space reports ready during warm-up, flash the green confirmation then hide.
+watch(() => !!(statusInfo.value && statusInfo.value.ready), (ready) => {
+  if (ready && warmActive.value && !running.value && !readyTimer) readyTimer = setTimeout(endWarm, 2600)
+})
+
+const progress = computed(() => {
+  if (running.value) return runningNotice()
+  if (warmActive.value) return warmNotice()
+  return null
 })
 
 function rerank(r) {
@@ -217,6 +264,8 @@ async function run() {
   const pending = pendingItems.value
   if (!pending.length) return
   running.value = true; errorMsg.value = ''
+  warmActive.value = false                              // the run notice takes over
+  if (readyTimer) { clearTimeout(readyTimer); readyTimer = null }
   batchTotal.value = pending.length; batchDone.value = 0
   const jobs = pending.map((it) => makeJobId(it.id))
   startPolling()

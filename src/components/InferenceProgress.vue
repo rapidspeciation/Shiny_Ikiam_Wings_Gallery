@@ -25,7 +25,11 @@ const pct = computed(() =>
 <template>
   <Transition name="ip-pop">
     <div v-if="show" class="ip" role="status" aria-live="polite" :data-kind="kind">
-      <div class="ip-spin" aria-hidden="true"></div>
+      <div v-if="kind !== 'ready'" class="ip-spin" aria-hidden="true"></div>
+      <div v-else class="ip-check" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+          stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg>
+      </div>
       <div class="ip-body">
         <div class="ip-title">{{ title }}</div>
         <div v-if="detail" class="ip-detail">{{ detail }}</div>
@@ -59,6 +63,7 @@ const pct = computed(() =>
 .ip[data-kind="loading"]  { --accent: #6366f1; }
 .ip[data-kind="queued"]   { --accent: #0ea5e9; }
 .ip[data-kind="analyzing"]{ --accent: #16a34a; }
+.ip[data-kind="ready"]    { --accent: #16a34a; }
 
 .ip-spin {
   flex: 0 0 auto;
@@ -70,6 +75,17 @@ const pct = computed(() =>
   mask: radial-gradient(closest-side, transparent 64%, #000 66%);
   animation: ip-rot .8s linear infinite;
 }
+.ip-check {
+  flex: 0 0 auto;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent);
+  animation: ip-pop-in .25s ease;
+}
+@keyframes ip-pop-in { from { transform: scale(.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 .ip-body { flex: 1 1 auto; min-width: 0; }
 .ip-title {
   font-size: .9rem;
