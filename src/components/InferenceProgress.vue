@@ -11,29 +11,44 @@ import { computed } from 'vue'
 
 const props = defineProps({
   show: { type: Boolean, default: false },
-  kind: { type: String, default: 'analyzing' }, // waking | loading | queued | analyzing
+  kind: { type: String, default: 'analyzing' }, // waking | loading | queued | analyzing | down | ready
   title: { type: String, default: '' },
   detail: { type: String, default: '' },
   progress: { type: Number, default: null },    // null = indeterminate
+  retryable: { type: Boolean, default: false }, // show a Retry button (used by the 'down' state)
 })
+
+const emit = defineEmits(['retry'])
 
 const pct = computed(() =>
   props.progress == null ? null : Math.max(0, Math.min(100, Math.round(props.progress * 100))),
 )
+// The 'down' state is terminal (server unreachable/errored): no progress bar, an alert
+// glyph instead of the spinner, and a Retry affordance.
+const isDown = computed(() => props.kind === 'down')
+const showBar = computed(() => props.kind !== 'ready' && !isDown.value)
 </script>
 
 <template>
   <Transition name="ip-pop">
-    <div v-if="show" class="ip" role="status" aria-live="polite" :data-kind="kind">
-      <div v-if="kind !== 'ready'" class="ip-spin" aria-hidden="true"></div>
-      <div v-else class="ip-check" aria-hidden="true">
+    <div v-if="show" class="ip" :role="isDown ? 'alert' : 'status'" aria-live="polite" :data-kind="kind">
+      <div v-if="kind === 'ready'" class="ip-check" aria-hidden="true">
         <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
           stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg>
       </div>
+      <div v-else-if="isDown" class="ip-alert" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+          stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z" />
+          <line x1="12" y1="9" x2="12" y2="13" /><line x1="12" y1="17" x2="12.01" y2="17" />
+        </svg>
+      </div>
+      <div v-else class="ip-spin" aria-hidden="true"></div>
       <div class="ip-body">
         <div class="ip-title">{{ title }}</div>
         <div v-if="detail" class="ip-detail">{{ detail }}</div>
-        <div class="ip-bar" :class="{ indet: pct === null }">
+        <button v-if="retryable" type="button" class="ip-retry" @click="emit('retry')">Try again</button>
+        <div v-if="showBar" class="ip-bar" :class="{ indet: pct === null }">
           <div class="ip-fill" :style="pct === null ? null : { width: pct + '%' }"></div>
         </div>
       </div>
@@ -64,6 +79,7 @@ const pct = computed(() =>
 .ip[data-kind="queued"]   { --accent: #0ea5e9; }
 .ip[data-kind="analyzing"]{ --accent: #16a34a; }
 .ip[data-kind="ready"]    { --accent: #16a34a; }
+.ip[data-kind="down"]     { --accent: #ef4444; }
 
 .ip-spin {
   flex: 0 0 auto;
@@ -75,7 +91,7 @@ const pct = computed(() =>
   mask: radial-gradient(closest-side, transparent 64%, #000 66%);
   animation: ip-rot .8s linear infinite;
 }
-.ip-check {
+.ip-check, .ip-alert {
   flex: 0 0 auto;
   width: 26px;
   height: 26px;
@@ -85,6 +101,19 @@ const pct = computed(() =>
   color: var(--accent);
   animation: ip-pop-in .25s ease;
 }
+.ip-retry {
+  margin-top: .5rem;
+  font: inherit;
+  font-size: .78rem;
+  font-weight: 600;
+  color: #fff;
+  background: var(--accent);
+  border: none;
+  border-radius: 8px;
+  padding: .35rem .75rem;
+  cursor: pointer;
+}
+.ip-retry:hover { filter: brightness(1.05); }
 @keyframes ip-pop-in { from { transform: scale(.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 .ip-body { flex: 1 1 auto; min-width: 0; }
 .ip-title {

@@ -149,21 +149,60 @@ const errorMsg = ref('')
 // "Nth in line"), and the representative request's step ("yolo"/"features"). null from
 // getStatus means the Space is unreachable, i.e. still waking from sleep.
 const statusInfo = ref(null)
+const pollTick = ref(0)          // bumps each poll so the time-based "down" cutoff re-evaluates
 const activeJobId = ref('')      // most recent in-flight job, for the substage line
 const batchTotal = ref(0)
 const batchDone = ref(0)
 let pollTimer = null
+let pollStartAt = 0              // ms epoch when the current wake/poll window began
 
-async function pollStatus() { statusInfo.value = await getStatus(activeJobId.value) }
+// How long to wait before declaring the server DOWN instead of "still waking". A cold
+// HF Space wake + BioCLIP load runs ~1-2 min; past these the frontend stops spinning
+// forever (the old bug) and shows an honest, retryable error instead.
+const WAKE_GRACE_MS = 90000      // status unreachable (getStatus === null)
+const LOAD_GRACE_MS = 210000     // reachable but never becomes ready (loading/degraded)
+
+async function pollStatus() {
+  statusInfo.value = await getStatus(activeJobId.value)
+  pollTick.value++
+}
 function startPolling() {
   if (!HAS_BACKEND || pollTimer) return
   statusInfo.value = null
+  pollStartAt = Date.now()
   pollStatus()
   pollTimer = setInterval(pollStatus, 1200)
 }
 function stopPolling() {
   if (pollTimer) { clearInterval(pollTimer); pollTimer = null }
-  statusInfo.value = null; activeJobId.value = ''
+  statusInfo.value = null; activeJobId.value = ''; pollStartAt = 0
+}
+// User hit "Try again" on the down notice: restart the wake window and re-ping. Any
+// request wakes the Space; if the backend auto-heals meanwhile, the next poll flips
+// the notice back to ready on its own.
+function retryWarm() {
+  pollStartAt = Date.now()
+  wakeBackend()
+  pollStatus()
+}
+
+// Shared "is the server actually down?" check for both the warm and running notices.
+// Returns a terminal 'down' notice (red, retryable) once we're past the grace window,
+// or null while it's still plausibly just waking/loading.
+function downNotice(s, elapsed) {
+  if (s === null && elapsed > WAKE_GRACE_MS) {
+    return { kind: 'down', title: 'Identifier is unavailable', retryable: true, progress: null,
+      detail: 'The server is not responding. It may be down or restarting. Please try again shortly.' }
+  }
+  if (s && s.stage === 'degraded' && elapsed > LOAD_GRACE_MS) {
+    return { kind: 'down', title: 'The model failed to load', retryable: true, progress: null,
+      detail: 'The server is up but the model is not loading. It keeps retrying; please try again in a minute.' }
+  }
+  if (s && !s.ready && s.stage !== 'degraded' && elapsed > LOAD_GRACE_MS) {
+    return { kind: 'down', title: 'Identifier is unavailable', retryable: true, progress: null,
+      detail: 'The model did not become ready in time. Please try again shortly.' }
+  }
+  return null
 }
 
 const SUBSTAGE = { yolo: 'detecting the wings', features: 'extracting wing features' }
@@ -177,6 +216,8 @@ function runningNotice() {
     return { kind: 'analyzing', title: 'Analyzing' + counter, detail: 'Running the offline demo model.', progress: frac }
   }
   const s = statusInfo.value
+  const down = downNotice(s, pollStartAt ? Date.now() - pollStartAt : 0)
+  if (down) return down
   if (s === null) {
     return { kind: 'waking', title: 'Waking up the server',
       detail: 'The free server sleeps when idle; the first wake can take up to a minute.', progress: null }
@@ -203,9 +244,15 @@ let readyTimer = null
 
 function warmNotice() {
   const s = statusInfo.value
+  const down = downNotice(s, pollStartAt ? Date.now() - pollStartAt : 0)
+  if (down) return down
   if (s === null) {
     return { kind: 'waking', title: 'Warming up the server',
       detail: 'The free server sleeps when idle; getting it ready so identifying is quick.', progress: null }
+  }
+  if (s.stage === 'degraded') {
+    return { kind: 'loading', title: 'Warming up the model',
+      detail: 'The model is taking longer than usual to load; the server is retrying.', progress: null }
   }
   if (!s.ready) {
     return { kind: 'loading', title: 'Warming up the model',
@@ -232,6 +279,7 @@ watch(() => !!(statusInfo.value && statusInfo.value.ready), (ready) => {
 })
 
 const progress = computed(() => {
+  void pollTick.value   // re-evaluate each poll so the elapsed-time "down" cutoff fires
   if (running.value) return runningNotice()
   if (warmActive.value) return warmNotice()
   return null
@@ -392,7 +440,8 @@ const showAbout = ref(false)
 
     <!-- live progress notification (waking / loading / queue / analyzing) -->
     <InferenceProgress :show="!!progress" :kind="progress?.kind || 'analyzing'"
-      :title="progress?.title || ''" :detail="progress?.detail || ''" :progress="progress?.progress ?? null" />
+      :title="progress?.title || ''" :detail="progress?.detail || ''" :progress="progress?.progress ?? null"
+      :retryable="!!progress?.retryable" @retry="retryWarm" />
 
     <!-- Upload + prior controls -->
     <div class="row g-3">
