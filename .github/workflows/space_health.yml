@@ -1,22 +1,25 @@
 name: HF Space keep-alive + auto-heal
 
 # Two jobs-in-one on a schedule:
-#   1. KEEP-ALIVE  - ping /status so the free Space never idles into a cold sleep
-#                    (the cold wake is what crash-looped it into RUNTIME_ERROR before).
+#   1. KEEP-ALIVE  - ping /status every 4 h. The free Space only sleeps after 48 h
+#                    without traffic (gcTimeout=172800s), so this keeps it warm.
+#                    Even a true cold boot is now safe: verified 2026-08-06, fresh
+#                    container -> API answering in seconds -> model ready in ~20-30 s.
 #   2. AUTO-HEAL   - if the Space is unreachable/errored, query the HF runtime API and,
 #                    when it reports RUNTIME_ERROR/PAUSED, POST a restart so it recovers
 #                    on its own instead of staying dead until someone notices.
 #
-# The backend now runs the model in an isolated subprocess, so the API process should
-# never die and RUNTIME_ERROR should not recur. This workflow is the belt-and-suspenders
-# backstop + it keeps cold starts rare.
+# The backend runs the model in an isolated subprocess, so the API process never dies
+# and RUNTIME_ERROR should not recur; this workflow is a low-frequency backstop.
+# History: originally ran every 10 min, which spun up ~144 runner VMs/day for one curl
+# each (and GitHub coalesced it to ~2 h anyway). Reduced to 4 h on 2026-08-06.
 #
 # SETUP: add a repo secret HF_TOKEN (a Hugging Face token with write access to the
 # Space) to enable AUTO-HEAL restarts. Without it, only KEEP-ALIVE runs.
 
 on:
   schedule:
-    - cron: '*/10 * * * *'   # every ~10 min (GitHub may delay/coalesce scheduled runs)
+    - cron: '0 */4 * * *'   # every 4 h (GitHub may delay/coalesce scheduled runs)
   workflow_dispatch:
 
 permissions:
