@@ -1,0 +1,26 @@
+{
+  "audit_version": "feature-crop-audit-v1",
+  "source": "wings_taxhead_padded_rc1_20260901",
+  "status": "complete",
+  "feature_rows": 25894,
+  "terminal_rows": 25894,
+  "terminal_status_counts": {"success": 25894},
+  "training_manifest_rows": 25894,
+  "feature_array": {
+    "path": "output/features-all.npy",
+    "bytes": 106061952,
+    "sha256": "b4ead7966f76a3777d58c48966d9adcb6a2dc5341e979c4ea44c8cde624c8f0a"
+  },
+  "training_manifest": {
+    "path": "output/training-manifest.jsonl",
+    "bytes": 9098249,
+    "sha256": "10297f6a7787537407d0ce0f4252a3375742a1c1d604764cd38916ceb606aa32"
+  },
+  "checks": {
+    "row_count_matches_terminal_ledger": true,
+    "all_terminal_rows_success": true,
+    "crop_coordinates_recorded_in_manifest": false,
+    "mask_provenance_recorded_in_manifest": false
+  },
+  "note": "The retained manifest is a feature-crop accounting ledger; it does not persist imageUnionBboxNorm or masks, so pixel-level crop reconstruction is not claimed from this artifact."
+}
