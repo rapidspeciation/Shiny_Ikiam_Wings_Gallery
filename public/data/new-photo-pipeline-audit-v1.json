@@ -4,9 +4,8 @@
   "new_cam_ids": 269,
   "new_photo_rows": 556,
   "status_counts": {
-    "ok": 551,
-    "download_error": 5
+    "ok": 556
   },
-  "all_new_photos_processed": false,
-  "results_sha256": "15f35633093a94701a92594cc7cece981ddb575b9eb87790eff4c889f253e031"
+  "all_new_photos_processed": true,
+  "results_sha256": "bdbf7cbcc0d7e89f8325d0b80c0de8817e45bfc534cacfc31618177aab6ea62d"
 }
