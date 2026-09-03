@@ -170,8 +170,10 @@ test('current-segmenter identity recovery ledger distinguishes missing inference
   assert.equal(recoveryLedger.counts.absent_current_inference_or_identity_join, 181)
   assert.equal(recoveryLedger.counts.projection_failure_after_successful_ledger, 65)
   assert.equal(recoveryLedger.counts.missing_source_manifest, 16)
-  assert.equal(recoveryLedger.cam077727.terminal_current_inference, 'absent')
+  assert.equal(recoveryLedger.cam077727.terminal_current_inference, 'detected')
   assert.equal(recoveryLedger.cam077727.legacy_boxes_not_used, true)
+  assert.equal(boxes.CAM077727d.length, 4)
+  assert.ok(boxes.CAM077727d.every(row => row.model.includes('current-segmenter')))
 })
 
 test('upstream review surface retains prediction controls and wing-box behavior', () => {

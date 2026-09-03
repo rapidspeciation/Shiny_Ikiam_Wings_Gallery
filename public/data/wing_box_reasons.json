@@ -77200,12 +77200,13 @@
     "uses_full_image": false
   },
   "cam077727d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM077727d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 26640; source 03097_CAM077727d__Ithomia_amarilla.jpg",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam077728d": {
     "exclusion_reason": null,
