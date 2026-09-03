@@ -134,16 +134,17 @@ test('missing reason ledger covers historical rows and frozen zero-detection ful
   }
 })
 
-test('Wings-v6 geometry unions all valid biological detections with padding, aspect and clamp', () => {
+test('Zoom to wings uses tight union coordinates with aspect and clamp', () => {
   const box = unionBox([
     { box: [0.2, 0.3, 0.4, 0.6] },
     { box: [0.6, 0.1, 0.9, 0.4] },
     { box: [-1, 0, 0.2, 0.2] },
     { box: [0.4, 0.4, 0.4, 0.5] }
-  ], { padding: 0.03, aspect: 1.15 })
+  ], { padding: 0, aspect: 1.15 })
   assert.ok(box)
   assert.ok(box.x1 >= 0 && box.y1 >= 0 && box.x2 <= 1 && box.y2 <= 1)
-  assert.ok(box.x1 < 0.2 && box.x2 > 0.9)
+  assert.equal(box.x1, 0.2)
+  assert.equal(box.x2, 0.9)
   assert.ok(unionBox([]) === null)
   assert.ok(unionBoxScale(box) > 1)
   for (const key of ['CAM070697d', 'CAM074338v', 'CAM072949d', 'CAM075867v1']) {
@@ -156,6 +157,7 @@ test('upstream review surface retains prediction controls and wing-box behavior'
   const collection = readFileSync('src/components/CollectionTab.vue', 'utf8')
   const panel = readFileSync('src/components/PredictionPanel.vue', 'utf8')
   const photo = readFileSync('src/components/PhotoCard.vue', 'utf8')
+  assert.match(photo, /unionBox\(st\.boxes, \{ padding: 0, aspect: 1\.15 \}\)/)
   for (const token of ['Model vs recorded', 'Show Photos']) assert.match(collection, new RegExp(token))
   for (const token of ['Model predictions', 'pred-tree']) assert.match(panel, new RegExp(token))
   assert.doesNotMatch(collection, /Candidate D audit|Open disagreements/)

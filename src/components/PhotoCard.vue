@@ -146,7 +146,7 @@ const applyWingFrame = (index) => {
   const pz = pzInstances[index]
   const st = photoState[index]
   if (!el || !pz || !st || !st.loaded) return
-  const u = unionBox(st.boxes, { padding: 0.03, aspect: 1.15 })
+  const u = unionBox(st.boxes, { padding: 0, aspect: 1.15 })
   if (!u) { pz.reset({ animate: false }); return }
   const W = el.offsetWidth, H = el.offsetHeight
   if (!W || !H) return
