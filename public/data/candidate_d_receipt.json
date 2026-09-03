@@ -3,7 +3,15 @@
     "oleria onega jaranilla": "Oleria onega janarilla",
     "vanessa brasiliensis": "Vanessa braziliensis"
   },
+  "authoritative_join_audit": {
+    "canonical_synonym_matches": 1,
+    "corrected_mismatches": 2887,
+    "exact_matches": 14285,
+    "missing_authoritative_records": 348,
+    "true_source_disagreements": 2887
+  },
   "box_reasons_sha256": "b1abccce5b9628552c72087a8bb066c429bac53d6130a09b982dedc47518025b",
+  "cam077706_recorded_subspecies": "Hypothyris euclea intermedia",
   "candidate_checkpoint_sha256": "2e7e14103388f199b96da7a489d89e49d8942611620a2414201b31df5059813f",
   "candidate_oof_camids": 3022,
   "cell": "D_padded_guides_support1",
@@ -25,7 +33,7 @@
   },
   "missing_reasons_sha256": "46c633810b4bf9951c9d1e8f132278ec217e3849bdddf3a3860524f006baf9ef",
   "mode": "equal_image",
-  "predictions_sha256": "1a3d38d9722b560a4617081beae2acf9ccfc9f8cd71f48e4b2957af0c16dacfb",
+  "predictions_sha256": "4b1589a8da1bf9a646535cfce7fe033c1fd130e5a1411763e3c9eee95e8e275e",
   "rank_rows": {
     "family": 3022,
     "genus": 3022,

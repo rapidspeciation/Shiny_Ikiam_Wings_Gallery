@@ -3,7 +3,6 @@ import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import {
-  AUDIT_RANKS,
   canonicalTaxon,
   predictionDiffers,
   rankComparison
@@ -41,9 +40,8 @@ test('candidate-D replaces the default prediction payload without historical fal
   assert.equal(first.seed, 1701)
   assert.equal(first.cell, 'D_padded_guides_support1')
   assert.equal(first.model_meta.display_seed_rule.includes('no test-set seed shopping'), true)
+  assert.equal(first.rank_predictions.species.top5_available, true)
   assert.equal(first.rank_predictions.species.top5_labels_available, false)
-  assert.equal(first.rank_predictions.species.top5_correct, false)
-  assert.equal('species_all' in first && first.species_all.length <= 1, true)
 })
 
 test('canonical synonyms apply before comparison and display', () => {
@@ -84,6 +82,15 @@ test('rank-aware disagreement and missing states are explicit', () => {
   assert.equal(rankComparison(record('Morpho helenor'), null, 'species').status, 'missing')
 })
 
+test('authoritative collection taxonomy fixes CAM077706 and prevents false disagreement', () => {
+  const cam = candidate.CAM077706
+  assert.equal(cam.recorded_taxonomy.canonical.subspecies, 'Hypothyris euclea intermedia')
+  assert.equal(cam.rank_predictions.subspecies.prediction, 'Hypothyris euclea intermedia')
+  const item = { Genus: 'Hypothyris', Species: 'Hypothyris euclea', Subspecies_Form: 'intermedia' }
+  assert.equal(predictionDiffers(item, cam, 'subspecies'), false)
+  assert.equal(cam.recorded_taxonomy.canonical.genus, 'Hypothyris')
+})
+
 test('model confidence sorting uses selected candidate rank and missing rows sort last descending', () => {
   const items = [{ CAM_ID: 'CAM-A' }, { CAM_ID: 'CAM-B' }, { CAM_ID: 'CAM-C' }]
   const map = {
@@ -95,12 +102,12 @@ test('model confidence sorting uses selected candidate rank and missing rows sor
   assert.deepEqual(sortItems(items, 'ModelConfidence', 'asc', map).map(item => item.CAM_ID), ['CAM-C', 'CAM-A', 'CAM-B'])
 })
 
-test('top-five contract exposes only membership, never fabricated ranked labels', () => {
+test('top-five contract never fabricates ranked labels when fold outputs are unavailable', () => {
   const row = candidate.CAM042391.rank_predictions.species
   assert.equal(row.top5_available, true)
   assert.equal(row.top5_labels_available, false)
   assert.equal(Object.hasOwn(row, 'top5_labels'), false)
-  assert.match(readFileSync('src/components/PredictionPanel.vue', 'utf8'), /membership only/)
+  assert.equal(readFileSync('public/data/candidate_d_receipt.json', 'utf8').includes('top5_labels_available'), true)
 })
 
 test('missing reason ledger covers historical rows and frozen zero-detection full-image rows', () => {
@@ -135,13 +142,14 @@ test('Wings-v6 geometry unions all valid biological detections with padding, asp
   }
 })
 
-test('review surface advertises rank audit, direct disagreement URL, and mobile-safe review controls', () => {
+test('upstream review surface retains prediction controls and wing-box behavior', () => {
   const collection = readFileSync('src/components/CollectionTab.vue', 'utf8')
   const panel = readFileSync('src/components/PredictionPanel.vue', 'utf8')
   const photo = readFileSync('src/components/PhotoCard.vue', 'utf8')
-  for (const token of ['Open disagreements', 'Candidate D audit by rank', 'reviewRank', 'Synonym-only']) assert.match(collection, new RegExp(token.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')))
-  for (const token of ['Recorded label', 'Predicted label', 'Top-5 contains recorded label', 'membership only']) assert.match(panel, new RegExp(token.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')))
+  for (const token of ['Model vs recorded', 'Show Photos']) assert.match(collection, new RegExp(token))
+  for (const token of ['Model predictions', 'pred-tree']) assert.match(panel, new RegExp(token))
+  assert.doesNotMatch(collection, /Candidate D audit|Open disagreements/)
+  assert.doesNotMatch(panel, /membership only|Model rank review/)
   assert.match(photo, /getBoxReason/)
   assert.match(panel, /max-width: 576px/)
-  assert.deepEqual(AUDIT_RANKS, ['family', 'subfamily', 'tribe', 'genus', 'species', 'subspecies'])
 })

@@ -51,8 +51,8 @@ const hasRecordedSubsp = computed(() => !!recordedSubsp.value)
 // mark where the database (recorded) taxon sits in the model's tree.
 // Prefer the canonical recorded label (pred.rec, matches the leaf names); fall back
 // to the raw collection.json values.
-const recSpeciesLc = computed(() => (pred.value?.rec?.species || recordedSpecies.value || '').toLowerCase())
-const recSubspLc = computed(() => (pred.value?.rec?.subsp || (hasRecordedSubsp.value ? recordedTaxon.value : '') || '').toLowerCase())
+const recSpeciesLc = computed(() => (recordedSpecies.value || '').toLowerCase())
+const recSubspLc = computed(() => ((hasRecordedSubsp.value ? recordedTaxon.value : '') || '').toLowerCase())
 const isRecSpecies = (t) => !!recSpeciesLc.value && t.toLowerCase() === recSpeciesLc.value
 const isRecSubsp = (t) => !!recSubspLc.value && t.toLowerCase() === recSubspLc.value
 
@@ -402,28 +402,6 @@ watch([camid, () => props.prediction], load, { immediate: true })
       </div>
 
       <template v-else>
-        <div class="rank-review mt-1 mb-2" aria-label="Model rank review">
-          <div class="pred-group-title">Model rank review · recorded taxonomy kept separate</div>
-          <div class="rank-review-grid small">
-            <div class="rank-review-head">Rank</div><div class="rank-review-head">Recorded label</div><div class="rank-review-head">Predicted label</div><div class="rank-review-head">Confidence</div><div class="rank-review-head">Top-5 contains recorded label</div>
-            <template v-for="row in rankRows" :key="`review-${row.rank}`">
-              <div class="rank-review-cell text-capitalize">{{ row.rank }}</div>
-              <div class="rank-review-cell" :title="row.recordedRaw && row.recordedRaw !== row.recorded ? `Raw recorded: ${row.recordedRaw}` : ''">{{ row.recorded || '—' }}</div>
-              <div class="rank-review-cell" :class="{ 'text-warning-emphasis': row.status === 'disagreement' }">{{ row.predicted || '—' }}</div>
-              <div class="rank-review-cell tabular">{{ row.confidence === null ? '—' : fmtPct(row.confidence) }}</div>
-              <div class="rank-review-cell">
-                <span v-if="row.top5Available">{{ top5Text(row) }}</span><span v-else>Not recorded</span>
-                <span v-if="row.top5Available && !row.top5LabelsAvailable" class="text-muted" title="Frozen rows record membership only, not the ranked labels."> · membership only</span>
-                <span v-if="rankMissingReasons[row.rank]" class="text-muted"> · {{ publicReason(rankMissingReasons[row.rank]) }}</span>
-                <span v-if="row.status === 'synonym-only'" class="badge text-bg-info-subtle border border-info-subtle ms-1">synonym-only</span>
-              </div>
-            </template>
-          </div>
-        </div>
-        <p v-if="!hasRecordedSubsp && suggestedSubsp" class="small text-info-emphasis mb-1 mt-1">
-          No subspecies recorded &mdash; model suggests <em>{{ suggestedSubsp }}</em>.
-        </p>
-
         <div class="pred-tree mt-1">
           <template v-for="g in tree" :key="'g-' + g.taxon">
             <!-- Genus row -->

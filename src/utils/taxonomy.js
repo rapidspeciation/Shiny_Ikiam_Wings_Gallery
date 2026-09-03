@@ -85,28 +85,18 @@ export function predictionRank(pred, rank) {
   }
 }
 
-function recordedFromPrediction(pred) {
-  if (pred?.recorded_taxonomy?.canonical) return pred.recorded_taxonomy.canonical
-  if (pred?.rec) {
-    return {
-      genus: canonicalTaxon(pred.rec.genus),
-      species: canonicalTaxon(pred.rec.species),
-      subspecies: canonicalTaxon(pred.rec.subsp)
-    }
-  }
-  return null
-}
-
 export function rankComparison(item, pred, rank) {
   const itemRecorded = recordedTaxonomy(item)
-  const predRecorded = recordedFromPrediction(pred)
-  const recorded = canonicalTaxon(predRecorded?.[rank] || itemRecorded[rank])
-  let recordedRaw = clean(pred?.recorded_taxonomy?.raw?.[rank]) || recorded
+  // Recorded truth always comes from the authoritative gallery row.  The
+  // prediction payload is model output only and may contain stale evaluation
+  // truth from a different CAMID join.
+  const recorded = canonicalTaxon(itemRecorded[rank])
+  let recordedRaw = clean(item?.[rank === 'subspecies' ? 'Subspecies_Form' : rank === 'species' ? 'Species' : rank === 'genus' ? 'Genus' : rank === 'family' ? 'Family' : rank === 'subfamily' ? 'Subfamily' : 'Tribe']) || recorded
   // The source records often store a bare subspecies epithet while the frozen
   // model call is a full trinomial.  Expand that formatting variant before
   // deciding whether a difference is a true synonym-only change.
   if (rank === 'subspecies' && recordedRaw && recordedRaw.split(/\s+/).length < 3) {
-    const species = predRecorded?.species || itemRecorded.species
+    const species = itemRecorded.species
     if (species && !recordedRaw.toLowerCase().startsWith(`${species.toLowerCase()} `)) {
       recordedRaw = `${species} ${recordedRaw}`
     }

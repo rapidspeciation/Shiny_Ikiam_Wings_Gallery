@@ -81,6 +81,13 @@ def resolve_camid(item: dict[str, Any]) -> str | None:
     return None
 
 
+def explicit_camid(item: dict[str, Any]) -> str | None:
+    """Return a stable explicit CAM_ID, distinct from a photo-derived key."""
+    value_ = str(value(item, "CAM_ID", "CAM_ID_CollData") or "").strip()
+    match = CAM_RE.match(value_)
+    return match.group(1).upper() if match else None
+
+
 def taxonomy_fields(item: dict[str, Any]) -> dict[str, Any]:
     """Normalize collection/insectary/CRISPR records without using model truth."""
     full_species = value(item, "SPECIES", "Stock_of_origin")
@@ -258,7 +265,25 @@ def merge_records(paths: list[tuple[str, Path | None]]) -> dict[str, dict[str, A
             camid = resolve_camid(original)
             if not camid:
                 continue
-            item = merged.setdefault(camid, {"CAM_ID": camid, "_source_tabs": []})
+            item = merged.setdefault(camid, {"CAM_ID": camid, "_source_tabs": [], "_identity_source": "photo"})
+            incoming_identity = "explicit" if explicit_camid(original) else "photo"
+            # A photo-derived row can precede the authoritative collection row.
+            # Prefer the explicit stable CAM_ID record for taxonomy and metadata,
+            # while retaining the union of photo URLs from both rows.
+            if incoming_identity == "explicit" and item.get("_identity_source") != "explicit":
+                preserved_photos = copy.deepcopy(item.get("all_photos") or [])
+                preserved_source_tabs = list(item.get("_source_tabs") or [])
+                item.clear()
+                item.update(copy.deepcopy(original))
+                item["CAM_ID"] = camid
+                item["_source_tabs"] = preserved_source_tabs
+                item["_identity_source"] = "explicit"
+                item["all_photos"] = preserved_photos
+            elif incoming_identity == "photo" and item.get("_identity_source") == "explicit":
+                # Keep authoritative fields untouched; merge only photos below.
+                pass
+            elif "_identity_source" not in item:
+                item["_identity_source"] = incoming_identity
             if source not in item["_source_tabs"]:
                 item["_source_tabs"].append(source)
             for key, candidate in original.items():
@@ -270,6 +295,8 @@ def merge_records(paths: list[tuple[str, Path | None]]) -> dict[str, dict[str, A
                         if name and name not in seen:
                             existing.append(copy.deepcopy(photo))
                             seen.add(name)
+                elif key in {"CAM_ID", "_identity_source"}:
+                    continue
                 elif not nonempty(item.get(key)) and nonempty(candidate):
                     item[key] = copy.deepcopy(candidate)
     return merged
@@ -375,6 +402,29 @@ def write_json(path: Path, payload: Any) -> None:
     path.write_text(json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
 
+def join_audit(predictions: dict[str, dict[str, Any]], rows: dict[str, dict[str, Any]], aliases: dict[str, str]) -> dict[str, int]:
+    counts = {"exact_matches": 0, "canonical_synonym_matches": 0, "true_source_disagreements": 0,
+              "missing_authoritative_records": 0, "corrected_mismatches": 0}
+    for camid, by_rank in rows.items():
+        record = predictions.get(camid, {}).get("recorded_taxonomy", {}).get("canonical", {})
+        if not record:
+            counts["missing_authoritative_records"] += len(by_rank)
+            continue
+        for rank, row in by_rank.items():
+            truth = canonical(row.get("truth"), aliases)
+            recorded = canonical(record.get(rank), aliases)
+            if not truth or not recorded:
+                counts["missing_authoritative_records"] += 1
+            elif truth == recorded:
+                counts["exact_matches"] += 1
+            elif truth.lower() == recorded.lower():
+                counts["canonical_synonym_matches"] += 1
+            else:
+                counts["true_source_disagreements"] += 1
+                counts["corrected_mismatches"] += 1
+    return counts
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--oof", type=Path, required=True)
@@ -410,6 +460,7 @@ def main() -> None:
         if not entry.get("ranks"):
             entry["reason"] = None
     box_reasons = build_box_reasons(paths, args.manifest)
+    audit = join_audit(predictions, rows, aliases)
 
     write_json(args.out_predictions, predictions)
     write_json(args.out_missing, missing)
@@ -443,6 +494,8 @@ def main() -> None:
         "top5_contract": "frozen rows expose top5_correct only; ranked labels are not fabricated",
         "aliases": aliases,
         "source_tabs": [name for name, path in paths if path and path.exists()],
+        "authoritative_join_audit": audit,
+        "cam077706_recorded_subspecies": predictions.get("CAM077706", {}).get("recorded_taxonomy", {}).get("canonical", {}).get("subspecies"),
     }
     write_json(args.out_receipt, receipt)
     print(json.dumps(receipt, indent=2, sort_keys=True))
