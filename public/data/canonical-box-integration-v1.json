@@ -4,9 +4,13 @@
   "source_rows": 556,
   "source_mock_rows": 0,
   "integrated_photo_keys": 556,
-  "new_keys": 1,
+  "new_keys": 537,
   "canonical_v6_total_keys": 10246,
   "canonical_reason_total_keys": 10297,
   "all_source_rows_have_boxes": true,
-  "results_sha256": "207f026e3a8cd8190a7304147eb58e11e20e3f34c5a6c62ea75a9211e8004df4"
+  "results_sha256": "207f026e3a8cd8190a7304147eb58e11e20e3f34c5a6c62ea75a9211e8004df4",
+  "source_unique_photo_keys": 537,
+  "pre_integration_canonical_v6_keys": 9709,
+  "post_integration_canonical_v6_keys": 10246,
+  "rows_per_key": "some CAM IDs have both d/v rows; source_rows counts responses, unique_photo_keys counts canonical photo artifacts"
 }
