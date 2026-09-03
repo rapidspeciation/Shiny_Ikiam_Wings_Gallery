@@ -21,6 +21,7 @@ export const BOX_SOURCES = {
 
 export const PREDICTION_SOURCES = {
   candidate_d: { file: 'predictions', label: 'Candidate D · corrected OOF' },
+  live_real: { file: 'predictions_live_real', label: 'Live released inference' },
   legacy: { file: 'predictions_legacy', label: 'Legacy gallery model (audit only)' }
 }
 
@@ -106,7 +107,10 @@ export async function getPredictions(camid, source = 'candidate_d') {
   if (!camid) return null
   try {
     const data = await loadFile(sourceFile(PREDICTION_SOURCES, source, 'candidate_d'))
-    return data[camid] || data[String(camid).toUpperCase()] || null
+    const hit = data[camid] || data[String(camid).toUpperCase()]
+    if (hit || source !== 'candidate_d') return hit || null
+    const live = await loadFile(PREDICTION_SOURCES.live_real.file)
+    return live[camid] || live[String(camid).toUpperCase()] || null
   } catch {
     return null
   }
@@ -115,7 +119,10 @@ export async function getPredictions(camid, source = 'candidate_d') {
 // Returns the whole predictions map ({ CAM_ID -> pred }), cached. {} on failure.
 export async function getAllPredictions(source = 'candidate_d') {
   try {
-    return await loadFile(sourceFile(PREDICTION_SOURCES, source, 'candidate_d'))
+    const data = await loadFile(sourceFile(PREDICTION_SOURCES, source, 'candidate_d'))
+    if (source !== 'candidate_d') return data
+    const live = await loadFile(PREDICTION_SOURCES.live_real.file).catch(() => ({}))
+    return { ...live, ...data }
   } catch {
     return {}
   }
