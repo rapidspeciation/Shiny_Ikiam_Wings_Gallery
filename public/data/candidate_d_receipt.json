@@ -52,6 +52,8 @@
   ],
   "status": "complete",
   "synonyms_sha256": "4706665dc24b8d3a5bd8f01f14904668331f4b5a53e7afed5828924f41307243",
+  "top5_blocker": "Selected fold-specific feature rows and complete held-out checkpoint set are absent from the local artifact bundle; only top5_correct booleans are available.",
   "top5_contract": "frozen rows expose top5_correct only; ranked labels are not fabricated",
-  "top5_labels_available": false
+  "top5_labels_available": false,
+  "top5_status": "blocked_pending_fold_feature_artifacts"
 }

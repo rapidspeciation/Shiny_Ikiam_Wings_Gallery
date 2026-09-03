@@ -1,5 +1,9 @@
 # Tax-head candidate review gallery
 
+## v2 repair status
+
+The v2 repair makes the authoritative collection/specimen row keyed by stable CAMID the recorded truth. It corrects CAM077706 to `Hypothyris euclea intermedia`, removes the audit-only UI additions, and updates the AI Identifier copy and accuracy table. Join counts and the explicit top-five artifact blocker are recorded in the WingsClassificator v2 report.
+
 This local clone keeps the upstream Ikiam Wings Gallery shell and uses only frozen
 artifacts.  No inference, public deployment, or push is performed here.
 

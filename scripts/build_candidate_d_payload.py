@@ -492,6 +492,8 @@ def main() -> None:
         },
         "top5_labels_available": False,
         "top5_contract": "frozen rows expose top5_correct only; ranked labels are not fabricated",
+        "top5_status": "blocked_pending_fold_feature_artifacts",
+        "top5_blocker": "Selected fold-specific feature rows and complete held-out checkpoint set are absent from the local artifact bundle; only top5_correct booleans are available.",
         "aliases": aliases,
         "source_tabs": [name for name, path in paths if path and path.exists()],
         "authoritative_join_audit": audit,
