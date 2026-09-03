@@ -19,6 +19,7 @@ const boxReasons = read('wing_box_reasons.json')
 const boxes = read('wing_boxes_v6.json')
 const recoveryLedger = read('wing-box-identity-recovery-v1.json')
 const segmenterJoin = read('segmenter-join-audit-v3.json')
+const unresolvedBatch = read('unresolved-segmenter-batch-v4.json')
 
 const record = (species, subspecies = '') => ({
   Genus: species?.split(/\s+/)[0] || '',
@@ -185,6 +186,14 @@ test('retained segmenter output join is deterministic and collision-safe', () =>
   const cam = segmenterJoin.rows.find(row => row.raw_prediction_key === 'cam077727d')
   assert.equal(cam.canonical_gallery_key, 'CAM077727d')
   assert.equal(cam.detection_count, 4)
+})
+
+test('recovery batch is selected exactly from unresolved ledger rows', () => {
+  const unresolved = Object.values(recoveryLedger.photo_rows).filter(row => row.current_inference_state === 'unresolved')
+  assert.equal(unresolvedBatch.row_count, unresolved.length)
+  assert.deepEqual(unresolvedBatch.rows.map(row => row.photo_key).sort(), unresolved.map(row => row.photo_key).sort())
+  assert.equal(unresolvedBatch.resolved_source_count, 175)
+  assert.equal(unresolvedBatch.missing_source_count, 83)
 })
 
 test('upstream review surface retains prediction controls and wing-box behavior', () => {
