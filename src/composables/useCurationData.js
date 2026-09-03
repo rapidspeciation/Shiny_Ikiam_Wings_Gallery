@@ -7,30 +7,46 @@
 //   taxon_links.json   -> { "<taxon>": { boa, sangay, noreste, cotacachi } }
 
 const BASE = import.meta.env.BASE_URL
+import { resolveCamid } from '../utils/galleryPipeline.js'
+import { canonicalTaxon, predictionDiffers, rankComparison } from '../utils/taxonomy.js'
+export { resolveCamid, predictionDiffers, canonicalTaxon, rankComparison }
 
 // Module-wide caches (one promise per file -> single fetch, deduped).
-const fileCache = {
-  wing_boxes: null,
-  predictions: null,
-  form_predictions: null,
-  taxon_links: null,
-  region_checklist: null
+const fileCache = new Map()
+
+export const BOX_SOURCES = {
+  v6: { file: 'wing_boxes_v6', label: 'Wings-v6 union boxes' },
+  legacy: { file: 'wing_boxes', label: 'Wings-v3 legacy boxes' }
+}
+
+export const PREDICTION_SOURCES = {
+  candidate_d: { file: 'predictions', label: 'Candidate D · corrected OOF' },
+  legacy: { file: 'predictions_legacy', label: 'Legacy gallery model (audit only)' }
 }
 
 function loadFile(name) {
-  if (fileCache[name]) return fileCache[name]
+  if (fileCache.has(name)) return fileCache.get(name)
   const url = `${BASE}data/${name}.json`
-  fileCache[name] = fetch(url)
+  const promise = fetch(url)
     .then(res => {
       if (!res.ok) throw new Error(`Failed to load ${name}.json`)
       return res.json()
     })
     .catch(err => {
       // Reset so a later call can retry; surface a safe empty object.
-      fileCache[name] = null
+      fileCache.delete(name)
       throw err
     })
-  return fileCache[name]
+  fileCache.set(name, promise)
+  return promise
+}
+
+function sourceFile(sources, source, fallback) {
+  return (sources[source] || sources[fallback]).file
+}
+
+export async function getCurationSourceMeta() {
+  try { return await loadFile('curation_sources') } catch { return {} }
 }
 
 // --- Key derivation -------------------------------------------------------
@@ -64,40 +80,118 @@ export const SOURCE_FULL_NAMES = {
 // Warm the wing-boxes cache in the background so the first "Zoom to wings" /
 // "Wing boxes" toggle doesn't pay for the ~2 MB cold fetch. Safe to call repeatedly
 // (loadFile dedupes to a single request). Errors are swallowed; getBoxes retries.
-export function preloadBoxes() {
-  return loadFile('wing_boxes').catch(() => {})
+export function preloadBoxes(source = 'v6') {
+  return loadFile(sourceFile(BOX_SOURCES, source, 'v6')).catch(() => {})
 }
 
 // Returns the array of boxes for a photo Name, or [] if none / not loaded yet.
-export async function getBoxes(name) {
+export async function getBoxes(name, source = 'v6') {
   const key = boxKeyFromName(name)
   if (!key) return []
   try {
-    const data = await loadFile('wing_boxes')
-    const boxes = data[key]
+    const data = await loadFile(sourceFile(BOX_SOURCES, source, 'v6'))
+    const boxes = data[key] || data[key.toUpperCase()] || data[key.toLowerCase()]
     return Array.isArray(boxes) ? boxes : []
   } catch {
     return []
   }
 }
 
+export async function getAllBoxes(source = 'v6') {
+  try { return await loadFile(sourceFile(BOX_SOURCES, source, 'v6')) } catch { return {} }
+}
+
 // Returns the prediction object for a CAM_ID, or null if none.
-export async function getPredictions(camid) {
+export async function getPredictions(camid, source = 'candidate_d') {
   if (!camid) return null
   try {
-    const data = await loadFile('predictions')
-    return data[camid] || null
+    const data = await loadFile(sourceFile(PREDICTION_SOURCES, source, 'candidate_d'))
+    return data[camid] || data[String(camid).toUpperCase()] || null
   } catch {
     return null
   }
 }
 
 // Returns the whole predictions map ({ CAM_ID -> pred }), cached. {} on failure.
-export async function getAllPredictions() {
+export async function getAllPredictions(source = 'candidate_d') {
   try {
-    return await loadFile('predictions')
+    return await loadFile(sourceFile(PREDICTION_SOURCES, source, 'candidate_d'))
   } catch {
     return {}
+  }
+}
+
+export async function getPredictionMissingReason(camid, rank = null) {
+  if (!camid) return null
+  try {
+    const data = await loadFile('prediction_missing_reasons')
+    const entry = data[String(camid).toUpperCase()]
+    if (!entry) return null
+    return rank ? (entry.ranks?.[rank] || entry.reason || null) : (entry.reason || null)
+  } catch {
+    return null
+  }
+}
+
+export async function getAllPredictionMissingReasons() {
+  try { return await loadFile('prediction_missing_reasons') } catch { return {} }
+}
+
+export async function getBoxReason(name) {
+  const key = boxKeyFromName(name)
+  if (!key) return null
+  try {
+    const data = await loadFile('wing_box_reasons')
+    return data[key.toLowerCase()] || data[key] || null
+  } catch {
+    return null
+  }
+}
+
+export async function getAllBoxReasons() {
+  try { return await loadFile('wing_box_reasons') } catch { return {} }
+}
+
+function stableBoxes(boxes) {
+  if (!Array.isArray(boxes)) return '[]'
+  return JSON.stringify(boxes.map(b => b?.box))
+}
+
+export function topPredictionTaxon(pred) {
+  if (!pred) return null
+  return pred.subspecies?.[0]?.[0] || pred.species?.[0]?.[0] || pred.genus?.[0]?.[0] || null
+}
+
+// Compares the two immutable review sources without changing either file's schema.
+// Pass preloaded maps for bulk filtering; omit them for a single card.
+export async function compareCurationVersions(item, preloaded = null) {
+  const maps = preloaded || {
+    newBoxes: await getAllBoxes('v6'), oldBoxes: await getAllBoxes('legacy'),
+    newPredictions: await getAllPredictions('candidate_d'), oldPredictions: await getAllPredictions('legacy')
+  }
+  const names = (item?.all_photos || []).map(p => p?.Name).filter(Boolean)
+  if (!names.length) {
+    if (item?.Photo_dorsal) names.push(item.Photo_dorsal)
+    if (item?.Photo_ventral) names.push(item.Photo_ventral)
+  }
+  const photos = names.map(name => {
+    const key = boxKeyFromName(name)
+    const newBoxes = maps.newBoxes[key] || []
+    const oldBoxes = maps.oldBoxes[key] || []
+    return { name, key, newBoxes, oldBoxes, boxesDiffer: stableBoxes(newBoxes) !== stableBoxes(oldBoxes) }
+  })
+  const camid = resolveCamid(item)
+  const newPrediction = camid ? maps.newPredictions[camid] || null : null
+  const oldPrediction = camid ? maps.oldPredictions[camid] || null : null
+  const newTaxon = topPredictionTaxon(newPrediction)
+  const oldTaxon = topPredictionTaxon(oldPrediction)
+  return {
+    photos,
+    boxesDiffer: photos.some(p => p.boxesDiffer),
+    predictionsDiffer: newTaxon !== oldTaxon,
+    newPrediction, oldPrediction, newTaxon, oldTaxon,
+    hasNewBoxes: photos.some(p => p.newBoxes.length),
+    hasNewPrediction: !!newPrediction
   }
 }
 
@@ -127,27 +221,6 @@ export async function getChecklist() {
 // ID. SHARED by the panel's "differs" badge and the gallery filter so they agree.
 //   item: a collection row (uses .Species and .Subspecies_Form)
 //   pred: a predictions.json entry (or null)
-export function predictionDiffers(item, pred) {
-  if (!item || !pred) return false
-  const recSp = cleanTaxon(item.Species)
-  const recSsp = cleanTaxon(item.Subspecies_Form)
-  const topSp = pred.species && pred.species[0] && pred.species[0][0]
-  const topSsp = pred.subspecies && pred.subspecies[0] && pred.subspecies[0][0]
-
-  if (recSp && topSp && topSp.toLowerCase() !== recSp.toLowerCase()) return true
-
-  if (recSsp && topSsp) {
-    // recSsp may be the bare epithet or the full trinomial; reduce to the epithet
-    const recEpithet = recSsp.includes(' ') ? recSsp.split(/\s+/).pop() : recSsp
-    const topParts = topSsp.split(/\s+/)
-    const topSpecies = topParts.slice(0, 2).join(' ')   // "Genus species"
-    const topEpithet = topParts.slice(2).join(' ')      // remainder (handles "type b")
-    const speciesMatches = recSp && topSpecies.toLowerCase() === recSp.toLowerCase()
-    if (speciesMatches && topEpithet.toLowerCase() !== recEpithet.toLowerCase()) return true
-  }
-  return false
-}
-
 // Region subspecies of a species, side-filtered. Returns the checklist keys `k`
 // where k startsWith "<species> ", k has exactly 3 words, and it is present on
 // the given side (or on EITHER side when side is empty/falsy).
@@ -193,12 +266,6 @@ export async function regionSpeciesOf(genus, side) {
 }
 
 // --- internal helpers -----------------------------------------------------
-
-function cleanTaxon(v) {
-  if (v === null || v === undefined) return ''
-  const s = String(v).trim()
-  return (!s || s === 'NA' || s === 'None') ? '' : s
-}
 
 function onSide(entry, side) {
   if (!entry) return false
@@ -246,7 +313,10 @@ export async function getLinks(taxon) {
 
 export function useCurationData() {
   return {
-    getBoxes, preloadBoxes, getPredictions, getAllPredictions, getLinks, boxKeyFromName,
+    getBoxes, getAllBoxes, preloadBoxes, getPredictions, getAllPredictions, getLinks, boxKeyFromName,
+    getCurationSourceMeta, compareCurationVersions, topPredictionTaxon,
+    getPredictionMissingReason, getAllPredictionMissingReasons, getBoxReason, getAllBoxReasons,
+    resolveCamid,
     getChecklist, regionSubspeciesOf, regionSpeciesOf, predictionDiffers
   }
 }

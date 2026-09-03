@@ -1,0 +1,49 @@
+{
+  "aliases": {
+    "oleria onega jaranilla": "Oleria onega janarilla",
+    "vanessa brasiliensis": "Vanessa braziliensis"
+  },
+  "box_reasons_sha256": "b1abccce5b9628552c72087a8bb066c429bac53d6130a09b982dedc47518025b",
+  "candidate_checkpoint_sha256": "2e7e14103388f199b96da7a489d89e49d8942611620a2414201b31df5059813f",
+  "candidate_oof_camids": 3022,
+  "cell": "D_padded_guides_support1",
+  "collection_sha256": "ae0fdb3818c446b64c59d351b940a614fd3e41d1f6b85ce670eff9e57c89ef8d",
+  "gallery_candidate_camids": 3022,
+  "gallery_missing_camids": 5990,
+  "gallery_union_camids": 8404,
+  "historical_prediction_camids": 4823,
+  "historical_without_candidate": 1801,
+  "legacy_predictions_sha256": "ed4b8740b356af5ac52e2bb0a70c1b9c56dda723aad2d6a6e9f714b5691c5592",
+  "manifest_sha256": "18881273749b1d80c7ed688dd9f82bf10b1a72cad7139f64ec7c492b4b1322a9",
+  "missing_rank_rows": {
+    "family": 0,
+    "genus": 0,
+    "species": 0,
+    "subfamily": 364,
+    "subspecies": 242,
+    "tribe": 5
+  },
+  "missing_reasons_sha256": "46c633810b4bf9951c9d1e8f132278ec217e3849bdddf3a3860524f006baf9ef",
+  "mode": "equal_image",
+  "predictions_sha256": "1a3d38d9722b560a4617081beae2acf9ccfc9f8cd71f48e4b2957af0c16dacfb",
+  "rank_rows": {
+    "family": 3022,
+    "genus": 3022,
+    "species": 3022,
+    "subfamily": 2658,
+    "subspecies": 2780,
+    "tribe": 3017
+  },
+  "schema_version": "wings-gallery-candidate-d-payload/2",
+  "seed": 1701,
+  "source_oof_sha256": "5464cd24f4c923225a0f5e3908ffe8f0c3057c355371c79eca015ab5718342f7",
+  "source_tabs": [
+    "collection",
+    "insectary",
+    "crispr"
+  ],
+  "status": "complete",
+  "synonyms_sha256": "4706665dc24b8d3a5bd8f01f14904668331f4b5a53e7afed5828924f41307243",
+  "top5_contract": "frozen rows expose top5_correct only; ranked labels are not fabricated",
+  "top5_labels_available": false
+}

@@ -1,7 +1,22 @@
+import { predictionRank } from './taxonomy.js'
+
 export function hasAnyPhoto(item) {
   const hasLegacy = item.URLd || item.URLv
   const hasList = item.all_photos && item.all_photos.length > 0
   return Boolean(hasLegacy || hasList)
+}
+
+export function resolveCamid(item) {
+  const explicit = String(item?.CAM_ID || '').trim()
+  if (explicit) return explicit
+  const names = (item?.all_photos || []).map(photo => photo?.Name)
+  if (item?.Photo_dorsal) names.push(item.Photo_dorsal)
+  if (item?.Photo_ventral) names.push(item.Photo_ventral)
+  for (const name of names) {
+    const match = String(name || '').match(/^(CAM\d+)/i)
+    if (match) return match[1].toUpperCase()
+  }
+  return null
 }
 
 export function applyOnePerSubspeciesSex(items) {
@@ -17,19 +32,19 @@ export function applyOnePerSubspeciesSex(items) {
 // Model's top-species confidence for a row, or -1 if it has no prediction.
 // Pairs with the "Differs" filter: sort desc to surface the model's most
 // confident disagreements (the clearest mislabel candidates) first.
-function modelConfidence(item, predictions) {
-  const pred = predictions && predictions[item.CAM_ID]
-  const top = pred && pred.species && pred.species[0]
-  return (top && typeof top[1] === 'number') ? top[1] : -1
+export function modelConfidence(item, predictions, rank = 'species') {
+  const pred = predictions && predictions[resolveCamid(item)]
+  const top = predictionRank(pred, rank)
+  return (top && typeof top.confidence === 'number') ? top.confidence : -1
 }
 
-export function sortItems(items, sortBy, sortOrder, predictions) {
+export function sortItems(items, sortBy, sortOrder, predictions, reviewRank = 'species') {
   if (sortBy === 'Row Number') return items
 
   if (sortBy === 'ModelConfidence') {
     if (!predictions) return items   // map not loaded -> leave order untouched
     return items.slice().sort((a, b) => {
-      const d = modelConfidence(a, predictions) - modelConfidence(b, predictions)
+      const d = modelConfidence(a, predictions, reviewRank) - modelConfidence(b, predictions, reviewRank)
       return sortOrder === 'asc' ? d : -d
     })
   }
@@ -63,5 +78,5 @@ export function applyGlobalPipeline(items, options) {
     results = applyOnePerSubspeciesSex(results)
   }
 
-  return sortItems(results, options.sortBy, options.sortOrder, options.predictions)
+  return sortItems(results, options.sortBy, options.sortOrder, options.predictions, options.reviewRank)
 }

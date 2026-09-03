@@ -3,8 +3,9 @@ import Panzoom from '@panzoom/panzoom'
 import { onMounted, onBeforeUnmount, ref, reactive, computed, watch, nextTick } from 'vue'
 import { usePanzoomRegistry } from '../composables/usePanzoomRegistry.js'
 import { useGlobalGalleryOptions } from '../composables/useGlobalGalleryOptions.js'
-import { getBoxes } from '../composables/useCurationData.js'
+import { getBoxes, getBoxReason } from '../composables/useCurationData.js'
 import { getProxiedUrl, notifyTierFailed, getProxyState } from '../utils/imageProxy.js'
+import { unionBox, unionBoxScale } from '../utils/wingBoxes.js'
 import PredictionPanel from './PredictionPanel.vue'
 
 const props = defineProps({
@@ -123,8 +124,8 @@ const detachPanzoomAll = () => {
 const ensureBoxes = async (index, name) => {
   if (photoState[index] && photoState[index].loaded) return
   if (!photoState[index]) photoState[index] = { boxes: [], loaded: false }
-  const boxes = await getBoxes(name)
-  photoState[index] = { boxes, loaded: true }
+  const [boxes, boxReason] = await Promise.all([getBoxes(name), getBoxReason(name)])
+  photoState[index] = { boxes, boxReason, loaded: true }
 }
 
 // Returns a promise that resolves once every visible photo's boxes are in
@@ -136,21 +137,6 @@ const loadVisibleBoxes = () => {
 }
 
 // Union bbox of all boxes for a photo, or null if none.
-const unionBox = (boxes) => {
-  if (!Array.isArray(boxes) || boxes.length === 0) return null
-  let x1 = 1, y1 = 1, x2 = 0, y2 = 0
-  for (const b of boxes) {
-    const box = b && b.box
-    if (!Array.isArray(box) || box.length < 4) continue
-    const [bx1, by1, bx2, by2] = box
-    if ([bx1, by1, bx2, by2].some(v => typeof v !== 'number' || Number.isNaN(v))) continue
-    x1 = Math.min(x1, bx1); y1 = Math.min(y1, by1)
-    x2 = Math.max(x2, bx2); y2 = Math.max(y2, by2)
-  }
-  if (x2 <= x1 || y2 <= y1) return null
-  return { x1, y1, x2, y2 }
-}
-
 // Frame the union wing bbox THROUGH panzoom, so the user can keep zooming/panning
 // from there. Panzoom transform is `scale(S) translate(Xpx,Ypx)` about the layer's
 // centre, so to put the bbox centre (cx,cy) at the viewport centre: X=W(0.5-cx),
@@ -160,12 +146,12 @@ const applyWingFrame = (index) => {
   const pz = pzInstances[index]
   const st = photoState[index]
   if (!el || !pz || !st || !st.loaded) return
-  const u = unionBox(st.boxes)
+  const u = unionBox(st.boxes, { padding: 0.03, aspect: 1.15 })
   if (!u) { pz.reset({ animate: false }); return }
   const W = el.offsetWidth, H = el.offsetHeight
   if (!W || !H) return
   const cx = (u.x1 + u.x2) / 2, cy = (u.y1 + u.y2) / 2
-  const scale = Math.min(8, 0.95 / Math.max(u.x2 - u.x1, u.y2 - u.y1))
+  const scale = unionBoxScale(u, 8, 0.95)
   pz.zoom(scale, { animate: false })
   // force: true — pan() is a no-op while disablePan is set (the panel's default),
   // which would frame off-centre wings on the image middle instead of the bbox.
@@ -182,6 +168,11 @@ const onImgLoad = (index) => { if (zoomWings.value) applyWingFrame(index) }
 const boxesFor = (index) => {
   const st = photoState[index]
   return st && st.loaded ? st.boxes : []
+}
+
+const boxReasonFor = (index) => {
+  const st = photoState[index]
+  return st && st.loaded ? st.boxReason : null
 }
 
 const fmtConf = (conf) => {
@@ -226,16 +217,17 @@ const displayPhotos = () => {
   let list = []
   if (props.item.all_photos && props.item.all_photos.length > 0) {
     list = props.item.all_photos.filter(p => {
-      if (props.side === 'Dorsal' && !p.Name.includes('d.JPG')) return false
-      if (props.side === 'Ventral' && !p.Name.includes('v.JPG')) return false
+      const viewName = String(p.Name || '').toLowerCase()
+      if (props.side === 'Dorsal' && !/[d]\d*\./.test(viewName)) return false
+      if (props.side === 'Ventral' && !/[v]\d*\./.test(viewName)) return false
       return true
     })
   } else {
     if ((props.side.includes('Dorsal') || props.side === 'Dorsal and Ventral') && props.item.URLd) {
-      list.push({ URL_to_view: props.item.URLd, Name: 'Dorsal' })
+      list.push({ URL_to_view: props.item.URLd, Name: `${props.item.CAM_ID}d.JPG` })
     }
     if ((props.side.includes('Ventral') || props.side === 'Dorsal and Ventral') && props.item.URLv) {
-      list.push({ URL_to_view: props.item.URLv, Name: 'Ventral' })
+      list.push({ URL_to_view: props.item.URLv, Name: `${props.item.CAM_ID}v.JPG` })
     }
   }
 
@@ -299,13 +291,16 @@ const displayPhotos = () => {
 
            <!-- Confidence labels as HTML (so they don't distort with the SVG) -->
            <template v-if="showBoxes">
-             <span
+           <span
                v-for="(b, bi) in boxesFor(index)"
                :key="'lbl-' + bi"
                class="wing-conf"
                :style="{ left: (b.box[0] * 100) + '%', top: (b.box[1] * 100) + '%' }"
-             >{{ fmtConf(b.conf) }}</span>
+           >{{ fmtConf(b.conf) }}</span>
            </template>
+           <div v-if="(showBoxes || zoomWings) && !boxesFor(index).length && boxReasonFor(index)?.reason" class="box-status small text-muted" role="status">
+             {{ boxReasonFor(index).reason }}
+           </div>
          </div>
        </div>
     </div>
@@ -395,5 +390,16 @@ const displayPhotos = () => {
   border-radius: 2px;
   pointer-events: none;
   white-space: nowrap;
+}
+.box-status {
+  position: absolute;
+  left: 4px;
+  right: 4px;
+  bottom: 4px;
+  padding: 2px 4px;
+  line-height: 1.2;
+  background: rgba(255, 255, 255, 0.88);
+  border-radius: 3px;
+  pointer-events: none;
 }
 </style>

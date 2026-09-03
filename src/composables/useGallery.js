@@ -11,7 +11,7 @@ export function useGallery(rawData, options) {
   const lastFilterFn = ref(null)
   const lastPredictions = ref(null)  // cached for re-sorts (e.g. sort-dropdown change)
 
-  const { sortBy, sortOrder, side, onlyPhotos, onePerSubspecies } = options
+  const { sortBy, sortOrder, side, onlyPhotos, onePerSubspecies, reviewRank } = options
 
   // --- Actions ---
 
@@ -29,7 +29,8 @@ export function useGallery(rawData, options) {
       sortOrder: sortOrder.value,
       onlyPhotos: onlyPhotos.value,
       onePerSubspecies: onePerSubspecies.value,
-      predictions: lastPredictions.value
+      predictions: lastPredictions.value,
+      reviewRank: reviewRank?.value || 'species'
     })
 
     // B. Reset Pagination and Update State

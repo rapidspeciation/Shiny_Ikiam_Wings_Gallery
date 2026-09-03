@@ -6,10 +6,12 @@
 import { ref, reactive, computed, watch } from 'vue'
 import { useGlobalGalleryOptions } from '../composables/useGlobalGalleryOptions.js'
 import {
-  getPredictions, getFormPrediction, getLinks, predictionDiffers,
+  getPredictions, getFormPrediction, getLinks, predictionDiffers, getPredictionMissingReason,
   regionSubspeciesOf, regionSpeciesOf,
   SOURCE_KEYS, SOURCE_LABELS, SOURCE_FULL_NAMES
 } from '../composables/useCurationData.js'
+import { resolveCamid } from '../utils/galleryPipeline.js'
+import { REVIEW_RANKS, rankComparison } from '../utils/taxonomy.js'
 
 // `item` drives the existing CAMID-based curation flow (Collection tab).
 // `prediction` lets the AI ID tab pass a model result directly (no CAMID, no
@@ -24,11 +26,13 @@ const { expandPredictions } = useGlobalGalleryOptions()
 
 const state = ref('loading')   // 'loading' | 'ready' | 'none' | 'error'
 const pred = ref(null)
+const missingReason = ref('')
+const rankMissingReasons = ref({})
 const formPred = ref(null)     // model FORM prediction (polymorphic morph), or null
 const open = ref(props.startOpen || expandPredictions.value)   // compact by default; "Show predictions" opens all
 const linksCache = ref({})     // taxon -> { boa, sangay, noreste, cotacachi }
 
-const camid = computed(() => props.item && props.item.CAM_ID)
+const camid = computed(() => resolveCamid(props.item))
 
 const clean = (v) => {
   if (v === null || v === undefined) return ''
@@ -58,6 +62,15 @@ const topSubspName = computed(() => pred.value?.subspecies?.[0]?.[0] || '')
 
 // "differs from recorded" badge uses the SAME helper as the gallery filter.
 const differs = computed(() => predictionDiffers(props.item, pred.value))
+
+const rankRows = computed(() => REVIEW_RANKS.map(rank => rankComparison(props.item, pred.value, rank)))
+const top5Text = (row) => {
+  if (!row.top5Available) return 'Not recorded'
+  return row.top5Correct ? 'Yes' : 'No'
+}
+const publicReason = (reason) => String(reason || '')
+  .replaceAll('candidate-D', 'corrected model')
+  .replaceAll('OOF', 'held-out')
 
 // model form (colour morph) disagrees with a recorded form
 const formDiffers = computed(() => {
@@ -297,6 +310,8 @@ function chipsFor(taxon) {
 
 async function load() {
   state.value = 'loading'
+  missingReason.value = ''
+  rankMissingReasons.value = {}
   extraSubspecies.value = {}
   extraSpecies.value = {}
   moreSubsp.value = {}
@@ -306,8 +321,18 @@ async function load() {
     // AI ID tab supplies the prediction directly; Collection tab fetches by CAMID.
     if (!props.prediction) getFormPrediction(camid.value).then(f => { formPred.value = f })
     const p = props.prediction || await getPredictions(camid.value)
-    if (!p) { pred.value = null; state.value = 'none'; return }
+    if (!p) {
+      pred.value = null
+      missingReason.value = await getPredictionMissingReason(camid.value)
+      state.value = 'none'
+      return
+    }
     pred.value = p
+    const missing = {}
+    for (const row of rankRows.value) {
+      if (row.status === 'missing') missing[row.rank] = await getPredictionMissingReason(camid.value, row.rank)
+    }
+    rankMissingReasons.value = missing
     state.value = 'ready'
     resetExpansion()
     if (expandPredictions.value) { open.value = true; expandAll() }
@@ -351,8 +376,8 @@ watch([camid, () => props.prediction], load, { immediate: true })
       @click="open = !open"
     >
       <span class="d-flex align-items-center gap-2 flex-wrap">
-        <span class="fw-bold small" title="Out-of-fold model predictions: each specimen is scored by a model that never trained on it — an honest signal for spotting mislabels.">Model predictions</span>
-        <span v-if="state === 'ready' && side" class="badge text-bg-light border text-secondary fw-normal" :title="`Suggestions weighted to ${side}-of-Andes taxa`">{{ side }} of Andes</span>
+        <span class="fw-bold small" title="Corrected out-of-fold model predictions; each specimen is scored by a model that never trained on it.">Model predictions</span>
+        <span v-if="state === 'ready' && side" class="badge text-bg-light border text-secondary fw-normal" :title="`Recorded ${side}-of-Andes side; model predictions are visual-only and geography is sensitivity-only.`">{{ side }} of Andes</span>
         <span
           v-if="state === 'ready' && !hasRecordedSubsp && suggestedSubsp"
           class="badge text-bg-info-subtle text-info-emphasis border border-info-subtle fw-normal"
@@ -371,9 +396,30 @@ watch([camid, () => props.prediction], load, { immediate: true })
         Loading predictions&hellip;
       </div>
       <div v-else-if="state === 'error'" class="text-danger small py-2">Could not load predictions.</div>
-      <div v-else-if="state === 'none'" class="text-muted small py-2">No model prediction available for this specimen.</div>
+      <div v-else-if="state === 'none'" class="text-muted small py-2">
+        No model prediction available for this specimen.
+        <span v-if="missingReason">{{ publicReason(missingReason) }}.</span>
+      </div>
 
       <template v-else>
+        <div class="rank-review mt-1 mb-2" aria-label="Model rank review">
+          <div class="pred-group-title">Model rank review · recorded taxonomy kept separate</div>
+          <div class="rank-review-grid small">
+            <div class="rank-review-head">Rank</div><div class="rank-review-head">Recorded label</div><div class="rank-review-head">Predicted label</div><div class="rank-review-head">Confidence</div><div class="rank-review-head">Top-5 contains recorded label</div>
+            <template v-for="row in rankRows" :key="`review-${row.rank}`">
+              <div class="rank-review-cell text-capitalize">{{ row.rank }}</div>
+              <div class="rank-review-cell" :title="row.recordedRaw && row.recordedRaw !== row.recorded ? `Raw recorded: ${row.recordedRaw}` : ''">{{ row.recorded || '—' }}</div>
+              <div class="rank-review-cell" :class="{ 'text-warning-emphasis': row.status === 'disagreement' }">{{ row.predicted || '—' }}</div>
+              <div class="rank-review-cell tabular">{{ row.confidence === null ? '—' : fmtPct(row.confidence) }}</div>
+              <div class="rank-review-cell">
+                <span v-if="row.top5Available">{{ top5Text(row) }}</span><span v-else>Not recorded</span>
+                <span v-if="row.top5Available && !row.top5LabelsAvailable" class="text-muted" title="Frozen rows record membership only, not the ranked labels."> · membership only</span>
+                <span v-if="rankMissingReasons[row.rank]" class="text-muted"> · {{ publicReason(rankMissingReasons[row.rank]) }}</span>
+                <span v-if="row.status === 'synonym-only'" class="badge text-bg-info-subtle border border-info-subtle ms-1">synonym-only</span>
+              </div>
+            </template>
+          </div>
+        </div>
         <p v-if="!hasRecordedSubsp && suggestedSubsp" class="small text-info-emphasis mb-1 mt-1">
           No subspecies recorded &mdash; model suggests <em>{{ suggestedSubsp }}</em>.
         </p>
@@ -617,6 +663,12 @@ watch([camid, () => props.prediction], load, { immediate: true })
 }
 .pred-recorded { border-top: 1px solid #e2e8f0; margin-top: 0.5rem; padding-top: 0.35rem; }
 .pred-form { border-top: 1px dashed #cbd5e1; padding-top: 0.35rem; }
+.rank-review { border: 1px solid #dbe3ee; border-radius: 4px; background: #f8fafc; padding: 0.35rem; }
+.rank-review-grid { display: grid; grid-template-columns: minmax(4.5rem, 0.7fr) minmax(7rem, 1.4fr) minmax(7rem, 1.4fr) minmax(4.5rem, 0.6fr) minmax(10rem, 1.8fr); gap: 0.15rem 0.45rem; align-items: baseline; min-width: 34rem; }
+.rank-review-head { color: #64748b; font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; }
+.rank-review-cell { min-width: 0; overflow-wrap: anywhere; }
+.rank-review-cell:nth-child(5n + 2), .rank-review-cell:nth-child(5n + 3) { font-style: italic; }
+.tabular { font-variant-numeric: tabular-nums; }
 
 .pred-chips { display: flex; flex-wrap: wrap; gap: 0.2rem; flex: 0 0 auto; margin-left: auto; }
 .src-chip {
@@ -695,5 +747,6 @@ watch([camid, () => props.prediction], load, { immediate: true })
   .pred-row { flex-wrap: wrap; }
   .pred-name { flex: 1 1 auto; }
   .pred-chips { flex-basis: 100%; margin-left: 1.4rem; margin-top: 1px; }
+  .rank-review { overflow-x: auto; }
 }
 </style>

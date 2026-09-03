@@ -1,0 +1,147 @@
+import test from 'node:test'
+import assert from 'node:assert/strict'
+import { readFileSync } from 'node:fs'
+import { resolve } from 'node:path'
+import {
+  AUDIT_RANKS,
+  canonicalTaxon,
+  predictionDiffers,
+  rankComparison
+} from '../src/utils/taxonomy.js'
+import { modelConfidence, sortItems } from '../src/utils/galleryPipeline.js'
+import { unionBox, unionBoxScale } from '../src/utils/wingBoxes.js'
+
+const dataRoot = resolve('public/data')
+const read = name => JSON.parse(readFileSync(resolve(dataRoot, name), 'utf8'))
+const candidate = read('predictions.json')
+const legacy = read('predictions_legacy.json')
+const missing = read('prediction_missing_reasons.json')
+const boxReasons = read('wing_box_reasons.json')
+const boxes = read('wing_boxes_v6.json')
+
+const record = (species, subspecies = '') => ({
+  Genus: species?.split(/\s+/)[0] || '',
+  Species: species,
+  Subspecies_Form: subspecies
+})
+
+const candidateRow = (label, confidence = 0.7, top5 = true) => ({
+  prediction: label,
+  confidence,
+  top5_correct: top5,
+  top5_available: true,
+  top5_labels_available: false
+})
+
+test('candidate-D replaces the default prediction payload without historical fallback', () => {
+  assert.equal(Object.keys(candidate).length, 3022)
+  assert.equal(Object.keys(legacy).length, 4823)
+  const first = candidate.CAM042391
+  assert.equal(first.source, 'candidate_d')
+  assert.equal(first.seed, 1701)
+  assert.equal(first.cell, 'D_padded_guides_support1')
+  assert.equal(first.model_meta.display_seed_rule.includes('no test-set seed shopping'), true)
+  assert.equal(first.rank_predictions.species.top5_labels_available, false)
+  assert.equal(first.rank_predictions.species.top5_correct, false)
+  assert.equal('species_all' in first && first.species_all.length <= 1, true)
+})
+
+test('canonical synonyms apply before comparison and display', () => {
+  assert.equal(canonicalTaxon('Vanessa brasiliensis'), 'Vanessa braziliensis')
+  assert.equal(canonicalTaxon('Oleria onega jaranilla'), 'Oleria onega janarilla')
+  const vanessa = {
+    recorded_taxonomy: {
+      raw: { species: 'Vanessa brasiliensis' },
+      canonical: { species: 'Vanessa braziliensis' }
+    },
+    rank_predictions: { species: candidateRow('Vanessa braziliensis') }
+  }
+  const comparison = rankComparison(record('Vanessa brasiliensis'), vanessa, 'species')
+  assert.equal(comparison.status, 'synonym-only')
+  assert.equal(predictionDiffers(record('Vanessa brasiliensis'), vanessa, 'species'), false)
+  const bareSubspecies = {
+    recorded_taxonomy: {
+      raw: { species: 'Oleria onega', subspecies: 'jaranilla' },
+      canonical: { species: 'Oleria onega', subspecies: 'Oleria onega jaranilla' }
+    },
+    rank_predictions: { subspecies: candidateRow('Oleria onega janarilla') }
+  }
+  assert.equal(rankComparison(record('Oleria onega', 'jaranilla'), bareSubspecies, 'subspecies').status, 'synonym-only')
+})
+
+test('rank-aware disagreement and missing states are explicit', () => {
+  const pred = {
+    recorded_taxonomy: { canonical: { species: 'Morpho helenor' }, raw: { species: 'Morpho helenor' } },
+    rank_predictions: {
+      genus: candidateRow('Morpho'),
+      species: candidateRow('Morpho aega', 0.91),
+      subspecies: candidateRow('Morpho helenor theodorus', 0.2)
+    }
+  }
+  assert.equal(rankComparison(record('Morpho helenor'), pred, 'species').status, 'disagreement')
+  assert.equal(predictionDiffers(record('Morpho helenor'), pred, 'species'), true)
+  assert.equal(rankComparison(record('Morpho helenor'), pred, 'genus').status, 'agreement')
+  assert.equal(rankComparison(record('Morpho helenor'), null, 'species').status, 'missing')
+})
+
+test('model confidence sorting uses selected candidate rank and missing rows sort last descending', () => {
+  const items = [{ CAM_ID: 'CAM-A' }, { CAM_ID: 'CAM-B' }, { CAM_ID: 'CAM-C' }]
+  const map = {
+    'CAM-A': { rank_predictions: { species: candidateRow('A', 0.2) } },
+    'CAM-B': { rank_predictions: { species: candidateRow('B', 0.95) } }
+  }
+  assert.equal(modelConfidence(items[1], map), 0.95)
+  assert.deepEqual(sortItems(items, 'ModelConfidence', 'desc', map).map(item => item.CAM_ID), ['CAM-B', 'CAM-A', 'CAM-C'])
+  assert.deepEqual(sortItems(items, 'ModelConfidence', 'asc', map).map(item => item.CAM_ID), ['CAM-C', 'CAM-A', 'CAM-B'])
+})
+
+test('top-five contract exposes only membership, never fabricated ranked labels', () => {
+  const row = candidate.CAM042391.rank_predictions.species
+  assert.equal(row.top5_available, true)
+  assert.equal(row.top5_labels_available, false)
+  assert.equal(Object.hasOwn(row, 'top5_labels'), false)
+  assert.match(readFileSync('src/components/PredictionPanel.vue', 'utf8'), /membership only/)
+})
+
+test('missing reason ledger covers historical rows and frozen zero-detection full-image rows', () => {
+  const historicalWithoutCandidate = Object.keys(legacy).filter(camid => !candidate[camid])
+  assert.equal(historicalWithoutCandidate.length, 1801)
+  for (const camid of Object.keys(legacy)) assert.ok(missing[camid], `missing reason for ${camid}`)
+  for (const camid of historicalWithoutCandidate) assert.ok(missing[camid].reason)
+  const rankMissingCamid = Object.keys(candidate).find(camid => Object.keys(candidate[camid].rank_predictions).length < 6)
+  assert.ok(rankMissingCamid && missing[rankMissingCamid].reason)
+  for (const key of ['cam070267d', 'cam075743v3']) {
+    assert.equal(boxReasons[key].status, 'zero_detection')
+    assert.equal(boxReasons[key].uses_full_image, true)
+    assert.match(boxReasons[key].reason, /full image retained/)
+  }
+})
+
+test('Wings-v6 geometry unions all valid biological detections with padding, aspect and clamp', () => {
+  const box = unionBox([
+    { box: [0.2, 0.3, 0.4, 0.6] },
+    { box: [0.6, 0.1, 0.9, 0.4] },
+    { box: [-1, 0, 0.2, 0.2] },
+    { box: [0.4, 0.4, 0.4, 0.5] }
+  ], { padding: 0.03, aspect: 1.15 })
+  assert.ok(box)
+  assert.ok(box.x1 >= 0 && box.y1 >= 0 && box.x2 <= 1 && box.y2 <= 1)
+  assert.ok(box.x1 < 0.2 && box.x2 > 0.9)
+  assert.ok(unionBox([]) === null)
+  assert.ok(unionBoxScale(box) > 1)
+  for (const key of ['CAM070697d', 'CAM074338v', 'CAM072949d', 'CAM075867v1']) {
+    assert.ok(boxes[key]?.length, `missing representative union ${key}`)
+    assert.ok(boxes[key].every(row => row.union === true), `${key} is not marked union`)
+  }
+})
+
+test('review surface advertises rank audit, direct disagreement URL, and mobile-safe review controls', () => {
+  const collection = readFileSync('src/components/CollectionTab.vue', 'utf8')
+  const panel = readFileSync('src/components/PredictionPanel.vue', 'utf8')
+  const photo = readFileSync('src/components/PhotoCard.vue', 'utf8')
+  for (const token of ['Open disagreements', 'Candidate D audit by rank', 'reviewRank', 'Synonym-only']) assert.match(collection, new RegExp(token.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')))
+  for (const token of ['Recorded label', 'Predicted label', 'Top-5 contains recorded label', 'membership only']) assert.match(panel, new RegExp(token.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')))
+  assert.match(photo, /getBoxReason/)
+  assert.match(panel, /max-width: 576px/)
+  assert.deepEqual(AUDIT_RANKS, ['family', 'subfamily', 'tribe', 'genus', 'species', 'subspecies'])
+})

@@ -1,0 +1,38 @@
+{
+  "aliases": {
+    "Oleria onega jaranilla": "Oleria onega janarilla",
+    "Vanessa brasiliensis": "Vanessa braziliensis"
+  },
+  "authority": [
+    {
+      "accepted_name": "Vanessa braziliensis (Moore, 1883)",
+      "name": "GBIF Backbone Taxonomy",
+      "url": "https://www.gbif.org/species/9563837",
+      "usage_key": 9563837,
+      "verification": "GBIF species match returned EXACT/ACCEPTED for Vanessa braziliensis and FUZZY to the same usage key for Vanessa brasiliensis on 2026-09-02"
+    },
+    {
+      "name": "project frozen taxonomy map",
+      "path": "../final-corpus-freeze-v1/taxonomy-map.json",
+      "role": "project taxonomy authority used before this spelling overlay"
+    }
+  ],
+  "collision_policy": "canonical key wins; aliases merge into it; numeric geographic evidence is summed; verbatim source values are retained in audit fields",
+  "mappings": [
+    {
+      "authority_usage_key": 9563837,
+      "canonical": "Vanessa braziliensis",
+      "rank": "species",
+      "reason": "misspelling",
+      "verbatim": "Vanessa brasiliensis"
+    },
+    {
+      "canonical": "Oleria onega janarilla",
+      "rank": "subspecies",
+      "reason": "required project spelling overlay",
+      "verbatim": "Oleria onega jaranilla"
+    }
+  ],
+  "schema": "wings-taxonomy-canonicalization-ledger/1",
+  "version": "2026-09-02"
+}
