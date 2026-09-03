@@ -57,7 +57,10 @@ export async function getCurationSourceMeta() {
 export function boxKeyFromName(name) {
   if (!name || typeof name !== 'string') return null
   const dot = name.lastIndexOf('.')
-  return dot === -1 ? name : name.slice(0, dot)
+  const stem = dot === -1 ? name : name.slice(0, dot)
+  // Drive disambiguates duplicate filenames as `CAM...v (2)`; keep the
+  // canonical artifact key whitespace-free while preserving the occurrence.
+  return stem.replace(/\s+\((\d+)\)$/, '_$1')
 }
 
 export const SOURCE_KEYS = ['boa', 'sangay', 'noreste', 'cotacachi']
