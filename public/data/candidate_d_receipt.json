@@ -344,6 +344,17 @@
     "subspecies": 2780,
     "tribe": 3017
   },
+  "ranked_replay_coverage": {
+    "family": 3022,
+    "genus": 3022,
+    "species": 3022,
+    "subfamily": 2658,
+    "subspecies": 2780,
+    "tribe": 3017
+  },
+  "ranked_replay_rows": 17521,
+  "ranked_replay_sha256": "69e824d8a4ef4d6c12fb262a5160c9ff2c90b75ecb84295e8c3274e5c13ffb46",
+  "ranked_replay_top1_mismatches": 0,
   "schema_version": "wings-gallery-candidate-d-payload/2",
   "seed": 1701,
   "source_oof_sha256": "5464cd24f4c923225a0f5e3908ffe8f0c3057c355371c79eca015ab5718342f7",
@@ -355,7 +366,7 @@
   "status": "complete",
   "synonyms_sha256": null,
   "top5_blocker": "Selected fold-specific feature rows and complete held-out checkpoint set are absent from the local artifact bundle; only top5_correct booleans are available.",
-  "top5_contract": "frozen rows expose top5_correct only; ranked labels are not fabricated",
-  "top5_labels_available": false,
-  "top5_status": "blocked_pending_fold_feature_artifacts"
+  "top5_contract": "fold-local replay from verified D checkpoints; equal_image visual-only values",
+  "top5_labels_available": true,
+  "top5_status": "complete"
 }

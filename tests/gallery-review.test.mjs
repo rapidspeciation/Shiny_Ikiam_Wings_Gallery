@@ -41,7 +41,8 @@ test('candidate-D replaces the default prediction payload without historical fal
   assert.equal(first.cell, 'D_padded_guides_support1')
   assert.equal(first.model_meta.display_seed_rule.includes('no test-set seed shopping'), true)
   assert.equal(first.rank_predictions.species.top5_available, true)
-  assert.equal(first.rank_predictions.species.top5_labels_available, false)
+  assert.equal(first.rank_predictions.species.top5_labels_available, true)
+  assert.equal(first.rank_predictions.species.top5_labels.length, 5)
 })
 
 test('canonical synonyms apply before comparison and display', () => {
@@ -112,12 +113,23 @@ test('model confidence sorting uses selected candidate rank and missing rows sor
   assert.deepEqual(sortItems(items, 'ModelConfidence', 'asc', map).map(item => item.CAM_ID), ['CAM-C', 'CAM-A', 'CAM-B'])
 })
 
-test('top-five contract never fabricates ranked labels when fold outputs are unavailable', () => {
+test('top-five contract exposes verified fold-local ranked labels and probabilities', () => {
   const row = candidate.CAM042391.rank_predictions.species
   assert.equal(row.top5_available, true)
-  assert.equal(row.top5_labels_available, false)
-  assert.equal(Object.hasOwn(row, 'top5_labels'), false)
+  assert.equal(row.top5_labels_available, true)
+  assert.equal(row.top5_labels.length, 5)
+  assert.equal(row.top5_probabilities.length, 5)
+  assert.ok(row.top5_probabilities.every((value, index, values) => index === 0 || value <= values[index - 1]))
   assert.equal(readFileSync('public/data/candidate_d_receipt.json', 'utf8').includes('top5_labels_available'), true)
+})
+
+test('ranked replay preserves recorded probability outside top five and nested species tree', () => {
+  const cam = candidate.CAM074313
+  assert.equal(cam.rank_predictions.species.prediction, 'Zaretis isidora')
+  assert.equal(cam.rank_predictions.species.top5_labels.length, 5)
+  assert.equal(cam.rec.species_p, 0.0005931223240908262)
+  assert.equal(cam.species[0][0], 'Zaretis isidora')
+  assert.ok(Array.isArray(cam.species[0][3]))
 })
 
 test('missing reason ledger covers historical rows and frozen zero-detection full-image rows', () => {

@@ -41,7 +41,8 @@ function validatePredictions(file, strict = false) {
     for (const rank of ['family', 'subfamily', 'tribe', 'genus', 'species', 'subspecies']) {
       const row = pred.rank_predictions?.[rank]
       if (strict && row && (!row.prediction || !Number.isFinite(row.confidence))) fail(`${file}: ${camid}.${rank} invalid rank_predictions row`)
-      if (strict && row && row.top5_labels_available !== false) fail(`${file}: ${camid}.${rank} must declare unavailable top-five labels`)
+      if (strict && row && row.top5_labels_available === false && Object.hasOwn(row, 'top5_labels')) fail(`${file}: ${camid}.${rank} unavailable top-five row must not contain labels`)
+      if (strict && row && row.top5_labels_available === true && (!Array.isArray(row.top5_labels) || row.top5_labels.length > 5 || !Array.isArray(row.top5_probabilities))) fail(`${file}: ${camid}.${rank} invalid ranked top-five vectors`)
       if (pred[rank] != null && !Array.isArray(pred[rank])) fail(`${file}: ${camid}.${rank} must be an array`)
       for (const [index, legacyRow] of (pred[rank] || []).entries()) {
         if (!Array.isArray(legacyRow) || typeof legacyRow[0] !== 'string' || !Number.isFinite(legacyRow[1])) fail(`${file}: ${camid}.${rank}[${index}] invalid`)
