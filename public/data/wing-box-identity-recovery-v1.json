@@ -1,0 +1,40 @@
+{
+  "affected_images": 262,
+  "cam077727": {
+    "canonical_source": "03097_CAM077727d__Ithomia_amarilla.jpg",
+    "current_box": "unavailable",
+    "legacy_boxes_not_used": true,
+    "photo": "CAM077727d.JPG",
+    "source_found_on_sanger": true,
+    "terminal_current_inference": "absent"
+  },
+  "counts": {
+    "absent_current_inference_or_identity_join": 181,
+    "missing_source_manifest": 16,
+    "other": 9498,
+    "projection_failure_after_successful_ledger": 65
+  },
+  "inference_failures": 0,
+  "recovered_images": 0,
+  "root_cause_notes": {
+    "absent_current_inference_or_identity_join": "No terminal current-segmenter row exists for affected image; source identity is present in holdout manifest but output ledger has no row.",
+    "missing_source_manifest": "No source manifest row was available.",
+    "projection_failure_after_successful_ledger": "Current ledger success exists but normalized gallery box projection is missing."
+  },
+  "schema_version": "wings-v6-gallery-ledger-identity-recovery/v1",
+  "segmenter_replay_attempts": [
+    {
+      "job_id": "26347",
+      "reason": "GPU driver unavailable and LSF memory termination",
+      "status": "failed"
+    },
+    {
+      "job_id": "26412",
+      "reason": "CPU fallback interrupted during ultralytics/torchvision import",
+      "status": "failed"
+    }
+  ],
+  "source_reason_sha256": "b1abccce5b9628552c72087a8bb066c429bac53d6130a09b982dedc47518025b",
+  "status": "blocked_pending_segmenter_replay",
+  "true_zero_detections": 0
+}

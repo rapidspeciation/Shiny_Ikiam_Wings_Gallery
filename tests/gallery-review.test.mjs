@@ -17,6 +17,7 @@ const legacy = read('predictions_legacy.json')
 const missing = read('prediction_missing_reasons.json')
 const boxReasons = read('wing_box_reasons.json')
 const boxes = read('wing_boxes_v6.json')
+const recoveryLedger = read('wing-box-identity-recovery-v1.json')
 
 const record = (species, subspecies = '') => ({
   Genus: species?.split(/\s+/)[0] || '',
@@ -163,6 +164,14 @@ test('Zoom to wings uses tight union coordinates with aspect and clamp', () => {
     assert.ok(boxes[key]?.length, `missing representative union ${key}`)
     assert.ok(boxes[key].every(row => row.union === true), `${key} is not marked union`)
   }
+})
+
+test('current-segmenter identity recovery ledger distinguishes missing inference', () => {
+  assert.equal(recoveryLedger.counts.absent_current_inference_or_identity_join, 181)
+  assert.equal(recoveryLedger.counts.projection_failure_after_successful_ledger, 65)
+  assert.equal(recoveryLedger.counts.missing_source_manifest, 16)
+  assert.equal(recoveryLedger.cam077727.terminal_current_inference, 'absent')
+  assert.equal(recoveryLedger.cam077727.legacy_boxes_not_used, true)
 })
 
 test('upstream review surface retains prediction controls and wing-box behavior', () => {
