@@ -34776,12 +34776,13 @@
     "uses_full_image": true
   },
   "cam072275d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
-    "photo_name": "CAM072275d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
+    "photo_name": "07131_CAM072275d__Lycaenidae_family.jpg",
+    "provenance": "Sanger job 27445; gallery-recovery-v2",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam072275v": {
     "exclusion_reason": "no_full_ledger_identity",
@@ -67416,12 +67417,13 @@
     "uses_full_image": true
   },
   "cam076941v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
-    "photo_name": "CAM076941v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
+    "photo_name": "08996_CAM076941v__Hesperiidae_family.jpg",
+    "provenance": "Sanger job 27445; gallery-recovery-v2",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam076942d": {
     "exclusion_reason": "no_full_ledger_identity",
@@ -71888,12 +71890,13 @@
     "uses_full_image": false
   },
   "cam077328d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
-    "photo_name": "CAM077328d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
+    "photo_name": "03559_CAM077328d__Brevioleria_aelia.jpg",
+    "provenance": "Sanger job 27445; gallery-recovery-v2",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam077328v": {
     "exclusion_reason": "no_full_ledger_identity",

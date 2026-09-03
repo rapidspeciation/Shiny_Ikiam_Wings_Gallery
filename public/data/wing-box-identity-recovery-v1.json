@@ -1,5 +1,8 @@
 {
   "affected_images": 262,
+  "batch_detected": 224,
+  "batch_job_id": "27445",
+  "batch_source_images": 224,
   "cam077727": {
     "canonical_source": "03097_CAM077727d__Ithomia_amarilla.jpg",
     "current_box": "four_current_segmenter_boxes",
@@ -11,10 +14,11 @@
   },
   "counts": {
     "absent_current_inference_or_identity_join": 181,
+    "batch_replay_detected": 224,
     "missing_source_manifest": 16,
     "other": 9498,
     "projection_failure_after_successful_ledger": 65,
-    "recovered_current_inference": 1
+    "recovered_current_inference": 4
   },
   "inference_failures": 0,
   "photo_rows": [
@@ -769,19 +773,19 @@
       "terminal_outcome": null
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam072275d",
         "CAM072275d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam072275d",
       "photo_name": "CAM072275d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 27445",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "four_boxes"
     },
     {
       "action": "pending",
@@ -3019,19 +3023,19 @@
       "terminal_outcome": null
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam076941v",
         "CAM076941v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam076941v",
       "photo_name": "CAM076941v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 27445",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "four_boxes"
     },
     {
       "action": "pending",
@@ -3334,19 +3338,19 @@
       "terminal_outcome": null
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam077328d",
         "CAM077328d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam077328d",
       "photo_name": "CAM077328d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 27445",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "four_boxes"
     },
     {
       "action": "pending",
@@ -3950,13 +3954,13 @@
     }
   ],
   "photo_rows_count": 262,
-  "recovered_images": 1,
+  "recovered_images": 4,
   "root_cause_notes": {
     "absent_current_inference_or_identity_join": "No terminal current-segmenter row exists for affected image; source identity is present in holdout manifest but output ledger has no row.",
     "missing_source_manifest": "No source manifest row was available.",
     "projection_failure_after_successful_ledger": "Current ledger success exists but normalized gallery box projection is missing."
   },
-  "run_identity": "wings-camid077727-v7",
+  "run_identity": "gallery-recovery-v2",
   "schema_version": "wings-v6-gallery-ledger-identity-recovery/v1",
   "segmenter_replay_attempts": [
     {
@@ -3972,6 +3976,6 @@
   ],
   "source_reason_sha256": "b1abccce5b9628552c72087a8bb066c429bac53d6130a09b982dedc47518025b",
   "status": "complete_with_unresolved",
-  "still_unresolved": 261,
+  "still_unresolved": 258,
   "true_zero_detections": 0
 }
