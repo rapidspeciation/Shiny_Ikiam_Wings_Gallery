@@ -18,6 +18,7 @@ const missing = read('prediction_missing_reasons.json')
 const boxReasons = read('wing_box_reasons.json')
 const boxes = read('wing_boxes_v6.json')
 const recoveryLedger = read('wing-box-identity-recovery-v1.json')
+const segmenterJoin = read('segmenter-join-audit-v3.json')
 
 const record = (species, subspecies = '') => ({
   Genus: species?.split(/\s+/)[0] || '',
@@ -174,6 +175,16 @@ test('current-segmenter identity recovery ledger distinguishes missing inference
   assert.equal(recoveryLedger.cam077727.legacy_boxes_not_used, true)
   assert.equal(boxes.CAM077727d.length, 4)
   assert.ok(boxes.CAM077727d.every(row => row.model.includes('current-segmenter')))
+})
+
+test('retained segmenter output join is deterministic and collision-safe', () => {
+  assert.equal(segmenterJoin.raw_rows, 224)
+  assert.equal(segmenterJoin.projected_rows, 224)
+  assert.equal(segmenterJoin.rejected_rows, 0)
+  assert.equal(segmenterJoin.affected_targets, 0)
+  const cam = segmenterJoin.rows.find(row => row.raw_prediction_key === 'cam077727d')
+  assert.equal(cam.canonical_gallery_key, 'CAM077727d')
+  assert.equal(cam.detection_count, 4)
 })
 
 test('upstream review surface retains prediction controls and wing-box behavior', () => {

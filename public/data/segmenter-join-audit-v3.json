@@ -1,0 +1,2026 @@
+{
+  "affected_targets": 0,
+  "projected_rows": 224,
+  "raw_rows": 224,
+  "rejected_rows": 0,
+  "rows": [
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM072181d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam072181d",
+      "source_key": "00006_CAM072181d__Methona_confusa.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM072432d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam072432d",
+      "source_key": "00044_CAM072432d__Ithomia_pseudoagalla.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM072445v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam072445v",
+      "source_key": "00062_CAM072445v__Dircenna_jemina.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM072462v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam072462v",
+      "source_key": "00074_CAM072462v__Diaethria_clymena.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM072465v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam072465v",
+      "source_key": "00080_CAM072465v__Catonephele_numilia.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM072484v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam072484v",
+      "source_key": "00101_CAM072484v__Cithaerias_pireta.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM072512d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam072512d",
+      "source_key": "00143_CAM072512d__Godyris_zavaleta.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM072522d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam072522d",
+      "source_key": "00163_CAM072522d__Unknown_species.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM072177d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam072177d",
+      "source_key": "00261_CAM072177d__Melinaea_isocomma.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM072490d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam072490d",
+      "source_key": "00337_CAM072490d__Eresia_emerantia.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM072480v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam072480v",
+      "source_key": "00339_CAM072480v__Cithaerias_pireta.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM072589v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam072589v",
+      "source_key": "00423_CAM072589v__Mechanitis_messenoides.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM072614v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam072614v",
+      "source_key": "00458_CAM072614v__Echydna_punctata.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM072625v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam072625v",
+      "source_key": "00473_CAM072625v__Ancyluris_colubra.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM072633v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam072633v",
+      "source_key": "00489_CAM072633v__Unknown_species.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM072644v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam072644v",
+      "source_key": "00506_CAM072644v__Callicore_cynosura.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM072661v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam072661v",
+      "source_key": "00529_CAM072661v__Hypothyris_euclea.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM072658d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam072658d",
+      "source_key": "00600_CAM072658d__Ithomiola_orpheus.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM072158v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam072158v",
+      "source_key": "00606_CAM072158v__Oleria_onega.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM072719d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam072719d",
+      "source_key": "00662_CAM072719d__Amarynthis_meneria.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM072764d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam072764d",
+      "source_key": "00666_CAM072764d__Oleria_gunilla.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM072772d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam072772d",
+      "source_key": "00676_CAM072772d__Ithomia_amarilla.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM072790d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam072790d",
+      "source_key": "00698_CAM072790d__Riodinidae.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM072794d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam072794d",
+      "source_key": "00706_CAM072794d__Callicore_hydaspes.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM072827d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam072827d",
+      "source_key": "00749_CAM072827d__Unknown_species.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM072847d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam072847d",
+      "source_key": "00774_CAM072847d__Hypothyris_fluonia.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM072925d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam072925d",
+      "source_key": "00852_CAM072925d__Doxocopa_agathina.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM072713d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam072713d",
+      "source_key": "00891_CAM072713d__Taygetis_thamyra.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM072716v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam072716v",
+      "source_key": "00915_CAM072716v__Pseudodebis_valentina.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM072832d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam072832d",
+      "source_key": "00961_CAM072832d__Morpho_achilles.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM072862d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam072862d",
+      "source_key": "00979_CAM072862d__Hypothyris_semifulva.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM072757d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam072757d",
+      "source_key": "01106_CAM072757d__Ithomia_amarilla.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM072986d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam072986d",
+      "source_key": "01178_CAM072986d__Unknown_species.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM074304v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam074304v",
+      "source_key": "01204_CAM074304v__Historis_acheronta.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM074314v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam074314v",
+      "source_key": "01224_CAM074314v__Nessaea_obrinus.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM074331v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam074331v",
+      "source_key": "01256_CAM074331v__Morpho_helenor.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM074342v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam074342v",
+      "source_key": "01268_CAM074342v__Unknown_species.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM042458d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam042458d",
+      "source_key": "01369_CAM042458d__Unknown_species.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM042459v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam042459v",
+      "source_key": "01371_CAM042459v__Unknown_species.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM072984d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam072984d",
+      "source_key": "01388_CAM072984d__Unknown_species.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM072985d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam072985d",
+      "source_key": "01390_CAM072985d__Unknown_species.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM074352v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam074352v",
+      "source_key": "01405_CAM074352v__Unknown_species.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM074347v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam074347v",
+      "source_key": "01428_CAM074347v__Eresia_clio.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM074365v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam074365v",
+      "source_key": "01430_CAM074365v__Pyrrhogyra_otolais.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM074367v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam074367v",
+      "source_key": "01443_CAM074367v__Bia_actorion.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM074390v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam074390v",
+      "source_key": "01462_CAM074390v__Colobura_dirce.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM074393d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam074393d",
+      "source_key": "01467_CAM074393d__Consul_fabius.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM074418d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam074418d",
+      "source_key": "01508_CAM074418d__Mechanitis_polymnia.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM074427d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam074427d",
+      "source_key": "01516_CAM074427d__Unknown_species.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM074430v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam074430v",
+      "source_key": "01523_CAM074430v__Hyalyris_lactea.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM072620d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam072620d",
+      "source_key": "01528_CAM072620d__Amarynthis_meneria.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM074413d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam074413d",
+      "source_key": "01545_CAM074413d__Hyposcada_illinissa.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM074488v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam074488v",
+      "source_key": "01720_CAM074488v__Hypothyris_ninonia.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM074533v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam074533v",
+      "source_key": "01736_CAM074533v__Corderopedaliodes_corderoi.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM074555v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam074555v",
+      "source_key": "01780_CAM074555v__Mechanitis_polymnia.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM074562v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam074562v",
+      "source_key": "01794_CAM074562v__Ithomia_salapia.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM072193d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam072193d",
+      "source_key": "01854_CAM072193d__Godyris_zavaleta.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM074475d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam074475d",
+      "source_key": "01916_CAM074475d__Godyris_panthyale.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM072219v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam072219v",
+      "source_key": "01922_CAM072219v__Scada_reckia.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM072225d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam072225d",
+      "source_key": "01933_CAM072225d__Hyposcada_anchiala.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM072228d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam072228d",
+      "source_key": "01939_CAM072228d__Mechanitis_mazaeus.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM074734v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam074734v",
+      "source_key": "01966_CAM074734v__Oleria_makrena.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM074722d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam074722d",
+      "source_key": "02040_CAM074722d__Heliconius_melpomene.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM074652d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam074652d",
+      "source_key": "02071_CAM074652d__Forbestra_olivencia.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM074671d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam074671d",
+      "source_key": "02083_CAM074671d__Megoleria_orestilla.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM074687v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam074687v",
+      "source_key": "02124_CAM074687v__Ithomia_terra.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM074693d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam074693d",
+      "source_key": "02129_CAM074693d__Hyalyris_antea.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM074752d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam074752d",
+      "source_key": "02179_CAM074752d__Pteronymia_alina.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM074769v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam074769v",
+      "source_key": "02233_CAM074769v__Pteronymia_alina.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM074785d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam074785d",
+      "source_key": "02256_CAM074785d__Pteronymia_inania.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM074823v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam074823v",
+      "source_key": "02259_CAM074823v__Ceratinia_neso.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM074845v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam074845v",
+      "source_key": "02357_CAM074845v__Heliconius_erato.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM074840v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam074840v",
+      "source_key": "02396_CAM074840v__Episcada_mira.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM070513d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam070513d",
+      "source_key": "02402_CAM070513d__Pteronymia_vestilla.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM070514d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam070514d",
+      "source_key": "02417_CAM070514d__Pteronymia_vestilla.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM070516d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam070516d",
+      "source_key": "02418_CAM070516d__Pteronymia_vestilla.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM070527v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam070527v",
+      "source_key": "02448_CAM070527v__Oleria_onega.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM070558d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam070558d",
+      "source_key": "02469_CAM070558d__Godyris_zavaleta.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM070557v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam070557v",
+      "source_key": "02470_CAM070557v__Godyris_zavaleta.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM074604d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam074604d",
+      "source_key": "02542_CAM074604d__Oleria_gunilla.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM074606d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam074606d",
+      "source_key": "02546_CAM074606d__Hyposcada_illinissa.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM074861v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam074861v",
+      "source_key": "02604_CAM074861v__Mechanitis_polymnia.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM042470v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam042470v",
+      "source_key": "02832_CAM042470v__Mechanitis_lysimnia.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM042452d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam042452d",
+      "source_key": "02846_CAM042452d__Ceratinia_tutia.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM042428v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam042428v",
+      "source_key": "02883_CAM042428v__Unknown_species.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM042032d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam042032d",
+      "source_key": "03029_CAM042032d__Unknown_species.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM077732v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam077732v",
+      "source_key": "03089_CAM077732v__Melinaea_mothone.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM077727d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam077727d",
+      "source_key": "03097_CAM077727d__Ithomia_amarilla.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM077721d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam077721d",
+      "source_key": "03106_CAM077721d__Methona_confusa.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM077716v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam077716v",
+      "source_key": "03117_CAM077716v__Hypothyris_euclea.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM077714d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam077714d",
+      "source_key": "03122_CAM077714d__Hypothyris_euclea.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM077722d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam077722d",
+      "source_key": "03125_CAM077722d__Mechanitis_mazaeus.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM077707d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam077707d",
+      "source_key": "03137_CAM077707d__Hypothyris_euclea.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM077689d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam077689d",
+      "source_key": "03156_CAM077689d__Unknown_species.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM077695v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam077695v",
+      "source_key": "03163_CAM077695v__Hypothyris_euclea.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM077670d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam077670d",
+      "source_key": "03216_CAM077670d__Melinaea_satevis.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM077544d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam077544d",
+      "source_key": "03335_CAM077544d__Aeria_eurimedia.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM077512d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam077512d",
+      "source_key": "03390_CAM077512d__Unknown_species.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM077496d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam077496d",
+      "source_key": "03416_CAM077496d__Pteronymia_primula.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM077500v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam077500v",
+      "source_key": "03422_CAM077500v__Ithomia_salapia.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM077478d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam077478d",
+      "source_key": "03449_CAM077478d__Pteronymia_primula.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM077455d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam077455d",
+      "source_key": "03519_CAM077455d__Hypothyris_euclea.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "cam077328d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam077328d",
+      "source_key": "03559_CAM077328d__Brevioleria_aelia.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM070598d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam070598d",
+      "source_key": "03617_CAM070598d__Forbestra_proceris.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM070604d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam070604d",
+      "source_key": "03629_CAM070604d__Napeogenes_inachia.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM070611d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam070611d",
+      "source_key": "03643_CAM070611d__Dircenna_dero.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM070644d",
+      "detection_count": 3,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam070644d",
+      "source_key": "03721_CAM070644d__Oleria_gunilla.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM070962d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam070962d",
+      "source_key": "03724_CAM070962d__Hypothyris_euclea.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM070996v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam070996v",
+      "source_key": "03793_CAM070996v__Mechanitis_polymnia.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM071046v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam071046v",
+      "source_key": "03885_CAM071046v__Ceratinia_tutia.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM071160d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam071160d",
+      "source_key": "04108_CAM071160d__Hypothyris_euclea.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM071168d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam071168d",
+      "source_key": "04124_CAM071168d__Hypothyris_euclea.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM071204d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam071204d",
+      "source_key": "04189_CAM071204d__Hypothyris_euclea.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM071215d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam071215d",
+      "source_key": "04203_CAM071215d__Hypothyris_euclea.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM071281v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam071281v",
+      "source_key": "04285_CAM071281v__Ceratinia_tutia.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM071290v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam071290v",
+      "source_key": "04303_CAM071290v__Ithomia_agnosia.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM070669v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam070669v",
+      "source_key": "04486_CAM070669v__Hypothyris_ninonia.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM070673v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam070673v",
+      "source_key": "04507_CAM070673v__Godyris_dircenna.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM070712d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam070712d",
+      "source_key": "04556_CAM070712d__Hypoleria_lavinia.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM070718v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam070718v",
+      "source_key": "04572_CAM070718v__Oleria_zelica.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM070753d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam070753d",
+      "source_key": "04633_CAM070753d__Heliconius_eleuchia.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM070748d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam070748d",
+      "source_key": "04636_CAM070748d__Oleria_zelica.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM070746d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam070746d",
+      "source_key": "04643_CAM070746d__Heliconius_eleuchia.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM070756v",
+      "detection_count": 3,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam070756v",
+      "source_key": "04656_CAM070756v__Hypomenitis_polissena.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM071208d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam071208d",
+      "source_key": "04676_CAM071208d__Godyris_zavaleta.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM071223d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam071223d",
+      "source_key": "04704_CAM071223d__Tithorea_harmonia.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM071260d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam071260d",
+      "source_key": "04732_CAM071260d__Hypothyris_euclea.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM070769v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam070769v",
+      "source_key": "04736_CAM070769v__Dircenna_loreta.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM070798d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam070798d",
+      "source_key": "04804_CAM070798d__Napeogenes_inachia.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM070813v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam070813v",
+      "source_key": "04849_CAM070813v__Godyris_zavaleta.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM070825v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam070825v",
+      "source_key": "04859_CAM070825v__Pteronymia_vestilla.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM070839d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam070839d",
+      "source_key": "04870_CAM070839d__Ithomia_salapia.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM070850d",
+      "detection_count": 3,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam070850d",
+      "source_key": "04907_CAM070850d__Oleria_onega.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM070862v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam070862v",
+      "source_key": "04962_CAM070862v__Godyris_dircenna.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM071325d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam071325d",
+      "source_key": "05129_CAM071325d__Hypomenitis_libethris.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM071380d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam071380d",
+      "source_key": "05239_CAM071380d__Veladyris_pardalis.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM071478v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam071478v",
+      "source_key": "05381_CAM071478v__Oleria_baizana.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM071488v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam071488v",
+      "source_key": "05403_CAM071488v__Oleria_baizana.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM071489d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam071489d",
+      "source_key": "05404_CAM071489d__Oleria_baizana.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM071490d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam071490d",
+      "source_key": "05406_CAM071490d__Oleria_baizana.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM071499d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam071499d",
+      "source_key": "05422_CAM071499d__Oleria_baizana.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM071450v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam071450v",
+      "source_key": "05500_CAM071450v__Pteronymia_oneida.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM071508d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam071508d",
+      "source_key": "05509_CAM071508d__Oleria_tremona.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM070297v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam070297v",
+      "source_key": "05555_CAM070297v__Mechanitis_polymnia.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM070306d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam070306d",
+      "source_key": "05570_CAM070306d__Melinaea_mothone.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM071616d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam071616d",
+      "source_key": "05751_CAM071616d__Hyposcada_anchiala.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM071627v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam071627v",
+      "source_key": "05774_CAM071627v__Oleria_gunilla.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM071641v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam071641v",
+      "source_key": "05802_CAM071641v__Oleria_onega.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM071650d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam071650d",
+      "source_key": "05819_CAM071650d__Pteronymia_vestilla.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM071696d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam071696d",
+      "source_key": "05905_CAM071696d__Oleria_onega.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM071714v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam071714v",
+      "source_key": "05952_CAM071714v__Forbestra_proceris.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM071999d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam071999d",
+      "source_key": "06009_CAM071999d__Hyposcada_illinissa.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM072047d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam072047d",
+      "source_key": "06025_CAM072047d__Pseudoscada_florula.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM072083v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam072083v",
+      "source_key": "06094_CAM072083v__Napeogenes_inachia.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM072084v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam072084v",
+      "source_key": "06096_CAM072084v__Hyposcada_illinissa.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM071770v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam071770v",
+      "source_key": "06170_CAM071770v__Oleria_zelica.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM071784v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam071784v",
+      "source_key": "06198_CAM071784v__Pseudoscada_troetschi.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM071785d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam071785d",
+      "source_key": "06199_CAM071785d__Thyridia_psidii.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM071951d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam071951d",
+      "source_key": "06410_CAM071951d__Oleria_zelica.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM072013d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam072013d",
+      "source_key": "06451_CAM072013d__Pseudoscada_timna.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM071838d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam071838d",
+      "source_key": "06479_CAM071838d__Scada_zibia.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM071816v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam071816v",
+      "source_key": "06503_CAM071816v__Lycorea_halia.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM071821v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam071821v",
+      "source_key": "06505_CAM071821v__Eueides_procula.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM071910v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam071910v",
+      "source_key": "06586_CAM071910v__Heliconius_clysonymus.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM071922v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam071922v",
+      "source_key": "06596_CAM071922v__Hypomenitis_polissena.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM071961d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam071961d",
+      "source_key": "06614_CAM071961d__Oleria_amalda.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM072017d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam072017d",
+      "source_key": "06663_CAM072017d__Oleria_ilerdina.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM072090v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam072090v",
+      "source_key": "06700_CAM072090v__Oleria_onega.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM070397v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam070397v",
+      "source_key": "06856_CAM070397v__Unknown_species.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM070426d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam070426d",
+      "source_key": "06905_CAM070426d__Unknown_species.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM070427d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam070427d",
+      "source_key": "06907_CAM070427d__Mechanitis_polymnia.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM070440d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam070440d",
+      "source_key": "06929_CAM070440d__Mechanitis_messenoides.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM073327v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam073327v",
+      "source_key": "06992_CAM073327v__Unknown_species.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM073340v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam073340v",
+      "source_key": "07018_CAM073340v__Melinaea_menophilus.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM073342v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam073342v",
+      "source_key": "07022_CAM073342v__Melinaea_menophilus.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM073357v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam073357v",
+      "source_key": "07052_CAM073357v__Unknown_species.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM072257v",
+      "detection_count": 3,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam072257v",
+      "source_key": "07100_CAM072257v__Mechanitis_polymnia.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "cam072275d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam072275d",
+      "source_key": "07131_CAM072275d__Lycaenidae_family.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM072318v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam072318v",
+      "source_key": "07179_CAM072318v__Heterosais_giulia.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM072375d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam072375d",
+      "source_key": "07263_CAM072375d__Eueides_isabella.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM072377d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam072377d",
+      "source_key": "07267_CAM072377d__Eresia_quintilla.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM072326v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam072326v",
+      "source_key": "07341_CAM072326v__Godyris_zavaleta.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM072369v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam072369v",
+      "source_key": "07366_CAM072369v__Eresia_emerantia.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM074925d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam074925d",
+      "source_key": "07420_CAM074925d__Oleria_onega.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM077299d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam077299d",
+      "source_key": "07551_CAM077299d__Thyridia_psidii.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM077406d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam077406d",
+      "source_key": "07599_CAM077406d__Mechanitis_lysimnia.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM036744v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam036744v",
+      "source_key": "07634_CAM036744v__Unknown_species.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM036782v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam036782v",
+      "source_key": "07641_CAM036782v__Unknown_species.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM070049d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam070049d",
+      "source_key": "07770_CAM070049d__Unknown_species.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM070110d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam070110d",
+      "source_key": "07780_CAM070110d__Unknown_species.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM070474v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam070474v",
+      "source_key": "07800_CAM070474v__Oleria_assimilis.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM070476d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam070476d",
+      "source_key": "07802_CAM070476d__Mechanitis_mazaeus.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM070486d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam070486d",
+      "source_key": "07817_CAM070486d__Napeogenes_inachia.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM070489d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam070489d",
+      "source_key": "07823_CAM070489d__Ithomia_salapia.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM070484d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam070484d",
+      "source_key": "07851_CAM070484d__Forbestra_proceris.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM070105v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam070105v",
+      "source_key": "07867_CAM070105v__Unknown_species.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM036804d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam036804d",
+      "source_key": "07869_CAM036804d__Unknown_species.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM036805d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam036805d",
+      "source_key": "07877_CAM036805d__Unknown_species.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM078537d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam078537d",
+      "source_key": "08452_CAM078537d__Unknown_species.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM078520v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam078520v",
+      "source_key": "08481_CAM078520v__Unknown_species.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM078518v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam078518v",
+      "source_key": "08485_CAM078518v__Unknown_species.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM075805d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam075805d",
+      "source_key": "08537_CAM075805d__Unknown_species.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM075810d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam075810d",
+      "source_key": "08555_CAM075810d__Unknown_species.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM075834v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam075834v",
+      "source_key": "08585_CAM075834v__Unknown_species.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM076920d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam076920d",
+      "source_key": "08955_CAM076920d__Oleria_onega.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "cam076941v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam076941v",
+      "source_key": "08996_CAM076941v__Hesperiidae_family.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM076946d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam076946d",
+      "source_key": "09005_CAM076946d__Napeogenes_duessa.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM076958v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam076958v",
+      "source_key": "09028_CAM076958v__Eueides_tales.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM076991d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam076991d",
+      "source_key": "09091_CAM076991d__Mcclungia_cymo.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM077105d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam077105d",
+      "source_key": "09115_CAM077105d__Mechanitis_messenoides.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM077112v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam077112v",
+      "source_key": "09130_CAM077112v__Ithomia_salapia.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM077135d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam077135d",
+      "source_key": "09149_CAM077135d__Hyalyris_oulita.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM077283v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam077283v",
+      "source_key": "09202_CAM077283v__Cartea_vitula.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM077346v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam077346v",
+      "source_key": "09234_CAM077346v__Mechanitis_lysimnia.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM074906d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam074906d",
+      "source_key": "09348_CAM074906d__Ithomia_salapia.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM074923v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam074923v",
+      "source_key": "09369_CAM074923v__Melinaea_menophilus.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM074939v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam074939v",
+      "source_key": "09370_CAM074939v__Heliconius_erato.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM076804v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam076804v",
+      "source_key": "09443_CAM076804v__Methona_curvifascia.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM076829d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam076829d",
+      "source_key": "09468_CAM076829d__Ceratinia_tutia.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM076889d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam076889d",
+      "source_key": "09477_CAM076889d__Scada_zibia.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM077146v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam077146v",
+      "source_key": "09583_CAM077146v__Hyalyris_oulita.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM077155v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam077155v",
+      "source_key": "09608_CAM077155v__Hypothyris_mansuetus.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM077163v",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam077163v",
+      "source_key": "09611_CAM077163v__Brevioleria_seba.jpg",
+      "terminal_outcome": "detected"
+    },
+    {
+      "affected_target": false,
+      "canonical_gallery_key": "CAM077268d",
+      "detection_count": 4,
+      "join_rule": "CAMID+dorsal/ventral+case-insensitive stem",
+      "raw_prediction_key": "cam077268d",
+      "source_key": "09768_CAM077268d__Napeogenes_inachia.jpg",
+      "terminal_outcome": "detected"
+    }
+  ],
+  "schema_version": "wings-segmenter-join-audit/v3",
+  "source_sha256": "03a0c80a5fb1b419fefce43262168ed6d9651b7f210c0fd87c9a61e6967a780d"
+}
