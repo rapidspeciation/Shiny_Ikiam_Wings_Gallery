@@ -1995,7 +1995,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM042428": {
     "candidate_available": false,
@@ -2604,7 +2604,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM042472": {
     "candidate_available": false,
@@ -2786,7 +2786,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM042485": {
     "candidate_available": false,
@@ -2830,7 +2830,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM042489": {
     "candidate_available": false,
@@ -2844,7 +2844,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM042490": {
     "candidate_available": false,
@@ -3600,7 +3600,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "Wings-v6 zero/failed detection; no candidate-D feature row"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM070269": {
     "candidate_available": false,
@@ -3614,7 +3614,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM070270": {
     "candidate_available": true,
@@ -3882,7 +3882,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM070307V": {
     "candidate_available": false,
@@ -5610,7 +5610,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM070540": {
     "candidate_available": false,
@@ -5624,7 +5624,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM070541": {
     "candidate_available": true,
@@ -7631,7 +7631,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM070785": {
     "candidate_available": true,
@@ -8828,7 +8828,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM070921": {
     "candidate_available": false,
@@ -9785,7 +9785,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM071017": {
     "candidate_available": true,
@@ -9820,7 +9820,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM071021": {
     "candidate_available": false,
@@ -10541,7 +10541,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM071083": {
     "candidate_available": false,
@@ -11523,7 +11523,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM071180": {
     "candidate_available": true,
@@ -11994,7 +11994,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM071228": {
     "candidate_available": true,
@@ -12605,7 +12605,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM071285": {
     "candidate_available": false,
@@ -13275,7 +13275,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM071366": {
     "candidate_available": true,
@@ -14569,7 +14569,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM071530": {
     "candidate_available": true,
@@ -14779,7 +14779,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM071549": {
     "candidate_available": true,
@@ -19363,7 +19363,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM072092": {
     "candidate_available": true,
@@ -20683,7 +20683,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM072265": {
     "candidate_available": true,
@@ -20769,7 +20769,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM072274": {
     "candidate_available": false,
@@ -20783,7 +20783,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM072275": {
     "candidate_available": false,
@@ -20797,7 +20797,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM072276": {
     "candidate_available": false,
@@ -20811,7 +20811,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM072277": {
     "candidate_available": true,
@@ -21382,7 +21382,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM072349": {
     "candidate_available": true,
@@ -22274,7 +22274,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM072454": {
     "candidate_available": false,
@@ -22288,7 +22288,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM072455": {
     "candidate_available": false,
@@ -22302,7 +22302,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM072456": {
     "candidate_available": false,
@@ -22316,7 +22316,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM072457": {
     "candidate_available": false,
@@ -22330,7 +22330,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM072458": {
     "candidate_available": true,
@@ -22586,7 +22586,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM072489": {
     "candidate_available": true,
@@ -22954,7 +22954,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM072528": {
     "candidate_available": false,
@@ -22968,7 +22968,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM072529": {
     "candidate_available": false,
@@ -23227,7 +23227,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM072563": {
     "candidate_available": false,
@@ -23241,7 +23241,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM072564": {
     "candidate_available": true,
@@ -23991,7 +23991,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM072636": {
     "candidate_available": false,
@@ -24689,7 +24689,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM072709": {
     "candidate_available": true,
@@ -26005,7 +26005,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM072836": {
     "candidate_available": true,
@@ -26033,7 +26033,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM072839": {
     "candidate_available": false,
@@ -26047,7 +26047,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM072840": {
     "candidate_available": true,
@@ -26170,7 +26170,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM072850": {
     "candidate_available": false,
@@ -26198,7 +26198,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM072852": {
     "candidate_available": true,
@@ -27072,7 +27072,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM072936": {
     "candidate_available": true,
@@ -30595,7 +30595,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM073597": {
     "candidate_available": false,
@@ -30609,7 +30609,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM073598": {
     "candidate_available": false,
@@ -30623,7 +30623,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM073600": {
     "candidate_available": false,
@@ -36069,7 +36069,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM074003": {
     "candidate_available": false,
@@ -36083,7 +36083,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM074004": {
     "candidate_available": false,
@@ -36097,7 +36097,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM074005": {
     "candidate_available": false,
@@ -36111,7 +36111,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM074006": {
     "candidate_available": false,
@@ -36139,7 +36139,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM074008": {
     "candidate_available": false,
@@ -36181,7 +36181,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM074011": {
     "candidate_available": false,
@@ -36195,7 +36195,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM074012": {
     "candidate_available": false,
@@ -36209,7 +36209,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM074013": {
     "candidate_available": false,
@@ -36223,7 +36223,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM074014": {
     "candidate_available": false,
@@ -36237,7 +36237,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM074015": {
     "candidate_available": false,
@@ -36251,7 +36251,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM074016": {
     "candidate_available": false,
@@ -36265,7 +36265,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM074017": {
     "candidate_available": false,
@@ -36279,7 +36279,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM074018": {
     "candidate_available": false,
@@ -36293,7 +36293,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM074019": {
     "candidate_available": false,
@@ -36307,7 +36307,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM074020": {
     "candidate_available": false,
@@ -36321,7 +36321,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM074021": {
     "candidate_available": false,
@@ -36335,7 +36335,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM074022": {
     "candidate_available": false,
@@ -36349,7 +36349,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM074023": {
     "candidate_available": false,
@@ -36377,7 +36377,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM074025": {
     "candidate_available": false,
@@ -36391,7 +36391,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM074026": {
     "candidate_available": false,
@@ -36405,7 +36405,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM074027": {
     "candidate_available": false,
@@ -36419,7 +36419,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM074032": {
     "candidate_available": false,
@@ -36433,7 +36433,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM074033": {
     "candidate_available": false,
@@ -36447,7 +36447,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM074034": {
     "candidate_available": false,
@@ -36461,7 +36461,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM074035": {
     "candidate_available": false,
@@ -36475,7 +36475,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM074036": {
     "candidate_available": false,
@@ -36503,7 +36503,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM074042": {
     "candidate_available": false,
@@ -36671,7 +36671,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM074059": {
     "candidate_available": false,
@@ -36965,7 +36965,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM074081": {
     "candidate_available": false,
@@ -37147,7 +37147,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM074094": {
     "candidate_available": false,
@@ -37161,7 +37161,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM074095": {
     "candidate_available": false,
@@ -37189,7 +37189,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM074097": {
     "candidate_available": false,
@@ -37217,7 +37217,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM074099": {
     "candidate_available": false,
@@ -39186,7 +39186,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM074500": {
     "candidate_available": true,
@@ -39329,7 +39329,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM074513": {
     "candidate_available": false,
@@ -39343,7 +39343,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM074514": {
     "candidate_available": true,
@@ -40634,7 +40634,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM074666": {
     "candidate_available": true,
@@ -41441,7 +41441,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM074748": {
     "candidate_available": true,
@@ -41740,7 +41740,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM074788": {
     "candidate_available": true,
@@ -41789,7 +41789,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM074793": {
     "candidate_available": true,
@@ -42129,7 +42129,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM074835": {
     "candidate_available": true,
@@ -42955,7 +42955,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM074927": {
     "candidate_available": false,
@@ -42969,7 +42969,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM074928": {
     "candidate_available": false,
@@ -42983,7 +42983,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM074929": {
     "candidate_available": false,
@@ -42997,7 +42997,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM074930": {
     "candidate_available": false,
@@ -43011,7 +43011,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM074931": {
     "candidate_available": false,
@@ -43025,7 +43025,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM074932": {
     "candidate_available": true,
@@ -43421,7 +43421,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM074974": {
     "candidate_available": true,
@@ -43526,7 +43526,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM074986": {
     "candidate_available": false,
@@ -43603,7 +43603,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM074994": {
     "candidate_available": false,
@@ -52500,7 +52500,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "Wings-v6 zero/failed detection; no candidate-D feature row"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM075744": {
     "candidate_available": false,
@@ -67291,7 +67291,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM076808": {
     "candidate_available": true,
@@ -67426,7 +67426,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM076819": {
     "candidate_available": false,
@@ -67440,7 +67440,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM076820": {
     "candidate_available": false,
@@ -67605,7 +67605,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM076833": {
     "candidate_available": true,
@@ -67682,7 +67682,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM076841": {
     "candidate_available": false,
@@ -68389,7 +68389,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM076894": {
     "candidate_available": true,
@@ -68776,7 +68776,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM076942": {
     "candidate_available": false,
@@ -68790,7 +68790,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM076943": {
     "candidate_available": false,
@@ -68804,7 +68804,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM076944": {
     "candidate_available": false,
@@ -69126,7 +69126,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM076982": {
     "candidate_available": false,
@@ -69140,7 +69140,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM076983": {
     "candidate_available": false,
@@ -69154,7 +69154,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM076984": {
     "candidate_available": true,
@@ -69224,7 +69224,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM076991": {
     "candidate_available": true,
@@ -70459,7 +70459,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM077226": {
     "candidate_available": false,
@@ -70705,7 +70705,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM077249": {
     "candidate_available": true,
@@ -71390,7 +71390,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM077320": {
     "candidate_available": false,
@@ -71462,7 +71462,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM077327": {
     "candidate_available": true,
@@ -71483,7 +71483,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM077329": {
     "candidate_available": false,
@@ -71623,7 +71623,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM077339": {
     "candidate_available": false,
@@ -71665,7 +71665,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM077342": {
     "candidate_available": false,
@@ -71679,7 +71679,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM077343": {
     "candidate_available": true,
@@ -72081,7 +72081,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM077389.2": {
     "candidate_available": false,
@@ -72545,7 +72545,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM077432": {
     "candidate_available": false,
@@ -72601,7 +72601,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM077437": {
     "candidate_available": true,
@@ -72938,7 +72938,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM077475": {
     "candidate_available": false,
@@ -73101,7 +73101,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM077493": {
     "candidate_available": false,
@@ -73796,7 +73796,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM077569": {
     "candidate_available": true,
@@ -75217,7 +75217,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM077695": {
     "candidate_available": true,
@@ -75424,7 +75424,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM077721": {
     "candidate_available": true,
@@ -75508,7 +75508,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM077728": {
     "candidate_available": true,
@@ -81906,7 +81906,7 @@
       "subspecies": "No valid frozen candidate-D OOF row for this rank",
       "tribe": "No valid frozen candidate-D OOF row for this rank"
     },
-    "reason": "No recoverable Wings-v6 feature row for candidate-D"
+    "reason": "No compatible frozen candidate-D OOF row; historical result is audit-only"
   },
   "CAM078546": {
     "candidate_available": false,

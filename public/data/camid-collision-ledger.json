@@ -1,0 +1,305 @@
+{
+  "apparent_taxonomy_conflicts": 4,
+  "authority_rule": "explicit stable CAM_ID > verified photographed record; photo URLs unioned",
+  "entries": [
+    {
+      "apparent_taxonomy_conflict": false,
+      "camid": "CAM071362",
+      "explicit_vs_photo_conflict": false,
+      "placeholder_only": false,
+      "records": [
+        {
+          "identity": "explicit",
+          "photos": [
+            "CAM071362d.JPG",
+            "CAM071362v.JPG"
+          ],
+          "row": 1188,
+          "source": "collection",
+          "taxonomy": {
+            "family": "Nymphalidae",
+            "genus": "Pteronymia",
+            "species": "Pteronymia ozia",
+            "subfamily": "Danainae",
+            "subspecies": "Pteronymia ozia browni",
+            "tribe": "Ithomiini"
+          }
+        },
+        {
+          "identity": "explicit",
+          "photos": [
+            "CAM071362d.JPG",
+            "CAM071362v.JPG"
+          ],
+          "row": 1205,
+          "source": "collection",
+          "taxonomy": {
+            "family": "Nymphalidae",
+            "genus": "Pteronymia",
+            "species": "Pteronymia ozia",
+            "subfamily": "Danainae",
+            "subspecies": "Pteronymia ozia browni",
+            "tribe": "Ithomiini"
+          }
+        }
+      ],
+      "source": "collection",
+      "taxonomy_variants": 1
+    },
+    {
+      "apparent_taxonomy_conflict": false,
+      "camid": "CAM071479",
+      "explicit_vs_photo_conflict": false,
+      "placeholder_only": false,
+      "records": [
+        {
+          "identity": "explicit",
+          "photos": [
+            "CAM071479d.JPG",
+            "CAM071479v.JPG"
+          ],
+          "row": 1158,
+          "source": "collection",
+          "taxonomy": {
+            "family": "Nymphalidae",
+            "genus": "Mechanitis",
+            "species": "Mechanitis messenoides",
+            "subfamily": "Danainae",
+            "subspecies": "Mechanitis messenoides deceptus",
+            "tribe": "Ithomiini"
+          }
+        },
+        {
+          "identity": "photo",
+          "photos": [],
+          "row": 1834,
+          "source": "collection",
+          "taxonomy": {
+            "family": "Nymphalidae",
+            "genus": "Mechanitis",
+            "species": "Mechanitis messenoides",
+            "subfamily": "Danainae",
+            "subspecies": "Mechanitis messenoides deceptus",
+            "tribe": "Ithomiini"
+          }
+        }
+      ],
+      "source": "collection",
+      "taxonomy_variants": 1
+    },
+    {
+      "apparent_taxonomy_conflict": true,
+      "camid": "CAM077706",
+      "explicit_vs_photo_conflict": true,
+      "placeholder_only": false,
+      "records": [
+        {
+          "identity": "photo",
+          "photos": [],
+          "row": 7055,
+          "source": "collection",
+          "taxonomy": {
+            "family": "Nymphalidae",
+            "genus": "Oleria",
+            "species": "Oleria onega",
+            "subfamily": "Danainae",
+            "subspecies": "Oleria onega janarilla",
+            "tribe": "Ithomiini"
+          }
+        },
+        {
+          "identity": "explicit",
+          "photos": [
+            "CAM077706v.JPG",
+            "CAM077706d.JPG"
+          ],
+          "row": 7056,
+          "source": "collection",
+          "taxonomy": {
+            "family": "Nymphalidae",
+            "genus": "Hypothyris",
+            "species": "Hypothyris euclea",
+            "subfamily": "Danainae",
+            "subspecies": "Hypothyris euclea intermedia",
+            "tribe": "Ithomiini"
+          }
+        }
+      ],
+      "source": "collection",
+      "taxonomy_variants": 2
+    },
+    {
+      "apparent_taxonomy_conflict": true,
+      "camid": "CAM077707",
+      "explicit_vs_photo_conflict": true,
+      "placeholder_only": false,
+      "records": [
+        {
+          "identity": "photo",
+          "photos": [],
+          "row": 7059,
+          "source": "collection",
+          "taxonomy": {
+            "family": "Nymphalidae",
+            "genus": "Hyposcada",
+            "species": "Hyposcada illinissa",
+            "subfamily": "Danainae",
+            "subspecies": "Hyposcada illinissa ida",
+            "tribe": "Ithomiini"
+          }
+        },
+        {
+          "identity": "explicit",
+          "photos": [
+            "CAM077707v.JPG",
+            "CAM077707d.JPG"
+          ],
+          "row": 7060,
+          "source": "collection",
+          "taxonomy": {
+            "family": "Nymphalidae",
+            "genus": "Hypothyris",
+            "species": "Hypothyris euclea",
+            "subfamily": "Danainae",
+            "subspecies": "Hypothyris euclea intermedia",
+            "tribe": "Ithomiini"
+          }
+        }
+      ],
+      "source": "collection",
+      "taxonomy_variants": 2
+    },
+    {
+      "apparent_taxonomy_conflict": true,
+      "camid": "CAM077708",
+      "explicit_vs_photo_conflict": true,
+      "placeholder_only": false,
+      "records": [
+        {
+          "identity": "photo",
+          "photos": [],
+          "row": 7061,
+          "source": "collection",
+          "taxonomy": {
+            "family": "Nymphalidae",
+            "genus": "Hyposcada",
+            "species": "Hyposcada illinissa",
+            "subfamily": "Danainae",
+            "subspecies": "Hyposcada illinissa ida",
+            "tribe": "Ithomiini"
+          }
+        },
+        {
+          "identity": "explicit",
+          "photos": [
+            "CAM077708v.JPG",
+            "CAM077708d.JPG"
+          ],
+          "row": 7062,
+          "source": "collection",
+          "taxonomy": {
+            "family": "Nymphalidae",
+            "genus": "Hypothyris",
+            "species": "Hypothyris euclea",
+            "subfamily": "Danainae",
+            "subspecies": "Hypothyris euclea intermedia",
+            "tribe": "Ithomiini"
+          }
+        }
+      ],
+      "source": "collection",
+      "taxonomy_variants": 2
+    },
+    {
+      "apparent_taxonomy_conflict": false,
+      "camid": "CAM070236",
+      "explicit_vs_photo_conflict": false,
+      "placeholder_only": false,
+      "records": [
+        {
+          "identity": "explicit",
+          "photos": [],
+          "row": 4,
+          "source": "insectary",
+          "taxonomy": {
+            "family": "",
+            "genus": "Mechanitis",
+            "species": "Mechanitis lysimnia",
+            "subfamily": "",
+            "subspecies": "",
+            "tribe": ""
+          }
+        },
+        {
+          "identity": "explicit",
+          "photos": [],
+          "row": 16,
+          "source": "insectary",
+          "taxonomy": {
+            "family": "",
+            "genus": "Mechanitis",
+            "species": "Mechanitis lysimnia",
+            "subfamily": "",
+            "subspecies": "",
+            "tribe": ""
+          }
+        }
+      ],
+      "source": "insectary",
+      "taxonomy_variants": 1
+    },
+    {
+      "apparent_taxonomy_conflict": true,
+      "camid": "CAM070413",
+      "explicit_vs_photo_conflict": false,
+      "placeholder_only": false,
+      "records": [
+        {
+          "identity": "explicit",
+          "photos": [
+            "CAM070413d.JPG",
+            "CAM070413v.JPG"
+          ],
+          "row": 163,
+          "source": "insectary",
+          "taxonomy": {
+            "family": "",
+            "genus": "Mechanitis",
+            "species": "Mechanitis polymnia",
+            "subfamily": "",
+            "subspecies": "Mechanitis polymnia proceriformis",
+            "tribe": ""
+          }
+        },
+        {
+          "identity": "explicit",
+          "photos": [
+            "CAM070413d.JPG",
+            "CAM070413v.JPG"
+          ],
+          "row": 164,
+          "source": "insectary",
+          "taxonomy": {
+            "family": "",
+            "genus": "Mechanitis",
+            "species": "Mechanitis polymnia",
+            "subfamily": "",
+            "subspecies": "Mechanitis polymnia eurydice",
+            "tribe": ""
+          }
+        }
+      ],
+      "source": "insectary",
+      "taxonomy_variants": 2
+    }
+  ],
+  "explicit_vs_photo_conflicts": [
+    "CAM077706",
+    "CAM077707",
+    "CAM077708"
+  ],
+  "raw_duplicate_groups": 7,
+  "resolved_duplicate_groups": 6,
+  "schema_version": "camid-collision-ledger/v3",
+  "status": "complete"
+}

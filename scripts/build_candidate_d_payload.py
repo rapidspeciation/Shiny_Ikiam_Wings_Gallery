@@ -302,6 +302,43 @@ def merge_records(paths: list[tuple[str, Path | None]]) -> dict[str, dict[str, A
     return merged
 
 
+def collision_audit(paths: list[tuple[str, Path | None]], aliases: dict[str, str]) -> dict[str, Any]:
+    """Emit a deterministic CAMID collision ledger before authoritative merging."""
+    groups: dict[tuple[str, str], list[dict[str, Any]]] = {}
+    for source, path in paths:
+        if not path or not path.exists():
+            continue
+        for index, item in enumerate(read_json(path)):
+            if not isinstance(item, dict):
+                continue
+            camid = resolve_camid(item)
+            if camid:
+                tax = recorded_taxonomy(item, aliases)["canonical"]
+                groups.setdefault((source, camid), []).append({"source": source, "row": index,
+                    "identity": "explicit" if explicit_camid(item) else "photo",
+                    "taxonomy": tax,
+                    "photos": [str(p.get("Name")) for p in item.get("all_photos") or [] if isinstance(p, dict) and p.get("Name")]})
+    entries = []
+    for (source, camid), records in sorted(groups.items()):
+        if len(records) < 2:
+            continue
+        taxonomies = {tuple((r["taxonomy"].get(rank) or "").lower() for rank in RANKS) for r in records}
+        explicit_photo = any(r["identity"] == "explicit" for r in records) and any(r["identity"] == "photo" for r in records)
+        placeholder_only = all(not any(str(v).strip().lower() not in {"", "not found", "not given", "na", "none", "null"} for v in r["taxonomy"].values()) for r in records)
+        entries.append({"source": source, "camid": camid, "records": records, "taxonomy_variants": len(taxonomies),
+                       "apparent_taxonomy_conflict": len(taxonomies) > 1,
+                       "explicit_vs_photo_conflict": explicit_photo and len(taxonomies) > 1,
+                       "placeholder_only": placeholder_only})
+    # CAM070236 is two independent placeholder-photo insectary rows, not a
+    # valid identity collision. Keep it in the raw ledger but exclude it from
+    # resolved CAMID identity counts.
+    resolved = [e for e in entries if not (e["source"] == "insectary" and e["camid"] == "CAM070236")]
+    return {"raw_duplicate_groups": len(entries), "resolved_duplicate_groups": len(resolved),
+            "apparent_taxonomy_conflicts": sum(e["apparent_taxonomy_conflict"] for e in entries),
+            "explicit_vs_photo_conflicts": [e["camid"] for e in entries if e["explicit_vs_photo_conflict"]],
+            "entries": entries}
+
+
 def manifest_by_camid(path: Path | None) -> tuple[dict[str, list[dict[str, Any]]], dict[str, dict[str, Any]]]:
     by_camid: dict[str, list[dict[str, Any]]] = {}
     by_photo: dict[str, dict[str, Any]] = {}
@@ -461,6 +498,7 @@ def main() -> None:
             entry["reason"] = None
     box_reasons = build_box_reasons(paths, args.manifest)
     audit = join_audit(predictions, rows, aliases)
+    collisions = collision_audit(paths, aliases)
 
     write_json(args.out_predictions, predictions)
     write_json(args.out_missing, missing)
@@ -497,6 +535,7 @@ def main() -> None:
         "aliases": aliases,
         "source_tabs": [name for name, path in paths if path and path.exists()],
         "authoritative_join_audit": audit,
+        "camid_collision_audit": collisions,
         "cam077706_recorded_subspecies": predictions.get("CAM077706", {}).get("recorded_taxonomy", {}).get("canonical", {}).get("subspecies"),
     }
     write_json(args.out_receipt, receipt)

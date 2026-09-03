@@ -91,6 +91,16 @@ test('authoritative collection taxonomy fixes CAM077706 and prevents false disag
   assert.equal(cam.recorded_taxonomy.canonical.genus, 'Hypothyris')
 })
 
+test('CAMID collision ledger is scoped, authoritative, and fold-independent', () => {
+  const ledger = read('camid-collision-ledger.json')
+  assert.equal(ledger.raw_duplicate_groups, 7)
+  assert.equal(ledger.resolved_duplicate_groups, 6)
+  assert.equal(ledger.apparent_taxonomy_conflicts, 4)
+  assert.deepEqual(ledger.explicit_vs_photo_conflicts, ['CAM077706', 'CAM077707', 'CAM077708'])
+  const cam = ledger.entries.find(entry => entry.camid === 'CAM077706')
+  assert.equal(cam.records.find(row => row.identity === 'explicit').taxonomy.subspecies, 'Hypothyris euclea intermedia')
+})
+
 test('model confidence sorting uses selected candidate rank and missing rows sort last descending', () => {
   const items = [{ CAM_ID: 'CAM-A' }, { CAM_ID: 'CAM-B' }, { CAM_ID: 'CAM-C' }]
   const map = {
