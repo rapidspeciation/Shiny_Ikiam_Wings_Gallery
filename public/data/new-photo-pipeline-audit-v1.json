@@ -1,0 +1,12 @@
+{
+  "audit_version": "released-photo-pipeline-v1",
+  "processed_at": "2026-09-03T21:21:13.385189+00:00",
+  "new_cam_ids": 269,
+  "new_photo_rows": 556,
+  "status_counts": {
+    "ok": 551,
+    "download_error": 5
+  },
+  "all_new_photos_processed": false,
+  "results_sha256": "15f35633093a94701a92594cc7cece981ddb575b9eb87790eff4c889f253e031"
+}
