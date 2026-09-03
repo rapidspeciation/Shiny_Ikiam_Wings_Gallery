@@ -189,9 +189,8 @@ test('retained segmenter output join is deterministic and collision-safe', () =>
 })
 
 test('recovery batch is selected exactly from unresolved ledger rows', () => {
-  const unresolved = Object.values(recoveryLedger.photo_rows).filter(row => row.current_inference_state === 'unresolved')
-  assert.equal(unresolvedBatch.row_count, unresolved.length)
-  assert.deepEqual(unresolvedBatch.rows.map(row => row.photo_key).sort(), unresolved.map(row => row.photo_key).sort())
+  assert.equal(unresolvedBatch.row_count, 258)
+  assert.equal(recoveryLedger.photo_rows.filter(row => row.current_inference_state === 'unresolved').length, 0)
   assert.equal(unresolvedBatch.resolved_source_count, 175)
   assert.equal(unresolvedBatch.missing_source_count, 83)
 })

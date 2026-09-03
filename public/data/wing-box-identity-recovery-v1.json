@@ -1,7 +1,7 @@
 {
   "affected_images": 262,
   "batch_detected": 224,
-  "batch_job_id": "27445",
+  "batch_job_id": "28129",
   "batch_source_images": 224,
   "cam077727": {
     "canonical_source": "03097_CAM077727d__Ithomia_amarilla.jpg",
@@ -20,757 +20,758 @@
     "projection_failure_after_successful_ledger": 65,
     "recovered_current_inference": 4
   },
+  "detected_new": 174,
   "inference_failures": 0,
   "photo_rows": [
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam042427d",
         "CAM042427d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam042427d",
       "photo_name": "CAM042427d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam042427v",
         "CAM042427v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam042427v",
       "photo_name": "CAM042427v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam042471d",
         "CAM042471d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam042471d",
       "photo_name": "CAM042471d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam042471v",
         "CAM042471v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam042471v",
       "photo_name": "CAM042471v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam042484d",
         "CAM042484d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam042484d",
       "photo_name": "CAM042484d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam042484v",
         "CAM042484v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam042484v",
       "photo_name": "CAM042484v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam042488d",
         "CAM042488d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam042488d",
       "photo_name": "CAM042488d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam042488v",
         "CAM042488v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam042488v",
       "photo_name": "CAM042488v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam042489d",
         "CAM042489d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam042489d",
       "photo_name": "CAM042489d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam042489v",
         "CAM042489v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam042489v",
       "photo_name": "CAM042489v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam070267v",
         "CAM070267v"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam070267v",
       "photo_name": "CAM070267v",
       "provenance": null,
       "root_cause": "projection_failure_after_successful_ledger",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam070267v2",
         "CAM070267v2.jfif"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam070267v2",
       "photo_name": "CAM070267v2.jfif",
       "provenance": null,
       "root_cause": "projection_failure_after_successful_ledger",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam070269d",
         "CAM070269d"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam070269d",
       "photo_name": "CAM070269d",
       "provenance": null,
       "root_cause": "projection_failure_after_successful_ledger",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam070269v",
         "CAM070269v"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam070269v",
       "photo_name": "CAM070269v",
       "provenance": null,
       "root_cause": "projection_failure_after_successful_ledger",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam070269v2",
         "CAM070269v2.jfif"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam070269v2",
       "photo_name": "CAM070269v2.jfif",
       "provenance": null,
       "root_cause": "projection_failure_after_successful_ledger",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam070307d",
         "CAM070307d.jfif"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam070307d",
       "photo_name": "CAM070307d.jfif",
       "provenance": null,
       "root_cause": "projection_failure_after_successful_ledger",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam070539d",
         "CAM070539d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam070539d",
       "photo_name": "CAM070539d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam070539v",
         "CAM070539v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam070539v",
       "photo_name": "CAM070539v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam070540d",
         "CAM070540d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam070540d",
       "photo_name": "CAM070540d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam070540v",
         "CAM070540v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam070540v",
       "photo_name": "CAM070540v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam070784d",
         "CAM070784d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam070784d",
       "photo_name": "CAM070784d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam070784v",
         "CAM070784v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam070784v",
       "photo_name": "CAM070784v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam070920d",
         "CAM070920d.JPG"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam070920d",
       "photo_name": "CAM070920d.JPG",
       "provenance": null,
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam070920v",
         "CAM070920v.JPG"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam070920v",
       "photo_name": "CAM070920v.JPG",
       "provenance": null,
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam071016d",
         "CAM071016d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam071016d",
       "photo_name": "CAM071016d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam071016v",
         "CAM071016v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam071016v",
       "photo_name": "CAM071016v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam071020d",
         "CAM071020d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam071020d",
       "photo_name": "CAM071020d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam071020v",
         "CAM071020v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam071020v",
       "photo_name": "CAM071020v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam071082d",
         "CAM071082d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam071082d",
       "photo_name": "CAM071082d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam071082v",
         "CAM071082v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam071082v",
       "photo_name": "CAM071082v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam071179d",
         "CAM071179d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam071179d",
       "photo_name": "CAM071179d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam071179v",
         "CAM071179v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam071179v",
       "photo_name": "CAM071179v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam071227d",
         "CAM071227d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam071227d",
       "photo_name": "CAM071227d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam071227v",
         "CAM071227v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam071227v",
       "photo_name": "CAM071227v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam071284d",
         "CAM071284d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam071284d",
       "photo_name": "CAM071284d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam071284v",
         "CAM071284v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam071284v",
       "photo_name": "CAM071284v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam071365d",
         "CAM071365d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam071365d",
       "photo_name": "CAM071365d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam071365v",
         "CAM071365v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam071365v",
       "photo_name": "CAM071365v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam071529d",
         "CAM071529d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam071529d",
       "photo_name": "CAM071529d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam071529v",
         "CAM071529v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam071529v",
       "photo_name": "CAM071529v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam071548d",
         "CAM071548d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam071548d",
       "photo_name": "CAM071548d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam071548v",
         "CAM071548v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam071548v",
       "photo_name": "CAM071548v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam072091d",
         "CAM072091d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam072091d",
       "photo_name": "CAM072091d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam072091v",
         "CAM072091v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam072091v",
       "photo_name": "CAM072091v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam072264d",
         "CAM072264d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam072264d",
       "photo_name": "CAM072264d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam072264v",
         "CAM072264v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam072264v",
       "photo_name": "CAM072264v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam072273d",
         "CAM072273d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam072273d",
       "photo_name": "CAM072273d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam072273v",
         "CAM072273v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam072273v",
       "photo_name": "CAM072273v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam072274d",
         "CAM072274d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam072274d",
       "photo_name": "CAM072274d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam072274v",
         "CAM072274v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam072274v",
       "photo_name": "CAM072274v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
       "action": "replay_current_segmenter",
@@ -788,2239 +789,2239 @@
       "terminal_outcome": "four_boxes"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam072275v",
         "CAM072275v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam072275v",
       "photo_name": "CAM072275v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam072276d",
         "CAM072276d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam072276d",
       "photo_name": "CAM072276d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam072276v",
         "CAM072276v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam072276v",
       "photo_name": "CAM072276v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam072348d",
         "CAM072348d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam072348d",
       "photo_name": "CAM072348d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam072348v",
         "CAM072348v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam072348v",
       "photo_name": "CAM072348v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam072453d",
         "CAM072453d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam072453d",
       "photo_name": "CAM072453d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam072453v",
         "CAM072453v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam072453v",
       "photo_name": "CAM072453v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam072454d",
         "CAM072454d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam072454d",
       "photo_name": "CAM072454d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam072454v",
         "CAM072454v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam072454v",
       "photo_name": "CAM072454v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam072455d",
         "CAM072455d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam072455d",
       "photo_name": "CAM072455d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam072455v",
         "CAM072455v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam072455v",
       "photo_name": "CAM072455v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam072456d",
         "CAM072456d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam072456d",
       "photo_name": "CAM072456d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam072456v",
         "CAM072456v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam072456v",
       "photo_name": "CAM072456v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam072457d",
         "CAM072457d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam072457d",
       "photo_name": "CAM072457d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam072457v",
         "CAM072457v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam072457v",
       "photo_name": "CAM072457v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam072488d",
         "CAM072488d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam072488d",
       "photo_name": "CAM072488d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam072488v",
         "CAM072488v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam072488v",
       "photo_name": "CAM072488v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam072527d",
         "CAM072527d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam072527d",
       "photo_name": "CAM072527d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam072527v",
         "CAM072527v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam072527v",
       "photo_name": "CAM072527v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam072528d",
         "CAM072528d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam072528d",
       "photo_name": "CAM072528d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam072528v",
         "CAM072528v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam072528v",
       "photo_name": "CAM072528v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam072562d",
         "CAM072562d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam072562d",
       "photo_name": "CAM072562d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam072562v",
         "CAM072562v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam072562v",
       "photo_name": "CAM072562v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam072563d",
         "CAM072563d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam072563d",
       "photo_name": "CAM072563d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam072563v",
         "CAM072563v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam072563v",
       "photo_name": "CAM072563v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam072635d",
         "CAM072635d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam072635d",
       "photo_name": "CAM072635d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam072635v",
         "CAM072635v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam072635v",
       "photo_name": "CAM072635v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam072708d",
         "CAM072708d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam072708d",
       "photo_name": "CAM072708d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam072708v",
         "CAM072708v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam072708v",
       "photo_name": "CAM072708v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam072835d",
         "CAM072835d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam072835d",
       "photo_name": "CAM072835d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam072835v",
         "CAM072835v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam072835v",
       "photo_name": "CAM072835v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam072838d",
         "CAM072838d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam072838d",
       "photo_name": "CAM072838d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam072838v",
         "CAM072838v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam072838v",
       "photo_name": "CAM072838v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam072839d",
         "CAM072839d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam072839d",
       "photo_name": "CAM072839d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam072839v",
         "CAM072839v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam072839v",
       "photo_name": "CAM072839v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam072849d",
         "CAM072849d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam072849d",
       "photo_name": "CAM072849d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam072849v",
         "CAM072849v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam072849v",
       "photo_name": "CAM072849v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam072851d",
         "CAM072851d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam072851d",
       "photo_name": "CAM072851d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam072851v",
         "CAM072851v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam072851v",
       "photo_name": "CAM072851v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam072935d",
         "CAM072935d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam072935d",
       "photo_name": "CAM072935d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam072935v",
         "CAM072935v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam072935v",
       "photo_name": "CAM072935v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam073596d",
         "CAM073596d"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam073596d",
       "photo_name": "CAM073596d",
       "provenance": null,
       "root_cause": "projection_failure_after_successful_ledger",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam073596v",
         "CAM073596v"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam073596v",
       "photo_name": "CAM073596v",
       "provenance": null,
       "root_cause": "projection_failure_after_successful_ledger",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam073596v2",
         "CAM073596v2.jpg"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam073596v2",
       "photo_name": "CAM073596v2.jpg",
       "provenance": null,
       "root_cause": "projection_failure_after_successful_ledger",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam073597v2",
         "CAM073597v2.jpg"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam073597v2",
       "photo_name": "CAM073597v2.jpg",
       "provenance": null,
       "root_cause": "projection_failure_after_successful_ledger",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam073598v",
         "CAM073598v"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam073598v",
       "photo_name": "CAM073598v",
       "provenance": null,
       "root_cause": "projection_failure_after_successful_ledger",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam073598v2",
         "CAM073598v2.jpg"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam073598v2",
       "photo_name": "CAM073598v2.jpg",
       "provenance": null,
       "root_cause": "projection_failure_after_successful_ledger",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam074002v",
         "CAM074002v.JPEG"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam074002v",
       "photo_name": "CAM074002v.JPEG",
       "provenance": null,
       "root_cause": "projection_failure_after_successful_ledger",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam074002v2",
         "CAM074002v2.JPEG"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam074002v2",
       "photo_name": "CAM074002v2.JPEG",
       "provenance": null,
       "root_cause": "projection_failure_after_successful_ledger",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam074003d",
         "CAM074003d.JPEG"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam074003d",
       "photo_name": "CAM074003d.JPEG",
       "provenance": null,
       "root_cause": "projection_failure_after_successful_ledger",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam074003v2",
         "CAM074003v2.JPEG"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam074003v2",
       "photo_name": "CAM074003v2.JPEG",
       "provenance": null,
       "root_cause": "projection_failure_after_successful_ledger",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam074004v",
         "CAM074004v.JPEG"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam074004v",
       "photo_name": "CAM074004v.JPEG",
       "provenance": null,
       "root_cause": "projection_failure_after_successful_ledger",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam074005v",
         "CAM074005v.JPEG"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam074005v",
       "photo_name": "CAM074005v.JPEG",
       "provenance": null,
       "root_cause": "projection_failure_after_successful_ledger",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam074005v2",
         "CAM074005v2.JPEG"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam074005v2",
       "photo_name": "CAM074005v2.JPEG",
       "provenance": null,
       "root_cause": "projection_failure_after_successful_ledger",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam074007d",
         "CAM074007d.JPEG"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam074007d",
       "photo_name": "CAM074007d.JPEG",
       "provenance": null,
       "root_cause": "projection_failure_after_successful_ledger",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam074010v2",
         "CAM074010v2.JPEG"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam074010v2",
       "photo_name": "CAM074010v2.JPEG",
       "provenance": null,
       "root_cause": "projection_failure_after_successful_ledger",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam074011v2",
         "CAM074011v2.JPEG"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam074011v2",
       "photo_name": "CAM074011v2.JPEG",
       "provenance": null,
       "root_cause": "projection_failure_after_successful_ledger",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam074012d",
         "CAM074012d.JPEG"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam074012d",
       "photo_name": "CAM074012d.JPEG",
       "provenance": null,
       "root_cause": "projection_failure_after_successful_ledger",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam074012v",
         "CAM074012v.JPEG"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam074012v",
       "photo_name": "CAM074012v.JPEG",
       "provenance": null,
       "root_cause": "projection_failure_after_successful_ledger",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam074012v2",
         "CAM074012v2.JPEG"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam074012v2",
       "photo_name": "CAM074012v2.JPEG",
       "provenance": null,
       "root_cause": "projection_failure_after_successful_ledger",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam074013d",
         "CAM074013d.JPEG"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam074013d",
       "photo_name": "CAM074013d.JPEG",
       "provenance": null,
       "root_cause": "projection_failure_after_successful_ledger",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam074014d",
         "CAM074014d.JPEG"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam074014d",
       "photo_name": "CAM074014d.JPEG",
       "provenance": null,
       "root_cause": "projection_failure_after_successful_ledger",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam074015d",
         "CAM074015d.JPEG"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam074015d",
       "photo_name": "CAM074015d.JPEG",
       "provenance": null,
       "root_cause": "projection_failure_after_successful_ledger",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam074015v",
         "CAM074015v.JPEG"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam074015v",
       "photo_name": "CAM074015v.JPEG",
       "provenance": null,
       "root_cause": "projection_failure_after_successful_ledger",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam074016d",
         "CAM074016d.JPEG"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam074016d",
       "photo_name": "CAM074016d.JPEG",
       "provenance": null,
       "root_cause": "projection_failure_after_successful_ledger",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam074017d",
         "CAM074017d.JPEG"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam074017d",
       "photo_name": "CAM074017d.JPEG",
       "provenance": null,
       "root_cause": "projection_failure_after_successful_ledger",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam074017v2",
         "CAM074017v2.JPEG"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam074017v2",
       "photo_name": "CAM074017v2.JPEG",
       "provenance": null,
       "root_cause": "projection_failure_after_successful_ledger",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam074018d",
         "CAM074018d.JPEG"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam074018d",
       "photo_name": "CAM074018d.JPEG",
       "provenance": null,
       "root_cause": "projection_failure_after_successful_ledger",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam074018v2",
         "CAM074018v2.JPEG"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam074018v2",
       "photo_name": "CAM074018v2.JPEG",
       "provenance": null,
       "root_cause": "projection_failure_after_successful_ledger",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam074019d",
         "CAM074019d.JPEG"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam074019d",
       "photo_name": "CAM074019d.JPEG",
       "provenance": null,
       "root_cause": "projection_failure_after_successful_ledger",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam074019v",
         "CAM074019v.JPEG"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam074019v",
       "photo_name": "CAM074019v.JPEG",
       "provenance": null,
       "root_cause": "projection_failure_after_successful_ledger",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam074020d",
         "CAM074020d.JPEG"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam074020d",
       "photo_name": "CAM074020d.JPEG",
       "provenance": null,
       "root_cause": "projection_failure_after_successful_ledger",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam074020v",
         "CAM074020v.JPEG"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam074020v",
       "photo_name": "CAM074020v.JPEG",
       "provenance": null,
       "root_cause": "projection_failure_after_successful_ledger",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam074020v2",
         "CAM074020v2.JPEG"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam074020v2",
       "photo_name": "CAM074020v2.JPEG",
       "provenance": null,
       "root_cause": "projection_failure_after_successful_ledger",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam074021d",
         "CAM074021d.JPEG"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam074021d",
       "photo_name": "CAM074021d.JPEG",
       "provenance": null,
       "root_cause": "projection_failure_after_successful_ledger",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam074021v2",
         "CAM074021v2.JPEG"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam074021v2",
       "photo_name": "CAM074021v2.JPEG",
       "provenance": null,
       "root_cause": "projection_failure_after_successful_ledger",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam074022v",
         "CAM074022v.JPEG"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam074022v",
       "photo_name": "CAM074022v.JPEG",
       "provenance": null,
       "root_cause": "projection_failure_after_successful_ledger",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam074024d",
         "CAM074024d.JPEG"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam074024d",
       "photo_name": "CAM074024d.JPEG",
       "provenance": null,
       "root_cause": "projection_failure_after_successful_ledger",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam074025d",
         "CAM074025d.JPEG"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam074025d",
       "photo_name": "CAM074025d.JPEG",
       "provenance": null,
       "root_cause": "projection_failure_after_successful_ledger",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam074025v",
         "CAM074025v.JPEG"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam074025v",
       "photo_name": "CAM074025v.JPEG",
       "provenance": null,
       "root_cause": "projection_failure_after_successful_ledger",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam074025v2",
         "CAM074025v2.JPEG"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam074025v2",
       "photo_name": "CAM074025v2.JPEG",
       "provenance": null,
       "root_cause": "projection_failure_after_successful_ledger",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam074026v2",
         "CAM074026v2.JPEG"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam074026v2",
       "photo_name": "CAM074026v2.JPEG",
       "provenance": null,
       "root_cause": "projection_failure_after_successful_ledger",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam074027d",
         "CAM074027d"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam074027d",
       "photo_name": "CAM074027d",
       "provenance": null,
       "root_cause": "projection_failure_after_successful_ledger",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam074027v",
         "CAM074027v"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam074027v",
       "photo_name": "CAM074027v",
       "provenance": null,
       "root_cause": "projection_failure_after_successful_ledger",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam074032v",
         "CAM074032v"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam074032v",
       "photo_name": "CAM074032v",
       "provenance": null,
       "root_cause": "projection_failure_after_successful_ledger",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam074032v2",
         "CAM074032v2.HEIC"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam074032v2",
       "photo_name": "CAM074032v2.HEIC",
       "provenance": null,
       "root_cause": "projection_failure_after_successful_ledger",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam074033d",
         "CAM074033d"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam074033d",
       "photo_name": "CAM074033d",
       "provenance": null,
       "root_cause": "projection_failure_after_successful_ledger",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam074034d",
         "CAM074034d"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam074034d",
       "photo_name": "CAM074034d",
       "provenance": null,
       "root_cause": "projection_failure_after_successful_ledger",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam074034v",
         "CAM074034v"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam074034v",
       "photo_name": "CAM074034v",
       "provenance": null,
       "root_cause": "projection_failure_after_successful_ledger",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam074034v2",
         "CAM074034v2.HEIC"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam074034v2",
       "photo_name": "CAM074034v2.HEIC",
       "provenance": null,
       "root_cause": "projection_failure_after_successful_ledger",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam074035d",
         "CAM074035d"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam074035d",
       "photo_name": "CAM074035d",
       "provenance": null,
       "root_cause": "projection_failure_after_successful_ledger",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam074037d",
         "CAM074037d"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam074037d",
       "photo_name": "CAM074037d",
       "provenance": null,
       "root_cause": "projection_failure_after_successful_ledger",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam074037v",
         "CAM074037v"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam074037v",
       "photo_name": "CAM074037v",
       "provenance": null,
       "root_cause": "projection_failure_after_successful_ledger",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam074037v2",
         "CAM074037v2.HEIC"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam074037v2",
       "photo_name": "CAM074037v2.HEIC",
       "provenance": null,
       "root_cause": "projection_failure_after_successful_ledger",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam074058v3",
         "CAM074058v3.JPG"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam074058v3",
       "photo_name": "CAM074058v3.JPG",
       "provenance": null,
       "root_cause": "projection_failure_after_successful_ledger",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam074080d",
         "CAM074080d"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam074080d",
       "photo_name": "CAM074080d",
       "provenance": null,
       "root_cause": "projection_failure_after_successful_ledger",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam074093d",
         "CAM074093d"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam074093d",
       "photo_name": "CAM074093d",
       "provenance": null,
       "root_cause": "projection_failure_after_successful_ledger",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam074094v",
         "CAM074094v"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam074094v",
       "photo_name": "CAM074094v",
       "provenance": null,
       "root_cause": "projection_failure_after_successful_ledger",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam074096v",
         "CAM074096v"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam074096v",
       "photo_name": "CAM074096v",
       "provenance": null,
       "root_cause": "projection_failure_after_successful_ledger",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam074098v",
         "CAM074098v"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam074098v",
       "photo_name": "CAM074098v",
       "provenance": null,
       "root_cause": "projection_failure_after_successful_ledger",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam074490d",
         "CAM074490d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam074490d",
       "photo_name": "CAM074490d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam074490v",
         "CAM074490v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam074490v",
       "photo_name": "CAM074490v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam074512d",
         "CAM074512d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam074512d",
       "photo_name": "CAM074512d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam074512v",
         "CAM074512v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam074512v",
       "photo_name": "CAM074512v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam074513d",
         "CAM074513d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam074513d",
       "photo_name": "CAM074513d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam074513v",
         "CAM074513v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam074513v",
       "photo_name": "CAM074513v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam074665d",
         "CAM074665d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam074665d",
       "photo_name": "CAM074665d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam074665v",
         "CAM074665v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam074665v",
       "photo_name": "CAM074665v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam074747d",
         "CAM074747d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam074747d",
       "photo_name": "CAM074747d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam074747v",
         "CAM074747v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam074747v",
       "photo_name": "CAM074747v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam074787d",
         "CAM074787d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam074787d",
       "photo_name": "CAM074787d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam074787v",
         "CAM074787v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam074787v",
       "photo_name": "CAM074787v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam074792d",
         "CAM074792d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 5,
+      "current_inference_state": "detected",
       "photo_key": "cam074792d",
       "photo_name": "CAM074792d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam074792v",
         "CAM074792v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam074792v",
       "photo_name": "CAM074792v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam074834d",
         "CAM074834d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam074834d",
       "photo_name": "CAM074834d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam074834v",
         "CAM074834v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam074834v",
       "photo_name": "CAM074834v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam074926d",
         "CAM074926d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam074926d",
       "photo_name": "CAM074926d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam074926v",
         "CAM074926v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam074926v",
       "photo_name": "CAM074926v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam074927d",
         "CAM074927d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam074927d",
       "photo_name": "CAM074927d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam074927v",
         "CAM074927v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam074927v",
       "photo_name": "CAM074927v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam074928d",
         "CAM074928d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam074928d",
       "photo_name": "CAM074928d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "download_failed",
       "aliases": [
         "cam074928v",
         "CAM074928v.JPG"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "source_unavailable",
       "photo_key": "cam074928v",
       "photo_name": "CAM074928v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "source_unavailable"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam074929d",
         "CAM074929d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam074929d",
       "photo_name": "CAM074929d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam074929v",
         "CAM074929v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam074929v",
       "photo_name": "CAM074929v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam074930d",
         "CAM074930d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam074930d",
       "photo_name": "CAM074930d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam074930v",
         "CAM074930v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam074930v",
       "photo_name": "CAM074930v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam074931d",
         "CAM074931d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam074931d",
       "photo_name": "CAM074931d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam074931v",
         "CAM074931v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam074931v",
       "photo_name": "CAM074931v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam074973d",
         "CAM074973d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam074973d",
       "photo_name": "CAM074973d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam074973v",
         "CAM074973v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 5,
+      "current_inference_state": "detected",
       "photo_key": "cam074973v",
       "photo_name": "CAM074973v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam074985d",
         "CAM074985d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 2,
+      "current_inference_state": "detected",
       "photo_key": "cam074985d",
       "photo_name": "CAM074985d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam074985v",
         "CAM074985v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 2,
+      "current_inference_state": "detected",
       "photo_key": "cam074985v",
       "photo_name": "CAM074985v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam074993d",
         "CAM074993d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam074993d",
       "photo_name": "CAM074993d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam074993v",
         "CAM074993v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam074993v",
       "photo_name": "CAM074993v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam076807d",
         "CAM076807d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam076807d",
       "photo_name": "CAM076807d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam076807v",
         "CAM076807v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam076807v",
       "photo_name": "CAM076807v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam076818d",
         "CAM076818d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam076818d",
       "photo_name": "CAM076818d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam076818v",
         "CAM076818v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam076818v",
       "photo_name": "CAM076818v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam076819d",
         "CAM076819d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam076819d",
       "photo_name": "CAM076819d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam076819v",
         "CAM076819v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam076819v",
       "photo_name": "CAM076819v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam076832d",
         "CAM076832d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam076832d",
       "photo_name": "CAM076832d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam076832v",
         "CAM076832v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam076832v",
       "photo_name": "CAM076832v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam076840d",
         "CAM076840d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam076840d",
       "photo_name": "CAM076840d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam076840v",
         "CAM076840v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam076840v",
       "photo_name": "CAM076840v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam076890v",
         "CAM076890v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam076890v",
       "photo_name": "CAM076890v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam076893d",
         "CAM076893d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam076893d",
       "photo_name": "CAM076893d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam076893v",
         "CAM076893v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam076893v",
       "photo_name": "CAM076893v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam076912v",
         "CAM076912v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam076912v",
       "photo_name": "CAM076912v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam076941d",
         "CAM076941d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam076941d",
       "photo_name": "CAM076941d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
       "action": "replay_current_segmenter",
@@ -3038,304 +3039,304 @@
       "terminal_outcome": "four_boxes"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam076942d",
         "CAM076942d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam076942d",
       "photo_name": "CAM076942d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam076942v",
         "CAM076942v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam076942v",
       "photo_name": "CAM076942v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam076943d",
         "CAM076943d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam076943d",
       "photo_name": "CAM076943d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam076943v",
         "CAM076943v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam076943v",
       "photo_name": "CAM076943v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam076981d",
         "CAM076981d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam076981d",
       "photo_name": "CAM076981d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam076981v",
         "CAM076981v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam076981v",
       "photo_name": "CAM076981v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam076982d",
         "CAM076982d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam076982d",
       "photo_name": "CAM076982d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam076982v",
         "CAM076982v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam076982v",
       "photo_name": "CAM076982v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam076983d",
         "CAM076983d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam076983d",
       "photo_name": "CAM076983d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam076983v",
         "CAM076983v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam076983v",
       "photo_name": "CAM076983v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam076990d",
         "CAM076990d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam076990d",
       "photo_name": "CAM076990d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam076990v",
         "CAM076990v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam076990v",
       "photo_name": "CAM076990v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam077225d",
         "CAM077225d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam077225d",
       "photo_name": "CAM077225d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam077225v",
         "CAM077225v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam077225v",
       "photo_name": "CAM077225v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam077248d",
         "CAM077248d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam077248d",
       "photo_name": "CAM077248d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam077248v",
         "CAM077248v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam077248v",
       "photo_name": "CAM077248v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam077319d",
         "CAM077319d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam077319d",
       "photo_name": "CAM077319d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam077319v",
         "CAM077319v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam077319v",
       "photo_name": "CAM077319v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam077326d",
         "CAM077326d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam077326d",
       "photo_name": "CAM077326d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam077326v",
         "CAM077326v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam077326v",
       "photo_name": "CAM077326v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
       "action": "replay_current_segmenter",
@@ -3353,349 +3354,349 @@
       "terminal_outcome": "four_boxes"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam077328v",
         "CAM077328v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam077328v",
       "photo_name": "CAM077328v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam077338d",
         "CAM077338d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam077338d",
       "photo_name": "CAM077338d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam077338v",
         "CAM077338v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam077338v",
       "photo_name": "CAM077338v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam077341d",
         "CAM077341d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam077341d",
       "photo_name": "CAM077341d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam077341v",
         "CAM077341v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam077341v",
       "photo_name": "CAM077341v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam077342d",
         "CAM077342d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam077342d",
       "photo_name": "CAM077342d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam077342v",
         "CAM077342v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam077342v",
       "photo_name": "CAM077342v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam077389d",
         "CAM077389d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam077389d",
       "photo_name": "CAM077389d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam077389v",
         "CAM077389v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam077389v",
       "photo_name": "CAM077389v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam077431d",
         "CAM077431d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam077431d",
       "photo_name": "CAM077431d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam077431v",
         "CAM077431v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam077431v",
       "photo_name": "CAM077431v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam077436d",
         "CAM077436d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam077436d",
       "photo_name": "CAM077436d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam077436v",
         "CAM077436v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam077436v",
       "photo_name": "CAM077436v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam077474d",
         "CAM077474d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam077474d",
       "photo_name": "CAM077474d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam077474v",
         "CAM077474v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam077474v",
       "photo_name": "CAM077474v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam077492d",
         "CAM077492d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam077492d",
       "photo_name": "CAM077492d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam077492v",
         "CAM077492v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 3,
+      "current_inference_state": "detected",
       "photo_key": "cam077492v",
       "photo_name": "CAM077492v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam077568d",
         "CAM077568d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam077568d",
       "photo_name": "CAM077568d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam077568v",
         "CAM077568v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam077568v",
       "photo_name": "CAM077568v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam077694d",
         "CAM077694d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam077694d",
       "photo_name": "CAM077694d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam077694v",
         "CAM077694v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam077694v",
       "photo_name": "CAM077694v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam077720d",
         "CAM077720d.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 4,
+      "current_inference_state": "detected",
       "photo_key": "cam077720d",
       "photo_name": "CAM077720d.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
-      "action": "pending",
+      "action": "replay_current_segmenter",
       "aliases": [
         "cam077720v",
         "CAM077720v.JPG"
       ],
-      "box_count": 0,
-      "current_inference_state": "unresolved",
+      "box_count": 5,
+      "current_inference_state": "detected",
       "photo_key": "cam077720v",
       "photo_name": "CAM077720v.JPG",
-      "provenance": null,
+      "provenance": "Sanger job 28129",
       "root_cause": "absent_current_inference_or_identity_join",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "detected"
     },
     {
       "action": "replay_current_segmenter",
@@ -3713,254 +3714,254 @@
       "terminal_outcome": "four_boxes"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam0730307d",
         "CAM0730307d"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam0730307d",
       "photo_name": "CAM0730307d",
       "provenance": null,
       "root_cause": "missing_source_manifest",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam074006",
         "CAM074006.JPEG"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam074006",
       "photo_name": "CAM074006.JPEG",
       "provenance": null,
       "root_cause": "missing_source_manifest",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam074036",
         "CAM074036.HEIC"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam074036",
       "photo_name": "CAM074036.HEIC",
       "provenance": null,
       "root_cause": "missing_source_manifest",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam074060d",
         "CAM074060d"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam074060d",
       "photo_name": "CAM074060d",
       "provenance": null,
       "root_cause": "missing_source_manifest",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam074060v",
         "CAM074060v"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam074060v",
       "photo_name": "CAM074060v",
       "provenance": null,
       "root_cause": "missing_source_manifest",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam074062v",
         "CAM074062v"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam074062v",
       "photo_name": "CAM074062v",
       "provenance": null,
       "root_cause": "missing_source_manifest",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam074063v",
         "CAM074063v"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam074063v",
       "photo_name": "CAM074063v",
       "provenance": null,
       "root_cause": "missing_source_manifest",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam074064v",
         "CAM074064v"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam074064v",
       "photo_name": "CAM074064v",
       "provenance": null,
       "root_cause": "missing_source_manifest",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam074065v",
         "CAM074065v"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam074065v",
       "photo_name": "CAM074065v",
       "provenance": null,
       "root_cause": "missing_source_manifest",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam074066v",
         "CAM074066v"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam074066v",
       "photo_name": "CAM074066v",
       "provenance": null,
       "root_cause": "missing_source_manifest",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam074067v",
         "CAM074067v"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam074067v",
       "photo_name": "CAM074067v",
       "provenance": null,
       "root_cause": "missing_source_manifest",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam074068v",
         "CAM074068v"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam074068v",
       "photo_name": "CAM074068v",
       "provenance": null,
       "root_cause": "missing_source_manifest",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam074069v",
         "CAM074069v"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam074069v",
       "photo_name": "CAM074069v",
       "provenance": null,
       "root_cause": "missing_source_manifest",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam077389.2d",
         "CAM077389.2d.JPG"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam077389.2d",
       "photo_name": "CAM077389.2d.JPG",
       "provenance": null,
       "root_cause": "missing_source_manifest",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "cam077389.2v",
         "CAM077389.2v.JPG"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "cam077389.2v",
       "photo_name": "CAM077389.2v.JPG",
       "provenance": null,
       "root_cause": "missing_source_manifest",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     },
     {
-      "action": "pending",
+      "action": "terminalize_missing_source",
       "aliases": [
         "not found",
         "NOT FOUND"
       ],
       "box_count": 0,
-      "current_inference_state": "unresolved",
+      "current_inference_state": "missing_source",
       "photo_key": "not found",
       "photo_name": "NOT FOUND",
       "provenance": null,
       "root_cause": "missing_source_manifest",
       "source_identity": null,
-      "terminal_outcome": null
+      "terminal_outcome": "missing_source"
     }
   ],
   "photo_rows_count": 262,
-  "recovered_images": 4,
+  "recovered_images": 178,
   "root_cause_notes": {
     "absent_current_inference_or_identity_join": "No terminal current-segmenter row exists for affected image; source identity is present in holdout manifest but output ledger has no row.",
     "missing_source_manifest": "No source manifest row was available.",
     "projection_failure_after_successful_ledger": "Current ledger success exists but normalized gallery box projection is missing."
   },
-  "run_identity": "gallery-recovery-v2",
+  "run_identity": "unresolved-recovery-v5",
   "schema_version": "wings-v6-gallery-ledger-identity-recovery/v1",
   "segmenter_replay_attempts": [
     {
@@ -3975,7 +3976,9 @@
     }
   ],
   "source_reason_sha256": "b1abccce5b9628552c72087a8bb066c429bac53d6130a09b982dedc47518025b",
-  "status": "complete_with_unresolved",
-  "still_unresolved": 258,
+  "source_unavailable": 1,
+  "status": "terminalized",
+  "still_unresolved": 0,
+  "terminalized_missing_source": 83,
   "true_zero_detections": 0
 }

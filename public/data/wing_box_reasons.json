@@ -2368,20 +2368,22 @@
     "uses_full_image": false
   },
   "cam042427d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM042427d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam042427v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM042427v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam042428d": {
     "exclusion_reason": null,
@@ -3072,20 +3074,22 @@
     "uses_full_image": false
   },
   "cam042471d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM042471d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam042471v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM042471v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam042472d": {
     "exclusion_reason": null,
@@ -3272,20 +3276,22 @@
     "uses_full_image": false
   },
   "cam042484d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM042484d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam042484v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM042484v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam042485d": {
     "exclusion_reason": null,
@@ -3336,36 +3342,40 @@
     "uses_full_image": false
   },
   "cam042488d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM042488d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam042488v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM042488v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam042489d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM042489d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam042489v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM042489v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam042490d": {
     "exclusion_reason": null,
@@ -7256,36 +7266,40 @@
     "uses_full_image": false
   },
   "cam070539d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM070539d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam070539v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM070539v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam070540d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM070540d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam070540v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM070540v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam070541d": {
     "exclusion_reason": null,
@@ -11032,20 +11046,22 @@
     "uses_full_image": false
   },
   "cam070784d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM070784d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam070784v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM070784v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam070785d": {
     "exclusion_reason": null,
@@ -14680,20 +14696,22 @@
     "uses_full_image": false
   },
   "cam071016d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM071016d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam071016v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM071016v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam071017d": {
     "exclusion_reason": null,
@@ -14744,20 +14762,22 @@
     "uses_full_image": false
   },
   "cam071020d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM071020d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam071020v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM071020v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam071021d": {
     "exclusion_reason": null,
@@ -15720,20 +15740,22 @@
     "uses_full_image": false
   },
   "cam071082d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM071082d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam071082v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM071082v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam071083d": {
     "exclusion_reason": null,
@@ -17272,20 +17294,22 @@
     "uses_full_image": false
   },
   "cam071179d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM071179d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam071179v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM071179v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam071180d": {
     "exclusion_reason": null,
@@ -18040,20 +18064,22 @@
     "uses_full_image": false
   },
   "cam071227d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM071227d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam071227v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM071227v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam071228d": {
     "exclusion_reason": null,
@@ -18952,20 +18978,22 @@
     "uses_full_image": false
   },
   "cam071284d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM071284d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam071284v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM071284v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam071285d": {
     "exclusion_reason": null,
@@ -20248,20 +20276,22 @@
     "uses_full_image": false
   },
   "cam071365d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM071365d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam071365v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM071365v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam071366d": {
     "exclusion_reason": null,
@@ -22872,20 +22902,22 @@
     "uses_full_image": false
   },
   "cam071529d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM071529d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam071529v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM071529v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam071530d": {
     "exclusion_reason": null,
@@ -23176,20 +23208,22 @@
     "uses_full_image": false
   },
   "cam071548d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM071548d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam071548v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM071548v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam071549d": {
     "exclusion_reason": null,
@@ -31832,20 +31866,22 @@
     "uses_full_image": false
   },
   "cam072091d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM072091d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam072091v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM072091v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam072092d": {
     "exclusion_reason": null,
@@ -34600,20 +34636,22 @@
     "uses_full_image": false
   },
   "cam072264d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM072264d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam072264v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM072264v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam072265d": {
     "exclusion_reason": null,
@@ -34744,36 +34782,40 @@
     "uses_full_image": false
   },
   "cam072273d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM072273d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam072273v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM072273v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam072274d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM072274d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam072274v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM072274v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam072275d": {
     "exclusion_reason": null,
@@ -34785,28 +34827,31 @@
     "uses_full_image": false
   },
   "cam072275v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM072275v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam072276d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM072276d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam072276v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM072276v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam072277d": {
     "exclusion_reason": null,
@@ -35929,20 +35974,22 @@
     "uses_full_image": false
   },
   "cam072348d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM072348d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam072348v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM072348v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam072349d": {
     "exclusion_reason": null,
@@ -37609,84 +37656,94 @@
     "uses_full_image": false
   },
   "cam072453d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM072453d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam072453v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM072453v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam072454d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM072454d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam072454v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM072454v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam072455d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM072455d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam072455v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM072455v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam072456d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM072456d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam072456v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM072456v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam072457d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM072457d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam072457v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM072457v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam072458d": {
     "exclusion_reason": null,
@@ -38169,20 +38226,22 @@
     "uses_full_image": false
   },
   "cam072488d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM072488d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam072488v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM072488v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam072489d": {
     "exclusion_reason": null,
@@ -38793,36 +38852,40 @@
     "uses_full_image": false
   },
   "cam072527d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM072527d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam072527v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM072527v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam072528d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM072528d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam072528v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM072528v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam072529d": {
     "exclusion_reason": null,
@@ -39353,36 +39416,40 @@
     "uses_full_image": false
   },
   "cam072562d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM072562d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam072562v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM072562v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam072563d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM072563d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam072563v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM072563v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam072564d": {
     "exclusion_reason": null,
@@ -40521,20 +40588,22 @@
     "uses_full_image": false
   },
   "cam072635d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM072635d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam072635v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM072635v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam072636d": {
     "exclusion_reason": null,
@@ -41689,20 +41758,22 @@
     "uses_full_image": false
   },
   "cam072708d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM072708d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam072708v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM072708v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam072709d": {
     "exclusion_reason": null,
@@ -43721,20 +43792,22 @@
     "uses_full_image": false
   },
   "cam072835d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM072835d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam072835v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM072835v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam072836d": {
     "exclusion_reason": null,
@@ -43769,36 +43842,40 @@
     "uses_full_image": false
   },
   "cam072838d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM072838d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam072838v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM072838v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam072839d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM072839d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam072839v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM072839v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam072840d": {
     "exclusion_reason": null,
@@ -43945,20 +44022,22 @@
     "uses_full_image": false
   },
   "cam072849d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM072849d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam072849v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM072849v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam072850d": {
     "exclusion_reason": null,
@@ -43977,20 +44056,22 @@
     "uses_full_image": false
   },
   "cam072851d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM072851d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam072851v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM072851v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam072852d": {
     "exclusion_reason": null,
@@ -45305,20 +45386,22 @@
     "uses_full_image": false
   },
   "cam072935d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM072935d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam072935v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM072935v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam072936d": {
     "exclusion_reason": null,
@@ -52929,20 +53012,22 @@
     "uses_full_image": false
   },
   "cam074490d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM074490d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam074490v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM074490v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam074500d": {
     "exclusion_reason": null,
@@ -53137,36 +53222,40 @@
     "uses_full_image": false
   },
   "cam074512d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM074512d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam074512v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM074512v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam074513d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM074513d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam074513v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM074513v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam074514d": {
     "exclusion_reason": null,
@@ -55569,20 +55658,22 @@
     "uses_full_image": false
   },
   "cam074665d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM074665d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam074665v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM074665v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam074666d": {
     "exclusion_reason": null,
@@ -56881,20 +56972,22 @@
     "uses_full_image": false
   },
   "cam074747d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM074747d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam074747v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM074747v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam074748d": {
     "exclusion_reason": null,
@@ -57521,20 +57614,22 @@
     "uses_full_image": false
   },
   "cam074787d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM074787d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam074787v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM074787v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam074788d": {
     "exclusion_reason": null,
@@ -57601,20 +57696,22 @@
     "uses_full_image": false
   },
   "cam074792d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM074792d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam074792v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM074792v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam074793d": {
     "exclusion_reason": null,
@@ -58273,20 +58370,22 @@
     "uses_full_image": false
   },
   "cam074834d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM074834d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam074834v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM074834v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam074835d": {
     "exclusion_reason": null,
@@ -59729,100 +59828,112 @@
     "uses_full_image": false
   },
   "cam074926d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM074926d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam074926v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM074926v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam074927d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM074927d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam074927v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM074927v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam074928d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM074928d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam074928v": {
-    "exclusion_reason": "no_full_ledger_identity",
+    "exclusion_reason": "source_unavailable",
     "feature_action": "none",
     "photo_name": "CAM074928v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
+    "provenance": "Sanger job 28129 source manifest",
+    "reason": "Source download failed in bounded replay; no current-model inference attempted",
     "status": "irrecoverable",
     "uses_full_image": true
   },
   "cam074929d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM074929d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam074929v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM074929v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam074930d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM074930d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam074930v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM074930v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam074931d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM074931d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam074931v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM074931v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam074932d": {
     "exclusion_reason": null,
@@ -60481,20 +60592,22 @@
     "uses_full_image": false
   },
   "cam074973d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM074973d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam074973v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM074973v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam074974d": {
     "exclusion_reason": null,
@@ -60657,20 +60770,22 @@
     "uses_full_image": false
   },
   "cam074985d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM074985d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam074985v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM074985v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam074987d": {
     "exclusion_reason": null,
@@ -60753,20 +60868,22 @@
     "uses_full_image": false
   },
   "cam074993d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM074993d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam074993v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM074993v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam074994d": {
     "exclusion_reason": null,
@@ -66113,20 +66230,22 @@
     "uses_full_image": false
   },
   "cam076807d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM076807d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam076807v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM076807v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam076808d": {
     "exclusion_reason": null,
@@ -66273,36 +66392,40 @@
     "uses_full_image": false
   },
   "cam076818d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM076818d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam076818v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM076818v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam076819d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM076819d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam076819v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM076819v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam076820d": {
     "exclusion_reason": null,
@@ -66433,20 +66556,22 @@
     "uses_full_image": false
   },
   "cam076832d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM076832d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam076832v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM076832v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam076833d": {
     "exclusion_reason": null,
@@ -66561,20 +66686,22 @@
     "uses_full_image": false
   },
   "cam076840d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM076840d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam076840v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM076840v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam076888d": {
     "exclusion_reason": null,
@@ -66617,12 +66744,13 @@
     "uses_full_image": false
   },
   "cam076890v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM076890v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam076891d": {
     "exclusion_reason": null,
@@ -66657,20 +66785,22 @@
     "uses_full_image": false
   },
   "cam076893d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM076893d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam076893v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM076893v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam076894d": {
     "exclusion_reason": null,
@@ -66969,12 +67099,13 @@
     "uses_full_image": false
   },
   "cam076912v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM076912v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam076913d": {
     "exclusion_reason": null,
@@ -67409,12 +67540,13 @@
     "uses_full_image": false
   },
   "cam076941d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM076941d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam076941v": {
     "exclusion_reason": null,
@@ -67426,36 +67558,40 @@
     "uses_full_image": false
   },
   "cam076942d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM076942d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam076942v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM076942v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam076943d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM076943d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam076943v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM076943v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam076944d": {
     "exclusion_reason": null,
@@ -68034,52 +68170,58 @@
     "uses_full_image": false
   },
   "cam076981d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM076981d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam076981v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM076981v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam076982d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM076982d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam076982v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM076982v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam076983d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM076983d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam076983v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM076983v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam076984d": {
     "exclusion_reason": null,
@@ -68162,20 +68304,22 @@
     "uses_full_image": false
   },
   "cam076990d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM076990d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam076990v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM076990v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam076991d": {
     "exclusion_reason": null,
@@ -70258,20 +70402,22 @@
     "uses_full_image": false
   },
   "cam077225d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM077225d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam077225v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM077225v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam077226d": {
     "exclusion_reason": null,
@@ -70626,20 +70772,22 @@
     "uses_full_image": false
   },
   "cam077248d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM077248d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam077248v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM077248v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam077249d": {
     "exclusion_reason": null,
@@ -71746,20 +71894,22 @@
     "uses_full_image": false
   },
   "cam077319d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM077319d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam077319v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM077319v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam077320d": {
     "exclusion_reason": null,
@@ -71858,20 +72008,22 @@
     "uses_full_image": false
   },
   "cam077326d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM077326d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam077326v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM077326v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam077327d": {
     "exclusion_reason": null,
@@ -71899,12 +72051,13 @@
     "uses_full_image": false
   },
   "cam077328v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM077328v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam077329d": {
     "exclusion_reason": null,
@@ -72035,20 +72188,22 @@
     "uses_full_image": false
   },
   "cam077338d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM077338d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam077338v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM077338v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam077339d": {
     "exclusion_reason": null,
@@ -72083,36 +72238,40 @@
     "uses_full_image": false
   },
   "cam077341d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM077341d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam077341v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM077341v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam077342d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM077342d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam077342v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM077342v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam077343d": {
     "exclusion_reason": null,
@@ -72867,20 +73026,22 @@
     "uses_full_image": true
   },
   "cam077389d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM077389d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam077389v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM077389v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam077390d": {
     "exclusion_reason": null,
@@ -73475,20 +73636,22 @@
     "uses_full_image": false
   },
   "cam077431d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM077431d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam077431v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM077431v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam077432d": {
     "exclusion_reason": null,
@@ -73555,20 +73718,22 @@
     "uses_full_image": false
   },
   "cam077436d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM077436d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam077436v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM077436v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam077437d": {
     "exclusion_reason": null,
@@ -74163,20 +74328,22 @@
     "uses_full_image": false
   },
   "cam077474d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM077474d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam077474v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM077474v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam077475d": {
     "exclusion_reason": null,
@@ -74451,20 +74618,22 @@
     "uses_full_image": false
   },
   "cam077492d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM077492d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam077492v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM077492v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam077493d": {
     "exclusion_reason": null,
@@ -75603,20 +75772,22 @@
     "uses_full_image": false
   },
   "cam077568d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM077568d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam077568v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM077568v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam077569d": {
     "exclusion_reason": null,
@@ -76675,20 +76846,22 @@
     "uses_full_image": false
   },
   "cam077694d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM077694d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam077694v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM077694v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam077695d": {
     "exclusion_reason": null,
@@ -77091,20 +77264,22 @@
     "uses_full_image": false
   },
   "cam077720d": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM077720d.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam077720v": {
-    "exclusion_reason": "no_full_ledger_identity",
-    "feature_action": "none",
+    "exclusion_reason": null,
+    "feature_action": "current_segmenter_replay",
     "photo_name": "CAM077720v.JPG",
-    "reason": "No recoverable Wings-v6 box/feature identity; full image retained",
-    "status": "irrecoverable",
-    "uses_full_image": true
+    "provenance": "Sanger job 28129; unresolved-recovery-v5",
+    "reason": null,
+    "status": "eligible",
+    "uses_full_image": false
   },
   "cam077721d": {
     "exclusion_reason": null,
