@@ -226,3 +226,10 @@ test('AI Identifier About copy uses one matched-prior Top-1 and Top-5 contract',
     '<tr><td>Family</td><td>99.4%</td><td>99.9%</td></tr>'
   ]) assert.ok(about.includes(required), `missing About copy: ${required}`)
 })
+
+test('public source labels do not expose internal model names', () => {
+  const sources = readFileSync('src/composables/useCurationData.js', 'utf8')
+  for (const internalName of ['Candidate D', 'Wings-v6', 'Wings-v3']) {
+    assert.doesNotMatch(sources, new RegExp(internalName))
+  }
+})

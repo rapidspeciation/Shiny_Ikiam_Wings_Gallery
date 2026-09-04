@@ -15,14 +15,14 @@ export { resolveCamid, predictionDiffers, canonicalTaxon, rankComparison }
 const fileCache = new Map()
 
 export const BOX_SOURCES = {
-  v6: { file: 'wing_boxes_v6', label: 'Wings-v6 union boxes' },
-  legacy: { file: 'wing_boxes', label: 'Wings-v3 legacy boxes' }
+  v6: { file: 'wing_boxes_v6', label: 'Current butterfly segmentation boxes' },
+  legacy: { file: 'wing_boxes', label: 'Previous butterfly segmentation boxes' }
 }
 
 export const PREDICTION_SOURCES = {
-  candidate_d: { file: 'predictions', label: 'Candidate D · corrected OOF' },
+  candidate_d: { file: 'predictions', label: 'Current taxonomic classifier · corrected OOF' },
   live_real: { file: 'predictions_live_real', label: 'Live released inference' },
-  legacy: { file: 'predictions_legacy', label: 'Legacy gallery model (audit only)' }
+  legacy: { file: 'predictions_legacy', label: 'Previous gallery classifier (audit only)' }
 }
 
 function loadFile(name) {
