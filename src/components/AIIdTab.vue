@@ -599,10 +599,10 @@ const showAbout = ref(false)
           in <em>Sphingidae</em>, so confident calls on sparsely-sampled groups (skippers, hairstreaks, micromoths)
           warrant extra caution. Even within Ithomiini, Müllerian mimicry makes subspecies look-alikes genuinely hard to
           tell apart.</p>
-          <p class="mb-1"><strong>Deployment accuracy</strong> on Sanger specimens (group-safe out-of-fold, dorsal+ventral combined;
-          visual-only model scores):</p>
+          <p class="mb-1"><strong>Deployment accuracy</strong> on 3,022 Sanger specimens (group-safe out-of-fold,
+          dorsal+ventral combined; visual-only model scores):</p>
           <table class="table table-sm table-bordered w-auto small">
-            <thead><tr><th>Rank</th><th>Top-1</th><th>Top-5</th></tr></thead>
+            <thead><tr><th>Rank</th><th>Effective Top-1</th><th>Effective Top-5</th></tr></thead>
             <tbody>
               <tr><td>Subspecies</td><td>84.7%</td><td>94.9%</td></tr>
               <tr><td>Species</td><td>90.2%</td><td>96.5%</td></tr>
@@ -612,7 +612,7 @@ const showAbout = ref(false)
               <tr><td>Family</td><td>99.4%</td><td>99.9%</td></tr>
             </tbody>
           </table>
-          <p class="text-muted">Source: frozen group-safe Sanger OOF comparison for Candidate D; top-five is the recorded held-out correctness rate. Performance is strong and reliable from genus upward (≥95%); subspecies is the hard
+          <p class="text-muted">Source: <a href="https://github.com/rapidspeciation/WingsClassificator/tree/main/context/taxonomic-head-audit/clean-retrain-v2/results" target="_blank" rel="noopener noreferrer">frozen group-safe Sanger OOF comparison for Candidate D</a>; effective top-five is the recorded held-out correctness rate. Performance is strong and reliable from genus upward (≥95%); subspecies is the hard
           frontier, because Müllerian mimicry produces look-alikes across species, exactly the cases the tool surfaces
           for checking. The backbone is currently frozen with only the head trained; planned backbone fine-tuning is the
           main lever expected to lift species and subspecies accuracy further.</p>
