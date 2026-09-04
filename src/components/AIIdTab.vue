@@ -589,7 +589,7 @@ const showAbout = ref(false)
           image backbone (released February 2026) with a hierarchical classification head that predicts the finest taxon
           and rolls those predictions up the taxonomy, keeping them consistent across subspecies, species, genus, and
           higher ranks. To focus it on wing pattern, images are first cropped to the wings by a lightweight
-          <strong>Butterfly Wing Segmenter v2</strong> crops the specimen to its biological wings before identification.</p>
+          <strong>Butterfly Wing Segmenter v2</strong>, which crops the specimen to its biological wings before identification.</p>
           <p>Version 2 uses an updated butterfly wing segmentation model to crop the specimen before identification. The previous model sometimes cropped the envelope or color chart and could miss dissected wings. We also corrected taxonomic synonyms and spelling errors, recovered records whose intended identification could be verified, and excluded unresolved placeholder labels from training.</p>
           <p><strong>Coverage:</strong> the label space spans Neotropical butterflies across all major families
           (Nymphalidae, Hesperiidae, Riodinidae, Lycaenidae, Pieridae, Papilionidae) and now a substantial component of
@@ -599,20 +599,20 @@ const showAbout = ref(false)
           in <em>Sphingidae</em>, so confident calls on sparsely-sampled groups (skippers, hairstreaks, micromoths)
           warrant extra caution. Even within Ithomiini, Müllerian mimicry makes subspecies look-alikes genuinely hard to
           tell apart.</p>
-          <p class="mb-1"><strong>Deployment accuracy</strong> on Sanger specimens (out-of-fold, dorsal+ventral combined,
-          with the side-of-Andes + Ecuador prior):</p>
+          <p class="mb-1"><strong>Deployment accuracy</strong> on Sanger specimens (group-safe out-of-fold, dorsal+ventral combined;
+          visual-only model scores):</p>
           <table class="table table-sm table-bordered w-auto small">
-            <thead><tr><th>Rank</th><th>Top-1</th></tr></thead>
+            <thead><tr><th>Rank</th><th>Top-1</th><th>Top-5</th></tr></thead>
             <tbody>
-              <tr><td>Subspecies</td><td>84.7%</td></tr>
-              <tr><td>Species</td><td>90.2%</td></tr>
-              <tr><td>Genus</td><td>95.8%</td></tr>
-              <tr><td>Tribe</td><td>97.4%</td></tr>
-              <tr><td>Subfamily</td><td>99.2%</td></tr>
-              <tr><td>Family</td><td>99.4%</td></tr>
+              <tr><td>Subspecies</td><td>84.7%</td><td>94.9%</td></tr>
+              <tr><td>Species</td><td>90.2%</td><td>96.5%</td></tr>
+              <tr><td>Genus</td><td>95.8%</td><td>98.9%</td></tr>
+              <tr><td>Tribe</td><td>97.4%</td><td>99.7%</td></tr>
+              <tr><td>Subfamily</td><td>99.2%</td><td>99.9%</td></tr>
+              <tr><td>Family</td><td>99.4%</td><td>99.9%</td></tr>
             </tbody>
           </table>
-          <p class="text-muted">Performance is strong and reliable from genus upward (≥95%); subspecies is the hard
+          <p class="text-muted">Source: frozen group-safe Sanger OOF comparison for Candidate D; top-five is the recorded held-out correctness rate. Performance is strong and reliable from genus upward (≥95%); subspecies is the hard
           frontier, because Müllerian mimicry produces look-alikes across species, exactly the cases the tool surfaces
           for checking. The backbone is currently frozen with only the head trained; planned backbone fine-tuning is the
           main lever expected to lift species and subspecies accuracy further.</p>
