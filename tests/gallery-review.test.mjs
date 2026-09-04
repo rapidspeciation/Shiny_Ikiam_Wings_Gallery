@@ -207,3 +207,22 @@ test('upstream review surface retains prediction controls and wing-box behavior'
   assert.match(photo, /getBoxReason/)
   assert.match(panel, /max-width: 576px/)
 })
+
+test('AI Identifier About copy uses one matched-prior Top-1 and Top-5 contract', () => {
+  const about = readFileSync('src/components/AIIdTab.vue', 'utf8')
+  for (const obsolete of ['Classifier v2', 'Segmenter v2', 'Version 2']) {
+    assert.doesNotMatch(about, new RegExp(obsolete))
+  }
+  for (const required of [
+    'YOLO26s-seg-based butterfly segmentation model',
+    'Changelog',
+    'matched side-of-Andes + Ecuador prior',
+    '<th>Top-1</th><th>Top-5</th>',
+    '<tr><td>Subspecies</td><td>84.7%</td><td>95.2%</td></tr>',
+    '<tr><td>Species</td><td>90.2%</td><td>96.4%</td></tr>',
+    '<tr><td>Genus</td><td>95.8%</td><td>98.6%</td></tr>',
+    '<tr><td>Tribe</td><td>97.4%</td><td>99.5%</td></tr>',
+    '<tr><td>Subfamily</td><td>99.2%</td><td>99.8%</td></tr>',
+    '<tr><td>Family</td><td>99.4%</td><td>99.9%</td></tr>'
+  ]) assert.ok(about.includes(required), `missing About copy: ${required}`)
+})

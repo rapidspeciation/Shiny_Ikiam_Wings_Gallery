@@ -584,13 +584,12 @@ const showAbout = ref(false)
           About this tool {{ showAbout ? '▾' : '▸' }}
         </button>
         <div v-show="showAbout" class="small mt-2">
-          <p><strong>Hierarchical Taxonomic Classifier v2</strong> identifies butterflies and nocturnal moths from wing photos, used as a curation tool to flag
-          uncertain or mislabelled identifications in the image database. It pairs a frozen <strong>BioCLIP 2.5-H</strong>
-          image backbone (released February 2026) with a hierarchical classification head that predicts the finest taxon
+          <p>This tool identifies butterflies and nocturnal moths from wing photos and helps flag uncertain or mislabelled
+          identifications in the image database. It pairs a frozen <strong>BioCLIP 2.5-H</strong> image backbone
+          (released February 2026) with a hierarchical taxonomic classifier that predicts the finest taxon
           and rolls those predictions up the taxonomy, keeping them consistent across subspecies, species, genus, and
-          higher ranks. To focus it on wing pattern, images are first cropped to the wings by a lightweight
-          <strong>Butterfly Wing Segmenter v2</strong>, which crops the specimen to its biological wings before identification.</p>
-          <p>Version 2 uses an updated butterfly wing segmentation model to crop the specimen before identification. The previous model sometimes cropped the envelope or color chart and could miss dissected wings. We also corrected taxonomic synonyms and spelling errors, recovered records whose intended identification could be verified, and excluded unresolved placeholder labels from training.</p>
+          higher ranks. A <strong>YOLO26s-seg-based butterfly segmentation model</strong>, updated 3 September 2026,
+          crops the image to the detected butterfly or wings before identification.</p>
           <p><strong>Coverage:</strong> the label space spans Neotropical butterflies across all major families
           (Nymphalidae, Hesperiidae, Riodinidae, Lycaenidae, Pieridae, Papilionidae) and now a substantial component of
           <strong>nocturnal moths</strong> — predominantly <em>Sphingidae</em> (hawkmoths), with Saturniidae, Geometridae,
@@ -600,19 +599,19 @@ const showAbout = ref(false)
           warrant extra caution. Even within Ithomiini, Müllerian mimicry makes subspecies look-alikes genuinely hard to
           tell apart.</p>
           <p class="mb-1"><strong>Deployment accuracy</strong> on 3,022 Sanger specimens (group-safe out-of-fold,
-          dorsal+ventral combined; visual-only model scores):</p>
+          dorsal+ventral combined, with the matched side-of-Andes + Ecuador prior):</p>
           <table class="table table-sm table-bordered w-auto small">
-            <thead><tr><th>Rank</th><th>Effective Top-1</th><th>Effective Top-5</th></tr></thead>
+            <thead><tr><th>Rank</th><th>Top-1</th><th>Top-5</th></tr></thead>
             <tbody>
-              <tr><td>Subspecies</td><td>84.7%</td><td>94.9%</td></tr>
-              <tr><td>Species</td><td>90.2%</td><td>96.5%</td></tr>
-              <tr><td>Genus</td><td>95.8%</td><td>98.9%</td></tr>
-              <tr><td>Tribe</td><td>97.4%</td><td>99.7%</td></tr>
-              <tr><td>Subfamily</td><td>99.2%</td><td>99.9%</td></tr>
+              <tr><td>Subspecies</td><td>84.7%</td><td>95.2%</td></tr>
+              <tr><td>Species</td><td>90.2%</td><td>96.4%</td></tr>
+              <tr><td>Genus</td><td>95.8%</td><td>98.6%</td></tr>
+              <tr><td>Tribe</td><td>97.4%</td><td>99.5%</td></tr>
+              <tr><td>Subfamily</td><td>99.2%</td><td>99.8%</td></tr>
               <tr><td>Family</td><td>99.4%</td><td>99.9%</td></tr>
             </tbody>
           </table>
-          <p class="text-muted">Source: <a href="https://github.com/rapidspeciation/WingsClassificator/tree/main/context/taxonomic-head-audit/clean-retrain-v2/results" target="_blank" rel="noopener noreferrer">frozen group-safe Sanger OOF comparison for Candidate D</a>; effective top-five is the recorded held-out correctness rate. Performance is strong and reliable from genus upward (≥95%); subspecies is the hard
+          <p class="text-muted">Performance is strong and reliable from genus upward (≥95%); subspecies is the hard
           frontier, because Müllerian mimicry produces look-alikes across species, exactly the cases the tool surfaces
           for checking. The backbone is currently frozen with only the head trained; planned backbone fine-tuning is the
           main lever expected to lift species and subspecies accuracy further.</p>
@@ -635,6 +634,11 @@ const showAbout = ref(false)
             specialist collections such as the <a href="https://sphingidae.myspecies.info" target="_blank" rel="noopener noreferrer">Sphingidae
             Taxonomic Inventory</a> and other hawkmoth/saturniid resources.
           </p>
+          <p class="mb-1"><strong>Changelog</strong></p>
+          <p><strong>3 September 2026:</strong> Updated wing segmentation to reduce crops of envelopes and color charts
+          and recover dissected wings that the previous model missed. Taxonomic labels now resolve verified synonyms and
+          spelling variants, recover records with a verified intended identification, and exclude unresolved placeholders
+          from training.</p>
           <p class="text-muted mb-0"><strong>This is an AI suggestion, not a definitive identification.</strong></p>
         </div>
       </div>
