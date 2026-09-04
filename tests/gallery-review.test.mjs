@@ -216,7 +216,7 @@ test('AI Identifier About copy uses one matched-prior Top-1 and Top-5 contract',
   for (const required of [
     'YOLO26s-seg-based butterfly segmentation model',
     'Changelog',
-    'matched side-of-Andes + Ecuador prior',
+    'side-of-Andes + Ecuador prior',
     '<th>Top-1</th><th>Top-5</th>',
     '<tr><td>Subspecies</td><td>84.7%</td><td>95.2%</td></tr>',
     '<tr><td>Species</td><td>90.2%</td><td>96.4%</td></tr>',

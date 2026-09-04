@@ -584,12 +584,12 @@ const showAbout = ref(false)
           About this tool {{ showAbout ? '▾' : '▸' }}
         </button>
         <div v-show="showAbout" class="small mt-2">
-          <p>This tool identifies butterflies and nocturnal moths from wing photos and helps flag uncertain or mislabelled
-          identifications in the image database. It pairs a frozen <strong>BioCLIP 2.5-H</strong> image backbone
-          (released February 2026) with a hierarchical taxonomic classifier that predicts the finest taxon
+          <p>A model that identifies butterflies and nocturnal moths from wing photos, used as a curation tool to flag
+          uncertain or mislabelled identifications in the image database. It pairs a frozen <strong>BioCLIP 2.5-H</strong>
+          image backbone (released February 2026) with a hierarchical classification head that predicts the finest taxon
           and rolls those predictions up the taxonomy, keeping them consistent across subspecies, species, genus, and
-          higher ranks. A <strong>YOLO26s-seg-based butterfly segmentation model</strong>, updated 3 September 2026,
-          crops the image to the detected butterfly or wings before identification.</p>
+          higher ranks. To focus it on wing pattern, images are first cropped to the wings by a lightweight
+          YOLO26s-seg-based butterfly segmentation model (updated 3 September 2026) trained on wing masks generated with SAM 3.</p>
           <p><strong>Coverage:</strong> the label space spans Neotropical butterflies across all major families
           (Nymphalidae, Hesperiidae, Riodinidae, Lycaenidae, Pieridae, Papilionidae) and now a substantial component of
           <strong>nocturnal moths</strong> — predominantly <em>Sphingidae</em> (hawkmoths), with Saturniidae, Geometridae,
@@ -598,8 +598,8 @@ const showAbout = ref(false)
           in <em>Sphingidae</em>, so confident calls on sparsely-sampled groups (skippers, hairstreaks, micromoths)
           warrant extra caution. Even within Ithomiini, Müllerian mimicry makes subspecies look-alikes genuinely hard to
           tell apart.</p>
-          <p class="mb-1"><strong>Deployment accuracy</strong> on 3,022 Sanger specimens (group-safe out-of-fold,
-          dorsal+ventral combined, with the matched side-of-Andes + Ecuador prior):</p>
+          <p class="mb-1"><strong>Deployment accuracy</strong> on Sanger specimens (out-of-fold, dorsal+ventral combined,
+          with the side-of-Andes + Ecuador prior):</p>
           <table class="table table-sm table-bordered w-auto small">
             <thead><tr><th>Rank</th><th>Top-1</th><th>Top-5</th></tr></thead>
             <tbody>
