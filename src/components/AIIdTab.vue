@@ -593,7 +593,8 @@ const showAbout = ref(false)
           <p><strong>Coverage:</strong> the label space spans Neotropical butterflies across all major families
           (Nymphalidae, Hesperiidae, Riodinidae, Lycaenidae, Pieridae, Papilionidae) and now a substantial component of
           <strong>nocturnal moths</strong> — predominantly <em>Sphingidae</em> (hawkmoths), with Saturniidae, Geometridae,
-          Notodontidae, Erebidae and others — for roughly <strong>4,900 species</strong> in total. Sampling is very
+          Notodontidae, Erebidae and others — spanning <strong>4,478 species</strong> and <strong>4,958 subspecies</strong>.
+          Rare species represented by even single observations are included in training. Sampling remains
           uneven: most of the butterfly data sits in the <em>Ithomiini</em> mimicry radiation and most of the moth data
           in <em>Sphingidae</em>, so confident calls on sparsely-sampled groups (skippers, hairstreaks, micromoths)
           warrant extra caution. Even within Ithomiini, Müllerian mimicry makes subspecies look-alikes genuinely hard to
@@ -603,15 +604,15 @@ const showAbout = ref(false)
           <table class="table table-sm table-bordered w-auto small">
             <thead><tr><th>Rank</th><th>Top-1</th><th>Top-5</th></tr></thead>
             <tbody>
-              <tr><td>Subspecies</td><td>84.7%</td><td>95.2%</td></tr>
-              <tr><td>Species</td><td>90.2%</td><td>96.4%</td></tr>
-              <tr><td>Genus</td><td>95.8%</td><td>98.6%</td></tr>
-              <tr><td>Tribe</td><td>97.4%</td><td>99.5%</td></tr>
-              <tr><td>Subfamily</td><td>99.2%</td><td>99.8%</td></tr>
-              <tr><td>Family</td><td>99.4%</td><td>99.9%</td></tr>
+              <tr><td>Subspecies</td><td>85.7%</td><td>96.5%</td></tr>
+              <tr><td>Species</td><td>91.6%</td><td>98.0%</td></tr>
+              <tr><td>Genus</td><td>96.8%</td><td>99.5%</td></tr>
+              <tr><td>Tribe</td><td>97.9%</td><td>99.9%</td></tr>
+              <tr><td>Subfamily</td><td>99.6%</td><td>100.0%</td></tr>
+              <tr><td>Family</td><td>99.6%</td><td>100.0%</td></tr>
             </tbody>
           </table>
-          <p class="text-muted">Performance is strong and reliable from genus upward (≥95%); subspecies is the hard
+          <p class="text-muted">Performance is strong and reliable from genus upward (≥96%); subspecies is the hard
           frontier, because Müllerian mimicry produces look-alikes across species, exactly the cases the tool surfaces
           for checking. The backbone is currently frozen with only the head trained; planned backbone fine-tuning is the
           main lever expected to lift species and subspecies accuracy further.</p>
@@ -635,10 +636,15 @@ const showAbout = ref(false)
             Taxonomic Inventory</a> and other hawkmoth/saturniid resources.
           </p>
           <p class="mb-1"><strong>Changelog</strong></p>
-          <p><strong>3 September 2026:</strong> Updated wing segmentation to reduce crops of envelopes and color charts
-          and recover dissected wings that the previous model missed. Taxonomic labels now resolve verified synonyms and
-          spelling variants, recover records with a verified intended identification, and exclude unresolved placeholders
-          from training.</p>
+          <p><strong>6 September 2026:</strong> Retrained the taxonomic classification head with the expanded Butterflies of America
+          dataset, retaining rare species down to single observations (covering 4,478 species and 4,958 subspecies).
+          BioCLIP features are extracted from tight crops focused strictly on the wings, improving Species Top-1 accuracy
+          to 91.6% (+1.4 pp, Top-5: 98.0%) and Subspecies Top-1 to 85.7% (+1.0 pp, Top-5: 96.5%). Also corrected EXIF 180° orientation
+          for gallery bounding boxes so zoom-to-wings centers over visible butterfly wings.</p>
+          <p><strong>3 September 2026:</strong> Updated wing segmentation to reduce crops of envelopes and color charts,
+          improving Species Top-1 by +1.0 pp and Genus Top-1 by +0.8 pp. Corrected taxonomic synonyms, spelling variants,
+          and eliminated 315 invalid placeholder classes (such as <em>NOT_FOUND</em>), lifting overall Subspecies Top-1 by
+          +0.7 pp (84.0% → 84.7%) and Species Top-1 by +0.5 pp (89.7% → 90.2%).</p>
           <p class="text-muted mb-0"><strong>This is an AI suggestion, not a definitive identification.</strong></p>
         </div>
       </div>
