@@ -8,7 +8,7 @@
     "v6": {
       "build_id": "wings-v6-union-gallery-full-ledger-20260831",
       "checkpoint_sha256": "38a0dab20ee607e0a43a72488420ed50e329f07c71c95775ef647b19e0f275de",
-      "data_sha256": "7c990c2619fb88fc4dfbfe525135a2ef8cc0ae001780fdb70cf48d166cac49d3",
+      "data_sha256": "a6e2ba0a29557aa8686a551e811e18a97813771dd66e71221f69e5300a777f72",
       "label": "Wings-v6 union boxes",
       "segmentation_model": "Wings-v6",
       "zero_detection_policy": "full image retained with wing_box_reasons.json reason"
@@ -26,7 +26,7 @@
       "checkpoint_sha256": "2e7e14103388f199b96da7a489d89e49d8942611620a2414201b31df5059813f",
       "display_seed": 1701,
       "head": "corrected candidate-D taxonomic head",
-      "label": "Candidate D · corrected OOF",
+      "label": "Candidate D \u00b7 corrected OOF",
       "preprocessing": "frozen Wings-v6 padded features",
       "score_semantics": "group-safe Sanger OOF closed-set taxonomic probability; not insect-presence or OOD confidence",
       "source_oof_sha256": "5464cd24f4c923225a0f5e3908ffe8f0c3057c355371c79eca015ab5718342f7",

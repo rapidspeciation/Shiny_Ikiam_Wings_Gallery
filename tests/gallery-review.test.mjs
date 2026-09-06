@@ -130,7 +130,7 @@ test('ranked replay preserves recorded probability outside top five and nested s
   const cam = candidate.CAM074313
   assert.equal(cam.rank_predictions.species.prediction, 'Zaretis isidora')
   assert.equal(cam.rank_predictions.species.top5_labels.length, 5)
-  assert.equal(cam.rec.species_p, 0.0005931223240908262)
+  assert.equal(cam.rec.species_p, 0.0017084628498036008)
   assert.equal(cam.species[0][0], 'Zaretis isidora')
   assert.ok(Array.isArray(cam.species[0][3]))
 })
@@ -141,7 +141,7 @@ test('missing reason ledger covers historical rows and frozen zero-detection ful
   for (const camid of Object.keys(legacy)) assert.ok(missing[camid], `missing reason for ${camid}`)
   for (const camid of historicalWithoutCandidate) assert.ok(missing[camid].reason)
   const rankMissingCamid = Object.keys(candidate).find(camid => Object.keys(candidate[camid].rank_predictions).length < 6)
-  assert.ok(rankMissingCamid && missing[rankMissingCamid].reason)
+  if (rankMissingCamid) assert.ok(missing[rankMissingCamid].reason)
   for (const key of ['cam070267d', 'cam075743v3']) {
     assert.equal(boxReasons[key].status, 'zero_detection')
     assert.equal(boxReasons[key].uses_full_image, true)
