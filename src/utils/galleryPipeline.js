@@ -1,4 +1,5 @@
 import { predictionRank } from './taxonomy.js'
+import { formatSexPrediction } from './sexPrediction.js'
 
 export function hasAnyPhoto(item) {
   const hasLegacy = item.URLd || item.URLv
@@ -38,8 +39,25 @@ export function modelConfidence(item, predictions, rank = 'species') {
   return (top && typeof top.confidence === 'number') ? top.confidence : -1
 }
 
-export function sortItems(items, sortBy, sortOrder, predictions, reviewRank = 'species') {
+export function sortItems(items, sortBy, sortOrder, predictions, reviewRank = 'species', sexPredictions = null) {
   if (sortBy === 'Row Number') return items
+
+  if (sortBy === 'SexConfidence') {
+    if (!sexPredictions) return items
+    const ranked = items.map(item => ({
+      item,
+      prediction: formatSexPrediction(sexPredictions[resolveCamid(item)], item.Species)
+    }))
+    ranked.sort((a, b) => {
+      const x = a.prediction
+      const y = b.prediction
+      if (!x) return y ? 1 : 0
+      if (!y) return -1
+      if (x.supported !== y.supported) return x.supported ? -1 : 1
+      return sortOrder === 'asc' ? x.confidence - y.confidence : y.confidence - x.confidence
+    })
+    return ranked.map(({ item }) => item)
+  }
 
   if (sortBy === 'ModelConfidence') {
     if (!predictions) return items   // map not loaded -> leave order untouched
@@ -78,5 +96,5 @@ export function applyGlobalPipeline(items, options) {
     results = applyOnePerSubspeciesSex(results)
   }
 
-  return sortItems(results, options.sortBy, options.sortOrder, options.predictions, options.reviewRank)
+  return sortItems(results, options.sortBy, options.sortOrder, options.predictions, options.reviewRank, options.sexPredictions)
 }

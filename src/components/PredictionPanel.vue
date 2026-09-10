@@ -6,12 +6,13 @@
 import { ref, reactive, computed, watch } from 'vue'
 import { useGlobalGalleryOptions } from '../composables/useGlobalGalleryOptions.js'
 import {
-  getPredictions, getFormPrediction, getLinks, predictionDiffers, getPredictionMissingReason,
+  getPredictions, getSexPrediction, getFormPrediction, getLinks, predictionDiffers, getPredictionMissingReason,
   regionSubspeciesOf, regionSpeciesOf,
   SOURCE_KEYS, SOURCE_LABELS, SOURCE_FULL_NAMES
 } from '../composables/useCurationData.js'
 import { resolveCamid } from '../utils/galleryPipeline.js'
 import { REVIEW_RANKS, rankComparison } from '../utils/taxonomy.js'
+import { formatSexPrediction } from '../utils/sexPrediction.js'
 
 // `item` drives the existing CAMID-based curation flow (Collection tab).
 // `prediction` lets the AI ID tab pass a model result directly (no CAMID, no
@@ -29,6 +30,9 @@ const pred = ref(null)
 const missingReason = ref('')
 const rankMissingReasons = ref({})
 const formPred = ref(null)     // model FORM prediction (polymorphic morph), or null
+const sexPred = ref(null)
+const sexState = ref('none')
+const displayedSex = computed(() => formatSexPrediction(sexPred.value, recordedSpecies.value))
 const open = ref(props.startOpen || expandPredictions.value)   // compact by default; "Show predictions" opens all
 const linksCache = ref({})     // taxon -> { boa, sangay, noreste, cotacachi }
 
@@ -317,6 +321,18 @@ async function load() {
   moreSubsp.value = {}
   moreSpecies.value = {}
   formPred.value = null
+  sexPred.value = null
+  sexState.value = 'none'
+  // A direct taxonomy prediction belongs to the AI Identifier upload flow,
+  // where sex prediction is not yet supported.
+  if (!props.prediction) {
+    try {
+      sexPred.value = await getSexPrediction(camid.value)
+      sexState.value = sexPred.value ? 'ready' : 'none'
+    } catch {
+      sexState.value = 'error'
+    }
+  }
   try {
     // AI ID tab supplies the prediction directly; Collection tab fetches by CAMID.
     if (!props.prediction) getFormPrediction(camid.value).then(f => { formPred.value = f })
@@ -391,6 +407,8 @@ watch([camid, () => props.prediction], load, { immediate: true })
     </button>
 
     <div v-show="open" :id="'pred-body-' + camid" class="pred-body px-2 pb-2">
+      <div v-if="displayedSex" class="pred-sex mt-2">{{ displayedSex.text }}</div>
+      <div v-else-if="sexState === 'error'" class="text-muted small mt-2">Sex prediction unavailable.</div>
       <div v-if="state === 'loading'" class="text-muted small py-2 d-flex align-items-center gap-2">
         <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
         Loading predictions&hellip;
@@ -561,6 +579,7 @@ watch([camid, () => props.prediction], load, { immediate: true })
 
 <style scoped>
 .pred-panel { font-size: 0.8rem; }
+.pred-sex { color: #334155; font-weight: 600; }
 .pred-head {
   background: #f1f5f9;
   border: none;

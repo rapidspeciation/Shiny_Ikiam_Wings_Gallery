@@ -36,7 +36,7 @@ const candidateRow = (label, confidence = 0.7, top5 = true) => ({
 })
 
 test('candidate-D replaces the default prediction payload without historical fallback', () => {
-  assert.equal(Object.keys(candidate).length, 3022)
+  assert.equal(Object.keys(candidate).length, 4504)
   assert.equal(Object.keys(legacy).length, 4823)
   const first = candidate.CAM042391
   assert.equal(first.source, 'candidate_d')
@@ -137,7 +137,7 @@ test('ranked replay preserves recorded probability outside top five and nested s
 
 test('missing reason ledger covers historical rows and frozen zero-detection full-image rows', () => {
   const historicalWithoutCandidate = Object.keys(legacy).filter(camid => !candidate[camid])
-  assert.equal(historicalWithoutCandidate.length, 1801)
+  assert.equal(historicalWithoutCandidate.length, 588)
   for (const camid of Object.keys(legacy)) assert.ok(missing[camid], `missing reason for ${camid}`)
   for (const camid of historicalWithoutCandidate) assert.ok(missing[camid].reason)
   const rankMissingCamid = Object.keys(candidate).find(camid => Object.keys(candidate[camid].rank_predictions).length < 6)

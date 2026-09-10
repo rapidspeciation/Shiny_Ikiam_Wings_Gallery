@@ -9,6 +9,7 @@ export function useGallery(rawData, options) {
   const allMatches = ref([])         // All items matching filters
   const displayedCount = ref(PAGE_SIZE)    // How many are currently rendered
   const lastFilterFn = ref(null)
+  const lastSexPredictions = ref(null)
   const lastPredictions = ref(null)  // cached for re-sorts (e.g. sort-dropdown change)
 
   const { sortBy, sortOrder, side, onlyPhotos, onePerSubspecies, reviewRank } = options
@@ -19,8 +20,9 @@ export function useGallery(rawData, options) {
   // predictions: optional CAM_ID -> prediction map, needed only for the "Model
   // confidence" sort. The Tab loads it lazily and passes it in; we cache it so a
   // later sort-dropdown change (which re-runs via the watcher) still has it.
-  const applyFilters = (filterFn, predictions) => {
+  const applyFilters = (filterFn, predictions, sexPredictions) => {
     lastFilterFn.value = filterFn
+    if (sexPredictions !== undefined) lastSexPredictions.value = sexPredictions
     if (predictions !== undefined) lastPredictions.value = predictions
     // A. Run the specific filter function provided by the Tab
     let results = rawData.value.filter(item => filterFn(item))
@@ -30,7 +32,8 @@ export function useGallery(rawData, options) {
       onlyPhotos: onlyPhotos.value,
       onePerSubspecies: onePerSubspecies.value,
       predictions: lastPredictions.value,
-      reviewRank: reviewRank?.value || 'species'
+      reviewRank: reviewRank?.value || 'species',
+      sexPredictions: lastSexPredictions.value
     })
 
     // B. Reset Pagination and Update State

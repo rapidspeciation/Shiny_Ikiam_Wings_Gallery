@@ -3,7 +3,8 @@ import { ref, computed, onMounted, watch } from 'vue'
 import { useDataset } from '../composables/useDataset.js'
 import { useGallery } from '../composables/useGallery.js'
 import { useGlobalGalleryOptions } from '../composables/useGlobalGalleryOptions.js'
-import { getAllPredictions, predictionDiffers, resolveCamid } from '../composables/useCurationData.js'
+import { getAllPredictions, getAllSexPredictions, predictionDiffers, resolveCamid } from '../composables/useCurationData.js'
+import { matchesSexFilter } from '../utils/sexPrediction.js'
 import FilterSelect from './FilterSelect.vue'
 import PhotoGrid from './PhotoGrid.vue'
 
@@ -27,6 +28,7 @@ const filters = ref({
   idStatus: [],
   modelVsRecorded: 'All'   // All | Differs | Matches | No prediction
 })
+const sexFilterError = ref('')
 
 const getUnique = (field, data) => {
   const set = new Set(data.map(i => i[field]).filter(x => x && x !== "NA"))
@@ -86,13 +88,25 @@ onMounted(async () => {
 })
 
 const onShowPhotos = async () => {
+  sexFilterError.value = ''
   // "Model vs recorded" filtering AND "Model confidence" sorting both need the
   // predictions map; load (cached) before filtering so the result set + order are
   // complete on first render. Uses the SAME predictionDiffers helper as the panel's
   // "differs" badge, so the two always agree.
   const mvr = filters.value.modelVsRecorded
-  const needPred = mvr !== 'All' || sortBy.value === 'ModelConfidence'
+  const taxonomyFilter = ['Differs', 'Matches', 'No prediction'].includes(mvr)
+  const sexFilter = ['Sex differs', 'Sex matches', 'No sex prediction'].includes(mvr)
+  const needPred = taxonomyFilter || sortBy.value === 'ModelConfidence'
   const predictions = needPred ? await getAllPredictions() : null
+  let sexPredictions = null
+  if (sexFilter || sortBy.value === 'SexConfidence') {
+    try {
+      sexPredictions = await getAllSexPredictions()
+    } catch {
+      sexFilterError.value = 'Sex predictions could not be loaded.'
+      return
+    }
+  }
 
   applyFilters((item) => {
     if (filters.value.family && item.Family !== filters.value.family) return false
@@ -113,14 +127,15 @@ const onShowPhotos = async () => {
         if (!pred || predictionDiffers(item, pred)) return false
       }
     }
+    if (sexFilter && sexPredictions && !matchesSexFilter(item, sexPredictions[resolveCamid(item)], mvr)) return false
     return true
-  }, predictions)
+  }, predictions, sexPredictions)
 }
 
 // switching the sort to "Model confidence" after photos are shown needs the
 // predictions map loaded; re-run the query so it's fetched and passed through.
 watch(() => sortBy.value, (val) => {
-  if (val === 'ModelConfidence' && isFiltered.value) onShowPhotos()
+  if (['ModelConfidence', 'SexConfidence'].includes(val) && isFiltered.value) onShowPhotos()
 })
 </script>
 
@@ -145,11 +160,14 @@ watch(() => sortBy.value, (val) => {
       <div class="col-6 col-md-3"><FilterSelect label="ID Status" v-model="filters.idStatus" :options="idStatuses" :multiple="true" /></div>
       <div class="col-6 col-md-3">
          <label class="form-label small fw-bold" for="mvr-filter">Model vs recorded</label>
-         <select id="mvr-filter" class="form-select" v-model="filters.modelVsRecorded" aria-label="Filter by model prediction vs recorded ID">
+         <select id="mvr-filter" class="form-select" v-model="filters.modelVsRecorded" aria-label="Filter by model prediction versus recorded taxonomy or sex">
            <option>All</option>
-           <option>Differs</option>
-           <option>Matches</option>
-           <option>No prediction</option>
+           <option value="Differs">Taxonomy differs</option>
+           <option value="Matches">Taxonomy matches</option>
+           <option value="No prediction">No taxonomy prediction</option>
+           <option value="Sex differs">Sex differs</option>
+           <option value="Sex matches">Sex matches</option>
+           <option value="No sex prediction">No sex prediction</option>
          </select>
       </div>
     </div>
@@ -157,6 +175,7 @@ watch(() => sortBy.value, (val) => {
     <!-- Action -->
     <div class="mb-4 text-center">
       <button class="btn btn-primary px-5 fw-bold" @click="onShowPhotos">Show Photos</button>
+      <div v-if="sexFilterError" class="small text-danger mt-2" role="alert">{{ sexFilterError }}</div>
     </div>
 
     <!-- Grid -->

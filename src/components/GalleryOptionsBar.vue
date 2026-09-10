@@ -22,7 +22,7 @@ const {
 const DEFAULT_SORT = 'Preservation_date'
 const supportsModelConfidence = computed(() => props.currentTab === 'Collection')
 watch(supportsModelConfidence, (ok) => {
-  if (!ok && sortBy.value === 'ModelConfidence') sortBy.value = DEFAULT_SORT
+  if (!ok && ['ModelConfidence', 'SexConfidence'].includes(sortBy.value)) sortBy.value = DEFAULT_SORT
 }, { immediate: true })
 
 const { mode: proxyMode, tierStatus } = getProxyState()
@@ -59,7 +59,8 @@ function statusClass(tier) {
         <option value="Preservation_date">Date</option>
         <option value="CAM_ID">CAM_ID</option>
         <option value="Row Number">Row #</option>
-        <option v-if="supportsModelConfidence" value="ModelConfidence">Model confidence</option>
+        <option v-if="supportsModelConfidence" value="ModelConfidence">Model confidence (taxonomy)</option>
+        <option v-if="supportsModelConfidence" value="SexConfidence">Model confidence (sex)</option>
       </select>
     </div>
     <div class="col-6 col-md-2">

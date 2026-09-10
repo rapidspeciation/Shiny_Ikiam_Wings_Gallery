@@ -131,6 +131,18 @@ export async function getAllPredictions(source = 'candidate_d') {
   }
 }
 
+// Out-of-fold sex predictions keyed by CAM_ID. These are collection-only;
+// AI Identifier uploads do not use this asset.
+export async function getSexPrediction(camid) {
+  if (!camid) return null
+  const data = await loadFile('sex_predictions')
+  return data[camid] || data[String(camid).toUpperCase()] || null
+}
+
+export async function getAllSexPredictions() {
+  return loadFile('sex_predictions')
+}
+
 export async function getPredictionMissingReason(camid, rank = null) {
   if (!camid) return null
   try {
@@ -323,7 +335,8 @@ export async function getLinks(taxon) {
 
 export function useCurationData() {
   return {
-    getBoxes, getAllBoxes, preloadBoxes, getPredictions, getAllPredictions, getLinks, boxKeyFromName,
+    getBoxes, getAllBoxes, preloadBoxes, getPredictions, getAllPredictions,
+    getSexPrediction, getAllSexPredictions, getLinks, boxKeyFromName,
     getCurationSourceMeta, compareCurationVersions, topPredictionTaxon,
     getPredictionMissingReason, getAllPredictionMissingReasons, getBoxReason, getAllBoxReasons,
     resolveCamid,

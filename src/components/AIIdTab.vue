@@ -616,6 +616,26 @@ const showAbout = ref(false)
           frontier, because Müllerian mimicry produces look-alikes across species, exactly the cases the tool surfaces
           for checking. The backbone is currently frozen with only the head trained; planned backbone fine-tuning is the
           main lever expected to lift species and subspecies accuracy further.</p>
+          <section aria-labelledby="sex-benchmark-title">
+          <p id="sex-benchmark-title" class="mb-1"><strong>Sex prediction · 9 September 2026</strong></p>
+          <p>Collection predictions use separate BioCLIP features from the two ventral forewings and two dorsal hindwings,
+          with out-of-fold scores for 1,220 Sanger specimens across 57 species.</p>
+          <table id="sex-benchmark" class="table table-sm table-bordered w-auto small">
+            <thead><tr><th scope="col">Evaluation</th><th scope="col">Specimens</th><th scope="col">Accuracy</th></tr></thead>
+            <tbody>
+              <tr><td>Excluding five damaged specimens</td><td>1,215</td><td>89.7%</td></tr>
+              <tr><td>All scored specimens</td><td>1,220</td><td>89.7%</td></tr>
+            </tbody>
+          </table>
+          <p>Scores average three models that each excluded the specimen from training and checkpoint selection.
+          <strong>Supported</strong> requires confidence ≥80% and sufficient taxon evidence for both sexes; otherwise <strong>Uncertain</strong>.
+          This exploratory screen supports 274 predictions in <em>Ithomia salapia</em>, <em>Mechanitis mazaeus</em>, <em>Mechanitis messenoides</em>, <em>Mechanitis polymnia</em>, <em>Oleria amalda</em>, <em>Oleria baizana</em>, <em>Oleria tigilla</em>.
+          5 disagree with the recorded sex and are candidates for review.</p>
+          <p>Sex prediction is not yet supported in AI Identifier.
+          These results measure agreement with recorded sex, not independently confirmed sex.</p>
+          <p><a href="/Shiny_Ikiam_Wings_Gallery/data/sex_review_candidates.csv" download>Review candidates (CSV)</a>
+          · <a href="/Shiny_Ikiam_Wings_Gallery/data/sex_taxon_reliability.csv" download>Taxon reliability (CSV)</a></p>
+          </section>
           <p class="mb-1">
             <strong>Models &amp; code:</strong>
             weights (head + wing-cropper):
