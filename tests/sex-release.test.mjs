@@ -12,4 +12,5 @@ test('published sex release uses verified wing-part OOF scores and states upload
  assert.match(about,/Sex prediction is not yet supported in AI Identifier\./)
  assert.match(about,/89\.7%/)
  assert.match(about,/1,220/)
+ assert.doesNotMatch(about,/Review candidates \(CSV\)|Taxon reliability \(CSV\)/)
 })

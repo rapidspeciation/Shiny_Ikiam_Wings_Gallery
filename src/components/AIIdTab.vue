@@ -633,8 +633,7 @@ const showAbout = ref(false)
           5 disagree with the recorded sex and are candidates for review.</p>
           <p>Sex prediction is not yet supported in AI Identifier.
           These results measure agreement with recorded sex, not independently confirmed sex.</p>
-          <p><a href="/Shiny_Ikiam_Wings_Gallery/data/sex_review_candidates.csv" download>Review candidates (CSV)</a>
-          · <a href="/Shiny_Ikiam_Wings_Gallery/data/sex_taxon_reliability.csv" download>Taxon reliability (CSV)</a></p>
+
           </section>
           <p class="mb-1">
             <strong>Models &amp; code:</strong>
