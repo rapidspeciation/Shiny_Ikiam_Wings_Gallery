@@ -218,12 +218,10 @@ test('AI Identifier About copy uses one matched-prior Top-1 and Top-5 contract',
     'Changelog',
     'side-of-Andes + Ecuador prior',
     '<th>Top-1</th><th>Top-5</th>',
-    '<tr><td>Subspecies</td><td>85.7%</td><td>96.5%</td></tr>',
-    '<tr><td>Species</td><td>91.6%</td><td>98.0%</td></tr>',
-    '<tr><td>Genus</td><td>96.8%</td><td>99.5%</td></tr>',
-    '<tr><td>Tribe</td><td>97.9%</td><td>99.9%</td></tr>',
-    '<tr><td>Subfamily</td><td>99.6%</td><td>100.0%</td></tr>',
-    '<tr><td>Family</td><td>99.6%</td><td>100.0%</td></tr>'
+    '<tr><td>Subspecies</td><td>2,613</td><td>87.93%</td><td>97.33%</td></tr>',
+    '<tr><td>Species</td><td>3,355</td><td>91.33%</td><td>97.91%</td></tr>',
+    '<tr><td>Genus</td><td>3,806</td><td>95.55%</td><td>99.26%</td></tr>',
+    '<tr><td>Family</td><td>3,824</td><td>99.32%</td><td>99.90%</td></tr>'
   ]) assert.ok(about.includes(required), `missing About copy: ${required}`)
 })
 

@@ -20,7 +20,7 @@ export const BOX_SOURCES = {
 }
 
 export const PREDICTION_SOURCES = {
-  candidate_d: { file: 'predictions', label: 'Current taxonomic classifier · corrected OOF' },
+  candidate_d: { file: 'predictions_expanded_concat_dv', label: 'Current taxonomic classifier · paired dorsal/ventral' },
   live_real: { file: 'predictions_live_real', label: 'Live released inference' },
   legacy: { file: 'predictions_legacy', label: 'Previous gallery classifier (audit only)' }
 }

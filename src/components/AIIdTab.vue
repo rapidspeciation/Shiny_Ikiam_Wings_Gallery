@@ -586,44 +586,46 @@ const showAbout = ref(false)
         <div v-show="showAbout" class="small mt-2">
           <p>A model that identifies butterflies and nocturnal moths from wing photos, used as a curation tool to flag
           uncertain or mislabelled identifications in the image database. It pairs a frozen <strong>BioCLIP 2.5-H</strong>
-          image backbone (released February 2026) with a hierarchical classification head that predicts the finest taxon
+          image backbone with a hierarchical classification head that predicts the finest taxon
           and rolls those predictions up the taxonomy, keeping them consistent across subspecies, species, genus, and
           higher ranks. To focus it on wing pattern, images are first cropped to the wings by a lightweight
-          YOLO26s-seg-based butterfly segmentation model (updated 3 September 2026) trained on wing masks generated with SAM 3.</p>
+          YOLO26s-seg-based butterfly segmentation model trained on wing masks generated with SAM 3.</p>
           <p><strong>Coverage:</strong> the label space spans Neotropical butterflies across all major families
           (Nymphalidae, Hesperiidae, Riodinidae, Lycaenidae, Pieridae, Papilionidae) and now a substantial component of
           <strong>nocturnal moths</strong> — predominantly <em>Sphingidae</em> (hawkmoths), with Saturniidae, Geometridae,
-          Notodontidae, Erebidae and others — spanning <strong>4,478 species</strong> and <strong>4,958 subspecies</strong>.
+          Notodontidae, Erebidae and others.
           Rare species represented by even single observations are included in training. Sampling remains
           uneven: most of the butterfly data sits in the <em>Ithomiini</em> mimicry radiation and most of the moth data
           in <em>Sphingidae</em>, so confident calls on sparsely-sampled groups (skippers, hairstreaks, micromoths)
           warrant extra caution. Even within Ithomiini, Müllerian mimicry makes subspecies look-alikes genuinely hard to
           tell apart.</p>
-          <p class="mb-1"><strong>Deployment accuracy</strong> on Sanger specimens (out-of-fold, dorsal+ventral combined,
-          with the side-of-Andes + Ecuador prior):</p>
-          <table class="table table-sm table-bordered w-auto small">
-            <thead><tr><th>Rank</th><th>Top-1</th><th>Top-5</th></tr></thead>
+          <p>The collection classifier combines dorsal and ventral features for 3,829 specimens with verified
+          paired photos. Other specimens retain their previous predictions. AI Identifier uses a single-photo classifier.</p>
+          <p class="mb-1"><strong>Deployment accuracy</strong> on held-out Sanger specimens,
+          averaged across three seeds and five folds, with the side-of-Andes + Ecuador prior:</p>
+          <table id="taxonomy-benchmark" class="table table-sm table-bordered w-auto small">
+            <thead><tr><th>Rank</th><th>Specimens</th><th>Top-1</th><th>Top-5</th></tr></thead>
             <tbody>
-              <tr><td>Subspecies</td><td>85.7%</td><td>96.5%</td></tr>
-              <tr><td>Species</td><td>91.6%</td><td>98.0%</td></tr>
-              <tr><td>Genus</td><td>96.8%</td><td>99.5%</td></tr>
-              <tr><td>Tribe</td><td>97.9%</td><td>99.9%</td></tr>
-              <tr><td>Subfamily</td><td>99.6%</td><td>100.0%</td></tr>
-              <tr><td>Family</td><td>99.6%</td><td>100.0%</td></tr>
+              <tr><td>Subspecies</td><td>2,613</td><td>87.93%</td><td>97.33%</td></tr>
+              <tr><td>Species</td><td>3,355</td><td>91.33%</td><td>97.91%</td></tr>
+              <tr><td>Genus</td><td>3,806</td><td>95.55%</td><td>99.26%</td></tr>
+              <tr><td>Family</td><td>3,824</td><td>99.32%</td><td>99.90%</td></tr>
             </tbody>
           </table>
-          <p class="text-muted">Performance is strong and reliable from genus upward (≥96%); subspecies is the hard
-          frontier, because Müllerian mimicry produces look-alikes across species, exactly the cases the tool surfaces
-          for checking. The backbone is currently frozen with only the head trained; planned backbone fine-tuning is the
-          main lever expected to lift species and subspecies accuracy further.</p>
+          <p class="text-muted">Each rank includes specimens with an eligible recorded identification;
+          labels absent from a fold's vocabulary count as misses. Subspecies scores cover named subspecies.
+          Geographic weighting adds 0.21 pp to Species Top-1 and 0.74 pp to Subspecies Top-1;
+          Genus Top-1 decreases by 0.16 pp. Tribe and subfamily scores await alignment of taxonomic labels.
+          These results evaluate the collection workflow, not single uploaded photos.
+          Gallery taxonomy predictions use the final fitted model; the table uses held-out predictions.</p>
+          <!-- Sex benchmark and support details are generated from the verified OOF export. -->
           <section aria-labelledby="sex-benchmark-title">
-          <p id="sex-benchmark-title" class="mb-1"><strong>Sex prediction · 9 September 2026</strong></p>
+          <p id="sex-benchmark-title" class="mb-1"><strong>Sex prediction</strong></p>
           <p>Collection predictions use separate BioCLIP features from the two ventral forewings and two dorsal hindwings,
-          with out-of-fold scores for 1,220 Sanger specimens across 57 species.</p>
+          for 1,586 Sanger specimens. The benchmark below covers 1,220 specimens across 57 species.</p>
           <table id="sex-benchmark" class="table table-sm table-bordered w-auto small">
             <thead><tr><th scope="col">Evaluation</th><th scope="col">Specimens</th><th scope="col">Accuracy</th></tr></thead>
             <tbody>
-              <tr><td>Excluding five damaged specimens</td><td>1,215</td><td>89.7%</td></tr>
               <tr><td>All scored specimens</td><td>1,220</td><td>89.7%</td></tr>
             </tbody>
           </table>
@@ -631,8 +633,9 @@ const showAbout = ref(false)
           <strong>Supported</strong> requires confidence ≥80% and sufficient taxon evidence for both sexes; otherwise <strong>Uncertain</strong>.
           This exploratory screen supports 274 predictions in <em>Ithomia salapia</em>, <em>Mechanitis mazaeus</em>, <em>Mechanitis messenoides</em>, <em>Mechanitis polymnia</em>, <em>Oleria amalda</em>, <em>Oleria baizana</em>, <em>Oleria tigilla</em>.
           5 disagree with the recorded sex and are candidates for review.</p>
-          <p>Sex prediction is not yet supported in AI Identifier.
-          These results measure agreement with recorded sex, not independently confirmed sex.</p>
+          <p>Sex prediction is not yet supported for uploaded photos. The current method uses separate features from
+          ventral forewing and dorsal hindwing crops of Sanger specimens. These views expose regions that may show
+          sexual differences, including androconia in some taxa.</p>
 
           </section>
           <p class="mb-1">
@@ -655,6 +658,13 @@ const showAbout = ref(false)
             Taxonomic Inventory</a> and other hawkmoth/saturniid resources.
           </p>
           <p class="mb-1"><strong>Changelog</strong></p>
+          <p><strong>10 September 2026:</strong> Added joint dorsal/ventral features for taxonomic prediction
+          in specimens with verified paired photos, retaining the previous method for other specimens.
+          Species Top-1 accuracy reaches 91.33% (+0.85 pp, Top-5: 97.91%) and Subspecies Top-1 reaches 87.93%
+          (+0.87 pp, Top-5: 97.33%), on the matched Sanger evaluation with the geographic prior. For uploaded photos, the model does not yet support combining dorsal and ventral photos of the same individual.</p>
+          <p><strong>9 September 2026:</strong> Added out-of-fold sex predictions from separate ventral forewing and dorsal
+          hindwing features, confidence scores, Supported/Uncertain labels, sex agreement filters, and confidence sorting
+          that places supported predictions first.</p>
           <p><strong>6 September 2026:</strong> Retrained the taxonomic classification head with the expanded Butterflies of America
           dataset, retaining rare species down to single observations (covering 4,478 species and 4,958 subspecies).
           BioCLIP features are extracted from tight crops focused strictly on the wings, improving Species Top-1 accuracy

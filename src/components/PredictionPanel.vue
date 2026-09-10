@@ -393,7 +393,7 @@ watch([camid, () => props.prediction], load, { immediate: true })
     >
       <span class="d-flex align-items-center gap-2 flex-wrap">
         <span class="fw-bold small" title="Corrected out-of-fold model predictions; each specimen is scored by a model that never trained on it.">Model predictions</span>
-        <span v-if="state === 'ready' && side" class="badge text-bg-light border text-secondary fw-normal" :title="`Recorded ${side}-of-Andes side; model predictions are visual-only and geography is sensitivity-only.`">{{ side }} of Andes</span>
+        <span v-if="state === 'ready' && side" class="badge text-bg-light border text-secondary fw-normal" :title="`Recorded ${side}-of-Andes side; paired model predictions include geographic weighting.`">{{ side }} of Andes</span>
         <span
           v-if="state === 'ready' && !hasRecordedSubsp && suggestedSubsp"
           class="badge text-bg-info-subtle text-info-emphasis border border-info-subtle fw-normal"
