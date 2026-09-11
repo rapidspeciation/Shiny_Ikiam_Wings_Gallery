@@ -5,10 +5,12 @@ import { resolve } from 'node:path'
 import {
   canonicalTaxon,
   predictionDiffers,
+  recordedPredictionEvidence,
   rankComparison
 } from '../src/utils/taxonomy.js'
 import { modelConfidence, sortItems } from '../src/utils/galleryPipeline.js'
 import { unionBox, unionBoxScale } from '../src/utils/wingBoxes.js'
+import { mergeCurrentPredictionMaps } from '../src/utils/predictionCoverage.js'
 
 const dataRoot = resolve('public/data')
 const read = name => JSON.parse(readFileSync(resolve(dataRoot, name), 'utf8'))
@@ -86,6 +88,20 @@ test('rank-aware disagreement and missing states are explicit', () => {
   assert.equal(rankComparison(record('Morpho helenor'), null, 'species').status, 'missing')
 })
 
+test('recorded prediction evidence keeps matching out-of-top-k scores and ignores stale embedded truth', () => {
+  const item = record('Morpho helenor', 'theodorus')
+  const matching = {
+    species: [['Morpho aega', 0.7, 0]],
+    rec: { species: 'Morpho helenor', species_p: 0.17, subsp: 'Morpho helenor theodorus', subsp_p: 0.08, oor: 1 }
+  }
+  assert.deepEqual(recordedPredictionEvidence(item, matching, 'species'), { confidence: 0.17, oor: true })
+  assert.deepEqual(recordedPredictionEvidence(item, matching, 'subspecies'), { confidence: 0.08, oor: true })
+
+  const stale = { rec: { species: 'Morpho aega', species_p: 0.99 } }
+  assert.equal(recordedPredictionEvidence(item, stale, 'species'), null)
+  assert.equal(recordedPredictionEvidence(item, {}, 'species'), null)
+})
+
 test('authoritative collection taxonomy fixes CAM077706 and prevents false disagreement', () => {
   const cam = candidate.CAM077706
   assert.equal(cam.recorded_taxonomy.canonical.subspecies, 'Hypothyris euclea intermedia')
@@ -136,12 +152,17 @@ test('ranked replay preserves recorded probability outside top five and nested s
 })
 
 test('missing reason ledger covers historical rows and frozen zero-detection full-image rows', () => {
-  const historicalWithoutCandidate = Object.keys(legacy).filter(camid => !candidate[camid])
-  assert.equal(historicalWithoutCandidate.length, 588)
-  for (const camid of Object.keys(legacy)) assert.ok(missing[camid], `missing reason for ${camid}`)
-  for (const camid of historicalWithoutCandidate) assert.ok(missing[camid].reason)
-  const rankMissingCamid = Object.keys(candidate).find(camid => Object.keys(candidate[camid].rank_predictions).length < 6)
-  if (rankMissingCamid) assert.ok(missing[rankMissingCamid].reason)
+  const coverage = read('predictions_coverage_current.json')
+  const active = mergeCurrentPredictionMaps({
+    expanded: read('predictions_expanded_concat_dv.json'),
+    coverage,
+    live: read('predictions_live_real.json')
+  })
+  const historicalWithoutActive = Object.keys(legacy).filter(camid => !active[camid])
+  assert.equal(historicalWithoutActive.length, 572)
+  for (const camid of historicalWithoutActive) assert.ok(missing[camid]?.reason, `missing reason for ${camid}`)
+  assert.equal(Object.keys(coverage).length, 402)
+  for (const camid of Object.keys(coverage)) assert.ok(!missing[camid]?.reason, `stale reason for ${camid}`)
   for (const key of ['cam070267d', 'cam075743v3']) {
     assert.equal(boxReasons[key].status, 'zero_detection')
     assert.equal(boxReasons[key].uses_full_image, true)

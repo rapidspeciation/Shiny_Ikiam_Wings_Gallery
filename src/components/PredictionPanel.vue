@@ -11,7 +11,7 @@ import {
   SOURCE_KEYS, SOURCE_LABELS, SOURCE_FULL_NAMES
 } from '../composables/useCurationData.js'
 import { resolveCamid } from '../utils/galleryPipeline.js'
-import { REVIEW_RANKS, rankComparison } from '../utils/taxonomy.js'
+import { REVIEW_RANKS, rankComparison, recordedPredictionEvidence, recordedTaxonomy } from '../utils/taxonomy.js'
 import { formatSexPrediction } from '../utils/sexPrediction.js'
 
 // `item` drives the existing CAMID-based curation flow (Collection tab).
@@ -43,8 +43,9 @@ const clean = (v) => {
   const s = String(v).trim()
   return (!s || s === 'NA' || s === 'None') ? '' : s
 }
-const recordedSpecies = computed(() => clean(props.item && props.item.Species))
-const recordedSubsp = computed(() => clean(props.item && props.item.Subspecies_Form))
+const recorded = computed(() => recordedTaxonomy(props.item))
+const recordedSpecies = computed(() => recorded.value.species)
+const recordedSubsp = computed(() => recorded.value.subspecies)
 const recordedTaxon = computed(() => {
   const sp = recordedSpecies.value, ssp = recordedSubsp.value
   if (sp && ssp) return ssp.startsWith(sp) ? ssp : `${sp} ${ssp}`
@@ -52,9 +53,8 @@ const recordedTaxon = computed(() => {
 })
 const hasRecordedSubsp = computed(() => !!recordedSubsp.value)
 
-// mark where the database (recorded) taxon sits in the model's tree.
-// Prefer the canonical recorded label (pred.rec, matches the leaf names); fall back
-// to the raw collection.json values.
+// Mark where the database taxon sits in the model tree. Recorded labels always
+// come from the collection row; prediction payloads supply scores only.
 const recSpeciesLc = computed(() => (recordedSpecies.value || '').toLowerCase())
 const recSubspLc = computed(() => ((hasRecordedSubsp.value ? recordedTaxon.value : '') || '').toLowerCase())
 const isRecSpecies = (t) => !!recSpeciesLc.value && t.toLowerCase() === recSpeciesLc.value
@@ -154,25 +154,26 @@ const tree = computed(() => {
     return { taxon: g, pct: genusProb.has(g) ? fmtPct(genusProb.get(g)) : '', species: speciesNodes }
   })
 
-  // ensure the RECORDED taxon is always present (even outside top-k) so its model
-  // rank/confidence is visible for curation. Prefer pred.rec (canonical, carries the
-  // model probs); fall back to the raw collection.json values when rec is absent
-  // (~20% of specimens) so the recorded ID is never hidden once the bottom block is gone.
-  const rec = p.rec
-  const recSp = rec?.species || recordedSpecies.value
+  // Ensure the recorded taxon is always present, even outside top-k. The
+  // collection row supplies its identity and the prediction arrays supply any
+  // matching probability.
+  const recSp = recordedSpecies.value
   if (recSp) {
-    const rg = rec?.genus || genusOf(recSp)
-    const recSubspFull = rec?.subsp || (hasRecordedSubsp.value ? recordedTaxon.value : '')
+    const rg = genusOf(recSp)
+    const recSubspFull = hasRecordedSubsp.value ? recordedTaxon.value : ''
+    const genusEvidence = recordedPredictionEvidence(props.item, p, 'genus')
+    const speciesEvidence = recordedPredictionEvidence(props.item, p, 'species')
+    const subspeciesEvidence = recSubspFull ? recordedPredictionEvidence(props.item, p, 'subspecies') : null
     let gNode = treeArr.find(x => x.taxon === rg)
-    if (!gNode) { gNode = { taxon: rg, pct: fmtPct(rec?.genus_p), species: [] }; treeArr.push(gNode) }
+    if (!gNode) { gNode = { taxon: rg, pct: fmtPct(genusEvidence?.confidence), species: [] }; treeArr.push(gNode) }
     let sNode = gNode.species.find(x => x.taxon === recSp)
     if (!sNode) {
-      sNode = { taxon: recSp, pct: fmtPct(rec?.species_p), prob: rec?.species_p || 0, oor: !!rec?.oor, subspecies: [] }
+      sNode = { taxon: recSp, pct: fmtPct(speciesEvidence?.confidence), prob: speciesEvidence?.confidence ?? -1, oor: speciesEvidence?.oor === true, subspecies: [] }
       gNode.species.push(sNode)
       gNode.species.sort((a, b) => b.prob - a.prob)
     }
     if (recSubspFull && !sNode.subspecies.find(x => x.taxon === recSubspFull)) {
-      sNode.subspecies.push({ taxon: recSubspFull, pct: fmtPct(rec?.subsp_p), oor: !!rec?.oor })
+      sNode.subspecies.push({ taxon: recSubspFull, pct: fmtPct(subspeciesEvidence?.confidence), oor: subspeciesEvidence?.oor === true })
     }
   }
   return treeArr

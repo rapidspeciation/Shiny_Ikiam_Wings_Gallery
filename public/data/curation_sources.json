@@ -21,16 +21,17 @@
   },
   "predictions": {
     "candidate_d": {
-      "build_id": "clean-retrain-v2-candidate-D",
-      "cell": "D_padded_guides_support1",
-      "checkpoint_sha256": "2e7e14103388f199b96da7a489d89e49d8942611620a2414201b31df5059813f",
-      "display_seed": 1701,
-      "head": "corrected candidate-D taxonomic head",
-      "label": "Candidate D \u00b7 corrected OOF",
-      "preprocessing": "frozen Wings-v6 padded features",
-      "score_semantics": "group-safe Sanger OOF closed-set taxonomic probability; not insect-presence or OOD confidence",
-      "source_oof_sha256": "5464cd24f4c923225a0f5e3908ffe8f0c3057c355371c79eca015ab5718342f7",
-      "top5_contract": "top5_correct membership flag only; ranked top-five labels are unavailable and not fabricated"
+      "build_id": "expanded-taxonomy-preview-20260910",
+      "checkpoint_sha256": "34ecd53f64b3f9dc600710af5ca8df7cd94845653a9ce9f916dcd08adc520167",
+      "file": "predictions_expanded_concat_dv.json",
+      "head": "current taxonomic classifier",
+      "label": "Current taxonomic classifier \u00b7 paired dorsal/ventral",
+      "pairing_policy": "EXPANDED_PAIRED",
+      "score_semantics": "final-fit closed-set taxonomic probability; not insect-presence or OOD confidence",
+      "supplemental_files": [
+        "predictions_coverage_current.json",
+        "predictions_live_real.json"
+      ]
     },
     "legacy": {
       "build_id": "legacy-gallery-data",
@@ -49,7 +50,7 @@
   },
   "schema_contract": {
     "recorded_taxonomy": "recorded_taxonomy.raw/canonical is immutable record context",
-    "model_taxonomy": "rank_predictions is candidate-D output only",
-    "missing_reasons": "prediction_missing_reasons.json explicitly covers gallery and historical CAMIDs"
+    "model_taxonomy": "the active gallery map merges expanded paired predictions, current coverage, then live released inference",
+    "missing_reasons": "prediction_missing_reasons.json covers CAMIDs without an active prediction and any rank-specific gaps"
   }
 }

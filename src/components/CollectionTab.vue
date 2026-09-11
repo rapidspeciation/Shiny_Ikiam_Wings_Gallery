@@ -29,6 +29,7 @@ const filters = ref({
   modelVsRecorded: 'All'   // All | Differs | Matches | No prediction
 })
 const sexFilterError = ref('')
+const taxonomyFilterError = ref('')
 
 const getUnique = (field, data) => {
   const set = new Set(data.map(i => i[field]).filter(x => x && x !== "NA"))
@@ -89,6 +90,7 @@ onMounted(async () => {
 
 const onShowPhotos = async () => {
   sexFilterError.value = ''
+  taxonomyFilterError.value = ''
   // "Model vs recorded" filtering AND "Model confidence" sorting both need the
   // predictions map; load (cached) before filtering so the result set + order are
   // complete on first render. Uses the SAME predictionDiffers helper as the panel's
@@ -97,7 +99,15 @@ const onShowPhotos = async () => {
   const taxonomyFilter = ['Differs', 'Matches', 'No prediction'].includes(mvr)
   const sexFilter = ['Sex differs', 'Sex matches', 'No sex prediction'].includes(mvr)
   const needPred = taxonomyFilter || sortBy.value === 'ModelConfidence'
-  const predictions = needPred ? await getAllPredictions() : null
+  let predictions = null
+  if (needPred) {
+    try {
+      predictions = await getAllPredictions()
+    } catch {
+      taxonomyFilterError.value = 'Taxonomy predictions could not be loaded. Try again.'
+      return
+    }
+  }
   let sexPredictions = null
   if (sexFilter || sortBy.value === 'SexConfidence') {
     try {
@@ -164,7 +174,6 @@ watch(() => sortBy.value, (val) => {
            <option>All</option>
            <option value="Differs">Taxonomy differs</option>
            <option value="Matches">Taxonomy matches</option>
-           <option value="No prediction">No taxonomy prediction</option>
            <option value="Sex differs">Sex differs</option>
            <option value="Sex matches">Sex matches</option>
            <option value="No sex prediction">No sex prediction</option>
@@ -175,6 +184,7 @@ watch(() => sortBy.value, (val) => {
     <!-- Action -->
     <div class="mb-4 text-center">
       <button class="btn btn-primary px-5 fw-bold" @click="onShowPhotos">Show Photos</button>
+      <div v-if="taxonomyFilterError" class="small text-danger mt-2" role="alert">{{ taxonomyFilterError }}</div>
       <div v-if="sexFilterError" class="small text-danger mt-2" role="alert">{{ sexFilterError }}</div>
     </div>
 

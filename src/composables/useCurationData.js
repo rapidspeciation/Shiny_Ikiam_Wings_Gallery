@@ -9,10 +9,12 @@
 const BASE = import.meta.env.BASE_URL
 import { resolveCamid } from '../utils/galleryPipeline.js'
 import { canonicalTaxon, predictionDiffers, rankComparison } from '../utils/taxonomy.js'
+import { loadCurrentPredictionMaps } from '../utils/predictionCoverage.js'
 export { resolveCamid, predictionDiffers, canonicalTaxon, rankComparison }
 
 // Module-wide caches (one promise per file -> single fetch, deduped).
 const fileCache = new Map()
+let currentPredictionsPromise = null
 
 export const BOX_SOURCES = {
   v6: { file: 'wing_boxes_v6', label: 'Current butterfly segmentation boxes' },
@@ -21,6 +23,7 @@ export const BOX_SOURCES = {
 
 export const PREDICTION_SOURCES = {
   candidate_d: { file: 'predictions_expanded_concat_dv', label: 'Current taxonomic classifier · paired dorsal/ventral' },
+  current_coverage: { file: 'predictions_coverage_current', label: 'Current classifier coverage' },
   live_real: { file: 'predictions_live_real', label: 'Live released inference' },
   legacy: { file: 'predictions_legacy', label: 'Previous gallery classifier (audit only)' }
 }
@@ -30,7 +33,11 @@ function loadFile(name) {
   const url = `${BASE}data/${name}.json`
   const promise = fetch(url)
     .then(res => {
-      if (!res.ok) throw new Error(`Failed to load ${name}.json`)
+      if (!res.ok) {
+        const error = new Error(`Failed to load ${name}.json`)
+        error.status = res.status
+        throw error
+      }
       return res.json()
     })
     .catch(err => {
@@ -44,6 +51,15 @@ function loadFile(name) {
 
 function sourceFile(sources, source, fallback) {
   return (sources[source] || sources[fallback]).file
+}
+
+function loadCurrentPredictions() {
+  if (currentPredictionsPromise) return currentPredictionsPromise
+  currentPredictionsPromise = loadCurrentPredictionMaps(loadFile).catch(error => {
+    currentPredictionsPromise = null
+    throw error
+  })
+  return currentPredictionsPromise
 }
 
 export async function getCurationSourceMeta() {
@@ -108,27 +124,17 @@ export async function getAllBoxes(source = 'v6') {
 // Returns the prediction object for a CAM_ID, or null if none.
 export async function getPredictions(camid, source = 'candidate_d') {
   if (!camid) return null
-  try {
-    const data = await loadFile(sourceFile(PREDICTION_SOURCES, source, 'candidate_d'))
-    const hit = data[camid] || data[String(camid).toUpperCase()]
-    if (hit || source !== 'candidate_d') return hit || null
-    const live = await loadFile(PREDICTION_SOURCES.live_real.file)
-    return live[camid] || live[String(camid).toUpperCase()] || null
-  } catch {
-    return null
-  }
+  const data = source === 'candidate_d'
+    ? await loadCurrentPredictions()
+    : await loadFile(sourceFile(PREDICTION_SOURCES, source, 'candidate_d'))
+  return data[camid] || data[String(camid).toUpperCase()] || null
 }
 
-// Returns the whole predictions map ({ CAM_ID -> pred }), cached. {} on failure.
+// Returns the whole predictions map ({ CAM_ID -> pred }), cached. The current
+// coverage file is optional during rollout; other load failures remain visible.
 export async function getAllPredictions(source = 'candidate_d') {
-  try {
-    const data = await loadFile(sourceFile(PREDICTION_SOURCES, source, 'candidate_d'))
-    if (source !== 'candidate_d') return data
-    const live = await loadFile(PREDICTION_SOURCES.live_real.file).catch(() => ({}))
-    return { ...live, ...data }
-  } catch {
-    return {}
-  }
+  if (source === 'candidate_d') return loadCurrentPredictions()
+  return loadFile(sourceFile(PREDICTION_SOURCES, source, 'candidate_d'))
 }
 
 // Out-of-fold sex predictions keyed by CAM_ID. These are collection-only;

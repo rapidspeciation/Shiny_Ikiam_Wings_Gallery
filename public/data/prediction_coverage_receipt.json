@@ -1,0 +1,6464 @@
+{
+  "checklist_sha256": "527ca3ead29ee9c744420aa902073af7d69563de04af8d04e62ff4b360bc1431",
+  "checkpoint_sha256": "34ecd53f64b3f9dc600710af5ca8df7cd94845653a9ce9f916dcd08adc520167",
+  "collection_sha256": "96675b8a49e007c427e9b5b11f21630d0bf9da3fcfc6ff7d2fff8b32ca1a14ac",
+  "current_assets": {
+    "collection_sha256": "99db62dcc97801ca4f7afd56e4588f42145daad4dedfd7752e1957247f7785fe",
+    "predictions_expanded_concat_dv_sha256": "2f75987de896889ee8ed9c09a77a4c97551a5f1934708bf8f63424d8a073fe70",
+    "predictions_live_real_sha256": "171f986b2d23f5669d7baacf364a4f83eb882d596be30cf2d54be76b69036b23",
+    "sex_predictions_sha256": "79df4a56e45efa782672949fddbf301ce297548cbc6a3ec306023074a7ba214d"
+  },
+  "duplicated_single_fallback_camids": 5,
+  "features_sha256": "d60f1d4cb5a26ccdea62e4d6def9f096e29dd40814b7a91a8d1f0acc591b502d",
+  "geographic_helper_sha256": "ade325cadea42468a4f9b60b5792bd2854f1b760933f003ac784bf27e6ba0284",
+  "hierarchy_sha256": "ba4a58c2f2b30cdba7b7ef1447ca32bdd4b8707ff26814ea3d65fa32ccf734b4",
+  "input_images": 799,
+  "manifest_sha256": "b8de147c34e42eb54c8c578c71373d2b94ae13fd512dce64b10073d84574d032",
+  "model_meta": {
+    "checklist_sha256": "527ca3ead29ee9c744420aa902073af7d69563de04af8d04e62ff4b360bc1431",
+    "checkpoint_sha256": "34ecd53f64b3f9dc600710af5ca8df7cd94845653a9ce9f916dcd08adc520167",
+    "confidence_semantics": "closed-set rank probability; not OOD confidence",
+    "feature_dimension": 2048,
+    "feature_recipe": "CONCAT_DV with trained duplicated-single fallback",
+    "geographic_helper_sha256": "ade325cadea42468a4f9b60b5792bd2854f1b760933f003ac784bf27e6ba0284",
+    "geographic_prior": "exact confirmed side-of-Andes + Ecuador checklist weights; eps=0.02",
+    "oof": false,
+    "pairing_policy": "explicitly verified unique current Collection dorsal/ventral photos only",
+    "prediction_kind": "final fitted head inference; not out-of-fold",
+    "release": "taxonomy-coverage-20260911"
+  },
+  "model_receipt_sha256": "760d5a09ce2b2a23ba257b642de761731e9f5e9f9fbd004085ece8b172445b09",
+  "pairing_decisions": {
+    "CAM036744": {
+      "collection_photo_names": [
+        "CAM036744d.JPG",
+        "CAM036744v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM036744d__Unknown_species",
+        "sanger:CAM036744v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM036778": {
+      "collection_photo_names": [
+        "CAM036778d.JPG",
+        "CAM036778v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM036778d__Unknown_species",
+        "sanger:CAM036778v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM036779": {
+      "collection_photo_names": [
+        "CAM036779d.JPG",
+        "CAM036779v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM036779d__Unknown_species",
+        "sanger:CAM036779v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM036780": {
+      "collection_photo_names": [
+        "CAM036780d.JPG",
+        "CAM036780v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM036780d__Unknown_species",
+        "sanger:CAM036780v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM036781": {
+      "collection_photo_names": [
+        "CAM036781d.JPG",
+        "CAM036781v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM036781d__Unknown_species",
+        "sanger:CAM036781v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM036782": {
+      "collection_photo_names": [
+        "CAM036782d.JPG",
+        "CAM036782v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM036782d__Unknown_species",
+        "sanger:CAM036782v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM036783": {
+      "collection_photo_names": [
+        "CAM036783d.JPG",
+        "CAM036783v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM036783d__Unknown_species",
+        "sanger:CAM036783v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM036784": {
+      "collection_photo_names": [
+        "CAM036784d.JPG",
+        "CAM036784v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM036784d__Unknown_species",
+        "sanger:CAM036784v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM036785": {
+      "collection_photo_names": [
+        "CAM036785d.JPG",
+        "CAM036785v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM036785d__Unknown_species",
+        "sanger:CAM036785v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM036786": {
+      "collection_photo_names": [
+        "CAM036786d.JPG",
+        "CAM036786v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM036786d__Unknown_species",
+        "sanger:CAM036786v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM036787": {
+      "collection_photo_names": [
+        "CAM036787d.JPG",
+        "CAM036787v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM036787d__Unknown_species",
+        "sanger:CAM036787v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM036789": {
+      "collection_photo_names": [
+        "CAM036789d.JPG",
+        "CAM036789v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM036789d__Unknown_species",
+        "sanger:CAM036789v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM036800": {
+      "collection_photo_names": [
+        "CAM036800d.JPG",
+        "CAM036800v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM036800d__Unknown_species",
+        "sanger:CAM036800v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM036801": {
+      "collection_photo_names": [
+        "CAM036801d.JPG",
+        "CAM036801v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM036801d__Unknown_species",
+        "sanger:CAM036801v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM036802": {
+      "collection_photo_names": [
+        "CAM036802d.JPG",
+        "CAM036802v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM036802d__Unknown_species",
+        "sanger:CAM036802v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM036804": {
+      "collection_photo_names": [
+        "CAM036804d.JPG",
+        "CAM036804v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM036804d__Unknown_species",
+        "sanger:CAM036804v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM036805": {
+      "collection_photo_names": [
+        "CAM036805d.JPG",
+        "CAM036805v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM036805d__Unknown_species",
+        "sanger:CAM036805v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM036806": {
+      "collection_photo_names": [
+        "CAM036806d.JPG",
+        "CAM036806v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM036806d__Unknown_species",
+        "sanger:CAM036806v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM036807": {
+      "collection_photo_names": [
+        "CAM036807d.JPG",
+        "CAM036807v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM036807d__Unknown_species",
+        "sanger:CAM036807v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042001": {
+      "collection_photo_names": [
+        "CAM042001d.JPG",
+        "CAM042001v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042001d__Unknown_species",
+        "sanger:CAM042001v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042002": {
+      "collection_photo_names": [
+        "CAM042002d.JPG",
+        "CAM042002v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042002d__Unknown_species",
+        "sanger:CAM042002v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042003": {
+      "collection_photo_names": [
+        "CAM042003d.JPG",
+        "CAM042003v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042003d__Unknown_species",
+        "sanger:CAM042003v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042004": {
+      "collection_photo_names": [
+        "CAM042004d.JPG",
+        "CAM042004v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042004d__Unknown_species",
+        "sanger:CAM042004v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042005": {
+      "collection_photo_names": [
+        "CAM042005d.JPG",
+        "CAM042005v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042005d__Unknown_species",
+        "sanger:CAM042005v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042006": {
+      "collection_photo_names": [
+        "CAM042006d.JPG",
+        "CAM042006v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042006d__Unknown_species",
+        "sanger:CAM042006v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042007": {
+      "collection_photo_names": [
+        "CAM042007d.JPG",
+        "CAM042007v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042007d__Unknown_species",
+        "sanger:CAM042007v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042008": {
+      "collection_photo_names": [
+        "CAM042008d.JPG",
+        "CAM042008v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042008d__Unknown_species",
+        "sanger:CAM042008v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042009": {
+      "collection_photo_names": [
+        "CAM042009d.JPG",
+        "CAM042009v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042009d__Unknown_species",
+        "sanger:CAM042009v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042010": {
+      "collection_photo_names": [
+        "CAM042010d.JPG",
+        "CAM042010v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042010d__Unknown_species",
+        "sanger:CAM042010v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042011": {
+      "collection_photo_names": [
+        "CAM042011d.JPG",
+        "CAM042011v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042011d__Unknown_species",
+        "sanger:CAM042011v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042012": {
+      "collection_photo_names": [
+        "CAM042012d.JPG"
+      ],
+      "images": 1,
+      "mode": "mean_duplicated_single_logits",
+      "source_ids": [
+        "sanger:CAM042012d__Unknown_species"
+      ],
+      "views": [
+        "d"
+      ]
+    },
+    "CAM042013": {
+      "collection_photo_names": [
+        "CAM042013d.JPG",
+        "CAM042013v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042013d__Unknown_species",
+        "sanger:CAM042013v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042014": {
+      "collection_photo_names": [
+        "CAM042014d.JPG",
+        "CAM042014v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042014d__Unknown_species",
+        "sanger:CAM042014v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042015": {
+      "collection_photo_names": [
+        "CAM042015d.JPG",
+        "CAM042015v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042015d__Unknown_species",
+        "sanger:CAM042015v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042016": {
+      "collection_photo_names": [
+        "CAM042016d.JPG",
+        "CAM042016v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042016d__Unknown_species",
+        "sanger:CAM042016v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042017": {
+      "collection_photo_names": [
+        "CAM042017d.JPG",
+        "CAM042017v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042017d__Unknown_species",
+        "sanger:CAM042017v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042018": {
+      "collection_photo_names": [
+        "CAM042018d.JPG",
+        "CAM042018v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042018d__Unknown_species",
+        "sanger:CAM042018v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042019": {
+      "collection_photo_names": [
+        "CAM042019d.JPG",
+        "CAM042019v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042019d__Unknown_species",
+        "sanger:CAM042019v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042020": {
+      "collection_photo_names": [
+        "CAM042020d.JPG",
+        "CAM042020v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042020d__Unknown_species",
+        "sanger:CAM042020v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042021": {
+      "collection_photo_names": [
+        "CAM042021d.JPG",
+        "CAM042021v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042021d__Unknown_species",
+        "sanger:CAM042021v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042022": {
+      "collection_photo_names": [
+        "CAM042022d.JPG",
+        "CAM042022v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042022d__Unknown_species",
+        "sanger:CAM042022v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042023": {
+      "collection_photo_names": [
+        "CAM042023d.JPG",
+        "CAM042023v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042023d__Unknown_species",
+        "sanger:CAM042023v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042024": {
+      "collection_photo_names": [
+        "CAM042024d.JPG",
+        "CAM042024v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042024d__Unknown_species",
+        "sanger:CAM042024v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042025": {
+      "collection_photo_names": [
+        "CAM042025d.JPG"
+      ],
+      "images": 1,
+      "mode": "mean_duplicated_single_logits",
+      "source_ids": [
+        "sanger:CAM042025d__Unknown_species"
+      ],
+      "views": [
+        "d"
+      ]
+    },
+    "CAM042026": {
+      "collection_photo_names": [
+        "CAM042026d.JPG",
+        "CAM042026v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042026d__Unknown_species",
+        "sanger:CAM042026v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042027": {
+      "collection_photo_names": [
+        "CAM042027d.JPG",
+        "CAM042027v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042027d__Unknown_species",
+        "sanger:CAM042027v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042028": {
+      "collection_photo_names": [
+        "CAM042028d.JPG",
+        "CAM042028v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042028d__Unknown_species",
+        "sanger:CAM042028v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042029": {
+      "collection_photo_names": [
+        "CAM042029d.JPG",
+        "CAM042029v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042029d__Unknown_species",
+        "sanger:CAM042029v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042030": {
+      "collection_photo_names": [
+        "CAM042030d.JPG",
+        "CAM042030v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042030d__Unknown_species",
+        "sanger:CAM042030v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042031": {
+      "collection_photo_names": [
+        "CAM042031d.JPG",
+        "CAM042031v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042031d__Unknown_species",
+        "sanger:CAM042031v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042032": {
+      "collection_photo_names": [
+        "CAM042032d.JPG",
+        "CAM042032v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042032d__Unknown_species",
+        "sanger:CAM042032v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042033": {
+      "collection_photo_names": [
+        "CAM042033d.JPG",
+        "CAM042033v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042033d__Unknown_species",
+        "sanger:CAM042033v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042034": {
+      "collection_photo_names": [
+        "CAM042034d.JPG",
+        "CAM042034v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042034d__Unknown_species",
+        "sanger:CAM042034v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042035": {
+      "collection_photo_names": [
+        "CAM042035d.JPG",
+        "CAM042035v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042035d__Unknown_species",
+        "sanger:CAM042035v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042036": {
+      "collection_photo_names": [
+        "CAM042036d.JPG",
+        "CAM042036v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042036d__Unknown_species",
+        "sanger:CAM042036v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042037": {
+      "collection_photo_names": [
+        "CAM042037d.JPG",
+        "CAM042037v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042037d__Unknown_species",
+        "sanger:CAM042037v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042038": {
+      "collection_photo_names": [
+        "CAM042038d.JPG",
+        "CAM042038v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042038d__Unknown_species",
+        "sanger:CAM042038v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042039": {
+      "collection_photo_names": [
+        "CAM042039d.JPG",
+        "CAM042039v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042039d__Unknown_species",
+        "sanger:CAM042039v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042040": {
+      "collection_photo_names": [
+        "CAM042040d.JPG",
+        "CAM042040v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042040d__Unknown_species",
+        "sanger:CAM042040v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042041": {
+      "collection_photo_names": [
+        "CAM042041d.JPG",
+        "CAM042041v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042041d__Unknown_species",
+        "sanger:CAM042041v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042042": {
+      "collection_photo_names": [
+        "CAM042042d.JPG",
+        "CAM042042v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042042d__Unknown_species",
+        "sanger:CAM042042v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042043": {
+      "collection_photo_names": [
+        "CAM042043d.JPG",
+        "CAM042043v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042043d__Unknown_species",
+        "sanger:CAM042043v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042044": {
+      "collection_photo_names": [
+        "CAM042044d.JPG",
+        "CAM042044v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042044d__Unknown_species",
+        "sanger:CAM042044v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042045": {
+      "collection_photo_names": [
+        "CAM042045d.JPG",
+        "CAM042045v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042045d__Unknown_species",
+        "sanger:CAM042045v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042046": {
+      "collection_photo_names": [
+        "CAM042046d.JPG",
+        "CAM042046v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042046d__Unknown_species",
+        "sanger:CAM042046v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042047": {
+      "collection_photo_names": [
+        "CAM042047d.JPG",
+        "CAM042047v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042047d__Unknown_species",
+        "sanger:CAM042047v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042048": {
+      "collection_photo_names": [
+        "CAM042048d.JPG",
+        "CAM042048v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042048d__Unknown_species",
+        "sanger:CAM042048v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042049": {
+      "collection_photo_names": [
+        "CAM042049d.JPG",
+        "CAM042049v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042049d__Unknown_species",
+        "sanger:CAM042049v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042050": {
+      "collection_photo_names": [
+        "CAM042050d.JPG",
+        "CAM042050v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042050d__Unknown_species",
+        "sanger:CAM042050v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042051": {
+      "collection_photo_names": [
+        "CAM042051d.JPG",
+        "CAM042051v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042051d__Unknown_species",
+        "sanger:CAM042051v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042052": {
+      "collection_photo_names": [
+        "CAM042052d.JPG",
+        "CAM042052v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042052d__Unknown_species",
+        "sanger:CAM042052v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042054": {
+      "collection_photo_names": [
+        "CAM042054d.JPG",
+        "CAM042054v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042054d__Unknown_species",
+        "sanger:CAM042054v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042055": {
+      "collection_photo_names": [
+        "CAM042055d.JPG",
+        "CAM042055v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042055d__Unknown_species",
+        "sanger:CAM042055v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042056": {
+      "collection_photo_names": [
+        "CAM042056d.JPG",
+        "CAM042056v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042056d__Unknown_species",
+        "sanger:CAM042056v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042057": {
+      "collection_photo_names": [
+        "CAM042057d.JPG",
+        "CAM042057v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042057d__Unknown_species",
+        "sanger:CAM042057v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042058": {
+      "collection_photo_names": [
+        "CAM042058d.JPG",
+        "CAM042058v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042058d__Unknown_species",
+        "sanger:CAM042058v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042059": {
+      "collection_photo_names": [
+        "CAM042059d.JPG",
+        "CAM042059v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042059d__Unknown_species",
+        "sanger:CAM042059v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042060": {
+      "collection_photo_names": [
+        "CAM042060d.JPG",
+        "CAM042060v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042060d__Unknown_species",
+        "sanger:CAM042060v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042061": {
+      "collection_photo_names": [
+        "CAM042061d.JPG",
+        "CAM042061v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042061d__Unknown_species",
+        "sanger:CAM042061v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042062": {
+      "collection_photo_names": [
+        "CAM042062d.JPG",
+        "CAM042062v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042062d__Unknown_species",
+        "sanger:CAM042062v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042063": {
+      "collection_photo_names": [
+        "CAM042063d.JPG",
+        "CAM042063v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042063d__Unknown_species",
+        "sanger:CAM042063v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042064": {
+      "collection_photo_names": [
+        "CAM042064d.JPG",
+        "CAM042064v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042064d__Unknown_species",
+        "sanger:CAM042064v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042065": {
+      "collection_photo_names": [
+        "CAM042065d.JPG",
+        "CAM042065v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042065d__Unknown_species",
+        "sanger:CAM042065v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042066": {
+      "collection_photo_names": [
+        "CAM042066d.JPG",
+        "CAM042066v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042066d__Unknown_species",
+        "sanger:CAM042066v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042067": {
+      "collection_photo_names": [
+        "CAM042067d.JPG",
+        "CAM042067v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042067d__Unknown_species",
+        "sanger:CAM042067v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042068": {
+      "collection_photo_names": [
+        "CAM042068d.JPG",
+        "CAM042068v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042068d__Unknown_species",
+        "sanger:CAM042068v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042069": {
+      "collection_photo_names": [
+        "CAM042069d.JPG",
+        "CAM042069v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042069d__Unknown_species",
+        "sanger:CAM042069v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042070": {
+      "collection_photo_names": [
+        "CAM042070d.JPG",
+        "CAM042070v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042070d__Unknown_species",
+        "sanger:CAM042070v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042071": {
+      "collection_photo_names": [
+        "CAM042071d.JPG",
+        "CAM042071v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042071d__Unknown_species",
+        "sanger:CAM042071v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042072": {
+      "collection_photo_names": [
+        "CAM042072d.JPG"
+      ],
+      "images": 1,
+      "mode": "mean_duplicated_single_logits",
+      "source_ids": [
+        "sanger:CAM042072d__Unknown_species"
+      ],
+      "views": [
+        "d"
+      ]
+    },
+    "CAM042073": {
+      "collection_photo_names": [
+        "CAM042073d.JPG",
+        "CAM042073v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042073d__Unknown_species",
+        "sanger:CAM042073v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042074": {
+      "collection_photo_names": [
+        "CAM042074d.JPG",
+        "CAM042074v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042074d__Unknown_species",
+        "sanger:CAM042074v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042075": {
+      "collection_photo_names": [
+        "CAM042075d.JPG",
+        "CAM042075v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042075d__Unknown_species",
+        "sanger:CAM042075v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042076": {
+      "collection_photo_names": [
+        "CAM042076d.JPG",
+        "CAM042076v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042076d__Unknown_species",
+        "sanger:CAM042076v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042077": {
+      "collection_photo_names": [
+        "CAM042077d.JPG",
+        "CAM042077v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042077d__Unknown_species",
+        "sanger:CAM042077v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042078": {
+      "collection_photo_names": [
+        "CAM042078d.JPG",
+        "CAM042078v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042078d__Unknown_species",
+        "sanger:CAM042078v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042079": {
+      "collection_photo_names": [
+        "CAM042079d.JPG",
+        "CAM042079v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042079d__Unknown_species",
+        "sanger:CAM042079v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042080": {
+      "collection_photo_names": [
+        "CAM042080d.JPG",
+        "CAM042080v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042080d__Unknown_species",
+        "sanger:CAM042080v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042373": {
+      "collection_photo_names": [
+        "CAM042373d.JPG",
+        "CAM042373v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042373d__Unknown_species",
+        "sanger:CAM042373v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042374": {
+      "collection_photo_names": [
+        "CAM042374d.JPG",
+        "CAM042374v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042374d__Unknown_species",
+        "sanger:CAM042374v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042375": {
+      "collection_photo_names": [
+        "CAM042375d.JPG",
+        "CAM042375v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042375d__Unknown_species",
+        "sanger:CAM042375v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042376": {
+      "collection_photo_names": [
+        "CAM042376d.JPG",
+        "CAM042376v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042376d__Unknown_species",
+        "sanger:CAM042376v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042377": {
+      "collection_photo_names": [
+        "CAM042377d.JPG",
+        "CAM042377v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042377d__Unknown_species",
+        "sanger:CAM042377v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042378": {
+      "collection_photo_names": [
+        "CAM042378d.JPG",
+        "CAM042378v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042378d__Unknown_species",
+        "sanger:CAM042378v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042379": {
+      "collection_photo_names": [
+        "CAM042379d.JPG",
+        "CAM042379v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042379d__Unknown_species",
+        "sanger:CAM042379v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042380": {
+      "collection_photo_names": [
+        "CAM042380d.JPG",
+        "CAM042380v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042380d__Unknown_species",
+        "sanger:CAM042380v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042381": {
+      "collection_photo_names": [
+        "CAM042381d.JPG",
+        "CAM042381v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042381d__Unknown_species",
+        "sanger:CAM042381v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042382": {
+      "collection_photo_names": [
+        "CAM042382d.JPG",
+        "CAM042382v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042382d__Unknown_species",
+        "sanger:CAM042382v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042383": {
+      "collection_photo_names": [
+        "CAM042383d.JPG",
+        "CAM042383v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042383d__Unknown_species",
+        "sanger:CAM042383v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042384": {
+      "collection_photo_names": [
+        "CAM042384d.JPG",
+        "CAM042384v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042384d__Unknown_species",
+        "sanger:CAM042384v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042385": {
+      "collection_photo_names": [
+        "CAM042385d.JPG",
+        "CAM042385v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042385d__Unknown_species",
+        "sanger:CAM042385v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042386": {
+      "collection_photo_names": [
+        "CAM042386d.JPG",
+        "CAM042386v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042386d__Unknown_species",
+        "sanger:CAM042386v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042387": {
+      "collection_photo_names": [
+        "CAM042387d.JPG",
+        "CAM042387v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042387d__Unknown_species",
+        "sanger:CAM042387v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042407": {
+      "collection_photo_names": [
+        "CAM042407d.JPG",
+        "CAM042407v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042407d__Unknown_species",
+        "sanger:CAM042407v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042427": {
+      "collection_photo_names": [
+        "CAM042427d.JPG",
+        "CAM042427v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042427d__Haeterini_tribe",
+        "sanger:CAM042427v__Haeterini_tribe"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042428": {
+      "collection_photo_names": [
+        "CAM042428d.JPG",
+        "CAM042428v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042428d__Unknown_species",
+        "sanger:CAM042428v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042429": {
+      "collection_photo_names": [
+        "CAM042429d.JPG",
+        "CAM042429v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042429d__Unknown_species",
+        "sanger:CAM042429v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042430": {
+      "collection_photo_names": [
+        "CAM042430d.JPG",
+        "CAM042430v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042430d__Unknown_species",
+        "sanger:CAM042430v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042431": {
+      "collection_photo_names": [
+        "CAM042431d.JPG",
+        "CAM042431v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042431d__Unknown_species",
+        "sanger:CAM042431v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042432": {
+      "collection_photo_names": [
+        "CAM042432d.JPG",
+        "CAM042432v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042432d__Unknown_species",
+        "sanger:CAM042432v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042433": {
+      "collection_photo_names": [
+        "CAM042433d.JPG",
+        "CAM042433v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042433d__Unknown_species",
+        "sanger:CAM042433v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042434": {
+      "collection_photo_names": [
+        "CAM042434d.JPG",
+        "CAM042434v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042434d__Unknown_species",
+        "sanger:CAM042434v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042435": {
+      "collection_photo_names": [
+        "CAM042435d.JPG",
+        "CAM042435v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042435d__Unknown_species",
+        "sanger:CAM042435v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042436": {
+      "collection_photo_names": [
+        "CAM042436d.JPG",
+        "CAM042436v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042436d__Unknown_species",
+        "sanger:CAM042436v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042437": {
+      "collection_photo_names": [
+        "CAM042437d.JPG",
+        "CAM042437v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042437d__Unknown_species",
+        "sanger:CAM042437v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042438": {
+      "collection_photo_names": [
+        "CAM042438d.JPG",
+        "CAM042438v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042438d__Unknown_species",
+        "sanger:CAM042438v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042439": {
+      "collection_photo_names": [
+        "CAM042439d.JPG",
+        "CAM042439v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042439d__Unknown_species",
+        "sanger:CAM042439v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042440": {
+      "collection_photo_names": [
+        "CAM042440d.JPG",
+        "CAM042440v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042440d__Unknown_species",
+        "sanger:CAM042440v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042441": {
+      "collection_photo_names": [
+        "CAM042441d.JPG",
+        "CAM042441v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042441d__Unknown_species",
+        "sanger:CAM042441v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042442": {
+      "collection_photo_names": [
+        "CAM042442d.JPG",
+        "CAM042442v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042442d__Unknown_species",
+        "sanger:CAM042442v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042443": {
+      "collection_photo_names": [
+        "CAM042443d.JPG",
+        "CAM042443v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042443d__Unknown_species",
+        "sanger:CAM042443v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042456": {
+      "collection_photo_names": [
+        "CAM042456d.JPG",
+        "CAM042456v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042456d__Unknown_species",
+        "sanger:CAM042456v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042457": {
+      "collection_photo_names": [
+        "CAM042457d.JPG",
+        "CAM042457v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042457d__Unknown_species",
+        "sanger:CAM042457v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042458": {
+      "collection_photo_names": [
+        "CAM042458d.JPG",
+        "CAM042458v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042458d__Unknown_species",
+        "sanger:CAM042458v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042459": {
+      "collection_photo_names": [
+        "CAM042459d.JPG",
+        "CAM042459v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042459d__Unknown_species",
+        "sanger:CAM042459v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042462": {
+      "collection_photo_names": [
+        "CAM042462d.JPG",
+        "CAM042462v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042462d__Unknown_species",
+        "sanger:CAM042462v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042463": {
+      "collection_photo_names": [
+        "CAM042463d.JPG"
+      ],
+      "images": 1,
+      "mode": "mean_duplicated_single_logits",
+      "source_ids": [
+        "sanger:CAM042463d__Unknown_species"
+      ],
+      "views": [
+        "d"
+      ]
+    },
+    "CAM042464": {
+      "collection_photo_names": [
+        "CAM042464d.JPG",
+        "CAM042464v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042464d__Unknown_species",
+        "sanger:CAM042464v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042465": {
+      "collection_photo_names": [
+        "CAM042465d.JPG",
+        "CAM042465v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042465d__Unknown_species",
+        "sanger:CAM042465v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042466": {
+      "collection_photo_names": [
+        "CAM042466d.JPG",
+        "CAM042466v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042466d__Unknown_species",
+        "sanger:CAM042466v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042467": {
+      "collection_photo_names": [
+        "CAM042467d.JPG",
+        "CAM042467v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042467d__Unknown_species",
+        "sanger:CAM042467v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042471": {
+      "collection_photo_names": [
+        "CAM042471d.JPG",
+        "CAM042471v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042471d__Athesis_clearista",
+        "sanger:CAM042471v__Athesis_clearista"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042484": {
+      "collection_photo_names": [
+        "CAM042484d.JPG",
+        "CAM042484v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042484d__Hypothyris_mamercus",
+        "sanger:CAM042484v__Hypothyris_mamercus"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042488": {
+      "collection_photo_names": [
+        "CAM042488d.JPG",
+        "CAM042488v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042488d__Mechanitis_mazaeus",
+        "sanger:CAM042488v__Mechanitis_mazaeus"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042489": {
+      "collection_photo_names": [
+        "CAM042489d.JPG",
+        "CAM042489v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042489d__Mechanitis_mazaeus",
+        "sanger:CAM042489v__Mechanitis_mazaeus"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042490": {
+      "collection_photo_names": [
+        "CAM042490d.JPG",
+        "CAM042490v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042490d__Unknown_species",
+        "sanger:CAM042490v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042491": {
+      "collection_photo_names": [
+        "CAM042491d.JPG",
+        "CAM042491v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042491d__Unknown_species",
+        "sanger:CAM042491v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042492": {
+      "collection_photo_names": [
+        "CAM042492d.JPG",
+        "CAM042492v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042492d__Unknown_species",
+        "sanger:CAM042492v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042493": {
+      "collection_photo_names": [
+        "CAM042493d.JPG",
+        "CAM042493v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042493d__Unknown_species",
+        "sanger:CAM042493v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042494": {
+      "collection_photo_names": [
+        "CAM042494d.JPG",
+        "CAM042494v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042494d__Unknown_species",
+        "sanger:CAM042494v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042495": {
+      "collection_photo_names": [
+        "CAM042495d.JPG",
+        "CAM042495v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042495d__Unknown_species",
+        "sanger:CAM042495v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042496": {
+      "collection_photo_names": [
+        "CAM042496d.JPG",
+        "CAM042496v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042496d__Unknown_species",
+        "sanger:CAM042496v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042497": {
+      "collection_photo_names": [
+        "CAM042497d.JPG",
+        "CAM042497v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042497d__Unknown_species",
+        "sanger:CAM042497v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042681": {
+      "collection_photo_names": [
+        "CAM042681d.JPG",
+        "CAM042681v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042681d__Unknown_species",
+        "sanger:CAM042681v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042682": {
+      "collection_photo_names": [
+        "CAM042682d.JPG",
+        "CAM042682v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042682d__Unknown_species",
+        "sanger:CAM042682v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042683": {
+      "collection_photo_names": [
+        "CAM042683d.JPG",
+        "CAM042683v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042683d__Unknown_species",
+        "sanger:CAM042683v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042749": {
+      "collection_photo_names": [
+        "CAM042749d.JPG",
+        "CAM042749v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042749d__Unknown_species",
+        "sanger:CAM042749v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042750": {
+      "collection_photo_names": [
+        "CAM042750d.JPG",
+        "CAM042750v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042750d__Unknown_species",
+        "sanger:CAM042750v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042751": {
+      "collection_photo_names": [
+        "CAM042751d.JPG",
+        "CAM042751v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042751d__Unknown_species",
+        "sanger:CAM042751v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042752": {
+      "collection_photo_names": [
+        "CAM042752d.JPG",
+        "CAM042752v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042752d__Unknown_species",
+        "sanger:CAM042752v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042753": {
+      "collection_photo_names": [
+        "CAM042753d.JPG",
+        "CAM042753v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042753d__Unknown_species",
+        "sanger:CAM042753v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042754": {
+      "collection_photo_names": [
+        "CAM042754d.JPG",
+        "CAM042754v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042754d__Unknown_species",
+        "sanger:CAM042754v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042755": {
+      "collection_photo_names": [
+        "CAM042755d.JPG",
+        "CAM042755v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042755d__Unknown_species",
+        "sanger:CAM042755v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042756": {
+      "collection_photo_names": [
+        "CAM042756d.JPG",
+        "CAM042756v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042756d__Unknown_species",
+        "sanger:CAM042756v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042757": {
+      "collection_photo_names": [
+        "CAM042757d.JPG",
+        "CAM042757v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042757d__Unknown_species",
+        "sanger:CAM042757v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042758": {
+      "collection_photo_names": [
+        "CAM042758d.JPG",
+        "CAM042758v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042758d__Unknown_species",
+        "sanger:CAM042758v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042766": {
+      "collection_photo_names": [
+        "CAM042766d.JPG",
+        "CAM042766v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042766d__Unknown_species",
+        "sanger:CAM042766v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM042767": {
+      "collection_photo_names": [
+        "CAM042767d.JPG",
+        "CAM042767v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM042767d__Unknown_species",
+        "sanger:CAM042767v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM070046": {
+      "collection_photo_names": [
+        "CAM070046d.JPG",
+        "CAM070046v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM070046d__Unknown_species",
+        "sanger:CAM070046v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM070047": {
+      "collection_photo_names": [
+        "CAM070047d.JPG",
+        "CAM070047v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM070047d__Unknown_species",
+        "sanger:CAM070047v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM070048": {
+      "collection_photo_names": [
+        "CAM070048d.JPG",
+        "CAM070048v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM070048d__Unknown_species",
+        "sanger:CAM070048v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM070049": {
+      "collection_photo_names": [
+        "CAM070049d.JPG",
+        "CAM070049v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM070049d__Unknown_species",
+        "sanger:CAM070049v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM070050": {
+      "collection_photo_names": [
+        "CAM070050d.JPG",
+        "CAM070050v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM070050d__Unknown_species",
+        "sanger:CAM070050v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM070081": {
+      "collection_photo_names": [
+        "CAM070081d.JPG",
+        "CAM070081v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM070081d__Unknown_species",
+        "sanger:CAM070081v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM070104": {
+      "collection_photo_names": [
+        "CAM070104d.JPG",
+        "CAM070104v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM070104d__Unknown_species",
+        "sanger:CAM070104v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM070105": {
+      "collection_photo_names": [
+        "CAM070105d.JPG",
+        "CAM070105v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM070105d__Unknown_species",
+        "sanger:CAM070105v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM070106": {
+      "collection_photo_names": [
+        "CAM070106d.JPG",
+        "CAM070106v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM070106d__Unknown_species",
+        "sanger:CAM070106v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM070110": {
+      "collection_photo_names": [
+        "CAM070110d.JPG",
+        "CAM070110v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM070110d__Unknown_species",
+        "sanger:CAM070110v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM070111": {
+      "collection_photo_names": [
+        "CAM070111d.JPG",
+        "CAM070111v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM070111d__Unknown_species",
+        "sanger:CAM070111v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM070112": {
+      "collection_photo_names": [
+        "CAM070112d.JPG",
+        "CAM070112v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM070112d__Unknown_species",
+        "sanger:CAM070112v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM070113": {
+      "collection_photo_names": [
+        "CAM070113d.JPG",
+        "CAM070113v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM070113d__Unknown_species",
+        "sanger:CAM070113v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM070131": {
+      "collection_photo_names": [
+        "CAM070131d.JPG",
+        "CAM070131v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM070131d__Unknown_species",
+        "sanger:CAM070131v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM070539": {
+      "collection_photo_names": [
+        "CAM070539d.JPG",
+        "CAM070539v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM070539d__Forbestra_proceris",
+        "sanger:CAM070539v__Forbestra_proceris"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM070540": {
+      "collection_photo_names": [
+        "CAM070540d.JPG",
+        "CAM070540v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM070540d__Forbestra_proceris",
+        "sanger:CAM070540v__Forbestra_proceris"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM070784": {
+      "collection_photo_names": [
+        "CAM070784d.JPG",
+        "CAM070784v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM070784d__Oleria_sexmaculata",
+        "sanger:CAM070784v__Oleria_sexmaculata"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM071016": {
+      "collection_photo_names": [
+        "CAM071016d.JPG",
+        "CAM071016v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM071016d__Mechanitis_mazaeus",
+        "sanger:CAM071016v__Mechanitis_mazaeus"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM071020": {
+      "collection_photo_names": [
+        "CAM071020d.JPG",
+        "CAM071020v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM071020d__Scada_zibia",
+        "sanger:CAM071020v__Scada_zibia"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM071082": {
+      "collection_photo_names": [
+        "CAM071082d.JPG",
+        "CAM071082v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM071082d__Mechanitis_mazaeus",
+        "sanger:CAM071082v__Mechanitis_mazaeus"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM071179": {
+      "collection_photo_names": [
+        "CAM071179d.JPG",
+        "CAM071179v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM071179d__Forbestra_proceris",
+        "sanger:CAM071179v__Forbestra_proceris"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM071227": {
+      "collection_photo_names": [
+        "CAM071227d.JPG",
+        "CAM071227v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM071227d__Mechanitis_mazaeus",
+        "sanger:CAM071227v__Mechanitis_mazaeus"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM071284": {
+      "collection_photo_names": [
+        "CAM071284d.JPG",
+        "CAM071284v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM071284d__Godyris_zavaleta",
+        "sanger:CAM071284v__Godyris_zavaleta"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM071365": {
+      "collection_photo_names": [
+        "CAM071365d.JPG",
+        "CAM071365v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM071365d__Heliconius_timareta",
+        "sanger:CAM071365v__Heliconius_timareta"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM071529": {
+      "collection_photo_names": [
+        "CAM071529d.JPG",
+        "CAM071529v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM071529d__Oleria_onega",
+        "sanger:CAM071529v__Oleria_onega"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM071548": {
+      "collection_photo_names": [
+        "CAM071548d.JPG",
+        "CAM071548v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM071548d__Forbestra_olivencia",
+        "sanger:CAM071548v__Forbestra_olivencia"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM071991": {
+      "collection_photo_names": [
+        "CAM071991d.JPG",
+        "CAM071991v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM071991d__Unknown_species",
+        "sanger:CAM071991v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072091": {
+      "collection_photo_names": [
+        "CAM072091d.JPG",
+        "CAM072091v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072091d__Hyposcada_illinissa",
+        "sanger:CAM072091v__Hyposcada_illinissa"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072256": {
+      "collection_photo_names": [
+        "CAM072256d.JPG",
+        "CAM072256v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072256d__Unknown_species",
+        "sanger:CAM072256v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072264": {
+      "collection_photo_names": [
+        "CAM072264d.JPG",
+        "CAM072264v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072264d__Riodinidae_family",
+        "sanger:CAM072264v__Riodinidae_family"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072273": {
+      "collection_photo_names": [
+        "CAM072273d.JPG",
+        "CAM072273v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072273d__Charis_anius",
+        "sanger:CAM072273v__Charis_anius"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072274": {
+      "collection_photo_names": [
+        "CAM072274d.JPG",
+        "CAM072274v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072274d__Riodinidae_family",
+        "sanger:CAM072274v__Riodinidae_family"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072275": {
+      "collection_photo_names": [
+        "CAM072275d.JPG",
+        "CAM072275v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072275d__Lycaenidae_family",
+        "sanger:CAM072275v__Lycaenidae_family"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072276": {
+      "collection_photo_names": [
+        "CAM072276d.JPG",
+        "CAM072276v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072276d__Riodinidae_family",
+        "sanger:CAM072276v__Riodinidae_family"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072336": {
+      "collection_photo_names": [
+        "CAM072336d.JPG",
+        "CAM072336v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072336d__Unknown_species",
+        "sanger:CAM072336v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072342": {
+      "collection_photo_names": [
+        "CAM072342d.JPG",
+        "CAM072342v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072342d__Unknown_species",
+        "sanger:CAM072342v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072345": {
+      "collection_photo_names": [
+        "CAM072345d.JPG",
+        "CAM072345v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072345d__Unknown_species",
+        "sanger:CAM072345v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072348": {
+      "collection_photo_names": [
+        "CAM072348d.JPG",
+        "CAM072348v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072348d__Aphrissa_boisduvalii",
+        "sanger:CAM072348v__Aphrissa_boisduvalii"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072414": {
+      "collection_photo_names": [
+        "CAM072414d.JPG",
+        "CAM072414v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072414d__Unknown_species",
+        "sanger:CAM072414v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072415": {
+      "collection_photo_names": [
+        "CAM072415d.JPG",
+        "CAM072415v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072415d__Unknown_species",
+        "sanger:CAM072415v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072447": {
+      "collection_photo_names": [
+        "CAM072447d.JPG",
+        "CAM072447v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072447d__Unknown_species",
+        "sanger:CAM072447v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072448": {
+      "collection_photo_names": [
+        "CAM072448d.JPG",
+        "CAM072448v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072448d__Unknown_species",
+        "sanger:CAM072448v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072451": {
+      "collection_photo_names": [
+        "CAM072451d.JPG",
+        "CAM072451v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072451d__Unknown_species",
+        "sanger:CAM072451v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072453": {
+      "collection_photo_names": [
+        "CAM072453d.JPG",
+        "CAM072453v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072453d__Lycaenidae_family",
+        "sanger:CAM072453v__Lycaenidae_family"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072454": {
+      "collection_photo_names": [
+        "CAM072454d.JPG",
+        "CAM072454v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072454d__Lycaenidae_family",
+        "sanger:CAM072454v__Lycaenidae_family"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072455": {
+      "collection_photo_names": [
+        "CAM072455d.JPG",
+        "CAM072455v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072455d__Lycaenidae_family",
+        "sanger:CAM072455v__Lycaenidae_family"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072456": {
+      "collection_photo_names": [
+        "CAM072456d.JPG",
+        "CAM072456v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072456d__Lycaenidae_family",
+        "sanger:CAM072456v__Lycaenidae_family"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072457": {
+      "collection_photo_names": [
+        "CAM072457d.JPG",
+        "CAM072457v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072457d__Lycaenidae_family",
+        "sanger:CAM072457v__Lycaenidae_family"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072488": {
+      "collection_photo_names": [
+        "CAM072488d.JPG",
+        "CAM072488v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072488d__Riodinidae_family",
+        "sanger:CAM072488v__Riodinidae_family"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072502": {
+      "collection_photo_names": [
+        "CAM072502d.JPG",
+        "CAM072502v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072502d__Unknown_species",
+        "sanger:CAM072502v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072503": {
+      "collection_photo_names": [
+        "CAM072503d.JPG",
+        "CAM072503v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072503d__Unknown_species",
+        "sanger:CAM072503v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072516": {
+      "collection_photo_names": [
+        "CAM072516d.JPG",
+        "CAM072516v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072516d__Unknown_species",
+        "sanger:CAM072516v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072518": {
+      "collection_photo_names": [
+        "CAM072518d.JPG",
+        "CAM072518v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072518d__Unknown_species",
+        "sanger:CAM072518v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072519": {
+      "collection_photo_names": [
+        "CAM072519d.JPG",
+        "CAM072519v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072519d__Unknown_species",
+        "sanger:CAM072519v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072520": {
+      "collection_photo_names": [
+        "CAM072520d.JPG",
+        "CAM072520v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072520d__Unknown_species",
+        "sanger:CAM072520v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072522": {
+      "collection_photo_names": [
+        "CAM072522d.JPG",
+        "CAM072522v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072522d__Unknown_species",
+        "sanger:CAM072522v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072523": {
+      "collection_photo_names": [
+        "CAM072523d.JPG",
+        "CAM072523v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072523d__Unknown_species",
+        "sanger:CAM072523v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072524": {
+      "collection_photo_names": [
+        "CAM072524d.JPG",
+        "CAM072524v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072524d__Unknown_species",
+        "sanger:CAM072524v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072525": {
+      "collection_photo_names": [
+        "CAM072525d.JPG",
+        "CAM072525v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072525d__Unknown_species",
+        "sanger:CAM072525v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072526": {
+      "collection_photo_names": [
+        "CAM072526d.JPG",
+        "CAM072526v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072526d__Unknown_species",
+        "sanger:CAM072526v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072527": {
+      "collection_photo_names": [
+        "CAM072527d.JPG",
+        "CAM072527v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072527d__Satyrini_tribe",
+        "sanger:CAM072527v__Satyrini_tribe"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072528": {
+      "collection_photo_names": [
+        "CAM072528d.JPG",
+        "CAM072528v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072528d__Satyrini_tribe",
+        "sanger:CAM072528v__Satyrini_tribe"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072529": {
+      "collection_photo_names": [
+        "CAM072529d.JPG",
+        "CAM072529v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072529d__Unknown_species",
+        "sanger:CAM072529v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072561": {
+      "collection_photo_names": [
+        "CAM072561d.JPG",
+        "CAM072561v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072561d__Unknown_species",
+        "sanger:CAM072561v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072562": {
+      "collection_photo_names": [
+        "CAM072562d.JPG",
+        "CAM072562v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072562d__Parcella_amarynthina",
+        "sanger:CAM072562v__Parcella_amarynthina"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072563": {
+      "collection_photo_names": [
+        "CAM072563d.JPG",
+        "CAM072563v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072563d__Evenus_felix",
+        "sanger:CAM072563v__Evenus_felix"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072568": {
+      "collection_photo_names": [
+        "CAM072568d.JPG",
+        "CAM072568v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072568d__Unknown_species",
+        "sanger:CAM072568v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072606": {
+      "collection_photo_names": [
+        "CAM072606d.JPG",
+        "CAM072606v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072606d__Unknown_species",
+        "sanger:CAM072606v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072607": {
+      "collection_photo_names": [
+        "CAM072607d.JPG",
+        "CAM072607v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072607d__Unknown_species",
+        "sanger:CAM072607v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072608": {
+      "collection_photo_names": [
+        "CAM072608d.JPG",
+        "CAM072608v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072608d__Unknown_species",
+        "sanger:CAM072608v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072609": {
+      "collection_photo_names": [
+        "CAM072609d.JPG",
+        "CAM072609v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072609d__Unknown_species",
+        "sanger:CAM072609v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072618": {
+      "collection_photo_names": [
+        "CAM072618d.JPG",
+        "CAM072618v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072618d__Unknown_species",
+        "sanger:CAM072618v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072621": {
+      "collection_photo_names": [
+        "CAM072621d.JPG",
+        "CAM072621v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072621d__Unknown_species",
+        "sanger:CAM072621v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072633": {
+      "collection_photo_names": [
+        "CAM072633d.JPG",
+        "CAM072633v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072633d__Unknown_species",
+        "sanger:CAM072633v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072635": {
+      "collection_photo_names": [
+        "CAM072635d.JPG",
+        "CAM072635v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072635d__Caligo_illioneus",
+        "sanger:CAM072635v__Caligo_illioneus"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072641": {
+      "collection_photo_names": [
+        "CAM072641d.JPG",
+        "CAM072641v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072641d__Unknown_species",
+        "sanger:CAM072641v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072646": {
+      "collection_photo_names": [
+        "CAM072646d.JPG",
+        "CAM072646v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072646d__Unknown_species",
+        "sanger:CAM072646v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072657": {
+      "collection_photo_names": [
+        "CAM072657d.JPG",
+        "CAM072657v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072657d__Unknown_species",
+        "sanger:CAM072657v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072676": {
+      "collection_photo_names": [
+        "CAM072676d.JPG",
+        "CAM072676v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072676d__Unknown_species",
+        "sanger:CAM072676v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072677": {
+      "collection_photo_names": [
+        "CAM072677d.JPG",
+        "CAM072677v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072677d__Unknown_species",
+        "sanger:CAM072677v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072694": {
+      "collection_photo_names": [
+        "CAM072694d.JPG",
+        "CAM072694v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072694d__Unknown_species",
+        "sanger:CAM072694v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072708": {
+      "collection_photo_names": [
+        "CAM072708d.JPG",
+        "CAM072708v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072708d__Caligo_idomeneus",
+        "sanger:CAM072708v__Caligo_idomeneus"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072729": {
+      "collection_photo_names": [
+        "CAM072729d.JPG",
+        "CAM072729v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072729d__Unknown_species",
+        "sanger:CAM072729v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072730": {
+      "collection_photo_names": [
+        "CAM072730d.JPG",
+        "CAM072730v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072730d__Unknown_species",
+        "sanger:CAM072730v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072732": {
+      "collection_photo_names": [
+        "CAM072732d.JPG",
+        "CAM072732v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072732d__Unknown_species",
+        "sanger:CAM072732v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072741": {
+      "collection_photo_names": [
+        "CAM072741d.JPG",
+        "CAM072741v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072741d__Unknown_species",
+        "sanger:CAM072741v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072746": {
+      "collection_photo_names": [
+        "CAM072746d.JPG",
+        "CAM072746v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072746d__Unknown_species",
+        "sanger:CAM072746v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072747": {
+      "collection_photo_names": [
+        "CAM072747d.JPG",
+        "CAM072747v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072747d__Unknown_species",
+        "sanger:CAM072747v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072748": {
+      "collection_photo_names": [
+        "CAM072748d.JPG",
+        "CAM072748v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072748d__Unknown_species",
+        "sanger:CAM072748v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072751": {
+      "collection_photo_names": [
+        "CAM072751d.JPG",
+        "CAM072751v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072751d__Unknown_species",
+        "sanger:CAM072751v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072752": {
+      "collection_photo_names": [
+        "CAM072752d.JPG",
+        "CAM072752v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072752d__Unknown_species",
+        "sanger:CAM072752v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072753": {
+      "collection_photo_names": [
+        "CAM072753d.JPG",
+        "CAM072753v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072753d__Unknown_species",
+        "sanger:CAM072753v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072754": {
+      "collection_photo_names": [
+        "CAM072754d.JPG",
+        "CAM072754v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072754d__Unknown_species",
+        "sanger:CAM072754v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072755": {
+      "collection_photo_names": [
+        "CAM072755d.JPG",
+        "CAM072755v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072755d__Unknown_species",
+        "sanger:CAM072755v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072760": {
+      "collection_photo_names": [
+        "CAM072760d.JPG",
+        "CAM072760v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072760d__Unknown_species",
+        "sanger:CAM072760v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072765": {
+      "collection_photo_names": [
+        "CAM072765d.JPG",
+        "CAM072765v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072765d__Unknown_species",
+        "sanger:CAM072765v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072775": {
+      "collection_photo_names": [
+        "CAM072775d.JPG",
+        "CAM072775v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072775d__Unknown_species",
+        "sanger:CAM072775v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072786": {
+      "collection_photo_names": [
+        "CAM072786d.JPG",
+        "CAM072786v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072786d__Unknown_species",
+        "sanger:CAM072786v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072787": {
+      "collection_photo_names": [
+        "CAM072787d.JPG",
+        "CAM072787v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072787d__Unknown_species",
+        "sanger:CAM072787v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072788": {
+      "collection_photo_names": [
+        "CAM072788d.JPG",
+        "CAM072788v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072788d__Unknown_species",
+        "sanger:CAM072788v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072789": {
+      "collection_photo_names": [
+        "CAM072789d.JPG",
+        "CAM072789v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072789d__Unknown_species",
+        "sanger:CAM072789v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072827": {
+      "collection_photo_names": [
+        "CAM072827d.JPG",
+        "CAM072827v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072827d__Unknown_species",
+        "sanger:CAM072827v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072835": {
+      "collection_photo_names": [
+        "CAM072835d.JPG",
+        "CAM072835v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072835d__Riodinidae_family",
+        "sanger:CAM072835v__Riodinidae_family"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072838": {
+      "collection_photo_names": [
+        "CAM072838d.JPG",
+        "CAM072838v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072838d__Riodinidae_family",
+        "sanger:CAM072838v__Riodinidae_family"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072839": {
+      "collection_photo_names": [
+        "CAM072839d.JPG",
+        "CAM072839v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072839d__Riodinidae_family",
+        "sanger:CAM072839v__Riodinidae_family"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072846": {
+      "collection_photo_names": [
+        "CAM072846d.JPG",
+        "CAM072846v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072846d__Unknown_species",
+        "sanger:CAM072846v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072849": {
+      "collection_photo_names": [
+        "CAM072849d.JPG",
+        "CAM072849v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072849d__Riodinidae_family",
+        "sanger:CAM072849v__Riodinidae_family"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072851": {
+      "collection_photo_names": [
+        "CAM072851d.JPG",
+        "CAM072851v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072851d__Riodinidae_family",
+        "sanger:CAM072851v__Riodinidae_family"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072893": {
+      "collection_photo_names": [
+        "CAM072893d.JPG",
+        "CAM072893v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072893d__Unknown_species",
+        "sanger:CAM072893v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072908": {
+      "collection_photo_names": [
+        "CAM072908d.JPG",
+        "CAM072908v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072908d__Unknown_species",
+        "sanger:CAM072908v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072910": {
+      "collection_photo_names": [
+        "CAM072910d.JPG",
+        "CAM072910v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072910d__Unknown_species",
+        "sanger:CAM072910v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072911": {
+      "collection_photo_names": [
+        "CAM072911d.JPG",
+        "CAM072911v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072911d__Unknown_species",
+        "sanger:CAM072911v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072912": {
+      "collection_photo_names": [
+        "CAM072912d.JPG",
+        "CAM072912v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072912d__Unknown_species",
+        "sanger:CAM072912v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072917": {
+      "collection_photo_names": [
+        "CAM072917d.JPG",
+        "CAM072917v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072917d__Unknown_species",
+        "sanger:CAM072917v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072927": {
+      "collection_photo_names": [
+        "CAM072927d.JPG",
+        "CAM072927v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072927d__Unknown_species",
+        "sanger:CAM072927v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072935": {
+      "collection_photo_names": [
+        "CAM072935d.JPG",
+        "CAM072935v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072935d__Zaretis_itys",
+        "sanger:CAM072935v__Zaretis_itys"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072970": {
+      "collection_photo_names": [
+        "CAM072970d.JPG",
+        "CAM072970v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072970d__Unknown_species",
+        "sanger:CAM072970v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072971": {
+      "collection_photo_names": [
+        "CAM072971d.JPG",
+        "CAM072971v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072971d__Unknown_species",
+        "sanger:CAM072971v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072972": {
+      "collection_photo_names": [
+        "CAM072972d.JPG",
+        "CAM072972v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072972d__Unknown_species",
+        "sanger:CAM072972v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072974": {
+      "collection_photo_names": [
+        "CAM072974d.JPG",
+        "CAM072974v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072974d__Unknown_species",
+        "sanger:CAM072974v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072976": {
+      "collection_photo_names": [
+        "CAM072976d.JPG",
+        "CAM072976v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072976d__Unknown_species",
+        "sanger:CAM072976v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072977": {
+      "collection_photo_names": [
+        "CAM072977d.JPG",
+        "CAM072977v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072977d__Unknown_species",
+        "sanger:CAM072977v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072978": {
+      "collection_photo_names": [
+        "CAM072978d.JPG",
+        "CAM072978v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072978d__Unknown_species",
+        "sanger:CAM072978v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072979": {
+      "collection_photo_names": [
+        "CAM072979d.JPG",
+        "CAM072979v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072979d__Unknown_species",
+        "sanger:CAM072979v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072980": {
+      "collection_photo_names": [
+        "CAM072980d.JPG",
+        "CAM072980v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072980d__Unknown_species",
+        "sanger:CAM072980v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072982": {
+      "collection_photo_names": [
+        "CAM072982d.JPG",
+        "CAM072982v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072982d__Unknown_species",
+        "sanger:CAM072982v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072983": {
+      "collection_photo_names": [
+        "CAM072983d.JPG",
+        "CAM072983v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072983d__Unknown_species",
+        "sanger:CAM072983v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072984": {
+      "collection_photo_names": [
+        "CAM072984d.JPG",
+        "CAM072984v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072984d__Unknown_species",
+        "sanger:CAM072984v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072985": {
+      "collection_photo_names": [
+        "CAM072985d.JPG",
+        "CAM072985v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072985d__Unknown_species",
+        "sanger:CAM072985v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072986": {
+      "collection_photo_names": [
+        "CAM072986d.JPG",
+        "CAM072986v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072986d__Unknown_species",
+        "sanger:CAM072986v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072987": {
+      "collection_photo_names": [
+        "CAM072987d.JPG",
+        "CAM072987v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072987d__Unknown_species",
+        "sanger:CAM072987v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072988": {
+      "collection_photo_names": [
+        "CAM072988d.JPG",
+        "CAM072988v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072988d__Unknown_species",
+        "sanger:CAM072988v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072989": {
+      "collection_photo_names": [
+        "CAM072989d.JPG",
+        "CAM072989v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072989d__Unknown_species",
+        "sanger:CAM072989v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM072991": {
+      "collection_photo_names": [
+        "CAM072991d.JPG",
+        "CAM072991v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM072991d__Unknown_species",
+        "sanger:CAM072991v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM074303": {
+      "collection_photo_names": [
+        "CAM074303d.JPG",
+        "CAM074303v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM074303d__Unknown_species",
+        "sanger:CAM074303v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM074307": {
+      "collection_photo_names": [
+        "CAM074307d.JPG",
+        "CAM074307v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM074307d__Unknown_species",
+        "sanger:CAM074307v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM074310": {
+      "collection_photo_names": [
+        "CAM074310d.JPG",
+        "CAM074310v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM074310d__Unknown_species",
+        "sanger:CAM074310v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM074312": {
+      "collection_photo_names": [
+        "CAM074312d.JPG",
+        "CAM074312v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM074312d__Unknown_species",
+        "sanger:CAM074312v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM074316": {
+      "collection_photo_names": [
+        "CAM074316d.JPG",
+        "CAM074316v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM074316d__Unknown_species",
+        "sanger:CAM074316v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM074317": {
+      "collection_photo_names": [
+        "CAM074317d.JPG",
+        "CAM074317v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM074317d__Unknown_species",
+        "sanger:CAM074317v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM074325": {
+      "collection_photo_names": [
+        "CAM074325d.JPG",
+        "CAM074325v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM074325d__Unknown_species",
+        "sanger:CAM074325v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM074335": {
+      "collection_photo_names": [
+        "CAM074335d.JPG",
+        "CAM074335v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM074335d__Unknown_species",
+        "sanger:CAM074335v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM074341": {
+      "collection_photo_names": [
+        "CAM074341d.JPG",
+        "CAM074341v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM074341d__Unknown_species",
+        "sanger:CAM074341v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM074342": {
+      "collection_photo_names": [
+        "CAM074342d.JPG",
+        "CAM074342v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM074342d__Unknown_species",
+        "sanger:CAM074342v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM074343": {
+      "collection_photo_names": [
+        "CAM074343d.JPG",
+        "CAM074343v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM074343d__Unknown_species",
+        "sanger:CAM074343v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM074344": {
+      "collection_photo_names": [
+        "CAM074344d.JPG",
+        "CAM074344v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM074344d__Unknown_species",
+        "sanger:CAM074344v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM074346": {
+      "collection_photo_names": [
+        "CAM074346d.JPG",
+        "CAM074346v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM074346d__Unknown_species",
+        "sanger:CAM074346v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM074349": {
+      "collection_photo_names": [
+        "CAM074349d.JPG",
+        "CAM074349v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM074349d__Unknown_species",
+        "sanger:CAM074349v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM074350": {
+      "collection_photo_names": [
+        "CAM074350d.JPG",
+        "CAM074350v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM074350d__Unknown_species",
+        "sanger:CAM074350v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM074352": {
+      "collection_photo_names": [
+        "CAM074352d.JPG",
+        "CAM074352v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM074352d__Unknown_species",
+        "sanger:CAM074352v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM074359": {
+      "collection_photo_names": [
+        "CAM074359d.JPG",
+        "CAM074359v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM074359d__Unknown_species",
+        "sanger:CAM074359v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM074382": {
+      "collection_photo_names": [
+        "CAM074382d.JPG",
+        "CAM074382v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM074382d__Unknown_species",
+        "sanger:CAM074382v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM074383": {
+      "collection_photo_names": [
+        "CAM074383d.JPG",
+        "CAM074383v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM074383d__Unknown_species",
+        "sanger:CAM074383v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM074384": {
+      "collection_photo_names": [
+        "CAM074384d.JPG",
+        "CAM074384v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM074384d__Unknown_species",
+        "sanger:CAM074384v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM074387": {
+      "collection_photo_names": [
+        "CAM074387d.JPG",
+        "CAM074387v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM074387d__Unknown_species",
+        "sanger:CAM074387v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM074391": {
+      "collection_photo_names": [
+        "CAM074391d.JPG",
+        "CAM074391v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM074391d__Unknown_species",
+        "sanger:CAM074391v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM074414": {
+      "collection_photo_names": [
+        "CAM074414d.JPG",
+        "CAM074414v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM074414d__Unknown_species",
+        "sanger:CAM074414v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM074427": {
+      "collection_photo_names": [
+        "CAM074427d.JPG",
+        "CAM074427v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM074427d__Unknown_species",
+        "sanger:CAM074427v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM074428": {
+      "collection_photo_names": [
+        "CAM074428d.JPG",
+        "CAM074428v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM074428d__Unknown_species",
+        "sanger:CAM074428v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM074429": {
+      "collection_photo_names": [
+        "CAM074429d.JPG",
+        "CAM074429v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM074429d__Unknown_species",
+        "sanger:CAM074429v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM074438": {
+      "collection_photo_names": [
+        "CAM074438d.JPG",
+        "CAM074438v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM074438d__Unknown_species",
+        "sanger:CAM074438v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM074442": {
+      "collection_photo_names": [
+        "CAM074442d.JPG",
+        "CAM074442v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM074442d__Unknown_species",
+        "sanger:CAM074442v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM074443": {
+      "collection_photo_names": [
+        "CAM074443d.JPG",
+        "CAM074443v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM074443d__Unknown_species",
+        "sanger:CAM074443v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM074447": {
+      "collection_photo_names": [
+        "CAM074447d.JPG",
+        "CAM074447v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM074447d__Unknown_species",
+        "sanger:CAM074447v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM074448": {
+      "collection_photo_names": [
+        "CAM074448d.JPG",
+        "CAM074448v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM074448d__Unknown_species",
+        "sanger:CAM074448v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM074452": {
+      "collection_photo_names": [
+        "CAM074452d.JPG",
+        "CAM074452v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM074452d__Unknown_species",
+        "sanger:CAM074452v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM074453": {
+      "collection_photo_names": [
+        "CAM074453d.JPG",
+        "CAM074453v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM074453d__Unknown_species",
+        "sanger:CAM074453v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM074454": {
+      "collection_photo_names": [
+        "CAM074454d.JPG",
+        "CAM074454v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM074454d__Unknown_species",
+        "sanger:CAM074454v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM074476": {
+      "collection_photo_names": [
+        "CAM074476d.JPG",
+        "CAM074476v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM074476d__Unknown_species",
+        "sanger:CAM074476v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM074479": {
+      "collection_photo_names": [
+        "CAM074479d.JPG",
+        "CAM074479v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM074479d__Unknown_species",
+        "sanger:CAM074479v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM074490": {
+      "collection_photo_names": [
+        "CAM074490d.JPG",
+        "CAM074490v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM074490d__Oleria_assimilis",
+        "sanger:CAM074490v__Oleria_assimilis"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM074502": {
+      "collection_photo_names": [
+        "CAM074502d.JPG",
+        "CAM074502v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM074502d__Unknown_species",
+        "sanger:CAM074502v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM074506": {
+      "collection_photo_names": [
+        "CAM074506d.JPG",
+        "CAM074506v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM074506d__Unknown_species",
+        "sanger:CAM074506v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM074507": {
+      "collection_photo_names": [
+        "CAM074507d.JPG",
+        "CAM074507v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM074507d__Unknown_species",
+        "sanger:CAM074507v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM074508": {
+      "collection_photo_names": [
+        "CAM074508d.JPG",
+        "CAM074508v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM074508d__Unknown_species",
+        "sanger:CAM074508v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM074509": {
+      "collection_photo_names": [
+        "CAM074509d.JPG",
+        "CAM074509v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM074509d__Unknown_species",
+        "sanger:CAM074509v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM074510": {
+      "collection_photo_names": [
+        "CAM074510d.JPG",
+        "CAM074510v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM074510d__Unknown_species",
+        "sanger:CAM074510v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM074512": {
+      "collection_photo_names": [
+        "CAM074512d.JPG",
+        "CAM074512v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM074512d__Archonias_anaitis",
+        "sanger:CAM074512v__Archonias_anaitis"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM074513": {
+      "collection_photo_names": [
+        "CAM074513d.JPG",
+        "CAM074513v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM074513d__Archonias_anaitis",
+        "sanger:CAM074513v__Archonias_anaitis"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM074522": {
+      "collection_photo_names": [
+        "CAM074522d.JPG",
+        "CAM074522v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM074522d__Unknown_species",
+        "sanger:CAM074522v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM074526": {
+      "collection_photo_names": [
+        "CAM074526d.JPG",
+        "CAM074526v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM074526d__Unknown_species",
+        "sanger:CAM074526v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM074540": {
+      "collection_photo_names": [
+        "CAM074540d.JPG",
+        "CAM074540v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM074540d__Unknown_species",
+        "sanger:CAM074540v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM074628": {
+      "collection_photo_names": [
+        "CAM074628d.JPG",
+        "CAM074628v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM074628d__Unknown_species",
+        "sanger:CAM074628v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM074647": {
+      "collection_photo_names": [
+        "CAM074647d.JPG",
+        "CAM074647v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM074647d__Unknown_species",
+        "sanger:CAM074647v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM074665": {
+      "collection_photo_names": [
+        "CAM074665d.JPG",
+        "CAM074665v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM074665d__Godyris_hewitsoni",
+        "sanger:CAM074665v__Godyris_hewitsoni"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM074726": {
+      "collection_photo_names": [
+        "CAM074726d.JPG",
+        "CAM074726v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM074726d__Unknown_species",
+        "sanger:CAM074726v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM074747": {
+      "collection_photo_names": [
+        "CAM074747d.JPG",
+        "CAM074747v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM074747d__Napeogenes_glycera",
+        "sanger:CAM074747v__Napeogenes_glycera"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM074787": {
+      "collection_photo_names": [
+        "CAM074787d.JPG",
+        "CAM074787v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM074787d__Pteronymia_alina",
+        "sanger:CAM074787v__Pteronymia_alina"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM074792": {
+      "collection_photo_names": [
+        "CAM074792d.JPG",
+        "CAM074792v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM074792d__Archonias_teutamis",
+        "sanger:CAM074792v__Archonias_teutamis"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM074834": {
+      "collection_photo_names": [
+        "CAM074834d.JPG",
+        "CAM074834v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM074834d__Godyris_duillia",
+        "sanger:CAM074834v__Godyris_duillia"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM074926": {
+      "collection_photo_names": [
+        "CAM074926d.JPG",
+        "CAM074926v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM074926d__Hesperiidae_family",
+        "sanger:CAM074926v__Hesperiidae_family"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM074927": {
+      "collection_photo_names": [
+        "CAM074927d.JPG",
+        "CAM074927v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM074927d__Hesperiidae_family",
+        "sanger:CAM074927v__Hesperiidae_family"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM074928": {
+      "collection_photo_names": [
+        "CAM074928d.JPG",
+        "CAM074928v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM074928d__Hesperiidae_family",
+        "sanger:CAM074928v__Hesperiidae_family"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM074929": {
+      "collection_photo_names": [
+        "CAM074929d.JPG",
+        "CAM074929v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM074929d__Hesperiidae_family",
+        "sanger:CAM074929v__Hesperiidae_family"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM074930": {
+      "collection_photo_names": [
+        "CAM074930d.JPG",
+        "CAM074930v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM074930d__Hesperiidae_family",
+        "sanger:CAM074930v__Hesperiidae_family"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM074931": {
+      "collection_photo_names": [
+        "CAM074931d.JPG",
+        "CAM074931v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM074931d__Hesperiidae_family",
+        "sanger:CAM074931v__Hesperiidae_family"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM074973": {
+      "collection_photo_names": [
+        "CAM074973d.JPG",
+        "CAM074973v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM074973d__Methona_curvifascia",
+        "sanger:CAM074973v__Methona_curvifascia"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM074985": {
+      "collection_photo_names": [
+        "CAM074985d.JPG",
+        "CAM074985v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM074985d__Napeogenes_zurippa",
+        "sanger:CAM074985v__Napeogenes_zurippa"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM074993": {
+      "collection_photo_names": [
+        "CAM074993d.JPG",
+        "CAM074993v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM074993d__Riodinidae_family",
+        "sanger:CAM074993v__Riodinidae_family"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM076807": {
+      "collection_photo_names": [
+        "CAM076807d.JPG",
+        "CAM076807v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM076807d__Vila_azeca",
+        "sanger:CAM076807v__Vila_azeca"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM076818": {
+      "collection_photo_names": [
+        "CAM076818d.JPG",
+        "CAM076818v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM076818d__Hesperiidae_family",
+        "sanger:CAM076818v__Hesperiidae_family"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM076819": {
+      "collection_photo_names": [
+        "CAM076819d.JPG",
+        "CAM076819v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM076819d__Hesperiidae_family",
+        "sanger:CAM076819v__Hesperiidae_family"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM076832": {
+      "collection_photo_names": [
+        "CAM076832d.JPG",
+        "CAM076832v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM076832d__Dircenna_loreta",
+        "sanger:CAM076832v__Dircenna_loreta"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM076840": {
+      "collection_photo_names": [
+        "CAM076840d.JPG",
+        "CAM076840v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM076840d__Hesperiidae_family",
+        "sanger:CAM076840v__Hesperiidae_family"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM076893": {
+      "collection_photo_names": [
+        "CAM076893d.JPG",
+        "CAM076893v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM076893d__Scada_reckia",
+        "sanger:CAM076893v__Scada_reckia"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM076941": {
+      "collection_photo_names": [
+        "CAM076941d.JPG",
+        "CAM076941v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM076941d__Hesperiidae_family",
+        "sanger:CAM076941v__Hesperiidae_family"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM076942": {
+      "collection_photo_names": [
+        "CAM076942d.JPG",
+        "CAM076942v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM076942d__Hesperiidae_family",
+        "sanger:CAM076942v__Hesperiidae_family"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM076943": {
+      "collection_photo_names": [
+        "CAM076943d.JPG",
+        "CAM076943v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM076943d__Hesperiidae_family",
+        "sanger:CAM076943v__Hesperiidae_family"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM076981": {
+      "collection_photo_names": [
+        "CAM076981d.JPG",
+        "CAM076981v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM076981d__Riodinidae_family",
+        "sanger:CAM076981v__Riodinidae_family"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM076982": {
+      "collection_photo_names": [
+        "CAM076982d.JPG",
+        "CAM076982v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM076982d__Hesperiidae_family",
+        "sanger:CAM076982v__Hesperiidae_family"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM076983": {
+      "collection_photo_names": [
+        "CAM076983d.JPG",
+        "CAM076983v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM076983d__Hesperiidae_family",
+        "sanger:CAM076983v__Hesperiidae_family"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM076990": {
+      "collection_photo_names": [
+        "CAM076990d.JPG",
+        "CAM076990v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM076990d__Pseudoscada_florula",
+        "sanger:CAM076990v__Pseudoscada_florula"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM077225": {
+      "collection_photo_names": [
+        "CAM077225d.JPG",
+        "CAM077225v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM077225d__Riodinidae_family",
+        "sanger:CAM077225v__Riodinidae_family"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM077248": {
+      "collection_photo_names": [
+        "CAM077248d.JPG",
+        "CAM077248v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM077248d__Ithomiola_floralis",
+        "sanger:CAM077248v__Ithomiola_floralis"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM077319": {
+      "collection_photo_names": [
+        "CAM077319d.JPG",
+        "CAM077319v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM077319d__Hypothyris_anastasia",
+        "sanger:CAM077319v__Hypothyris_anastasia"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM077326": {
+      "collection_photo_names": [
+        "CAM077326d.JPG",
+        "CAM077326v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM077326d__Brevioleria_arzalia",
+        "sanger:CAM077326v__Brevioleria_arzalia"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM077328": {
+      "collection_photo_names": [
+        "CAM077328d.JPG",
+        "CAM077328v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM077328d__Brevioleria_aelia",
+        "sanger:CAM077328v__Brevioleria_aelia"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM077338": {
+      "collection_photo_names": [
+        "CAM077338d.JPG",
+        "CAM077338v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM077338d__Hypothyris_ninonia",
+        "sanger:CAM077338v__Hypothyris_ninonia"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM077341": {
+      "collection_photo_names": [
+        "CAM077341d.JPG",
+        "CAM077341v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM077341d__Hypothyris_ninonia",
+        "sanger:CAM077341v__Hypothyris_ninonia"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM077342": {
+      "collection_photo_names": [
+        "CAM077342d.JPG",
+        "CAM077342v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM077342d__Hypothyris_ninonia",
+        "sanger:CAM077342v__Hypothyris_ninonia"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM077372": {
+      "collection_photo_names": [
+        "CAM077372d.JPG",
+        "CAM077372v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM077372d__Hesperiidae_family",
+        "sanger:CAM077372v__Hesperiidae_family"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM077389": {
+      "collection_photo_names": [
+        "CAM077389d.JPG",
+        "CAM077389v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM077389d__Ithomia_salapia",
+        "sanger:CAM077389v__Ithomia_salapia"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM077431": {
+      "collection_photo_names": [
+        "CAM077431d.JPG",
+        "CAM077431v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM077431d__Brevioleria_aelia",
+        "sanger:CAM077431v__Brevioleria_aelia"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM077436": {
+      "collection_photo_names": [
+        "CAM077436d.JPG",
+        "CAM077436v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM077436d__Ceratinia_poecila",
+        "sanger:CAM077436v__Ceratinia_poecila"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM077473": {
+      "collection_photo_names": [
+        "CAM077473d.JPG",
+        "CAM077473v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM077473d__Unknown_species",
+        "sanger:CAM077473v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM077474": {
+      "collection_photo_names": [
+        "CAM077474d.JPG",
+        "CAM077474v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM077474d__Arctiini_tribe",
+        "sanger:CAM077474v__Arctiini_tribe"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM077475": {
+      "collection_photo_names": [
+        "CAM077475d.JPG",
+        "CAM077475v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM077475d__Unknown_species",
+        "sanger:CAM077475v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM077492": {
+      "collection_photo_names": [
+        "CAM077492d.JPG",
+        "CAM077492v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM077492d__Dione_lucina",
+        "sanger:CAM077492v__Dione_lucina"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM077512": {
+      "collection_photo_names": [
+        "CAM077512d.JPG",
+        "CAM077512v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM077512d__Unknown_species",
+        "sanger:CAM077512v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM077568": {
+      "collection_photo_names": [
+        "CAM077568d.JPG",
+        "CAM077568v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM077568d__Pseudoscada_florula",
+        "sanger:CAM077568v__Pseudoscada_florula"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM077689": {
+      "collection_photo_names": [
+        "CAM077689d.JPG",
+        "CAM077689v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM077689d__Unknown_species",
+        "sanger:CAM077689v__Unknown_species"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM077694": {
+      "collection_photo_names": [
+        "CAM077694d.JPG",
+        "CAM077694v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM077694d__Hypothyris_anastasia",
+        "sanger:CAM077694v__Hypothyris_anastasia"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM077720": {
+      "collection_photo_names": [
+        "CAM077720d.JPG",
+        "CAM077720v.JPG"
+      ],
+      "images": 2,
+      "mode": "unique_dorsal_ventral_pair",
+      "source_ids": [
+        "sanger:CAM077720d__Ithomia_amarilla",
+        "sanger:CAM077720v__Ithomia_amarilla"
+      ],
+      "views": [
+        "d",
+        "v"
+      ]
+    },
+    "CAM077727": {
+      "collection_photo_names": [
+        "CAM077727d.JPG"
+      ],
+      "images": 1,
+      "mode": "mean_duplicated_single_logits",
+      "source_ids": [
+        "sanger:CAM077727d__Ithomia_amarilla"
+      ],
+      "views": [
+        "d"
+      ]
+    }
+  },
+  "prediction_sha256": "43b1c5532f2164b0006d31a8695107890c94534ae492c24146fa84e2e527e246",
+  "preservation": {
+    "current_expanded_asset_read_only": true,
+    "current_live_asset_read_only": true,
+    "current_sex_asset_read_only": true,
+    "recorded_identification_fields_not_emitted": true,
+    "sex_fields_not_emitted": true,
+    "supplementary_asset_only": true
+  },
+  "schema": "taxonomy-coverage-current-inference/1",
+  "status": "COMPLETE",
+  "target_camids": 402,
+  "targets_sha256": "91a54d314376ff19d9130ca416db846883f20707ccf8f97f3ff1a11095b5223d",
+  "unique_dorsal_ventral_pairs": 397
+}

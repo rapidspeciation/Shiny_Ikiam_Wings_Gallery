@@ -85,6 +85,25 @@ export function predictionRank(pred, rank) {
   }
 }
 
+export function recordedPredictionEvidence(item, pred, rank) {
+  const recorded = recordedTaxonomy(item)[rank]
+  if (!recorded || !pred) return null
+  const arrayRow = Array.isArray(pred[rank])
+    ? pred[rank].find(row => canonicalTaxon(row?.[0]).toLowerCase() === recorded.toLowerCase())
+    : null
+  if (arrayRow && Number.isFinite(arrayRow[1])) {
+    return { confidence: arrayRow[1], oor: arrayRow[2] === 1 }
+  }
+
+  const embeddedKey = rank === 'subspecies' ? 'subsp' : rank
+  const probabilityKey = rank === 'subspecies' ? 'subsp_p' : `${rank}_p`
+  const embeddedLabel = canonicalTaxon(pred.rec?.[embeddedKey])
+  if (!embeddedLabel || embeddedLabel.toLowerCase() !== recorded.toLowerCase()) return null
+  const confidence = pred.rec?.[probabilityKey]
+  if (!Number.isFinite(confidence)) return null
+  return { confidence, oor: pred.rec?.oor === 1 }
+}
+
 export function rankComparison(item, pred, rank) {
   const itemRecorded = recordedTaxonomy(item)
   // Recorded truth always comes from the authoritative gallery row.  The
