@@ -610,33 +610,12 @@ const showAbout = ref(false)
           in <em>Sphingidae</em>, so confident calls on sparsely-sampled groups (skippers, hairstreaks, micromoths)
           warrant extra caution. Even within Ithomiini, Müllerian mimicry makes subspecies look-alikes genuinely hard to
           tell apart.</p>
-          <p>The collection classifier uses an attention model to combine dorsal and ventral features for 3,829
-          specimens with verified paired photos. Other specimens retain their previous predictions. AI Identifier
-          keeps its existing single-photo classification head, with updated image preparation and taxon-name corrections.</p>
-          <p class="mb-1"><strong>Previous collection validation</strong> on held-out Sanger specimens,
-          averaged across three seeds and five folds, with the side-of-Andes + Ecuador prior:</p>
-          <table id="taxonomy-benchmark" class="table table-sm table-bordered w-auto small">
-            <thead><tr><th>Rank</th><th>Specimens</th><th>Top-1</th><th>Top-5</th></tr></thead>
-            <tbody>
-              <tr><td>Subspecies</td><td>2,613</td><td>87.93%</td><td>97.33%</td></tr>
-              <tr><td>Species</td><td>3,355</td><td>91.33%</td><td>97.91%</td></tr>
-              <tr><td>Genus</td><td>3,806</td><td>95.55%</td><td>99.26%</td></tr>
-              <tr><td>Family</td><td>3,824</td><td>99.32%</td><td>99.90%</td></tr>
-            </tbody>
-          </table>
-          <p class="text-muted">Each rank includes specimens with an eligible recorded identification;
-          labels absent from a fold's vocabulary count as misses. Subspecies scores cover named subspecies.
-          Geographic weighting adds 0.21 pp to Species Top-1 and 0.74 pp to Subspecies Top-1;
-          Genus Top-1 decreases by 0.16 pp. Tribe and subfamily scores await alignment of taxonomic labels.
-          These results evaluate the collection workflow, not single uploaded photos.
-          Previous gallery taxonomy predictions used the final fitted model; this table uses held-out predictions.</p>
+          <p>The collection classifier uses an attention model to combine dorsal and ventral photos for 3,829
+          specimens with verified pairs, learning how much to rely on each view. Other specimens keep their previous
+          predictions. AI Identifier uses a separate single-photo classifier.</p>
           <section aria-labelledby="attention-benchmark-title">
-            <p id="attention-benchmark-title" class="mb-1"><strong>Paired attention validation</strong></p>
-            <p>The attention model learns how strongly to use each dorsal and ventral photo. We combine predictions
-            from three trained models, adjust their confidence while keeping species and subspecies predictions
-            consistent, and apply the existing side-of-Andes + Ecuador checklist weighting. The table evaluates
-            this collection method on 314 held-out Sanger pairs. Geographic weighting changed probabilities but
-            did not change the first-ranked taxon in this test cohort.</p>
+            <p id="attention-benchmark-title" class="mb-1"><strong>Collection accuracy</strong> on 314 held-out
+            Sanger dorsal/ventral pairs, with the side-of-Andes + Ecuador prior:</p>
             <table id="attention-benchmark" class="table table-sm table-bordered w-auto small">
               <thead><tr><th>Rank</th><th>Specimens</th><th>Top-1</th><th>Top-5</th></tr></thead>
               <tbody>
@@ -645,23 +624,11 @@ const showAbout = ref(false)
                 <tr><td>Genus</td><td>314</td><td>98.09%</td><td>99.36%</td></tr>
               </tbody>
             </table>
-            <p>On these 314 pairs, the attention model improved Species Top-1 by 3.18 percentage points over a
-            matched single-photo ensemble averaged across available views (92.04% to 95.22%; paired 95% interval:
-            0.96 to 5.73 points). Against the previous five-fold collection method, matching eligible specimens
-            and recorded names gives a Species Top-1 difference of +1.93 points on 294 specimens and a named
-            Subspecies Top-1 difference of +0.96 points on 278. Their paired 95% intervals include zero
-            (−0.68 to +4.65 and −2.16 to +3.96 points); the methods used different training splits. On the same
-            278 specimens, named Subspecies Top-5 decreased from 99.64% to 99.28%. Gallery predictions for all
-            3,829 pairs are not held-out accuracy measurements.</p>
           </section>
           <section aria-labelledby="field-benchmark-title">
-            <p id="field-benchmark-title" class="mb-1"><strong>AI Identifier field-photo validation</strong></p>
-            <p>We evaluated the current single-photo upload workflow on 4,566 held-out photographs linked to
-            GBIF's iNaturalist Research Grade Observations, covering 629 represented species from Ecuador,
-            Colombia and Peru. Its existing classification head now receives the corrected v6 wing crop;
-            92 source-backed taxon names are corrected when their probabilities are reported. The interface
-            uses the complete taxonomic probability distribution and leaves geographic weighting off unless
-            you select a location.</p>
+            <p id="field-benchmark-title" class="mb-1"><strong>AI Identifier accuracy</strong> on 4,566 held-out
+            field photos from GBIF (iNaturalist Research Grade, 629 species from Ecuador, Colombia and Peru),
+            recorded between 12 February and 7 September 2026, after BioCLIP 2.5-H was released. No location selected:</p>
             <table id="field-benchmark" class="table table-sm table-bordered w-auto small">
               <thead><tr><th>Rank</th><th>Photographs</th><th>Top-1</th><th>Top-5</th></tr></thead>
               <tbody>
@@ -669,14 +636,11 @@ const showAbout = ref(false)
                 <tr><td>Genus</td><td>4,566</td><td>90.63%</td><td>97.22%</td></tr>
               </tbody>
             </table>
-            <p class="text-muted">Top-1 means the recorded identification ranks first; Top-5 means it is among
-            the first five. The table uses the default upload with no location selected and complete model
-            probabilities. Recorded observation and source-creation dates run from 12 February to 7 September
-            2026, after the BioCLIP 2.5-H weights were released in February 2026. It does not measure
-            subspecies identification, unrepresented species, upload
-            failures or user-selected geographic weighting. This field-photo test is separate from the
-            paired collection evaluations above.</p>
           </section>
+          <p class="text-muted">Top-1: the recorded identification ranks first. Top-5: it is among the first five.
+          The two tables measure different tasks and should not be compared with each other. Both test sets were also
+          used while choosing between model versions, so these scores may be slightly optimistic. They do not cover
+          species outside the label space.</p>
           <!-- Sex benchmark and support details are generated from the verified OOF export. -->
           <section aria-labelledby="sex-benchmark-title">
           <p id="sex-benchmark-title" class="mb-1"><strong>Sex prediction</strong></p>
@@ -699,11 +663,11 @@ const showAbout = ref(false)
           </section>
           <p class="mb-1">
             <strong>Models &amp; code:</strong>
-            single-photo head and original wing-cropper:
+            single-photo head:
             <a href="https://huggingface.co/fr4nzzch/butterfly-id-classifier" target="_blank" rel="noopener noreferrer">fr4nzzch/butterfly-id-classifier</a>
-            · current v6 wing-cropper weights:
+            · wing cropper:
             <a href="https://huggingface.co/spaces/fr4nzzch/butterfly-id/blob/main/assets/wing_seg_v6.pt" target="_blank" rel="noopener noreferrer">wing_seg_v6.pt</a>
-            · collection attention weights:
+            · collection attention model:
             <a href="https://github.com/rapidspeciation/Shiny_Ikiam_Wings_Gallery/releases/tag/collection-attention-20260926" target="_blank" rel="noopener noreferrer">collection-attention-20260926</a>
             · <a href="https://huggingface.co/spaces/fr4nzzch/butterfly-id" target="_blank" rel="noopener noreferrer">inference Space</a>
             · backbone <a href="https://huggingface.co/imageomics/bioclip-2.5-vith14" target="_blank" rel="noopener noreferrer">BioCLIP 2.5-H</a>
@@ -721,21 +685,17 @@ const showAbout = ref(false)
             Taxonomic Inventory</a> and other hawkmoth/saturniid resources.
           </p>
           <p class="mb-1"><strong>Changelog</strong></p>
-          <p><strong>26 September 2026:</strong> Updated AI Identifier image preparation to the corrected v6
-          wing crop, corrected 92 source-backed taxon names, and used the full probability distribution for
-          rank predictions. A blank location now leaves geography unweighted; you can still select a country
-          and side of the Andes. On the same 4,566 GBIF-linked field photos, the complete default workflow
-          raised Species Top-1 from 67.50% to 73.37% (+5.87 percentage points) and Top-5 from 85.59% to
-          92.05% (+6.46 points). These gains reflect the combined workflow changes; the classification head
-          and sex predictions are unchanged.</p>
-          <p><strong>26 September 2026:</strong> Updated collection taxonomy predictions for verified dorsal/ventral
-          pairs with three attention models. Their combined prediction reached 95.22% Species Top-1 on 314
-          held-out pairs; its matched single-photo comparator reached 92.04%. The older five-fold collection
-          table remains a separate evaluation. This collection release did not change AI Identifier or sex prediction.</p>
+          <p><strong>26 September 2026:</strong> AI Identifier now uses the corrected v6 wing crop, fixes 92 taxon
+          names, and no longer guesses a location when none is selected. On the GBIF field photos, Species Top-1 rose
+          from 67.50% to 73.37% (+5.87 pp) and Top-5 from 85.59% to 92.05% (+6.46 pp). The classification head is unchanged.</p>
+          <p><strong>26 September 2026:</strong> Collection predictions for verified dorsal/ventral pairs now use an
+          attention model. On 314 held-out pairs, Species Top-1 rose from 92.04% to 95.22% (+3.18 pp) over averaging
+          single-photo predictions across the two views.</p>
           <p><strong>10 September 2026:</strong> Added joint dorsal/ventral features for taxonomic prediction
           in specimens with verified paired photos, retaining the previous method for other specimens.
           Species Top-1 accuracy reaches 91.33% (+0.85 pp, Top-5: 97.91%) and Subspecies Top-1 reaches 87.93%
-          (+0.87 pp, Top-5: 97.33%), on the matched Sanger evaluation with the geographic prior. For uploaded photos, the model does not yet support combining dorsal and ventral photos of the same individual.</p>
+          (+0.87 pp, Top-5: 97.33%), on a five-fold Sanger evaluation of 3,355 specimens with the geographic prior (Genus Top-1: 95.55%,
+          Family Top-1: 99.32%). For uploaded photos, the model does not yet support combining dorsal and ventral photos of the same individual.</p>
           <p><strong>9 September 2026:</strong> Added out-of-fold sex predictions from separate ventral forewing and dorsal
           hindwing features, confidence scores, Supported/Uncertain labels, sex agreement filters, and confidence sorting
           that places supported predictions first.</p>
