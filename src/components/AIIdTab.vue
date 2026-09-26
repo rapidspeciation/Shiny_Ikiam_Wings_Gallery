@@ -670,7 +670,9 @@ const showAbout = ref(false)
             </table>
             <p class="text-muted">Top-1 means the recorded identification ranks first; Top-5 means it is among
             the first five. The table uses the default upload with no location selected and complete model
-            probabilities. It does not measure subspecies identification, unrepresented species, upload
+            probabilities. Recorded observation and source-creation dates run from 12 February to 7 September
+            2026, after the BioCLIP 2.5-H weights were released in February 2026. It does not measure
+            subspecies identification, unrepresented species, upload
             failures or user-selected geographic weighting. This field-photo test is separate from the
             paired collection evaluations above.</p>
           </section>
@@ -698,6 +700,8 @@ const showAbout = ref(false)
             <strong>Models &amp; code:</strong>
             single-photo head and original wing-cropper:
             <a href="https://huggingface.co/fr4nzzch/butterfly-id-classifier" target="_blank" rel="noopener noreferrer">fr4nzzch/butterfly-id-classifier</a>
+            · current v6 wing-cropper weights:
+            <a href="https://huggingface.co/spaces/fr4nzzch/butterfly-id/blob/main/assets/wing_seg_v6.pt" target="_blank" rel="noopener noreferrer">wing_seg_v6.pt</a>
             · collection attention weights:
             <a href="https://github.com/rapidspeciation/Shiny_Ikiam_Wings_Gallery/releases/tag/collection-attention-20260926" target="_blank" rel="noopener noreferrer">collection-attention-20260926</a>
             · <a href="https://huggingface.co/spaces/fr4nzzch/butterfly-id" target="_blank" rel="noopener noreferrer">inference Space</a>
@@ -719,8 +723,10 @@ const showAbout = ref(false)
           <p><strong>26 September 2026:</strong> Updated AI Identifier image preparation to the corrected v6
           wing crop, corrected 92 source-backed taxon names, and used the full probability distribution for
           rank predictions. A blank location now leaves geography unweighted; you can still select a country
-          and side of the Andes. On 4,566 held-out GBIF-linked field photos, Species Top-1 is 73.37% and
-          Top-5 is 92.05%. The classification head and sex predictions are unchanged.</p>
+          and side of the Andes. On the same 4,566 GBIF-linked field photos, the complete default workflow
+          raised Species Top-1 from 67.50% to 73.37% (+5.87 percentage points) and Top-5 from 85.59% to
+          92.05% (+6.46 points). These gains reflect the combined workflow changes; the classification head
+          and sex predictions are unchanged.</p>
           <p><strong>26 September 2026:</strong> Updated collection taxonomy predictions for verified dorsal/ventral
           pairs with three attention models. Their combined prediction reached 95.22% Species Top-1 on 314
           held-out pairs; its matched single-photo comparator reached 92.04%. The older five-fold collection
