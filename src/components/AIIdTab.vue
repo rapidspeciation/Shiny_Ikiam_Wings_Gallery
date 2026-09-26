@@ -138,18 +138,6 @@ const regionForSide = (s) => (s === 'West' ? REGION_OPTS[0] : s === 'East' ? REG
 const cParam = (c) => (c && c !== ANY ? c : '')
 const hasLocation = computed(() => country.value !== ANY || !!region.value)
 function resetLocation() { country.value = ANY; region.value = null }
-// One-tap presets for the most common upload locations (other countries stay in the dropdown).
-const QUICK_LOCATIONS = [
-  { country: 'Ecuador', side: 'East' },
-  { country: 'Ecuador', side: 'West' },
-  { country: 'Colombia', side: '' },
-]
-const isQuickActive = (q) => country.value === q.country && sideOf(region.value) === q.side
-function applyQuick(q) {
-  if (isQuickActive(q)) { resetLocation(); return }
-  country.value = q.country
-  region.value = q.country === 'Ecuador' ? regionForSide(q.side) : null
-}
 
 // ---- run ----
 const results = ref([])   // see placeholder shape in run()
@@ -506,11 +494,6 @@ const showAbout = ref(false)
           <div class="card-body">
             <h6 class="card-title">Where was it photographed? <span class="text-muted fw-normal small">(optional)</span></h6>
             <p class="text-muted small mb-2">Helps when look-alikes occur: it down-weights butterflies not recorded in your region. Leave it blank for visual predictions without geographic weighting. You can change this per photo after identifying.</p>
-            <div class="guess-chips mb-2" role="group" aria-label="Quick location picks">
-              <button v-for="q in QUICK_LOCATIONS" :key="q.country + q.side" type="button"
-                class="btn btn-sm guess-chip" :class="isQuickActive(q) ? 'btn-success' : 'btn-outline-success'"
-                :aria-pressed="isQuickActive(q)" @click="applyQuick(q)">{{ suggestLabel(q) }}</button>
-            </div>
             <FilterSelect label="Country" :options="countryOptions" v-model="country" placeholder="Any country" />
             <div v-if="country === 'Ecuador'" class="mt-2">
               <FilterSelect label="Region (side of the Andes)" :options="REGION_OPTS" v-model="region" placeholder="Either side" />

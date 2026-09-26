@@ -27,9 +27,8 @@ test('suggestLocations splits Ecuador by side and returns the top three by predi
 })
 
 
-test('upload panel offers three one-tap location presets that toggle off', () => {
+test('upload panel has no fixed location presets; suggestions come from each result', () => {
   const source = readFileSync('src/components/AIIdTab.vue', 'utf8')
-  assert.match(source, /QUICK_LOCATIONS = \[\s*\{ country: 'Ecuador', side: 'East' \},\s*\{ country: 'Ecuador', side: 'West' \},\s*\{ country: 'Colombia', side: '' \},\s*\]/)
-  assert.match(source, /if \(isQuickActive\(q\)\) \{ resetLocation\(\); return \}/)
-  assert.match(source, /aria-label="Quick location picks"/)
+  assert.doesNotMatch(source, /QUICK_LOCATIONS|Quick location picks/)
+  assert.match(source, /r\.suggest = suggestLocations\(checklist\.value, leaves\)/)
 })
