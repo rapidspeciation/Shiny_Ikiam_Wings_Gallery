@@ -2,8 +2,8 @@
 //
 // The backend (HF Space) returns RAW per-leaf probabilities (no geographic prior).
 // Inference runs ONCE per photo; the geographic prior is a *pure* client-side
-// re-rank (rankLeaves) so the user can change country/side after the fact — or let
-// us guess it — without re-running the model. rankLeaves marginalises the weighted
+// re-rank (rankLeaves) so the user can change country/side after the fact
+// without re-running the model. rankLeaves marginalises the weighted
 // leaves into the genus/species/subspecies shape PredictionPanel.vue renders.
 //
 // Set VITE_AIID_API to the HF Space origin to use the real model; otherwise a
@@ -44,6 +44,29 @@ function mockRawLeaves(filename) {
 
 // Whether a real backend is configured (vs. the offline demo mock).
 export const HAS_BACKEND = !!API_BASE
+export const PREDICTION_CACHE_VERSION = 'full-leaves-v1'
+
+// The new Space supplies all leaves for exact marginalisation. Older or mock
+// responses still have only the preview, which remains usable while it warms.
+export function predictionLeaves(result) {
+  const full = result?.full_leaves
+  if (result?.leaf_distribution_complete === true && !result?.mock &&
+      Array.isArray(full) && full.length === 7933) {
+    let total = 0
+    const names = new Set()
+    for (const entry of full) {
+      if (!Array.isArray(entry) || entry.length !== 2 ||
+          typeof entry[0] !== 'string' || !entry[0] || names.has(entry[0]) ||
+          typeof entry[1] !== 'number' || !Number.isFinite(entry[1]) || entry[1] < 0) {
+        return result.leaves || []
+      }
+      names.add(entry[0])
+      total += entry[1]
+    }
+    if (Math.abs(total - 1) <= 1e-3) return full
+  }
+  return result?.leaves || []
+}
 
 // Short random id so the backend can report THIS request's progress at /status?job=.
 export function makeJobId(seed = 'job') {
@@ -112,7 +135,8 @@ export async function predictOne(f, i = 0, { box = null, yolo = 'auto', jobId = 
       const json = await res.json()
       const r = json.results?.[0] || {}
       return {
-        id, filename: r.filename || f.name, leaves: r.leaves || [],
+        id, filename: r.filename || f.name,
+        leaves: predictionLeaves({ ...r, mock: !!json.mock }),
         wing_box: r.wing_box || null, boxes: r.boxes || [], mock: !!json.mock,
       }
     } catch (e) {

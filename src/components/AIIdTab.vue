@@ -13,7 +13,7 @@ import PredictionPanel from './PredictionPanel.vue'
 import AIReferenceGallery from './AIReferenceGallery.vue'
 import AIPhotoView from './AIPhotoView.vue'
 import InferenceProgress from './InferenceProgress.vue'
-import { predictStream, predictOne, rankLeaves, getStatus, makeJobId, wakeBackend, HAS_BACKEND } from '../utils/aiPredict.js'
+import { predictStream, predictOne, rankLeaves, getStatus, makeJobId, wakeBackend, HAS_BACKEND, PREDICTION_CACHE_VERSION } from '../utils/aiPredict.js'
 import { loadCountries, guessRegion } from '../utils/geoPrior.js'
 import { getChecklist } from '../composables/useCurationData.js'
 
@@ -125,7 +125,7 @@ onBeforeUnmount(() => {
   items.value.forEach((it) => it.previewUrl && URL.revokeObjectURL(it.previewUrl))
 })
 
-// ---- geographic prior (defaults applied to every new run) ----
+// ---- geographic prior (only applied when the user selects a location) ----
 const REGION_OPTS = ['West of Andes (Pacific / Chocó)', 'East of Andes (Amazon)']
 const ANY = 'Any'
 const country = ref(ANY)
@@ -135,7 +135,6 @@ const checklist = ref({})
 const sideOf = (r) => (r?.startsWith('West') ? 'West' : r?.startsWith('East') ? 'East' : '')
 const regionForSide = (s) => (s === 'West' ? REGION_OPTS[0] : s === 'East' ? REGION_OPTS[1] : null)
 const cParam = (c) => (c && c !== ANY ? c : '')
-const hasLocation = computed(() => country.value !== ANY || !!region.value)
 function resetLocation() { country.value = ANY; region.value = null }
 
 // ---- run ----
@@ -295,10 +294,18 @@ function applyGuess(r) {
   r.guess = g
   rerank(r)
 }
-// re-rank after the leaves change (mask switch): keep the guess flow if it's active.
-function applyLeaves(r, leaves, forceGuess = false) {
+// Re-rank after a mask switch; an explicitly requested guess follows that photo.
+function applyLeaves(r, leaves) {
   r.leaves = leaves
-  if (forceGuess || r.guess) applyGuess(r); else rerank(r)
+  if (r.guess) applyGuess(r); else rerank(r)
+}
+
+function cachedLeaves(r, key) {
+  const cached = r.predCache[key]
+  return cached?.version === PREDICTION_CACHE_VERSION ? cached.leaves : null
+}
+function cacheLeaves(r, key, leaves) {
+  r.predCache[key] = { version: PREDICTION_CACHE_VERSION, leaves }
 }
 
 const byId = (id) => results.value.find((r) => r.id === id)
@@ -317,7 +324,6 @@ async function run() {
   batchTotal.value = pending.length; batchDone.value = 0
   const jobs = pending.map((it) => makeJobId(it.id))
   startPolling()
-  const noLoc = !hasLocation.value
   for (const it of pending) {
     const placeholder = {
       id: it.id, filename: it.name, previewUrl: it.previewUrl, file: it,
@@ -340,9 +346,10 @@ async function run() {
         r.boxes = raw.boxes || []
         r.unionBox = raw.wing_box || null          // union of all masks (the default crop)
         r.usedIndex = r.boxes.length ? -2 : -1     // -2 = all wings (union), -1 = full image, >=0 = one mask
-        r.predCache = { [r.boxes.length ? 'all' : 'full']: raw.leaves }
+        r.predCache = {}
+        cacheLeaves(r, r.boxes.length ? 'all' : 'full', raw.leaves)
         r.mock = raw.mock; r.loading = false
-        applyLeaves(r, raw.leaves, noLoc)
+        applyLeaves(r, raw.leaves)
       },
       onError: (e, i, file) => {
         batchDone.value++
@@ -360,11 +367,12 @@ async function run() {
 // ---- wing-mask selection (lazy: run BioCLIP on a mask only when it's chosen) ----
 async function selectMask(r, i) {
   if (i === r.usedIndex || !r.boxes[i] || r.maskLoading) return
-  if (r.predCache[i]) { r.usedIndex = i; applyLeaves(r, r.predCache[i]); return }
+  const cached = cachedLeaves(r, i)
+  if (cached) { r.usedIndex = i; applyLeaves(r, cached); return }
   r.maskLoading = true
   try {
     const raw = await predictOne(r.file, 0, { box: r.boxes[i].box })
-    r.predCache[i] = raw.leaves
+    cacheLeaves(r, i, raw.leaves)
     r.usedIndex = i
     applyLeaves(r, raw.leaves)
   } catch (e) {
@@ -375,11 +383,12 @@ async function selectMask(r, i) {
 }
 async function useFull(r) {
   if (r.usedIndex === -1 || r.maskLoading) return
-  if (r.predCache.full) { r.usedIndex = -1; applyLeaves(r, r.predCache.full); return }
+  const cached = cachedLeaves(r, 'full')
+  if (cached) { r.usedIndex = -1; applyLeaves(r, cached); return }
   r.maskLoading = true
   try {
     const raw = await predictOne(r.file, 0, { yolo: 'off' })
-    r.predCache.full = raw.leaves
+    cacheLeaves(r, 'full', raw.leaves)
     r.usedIndex = -1
     applyLeaves(r, raw.leaves)
   } catch (e) {
@@ -391,11 +400,12 @@ async function useFull(r) {
 // All wings together (union of every detected mask); the default crop.
 async function useAll(r) {
   if (r.usedIndex === -2 || r.maskLoading || !r.unionBox) return
-  if (r.predCache.all) { r.usedIndex = -2; applyLeaves(r, r.predCache.all); return }
+  const cached = cachedLeaves(r, 'all')
+  if (cached) { r.usedIndex = -2; applyLeaves(r, cached); return }
   r.maskLoading = true
   try {
     const raw = await predictOne(r.file, 0, { box: r.unionBox })
-    r.predCache.all = raw.leaves
+    cacheLeaves(r, 'all', raw.leaves)
     r.usedIndex = -2
     applyLeaves(r, raw.leaves)
   } catch (e) {
@@ -486,7 +496,7 @@ const showAbout = ref(false)
         <div class="card h-100">
           <div class="card-body">
             <h6 class="card-title">Where was it photographed? <span class="text-muted fw-normal small">(optional)</span></h6>
-            <p class="text-muted small mb-2">Helps when look-alikes occur: it down-weights butterflies not recorded in your region. Leave it blank and we'll <strong>guess the location from the photo</strong>. You can change this per photo after identifying.</p>
+            <p class="text-muted small mb-2">Helps when look-alikes occur: it down-weights butterflies not recorded in your region. Leave it blank for visual predictions without geographic weighting. You can change this per photo after identifying.</p>
             <FilterSelect label="Country" :options="countryOptions" v-model="country" placeholder="Any country" />
             <div v-if="country === 'Ecuador'" class="mt-2">
               <FilterSelect label="Region (side of the Andes)" :options="REGION_OPTS" v-model="region" placeholder="Either side" />
@@ -601,7 +611,7 @@ const showAbout = ref(false)
           tell apart.</p>
           <p>The collection classifier uses an attention model to combine dorsal and ventral features for 3,829
           specimens with verified paired photos. Other specimens retain their previous predictions. AI Identifier
-          still uses the existing single-photo classifier.</p>
+          keeps its existing single-photo classification head, with updated image preparation and taxon-name corrections.</p>
           <p class="mb-1"><strong>Previous collection validation</strong> on held-out Sanger specimens,
           averaged across three seeds and five folds, with the side-of-Andes + Ecuador prior:</p>
           <table id="taxonomy-benchmark" class="table table-sm table-bordered w-auto small">
@@ -643,6 +653,27 @@ const showAbout = ref(false)
             278 specimens, named Subspecies Top-5 decreased from 99.64% to 99.28%. Gallery predictions for all
             3,829 pairs are not held-out accuracy measurements.</p>
           </section>
+          <section aria-labelledby="field-benchmark-title">
+            <p id="field-benchmark-title" class="mb-1"><strong>AI Identifier field-photo validation</strong></p>
+            <p>We evaluated the current single-photo upload workflow on 4,566 held-out photographs linked to
+            GBIF's iNaturalist Research Grade Observations, covering 629 represented species from Ecuador,
+            Colombia and Peru. Its existing classification head now receives the corrected v6 wing crop;
+            92 source-backed taxon names are corrected when their probabilities are reported. The interface
+            uses the complete taxonomic probability distribution and leaves geographic weighting off unless
+            you select a location.</p>
+            <table id="field-benchmark" class="table table-sm table-bordered w-auto small">
+              <thead><tr><th>Rank</th><th>Photographs</th><th>Top-1</th><th>Top-5</th></tr></thead>
+              <tbody>
+                <tr><td>Species</td><td>4,566</td><td>73.37%</td><td>92.05%</td></tr>
+                <tr><td>Genus</td><td>4,566</td><td>90.63%</td><td>97.22%</td></tr>
+              </tbody>
+            </table>
+            <p class="text-muted">Top-1 means the recorded identification ranks first; Top-5 means it is among
+            the first five. The table uses the default upload with no location selected and complete model
+            probabilities. It does not measure subspecies identification, unrepresented species, upload
+            failures or user-selected geographic weighting. This field-photo test is separate from the
+            paired collection evaluations above.</p>
+          </section>
           <!-- Sex benchmark and support details are generated from the verified OOF export. -->
           <section aria-labelledby="sex-benchmark-title">
           <p id="sex-benchmark-title" class="mb-1"><strong>Sex prediction</strong></p>
@@ -665,7 +696,7 @@ const showAbout = ref(false)
           </section>
           <p class="mb-1">
             <strong>Models &amp; code:</strong>
-            single-photo head and wing-cropper:
+            single-photo head and original wing-cropper:
             <a href="https://huggingface.co/fr4nzzch/butterfly-id-classifier" target="_blank" rel="noopener noreferrer">fr4nzzch/butterfly-id-classifier</a>
             · collection attention weights:
             <a href="https://github.com/rapidspeciation/Shiny_Ikiam_Wings_Gallery/releases/tag/collection-attention-20260926" target="_blank" rel="noopener noreferrer">collection-attention-20260926</a>
@@ -685,10 +716,15 @@ const showAbout = ref(false)
             Taxonomic Inventory</a> and other hawkmoth/saturniid resources.
           </p>
           <p class="mb-1"><strong>Changelog</strong></p>
+          <p><strong>26 September 2026:</strong> Updated AI Identifier image preparation to the corrected v6
+          wing crop, corrected 92 source-backed taxon names, and used the full probability distribution for
+          rank predictions. A blank location now leaves geography unweighted; you can still select a country
+          and side of the Andes. On 4,566 held-out GBIF-linked field photos, Species Top-1 is 73.37% and
+          Top-5 is 92.05%. The classification head and sex predictions are unchanged.</p>
           <p><strong>26 September 2026:</strong> Updated collection taxonomy predictions for verified dorsal/ventral
           pairs with three attention models. Their combined prediction reached 95.22% Species Top-1 on 314
           held-out pairs; its matched single-photo comparator reached 92.04%. The older five-fold collection
-          table remains a separate evaluation. AI Identifier and sex prediction are unchanged.</p>
+          table remains a separate evaluation. This collection release did not change AI Identifier or sex prediction.</p>
           <p><strong>10 September 2026:</strong> Added joint dorsal/ventral features for taxonomic prediction
           in specimens with verified paired photos, retaining the previous method for other specimens.
           Species Top-1 accuracy reaches 91.33% (+0.85 pp, Top-5: 97.91%) and Subspecies Top-1 reaches 87.93%
