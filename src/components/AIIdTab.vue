@@ -599,9 +599,10 @@ const showAbout = ref(false)
           in <em>Sphingidae</em>, so confident calls on sparsely-sampled groups (skippers, hairstreaks, micromoths)
           warrant extra caution. Even within Ithomiini, Müllerian mimicry makes subspecies look-alikes genuinely hard to
           tell apart.</p>
-          <p>The collection classifier combines dorsal and ventral features for 3,829 specimens with verified
-          paired photos. Other specimens retain their previous predictions. AI Identifier uses a single-photo classifier.</p>
-          <p class="mb-1"><strong>Deployment accuracy</strong> on held-out Sanger specimens,
+          <p>The collection classifier uses an attention model to combine dorsal and ventral features for 3,829
+          specimens with verified paired photos. Other specimens retain their previous predictions. AI Identifier
+          still uses the existing single-photo classifier.</p>
+          <p class="mb-1"><strong>Previous collection validation</strong> on held-out Sanger specimens,
           averaged across three seeds and five folds, with the side-of-Andes + Ecuador prior:</p>
           <table id="taxonomy-benchmark" class="table table-sm table-bordered w-auto small">
             <thead><tr><th>Rank</th><th>Specimens</th><th>Top-1</th><th>Top-5</th></tr></thead>
@@ -617,7 +618,58 @@ const showAbout = ref(false)
           Geographic weighting adds 0.21 pp to Species Top-1 and 0.74 pp to Subspecies Top-1;
           Genus Top-1 decreases by 0.16 pp. Tribe and subfamily scores await alignment of taxonomic labels.
           These results evaluate the collection workflow, not single uploaded photos.
-          Gallery taxonomy predictions use the final fitted model; the table uses held-out predictions.</p>
+          Previous gallery taxonomy predictions used the final fitted model; this table uses held-out predictions.</p>
+          <section aria-labelledby="attention-benchmark-title">
+            <p id="attention-benchmark-title" class="mb-1"><strong>Paired attention validation</strong></p>
+            <p>The selected three-model attention route was evaluated on 314 held-out Sanger dorsal/ventral pairs.
+            It averages each model's full leaf probabilities, calibrates the species distribution, preserves the
+            within-species leaf probabilities, then applies the collection's side-of-Andes + Ecuador prior. The
+            table reports this exact route; geographic weighting changed probabilities but no first-ranked taxon
+            in this test cohort.</p>
+            <table id="attention-benchmark" class="table table-sm table-bordered w-auto small">
+              <thead><tr><th>Rank</th><th>Specimens</th><th>Top-1</th><th>Top-5</th></tr></thead>
+              <tbody>
+                <tr><td>Named subspecies</td><td>296</td><td>89.86%</td><td>98.65%</td></tr>
+                <tr><td>Species</td><td>314</td><td>95.22%</td><td>99.04%</td></tr>
+                <tr><td>Genus</td><td>314</td><td>98.09%</td><td>99.36%</td></tr>
+              </tbody>
+            </table>
+            <p>On these 314 pairs, the attention route improved Species Top-1 by 3.18 percentage points over a
+            matched single-photo ensemble averaged across available views (92.04% to 95.22%; paired 95% interval:
+            0.96 to 5.73 points). Against the previous five-fold collection method, matching eligible specimens
+            and recorded names gives a Species Top-1 difference of +1.93 points on 294 specimens and a named
+            Subspecies Top-1 difference of +0.96 points on 278. Their paired 95% intervals include zero
+            (−0.68 to +4.65 and −2.16 to +3.96 points); the methods used different training splits. Gallery
+            predictions for all 3,829 pairs are not held-out accuracy measurements.</p>
+          </section>
+          <section aria-labelledby="field-benchmark-title">
+            <p id="field-benchmark-title" class="mb-1"><strong>Single-photo field validation</strong></p>
+            <p>Three corrected-label models were evaluated separately on 4,566 held-out photographs linked to
+            GBIF's iNaturalist Research-grade Observations dataset. The photographs cover 629 species from Ecuador,
+            Colombia and Peru. Scores are visual-only averages across the three models, without a geographic prior;
+            they do not measure subspecies identification or species outside the classifier's label space. These
+            corrected-label models are research candidates; the uploaded-photo classifier has not changed.</p>
+            <table id="field-benchmark" class="table table-sm table-bordered w-auto small">
+              <thead><tr><th>Rank</th><th>Photographs</th><th>Top-1</th><th>Top-5</th></tr></thead>
+              <tbody>
+                <tr><td>Species</td><td>4,566</td><td>71.32%</td><td>91.17%</td></tr>
+                <tr><td>Genus</td><td>4,566</td><td>89.60%</td><td>96.98%</td></tr>
+              </tbody>
+            </table>
+            <p>The larger field cohort includes 172 further provider-verified photographs without a captured GBIF
+            dataset record. Across all 4,738 photos, Species Top-1 was 70.37% and Top-5 was 89.80%.
+            Research Grade status and source identifications were checked, but the photos were not independently
+            certified as adult insects. Available dates do not rule out earlier copies in BioCLIP pretraining.</p>
+          </section>
+          <section aria-labelledby="model-improvements-title">
+            <p id="model-improvements-title" class="mb-1"><strong>Validation of model improvements</strong></p>
+            <p>We corrected 558 training-image taxon labels using captured captions tied to each source image.
+            On the 4,738-photo field test, mean Species Top-1 increased from 68.50% to 70.37% across matched
+            models, a gain of 1.86 percentage points (paired 95% interval: 1.47 to 2.24 points).</p>
+            <p>The label-correction experiment used single photos and a separate taxonomy from the paired
+            attention route. Their gains cannot be added. The field test has been used in several experiments,
+            so its model comparisons remain exploratory.</p>
+          </section>
           <!-- Sex benchmark and support details are generated from the verified OOF export. -->
           <section aria-labelledby="sex-benchmark-title">
           <p id="sex-benchmark-title" class="mb-1"><strong>Sex prediction</strong></p>
@@ -658,6 +710,10 @@ const showAbout = ref(false)
             Taxonomic Inventory</a> and other hawkmoth/saturniid resources.
           </p>
           <p class="mb-1"><strong>Changelog</strong></p>
+          <p><strong>26 September 2026:</strong> Updated collection taxonomy predictions for verified dorsal/ventral
+          pairs with a three-model attention route. The selected route reached 95.22% Species Top-1 on 314
+          held-out pairs; its matched single-photo comparator reached 92.04%. The older five-fold collection
+          table remains a separate evaluation. AI Identifier and sex prediction are unchanged.</p>
           <p><strong>10 September 2026:</strong> Added joint dorsal/ventral features for taxonomic prediction
           in specimens with verified paired photos, retaining the previous method for other specimens.
           Species Top-1 accuracy reaches 91.33% (+0.85 pp, Top-5: 97.91%) and Subspecies Top-1 reaches 87.93%
