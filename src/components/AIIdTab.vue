@@ -135,6 +135,7 @@ const checklist = ref({})
 const sideOf = (r) => (r?.startsWith('West') ? 'West' : r?.startsWith('East') ? 'East' : '')
 const regionForSide = (s) => (s === 'West' ? REGION_OPTS[0] : s === 'East' ? REGION_OPTS[1] : null)
 const cParam = (c) => (c && c !== ANY ? c : '')
+const hasLocation = computed(() => country.value !== ANY || !!region.value)
 function resetLocation() { country.value = ANY; region.value = null }
 
 // ---- run ----

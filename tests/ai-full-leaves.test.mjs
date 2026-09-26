@@ -2,6 +2,7 @@ import test from 'node:test'
 import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
 import { createServer } from 'vite'
+import { parse, compileScript } from '@vue/compiler-sfc'
 
 test('AI Identifier prefers complete unweighted leaves and safely falls back', async () => {
   const vite = await createServer({
@@ -38,4 +39,15 @@ test('new uploads do not infer geography unless the user requests it', () => {
   assert.match(source, /function guess\(r\) \{ applyGuess\(r\) \}/)
   assert.match(source, /function rerank\(r\) \{[\s\S]*?country: cParam\(r\.country\), side: sideOf\(r\.region\)/)
   assert.match(source, /cached\?\.version === PREDICTION_CACHE_VERSION/)
+})
+
+test('manual location selection exposes a bound reactive reset control', () => {
+  const source = readFileSync('src/components/AIIdTab.vue', 'utf8')
+  const { descriptor, errors } = parse(source)
+  assert.equal(errors.length, 0)
+  const script = compileScript(descriptor, { id: 'ai-identifier' })
+  assert.equal(script.bindings.hasLocation, 'setup-ref')
+  assert.match(descriptor.scriptSetup.content, /const hasLocation = computed\(\(\) => country\.value !== ANY \|\| !!region\.value\)/)
+  assert.match(descriptor.template.content, /<button v-if="hasLocation"[^>]*@click="resetLocation">Reset location<\/button>/)
+  assert.match(descriptor.scriptSetup.content, /function resetLocation\(\) \{ country\.value = ANY; region\.value = null \}/)
 })
