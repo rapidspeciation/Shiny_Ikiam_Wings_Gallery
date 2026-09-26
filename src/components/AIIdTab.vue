@@ -2,7 +2,7 @@
 // AI Identifier tab: upload butterfly photo(s) -> BioCLIP 2.5-H prediction (genus ▸
 // species ▸ subspecies). Inference runs ONCE per photo (raw leaf probabilities);
 // the country + side-of-Andes prior is a pure client-side re-rank, so each result
-// can change its location after the fact (or let us guess it) with no re-inference.
+// can change its location after the fact (or tap a suggested one) with no re-inference.
 // Photos stream in one-by-one as the model finishes each (concurrency pool). The
 // YOLO wing-crop returns selectable masks: the largest runs on Identify, others run
 // lazily when their bbox is clicked. Reference photos (Sanger first, GBIF fallback)
@@ -14,7 +14,7 @@ import AIReferenceGallery from './AIReferenceGallery.vue'
 import AIPhotoView from './AIPhotoView.vue'
 import InferenceProgress from './InferenceProgress.vue'
 import { predictStream, predictOne, rankLeaves, getStatus, makeJobId, wakeBackend, HAS_BACKEND, PREDICTION_CACHE_VERSION } from '../utils/aiPredict.js'
-import { loadCountries, guessRegion } from '../utils/geoPrior.js'
+import { loadCountries, suggestLocations } from '../utils/geoPrior.js'
 import { getChecklist } from '../composables/useCurationData.js'
 
 // ---- intake ----
@@ -108,6 +108,7 @@ onMounted(async () => {
   window.addEventListener('drop', onWinDrop)
   window.addEventListener('paste', onPaste)
   checklist.value = await getChecklist()
+  for (const r of results.value) if (r.leaves) r.suggest = suggestLocations(checklist.value, r.leaves)
   countryOptions.value = [ANY, ...(await loadCountries())]
 })
 // keep-alive caches this tab; re-ping + re-show warm state on return in case it dozed off.
@@ -137,6 +138,18 @@ const regionForSide = (s) => (s === 'West' ? REGION_OPTS[0] : s === 'East' ? REG
 const cParam = (c) => (c && c !== ANY ? c : '')
 const hasLocation = computed(() => country.value !== ANY || !!region.value)
 function resetLocation() { country.value = ANY; region.value = null }
+// One-tap presets for the most common upload locations (other countries stay in the dropdown).
+const QUICK_LOCATIONS = [
+  { country: 'Ecuador', side: 'East' },
+  { country: 'Ecuador', side: 'West' },
+  { country: 'Colombia', side: '' },
+]
+const isQuickActive = (q) => country.value === q.country && sideOf(region.value) === q.side
+function applyQuick(q) {
+  if (isQuickActive(q)) { resetLocation(); return }
+  country.value = q.country
+  region.value = q.country === 'Ecuador' ? regionForSide(q.side) : null
+}
 
 // ---- run ----
 const results = ref([])   // see placeholder shape in run()
@@ -288,17 +301,11 @@ const progress = computed(() => {
 function rerank(r) {
   r.pred = rankLeaves(r.leaves, checklist.value, { country: cParam(r.country), side: sideOf(r.region) })
 }
-function applyGuess(r) {
-  const g = guessRegion(checklist.value, r.leaves)
-  r.country = g.country || ANY
-  r.region = g.country === 'Ecuador' ? regionForSide(g.side) : null
-  r.guess = g
-  rerank(r)
-}
-// Re-rank after a mask switch; an explicitly requested guess follows that photo.
+// Re-rank after new leaves (upload or mask switch) and refresh the location suggestions.
 function applyLeaves(r, leaves) {
   r.leaves = leaves
-  if (r.guess) applyGuess(r); else rerank(r)
+  r.suggest = suggestLocations(checklist.value, leaves)
+  rerank(r)
 }
 
 function cachedLeaves(r, key) {
@@ -331,7 +338,7 @@ async function run() {
       loading: true, error: null, mock: false, leaves: null,
       boxes: [], unionBox: null, usedIndex: -1, predCache: {}, maskLoading: false,
       country: country.value, region: country.value === 'Ecuador' ? region.value : null,
-      guess: null, pred: null,
+      suggest: [], pred: null,
     }
     const existing = byId(it.id)
     if (existing) Object.assign(existing, placeholder)
@@ -417,12 +424,13 @@ async function useAll(r) {
 }
 
 // per-card location change
-function setCountry(r, v) { r.country = v; if (v !== 'Ecuador') r.region = null; r.guess = null; rerank(r) }
-function setRegion(r, v) { r.region = v; r.guess = null; rerank(r) }
-function guess(r) { applyGuess(r) }
-function applyGuessCountry(r, name) {
-  r.country = name
-  r.region = name === 'Ecuador' ? regionForSide(r.guess?.side) : null
+function setCountry(r, v) { r.country = v; if (v !== 'Ecuador') r.region = null; rerank(r) }
+function setRegion(r, v) { r.region = v; rerank(r) }
+const suggestLabel = (s) => (s.side ? `${s.country} · ${s.side} of Andes` : s.country)
+const isSuggestActive = (r, s) => r.country === s.country && sideOf(r.region) === s.side
+function applySuggestion(r, s) {
+  if (isSuggestActive(r, s)) { r.country = ANY; r.region = null }
+  else { r.country = s.country; r.region = s.country === 'Ecuador' ? regionForSide(s.side) : null }
   rerank(r)
 }
 
@@ -498,6 +506,11 @@ const showAbout = ref(false)
           <div class="card-body">
             <h6 class="card-title">Where was it photographed? <span class="text-muted fw-normal small">(optional)</span></h6>
             <p class="text-muted small mb-2">Helps when look-alikes occur: it down-weights butterflies not recorded in your region. Leave it blank for visual predictions without geographic weighting. You can change this per photo after identifying.</p>
+            <div class="guess-chips mb-2" role="group" aria-label="Quick location picks">
+              <button v-for="q in QUICK_LOCATIONS" :key="q.country + q.side" type="button"
+                class="btn btn-sm guess-chip" :class="isQuickActive(q) ? 'btn-success' : 'btn-outline-success'"
+                :aria-pressed="isQuickActive(q)" @click="applyQuick(q)">{{ suggestLabel(q) }}</button>
+            </div>
             <FilterSelect label="Country" :options="countryOptions" v-model="country" placeholder="Any country" />
             <div v-if="country === 'Ecuador'" class="mt-2">
               <FilterSelect label="Region (side of the Andes)" :options="REGION_OPTS" v-model="region" placeholder="Either side" />
@@ -540,22 +553,14 @@ const showAbout = ref(false)
               <FilterSelect label="Region (side of the Andes)" :options="REGION_OPTS" :model-value="r.region"
                 placeholder="Either side" @update:model-value="(v) => setRegion(r, v)" />
             </div>
-            <div class="loc-guess">
-              <button v-if="!r.guess" class="btn btn-outline-secondary btn-sm" @click="guess(r)" title="Infer the most likely location from the photo">
-                I don't know, guess it
-              </button>
-              <div v-if="r.guess" class="small">
-                <template v-if="r.guess.countries && r.guess.countries.length">
-                  <span class="text-muted">Guessed from the photo. Top predictions are recorded from <span v-if="r.guess.side">(<strong>{{ r.guess.side }}</strong> of the Andes, {{ Math.round(r.guess.sideConf * 100) }}%)</span>. Tap to apply:</span>
-                  <div class="guess-chips mt-1">
-                    <button v-for="[name, conf] in r.guess.countries" :key="name"
-                      class="btn btn-sm guess-chip" :class="r.country === name ? 'btn-success' : 'btn-outline-success'"
-                      @click="applyGuessCountry(r, name)">
-                      {{ name }} <span class="chip-pct">{{ Math.round(conf * 100) }}%</span>
-                    </button>
-                  </div>
-                </template>
-                <span v-else class="text-muted">Not enough signal to guess a location.</span>
+            <div v-if="r.suggest && r.suggest.length" class="loc-guess small">
+              <span class="text-muted">Quick pick, where the top predictions are recorded (tap where the photo was taken):</span>
+              <div class="guess-chips mt-1">
+                <button v-for="s in r.suggest" :key="s.country + s.side"
+                  class="btn btn-sm guess-chip" :class="isSuggestActive(r, s) ? 'btn-success' : 'btn-outline-success'"
+                  :aria-pressed="isSuggestActive(r, s)" @click="applySuggestion(r, s)">
+                  {{ suggestLabel(s) }} <span class="chip-pct">{{ Math.round(s.score * 100) }}%</span>
+                </button>
               </div>
             </div>
           </div>

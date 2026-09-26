@@ -81,6 +81,35 @@ export function guessRegion(checklist, rawLeaves, topN = 6) {
   return { country, countryConf, countries, side, sideConf }
 }
 
+// Top location suggestions for one-tap picking. Same evidence as guessRegion,
+// but Ecuador is split by side of the Andes so "Ecuador · East of Andes" can be
+// offered directly. Each score is the share of raw prediction mass documented
+// there. Suggestions are shown, never applied automatically.
+export function suggestLocations(checklist, rawLeaves, n = 3) {
+  const total = rawLeaves.reduce((a, [, p]) => a + p, 0) || 1
+  const mass = new Map()
+  const add = (key, country, side, p) => {
+    const cur = mass.get(key) || { country, side, score: 0 }
+    cur.score += p
+    mass.set(key, cur)
+  }
+  for (const [name, p] of rawLeaves) {
+    const e = entryFor(checklist, name)
+    if (!e || !e.countries) continue
+    for (const c in e.countries) {
+      if (!(e.countries[c] > 0)) continue
+      if (c === 'Ecuador' && (e.East > 0 || e.West > 0)) {
+        if (e.East > 0) add('Ecuador|East', c, 'East', p)
+        if (e.West > 0) add('Ecuador|West', c, 'West', p)
+      } else add(c, c, '', p)
+    }
+  }
+  return [...mass.values()]
+    .map((m) => ({ ...m, score: m.score / total }))
+    .sort((a, b) => b.score - a.score)
+    .slice(0, n)
+}
+
 // Sorted list of countries present in the checklist (for the Country dropdown).
 let _countriesPromise = null
 export function loadCountries() {
