@@ -15,8 +15,12 @@ test('default collection model uses verified paired predictions and preserves pu
   assert.ok(paired.every(r => r.model_meta.route === 'known_pair_attention_v1' &&
     r.model_meta.feature_dimension === 1024 && r.model_meta.source_views.dorsal &&
     r.model_meta.source_views.ventral && r.n_views === 2 && r.oof === 0))
-  const roles = Object.groupBy(paired, r => r.model_meta.attention_training_role)
-  assert.deepEqual(Object.fromEntries(Object.entries(roles).map(([role, entries]) => [role, entries.length])), {
+  const roles = {}
+  for (const row of paired) {
+    const role = row.model_meta.attention_training_role
+    roles[role] = (roles[role] ?? 0) + 1
+  }
+  assert.deepEqual(roles, {
     train: 2226, dev: 261, cal: 206, test: 314, absent_from_attention_training_manifest: 822
   })
   const sexBytes = readFileSync('public/data/sex_predictions.json')
