@@ -665,8 +665,10 @@ const showAbout = ref(false)
           </section>
           <p class="mb-1">
             <strong>Models &amp; code:</strong>
-            weights (head + wing-cropper):
+            single-photo head and wing-cropper:
             <a href="https://huggingface.co/fr4nzzch/butterfly-id-classifier" target="_blank" rel="noopener noreferrer">fr4nzzch/butterfly-id-classifier</a>
+            · collection attention weights:
+            <a href="https://github.com/rapidspeciation/Shiny_Ikiam_Wings_Gallery/releases/tag/collection-attention-20260926" target="_blank" rel="noopener noreferrer">collection-attention-20260926</a>
             · <a href="https://huggingface.co/spaces/fr4nzzch/butterfly-id" target="_blank" rel="noopener noreferrer">inference Space</a>
             · backbone <a href="https://huggingface.co/imageomics/bioclip-2.5-vith14" target="_blank" rel="noopener noreferrer">BioCLIP 2.5-H</a>
             · <a href="https://huggingface.co/facebook/sam3" target="_blank" rel="noopener noreferrer">SAM 3</a> (wing-mask training labels).

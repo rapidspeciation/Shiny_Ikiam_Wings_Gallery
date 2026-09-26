@@ -14,6 +14,8 @@ test('About shows expanded-pair held-out results and dated history separately', 
     'matched single-photo ensemble', 'Subspecies Top-1 difference of +0.96 points on 278',
     'Their paired 95% intervals include zero', 'named Subspecies Top-5 decreased from 99.64% to 99.28%',
     '<strong>Sex prediction</strong>', 'Sex prediction is not yet supported for uploaded photos.',
+    'single-photo head and wing-cropper:', 'collection attention weights:',
+    'href="https://github.com/rapidspeciation/Shiny_Ikiam_Wings_Gallery/releases/tag/collection-attention-20260926"',
     'table uses held-out predictions']) assert.ok(current.includes(copy), copy)
   assert.doesNotMatch(current, /Review candidates \(CSV\)|Taxon reliability \(CSV\)/)
   assert.doesNotMatch(current, /Single-photo field validation|field-benchmark|558 training-image taxon labels/)
