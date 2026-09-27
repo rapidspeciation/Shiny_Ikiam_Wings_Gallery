@@ -710,8 +710,8 @@ const showAbout = ref(false)
             <table id="field-benchmark" class="table table-sm table-bordered w-auto small">
               <thead><tr><th>Rank</th><th>Photographs</th><th>Top-1</th><th>Top-5</th></tr></thead>
               <tbody>
-                <tr><td>Species</td><td>4,566</td><td>73.92%</td><td>92.05%</td></tr>
-                <tr><td>Genus</td><td>4,566</td><td>90.60%</td><td>97.22%</td></tr>
+                <tr><td>Species</td><td>4,566</td><td>85.15%</td><td>96.12%</td></tr>
+                <tr><td>Genus</td><td>4,566</td><td>94.61%</td><td>98.47%</td></tr>
               </tbody>
             </table>
           </section>
@@ -760,9 +760,14 @@ const showAbout = ref(false)
             <a href="https://www.cotacachi.eu" target="_blank" rel="noopener noreferrer">Cotacachi</a>, expanded with
             additional Neotropical butterfly photo databases from across the region and, for the nocturnal moths,
             specialist collections such as the <a href="https://sphingidae.myspecies.info" target="_blank" rel="noopener noreferrer">Sphingidae
-            Taxonomic Inventory</a> and other hawkmoth/saturniid resources.
+            Taxonomic Inventory</a> and other hawkmoth/saturniid resources. The AI Identifier classifier is also trained on
+            research-grade iNaturalist and museum photos from GBIF, used for training only.
           </p>
           <p class="mb-1"><strong>Changelog</strong></p>
+          <p><strong>27 September 2026:</strong> Retrained the AI Identifier classifier with about 457,000 additional GBIF
+          photos (research-grade iNaturalist observations and museum specimens recorded before 12 February 2026, up to
+          1,000 per species). On the GBIF field photos, Species Top-1 rose from 73.92% to 85.15% (+11.23 pp) and Top-5
+          from 92.05% to 96.12% (+4.07 pp).</p>
           <p><strong>26 September 2026:</strong> Retrained the AI Identifier classifier after correcting 558 training
           labels using their source captions. On the GBIF field photos, Species Top-1 rose from 73.37% to 73.92% (+0.55 pp);
           Top-5 is unchanged at 92.05%.</p>
