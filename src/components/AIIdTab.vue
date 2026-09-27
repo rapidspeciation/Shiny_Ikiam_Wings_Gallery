@@ -775,17 +775,20 @@ const showAbout = ref(false)
           <section aria-labelledby="sex-benchmark-title">
           <p id="sex-benchmark-title" class="mb-1"><strong>Sex prediction</strong></p>
           <p>Collection predictions use separate BioCLIP features from the two ventral forewings and two dorsal hindwings,
-          for 1,586 Sanger specimens. The benchmark below covers 1,220 specimens across 57 species.</p>
+          for 3,809 Sanger specimens. The benchmark below covers 3,462 specimens with a recorded sex across 381 species.</p>
           <table id="sex-benchmark" class="table table-sm table-bordered w-auto small">
             <thead><tr><th scope="col">Evaluation</th><th scope="col">Specimens</th><th scope="col">Accuracy</th></tr></thead>
             <tbody>
-              <tr><td>All scored specimens</td><td>1,220</td><td>89.7%</td></tr>
+              <tr><td>All scored specimens</td><td>3,462</td><td>90.2%</td></tr>
+              <tr><td>Ithomiini</td><td>2,733</td><td>94.0%</td></tr>
+              <tr><td>Heliconiini</td><td>305</td><td>79.7%</td></tr>
+              <tr><td>Species not seen in training</td><td>3,462</td><td>85.5%</td></tr>
             </tbody>
           </table>
           <p>Scores average three models that each excluded the specimen from training and checkpoint selection.
-          <strong>Supported</strong> requires confidence ≥80% and sufficient taxon evidence for both sexes; otherwise <strong>Uncertain</strong>.
-          This exploratory screen supports 274 predictions in <em>Ithomia salapia</em>, <em>Mechanitis mazaeus</em>, <em>Mechanitis messenoides</em>, <em>Mechanitis polymnia</em>, <em>Oleria amalda</em>, <em>Oleria baizana</em>, <em>Oleria tigilla</em>.
-          5 disagree with the recorded sex and are candidates for review.</p>
+          <strong>Supported</strong> requires confidence of at least 85% and a reliable record for that species on other
+          specimens; otherwise <strong>Uncertain</strong>. Supported predictions were 98.2% correct, and 26 disagree with
+          the recorded sex and are candidates for review. Groups outside Ithomiini have fewer examples and are mostly Uncertain.</p>
           <p>Sex prediction is not yet supported for uploaded photos. The current method uses separate features from
           ventral forewing and dorsal hindwing crops of Sanger specimens. These views expose regions that may show
           sexual differences, including androconia in some taxa.</p>
@@ -821,6 +824,10 @@ const showAbout = ref(false)
           Ecuador (Costa, Sierra, Oriente, Galapagos). On 3,694 field photos from observers not used for tuning, Species
           Top-1 is 85.08% with no location, 87.87% with the country and 88.71% with coordinates. It favours commonly
           recorded species, so rare species gain little. Photo GPS is read in your browser and is not uploaded.</p>
+          <p><strong>27 September 2026:</strong> Retrained collection sex prediction on 3,462 specimens (was 1,220) and
+          added predictions for 347 specimens without a recorded or with an uncertain sex. On the original 1,220 benchmark
+          specimens, accuracy rose from 89.7% to 92.0%. Supported now requires a reliable record for the species and covers
+          1,435 predictions.</p>
           <p><strong>27 September 2026:</strong> Fixed the location filter: it had treated a missing checklist record as
           proof that a species is absent, so choosing the correct country lowered accuracy. It now also uses GBIF records and
           down-weights unrecorded species more gently, and the side of the Andes only marks species as off-region. With the
