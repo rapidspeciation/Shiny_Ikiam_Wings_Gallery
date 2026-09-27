@@ -1,10 +1,12 @@
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useDataset } from '../composables/useDataset.js'
 import { useGallery } from '../composables/useGallery.js'
 import { useGlobalGalleryOptions } from '../composables/useGlobalGalleryOptions.js'
 import { getAllPredictions, getAllSexPredictions, predictionDiffers, resolveCamid } from '../composables/useCurationData.js'
 import { matchesSexFilter } from '../utils/sexPrediction.js'
+import ShareViewButton from './ShareViewButton.vue'
+import { useShareView } from '../composables/useShareView.js'
 import FilterSelect from './FilterSelect.vue'
 import PhotoGrid from './PhotoGrid.vue'
 
@@ -75,18 +77,11 @@ const subspeciesList = computed(() => {
 const idStatuses = computed(() => getUnique('ID_status', rawData.value))
 
 // Watchers
-watch(() => filters.value.family, () => { filters.value.subfamily = null; filters.value.tribe = null; filters.value.species = []; filters.value.subspecies = [] })
-watch(() => filters.value.subfamily, () => { filters.value.tribe = null; filters.value.species = []; filters.value.subspecies = [] })
-watch(() => filters.value.tribe, () => { filters.value.species = []; filters.value.subspecies = [] })
+watch(() => filters.value.family, () => { filters.value.subfamily = null; filters.value.tribe = null; filters.value.species = []; filters.value.subspecies = [] }, { flush: 'sync' })
+watch(() => filters.value.subfamily, () => { filters.value.tribe = null; filters.value.species = []; filters.value.subspecies = [] }, { flush: 'sync' })
+watch(() => filters.value.tribe, () => { filters.value.species = []; filters.value.subspecies = [] }, { flush: 'sync' })
 
-onMounted(async () => {
-  await ensureLoaded()
-  const params = new URLSearchParams(window.location.search)
-  if (params.get('modelVsRecorded')) filters.value.modelVsRecorded = params.get('modelVsRecorded')
-  if (params.get('sortBy')) sortBy.value = params.get('sortBy')
-  if (params.get('sortOrder') && ['asc', 'desc'].includes(params.get('sortOrder'))) sortOrder.value = params.get('sortOrder')
-  if (params.get('modelVsRecorded') || params.get('sortBy')) await onShowPhotos()
-})
+
 
 const onShowPhotos = async () => {
   sexFilterError.value = ''
@@ -147,6 +142,7 @@ const onShowPhotos = async () => {
 watch(() => sortBy.value, (val) => {
   if (['ModelConfidence', 'SexConfidence'].includes(val) && isFiltered.value) onShowPhotos()
 })
+const { shareUrl } = useShareView({ slug: 'collection', filters, ensureLoaded, apply: onShowPhotos })
 </script>
 
 <template>
@@ -184,6 +180,7 @@ watch(() => sortBy.value, (val) => {
     <!-- Action -->
     <div class="mb-4 text-center">
       <button class="btn btn-primary px-5 fw-bold" @click="onShowPhotos">Show Photos</button>
+      <ShareViewButton class="ms-2" :get-url="shareUrl" />
       <div v-if="taxonomyFilterError" class="small text-danger mt-2" role="alert">{{ taxonomyFilterError }}</div>
       <div v-if="sexFilterError" class="small text-danger mt-2" role="alert">{{ sexFilterError }}</div>
     </div>

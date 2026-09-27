@@ -1,12 +1,15 @@
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, computed } from 'vue'
 import { useDataset } from '../composables/useDataset.js'
 import { useGlobalGalleryOptions } from '../composables/useGlobalGalleryOptions.js'
 import { applyGlobalPipeline } from '../utils/galleryPipeline.js'
+import { useShareView } from '../composables/useShareView.js'
+import ShareViewButton from './ShareViewButton.vue'
 import PhotoGrid from './PhotoGrid.vue'
 
 // State
-const inputIds = ref('')
+const searchFilters = ref({ camids: '' })
+const inputIds = computed({ get: () => searchFilters.value.camids, set: value => { searchFilters.value.camids = value } })
 const hasSearched = ref(false)
 
 const { columns, side, sortBy, sortOrder, onlyPhotos, onePerSubspecies } = useGlobalGalleryOptions()
@@ -48,11 +51,6 @@ const results = ref({
   Insectary: []
 })
 
-// Load all data on mount
-onMounted(async () => {
-  await Promise.all([ensureCollectionLoaded(), ensureCrisprLoaded(), ensureInsectaryLoaded()])
-})
-
 const performSearch = () => {
   // Parse input: split by commas, spaces, newlines and remove empty
   const targets = inputIds.value
@@ -60,7 +58,11 @@ const performSearch = () => {
     .map(value => value.trim().toUpperCase())
     .filter(Boolean)
   
-  if (targets.length === 0) return
+  if (targets.length === 0) {
+    results.value = { Collection: [], CRISPR: [], Insectary: [] }
+    hasSearched.value = false
+    return
+  }
   const uniqueTargets = new Set(targets)
 
   // Reset results
@@ -92,6 +94,8 @@ const displayResults = computed(() => {
     Insectary: applyGlobalPipeline(results.value.Insectary, options)
   }
 })
+const { shareUrl } = useShareView({ slug: 'search', filters: searchFilters,
+  ensureLoaded: () => Promise.all([ensureCollectionLoaded(), ensureCrisprLoaded(), ensureInsectaryLoaded()]), apply: performSearch })
 </script>
 
 <template>
@@ -105,9 +109,12 @@ const displayResults = computed(() => {
           rows="3" 
           placeholder="Enter one or more CAMIDs (e.g. CAM01234), separated by spaces or new lines"
         ></textarea>
-        <button class="btn btn-primary w-100" @click="performSearch" :disabled="loading">
+        <div class="d-flex flex-wrap justify-content-center gap-2">
+        <button class="btn btn-primary px-5" @click="performSearch" :disabled="loading">
           Search
         </button>
+        <ShareViewButton :get-url="shareUrl" />
+        </div>
       </div>
     </div>
 

@@ -1,8 +1,10 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed } from 'vue'
 import { useDataset } from '../composables/useDataset.js'
 import { useGallery } from '../composables/useGallery.js'
 import { useGlobalGalleryOptions } from '../composables/useGlobalGalleryOptions.js'
+import ShareViewButton from './ShareViewButton.vue'
+import { useShareView } from '../composables/useShareView.js'
 import FilterSelect from './FilterSelect.vue'
 import PhotoGrid from './PhotoGrid.vue'
 
@@ -24,9 +26,7 @@ const getUnique = (field, data) => Array.from(new Set(data.map(i => i[field]).fi
 
 const speciesList = computed(() => getUnique('Species', rawData.value))
 
-onMounted(async () => {
-  await ensureLoaded()
-})
+
 
 const onShowPhotos = () => {
   applyFilters((item) => {
@@ -38,6 +38,7 @@ const onShowPhotos = () => {
     return true
   })
 }
+const { shareUrl } = useShareView({ slug: 'crispr', filters, ensureLoaded, apply: onShowPhotos })
 </script>
 
 <template>
@@ -68,6 +69,7 @@ const onShowPhotos = () => {
 
     <div class="mb-4 text-center">
       <button class="btn btn-primary px-5 fw-bold" @click="onShowPhotos">Show Photos</button>
+      <ShareViewButton class="ms-2" :get-url="shareUrl" />
     </div>
 
     <PhotoGrid

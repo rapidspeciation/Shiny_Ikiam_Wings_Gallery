@@ -1,8 +1,10 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed } from 'vue'
 import { useDataset } from '../composables/useDataset.js'
 import { useGallery } from '../composables/useGallery.js'
 import { useGlobalGalleryOptions } from '../composables/useGlobalGalleryOptions.js'
+import ShareViewButton from './ShareViewButton.vue'
+import { useShareView } from '../composables/useShareView.js'
 import FilterSelect from './FilterSelect.vue'
 import PhotoGrid from './PhotoGrid.vue'
 
@@ -40,9 +42,7 @@ const idList = computed(() => {
   return getUnique('Insectary_ID', data)
 })
 
-onMounted(async () => {
-  await ensureLoaded()
-})
+
 
 const onShowPhotos = () => {
   applyFilters((item) => {
@@ -53,6 +53,7 @@ const onShowPhotos = () => {
     return true
   })
 }
+const { shareUrl } = useShareView({ slug: 'insectary', filters, ensureLoaded, apply: onShowPhotos })
 </script>
 
 <template>
@@ -75,6 +76,7 @@ const onShowPhotos = () => {
 
     <div class="mb-4 text-center">
       <button class="btn btn-primary px-5 fw-bold" @click="onShowPhotos">Show Photos</button>
+      <ShareViewButton class="ms-2" :get-url="shareUrl" />
     </div>
 
     <PhotoGrid
