@@ -133,6 +133,9 @@ function toggleLabel(r) {
   if (r.kind === 'all-species') return r.open ? '− fewer species' : `+ all species in ${r.taxon} (${r.count}${where})`
   return r.open ? '− fewer subspecies' : `+ all subspecies (${r.count}${where})`
 }
+// tag text follows the location mode (rankLeaves: oor_label / oor_title)
+const oorLabel = computed(() => props.pred?.oor_label || 'off-region')
+const oorTitle = computed(() => props.pred?.oor_title || 'Not recorded in the selected region')
 const rowTitle = (r) => {
   if (!isTaxonRow(r)) return undefined
   void namesVersion.value
@@ -145,7 +148,7 @@ const rowLabel = (r) => {
   if (pct(r.prob)) bits.push(pct(r.prob))
   if (isRecorded(r)) bits.push('recorded')
   if (isPredicted(r)) bits.push('predicted')
-  if (r.oor) bits.push('off-region')
+  if (r.oor) bits.push(oorLabel.value)
   return bits.join(', ')
 }
 
@@ -237,7 +240,7 @@ defineExpose({ rows })
         </span>
         <span v-if="isRecorded(r)" class="tt-badge rec" title="Recorded ID in the database">recorded</span>
         <span v-if="isPredicted(r)" class="tt-badge pred" title="Model's top prediction">predicted</span>
-        <span v-if="r.oor" class="tt-badge oor" title="Not recorded in the selected region">off-region</span>
+        <span v-if="r.oor" class="tt-badge oor" :title="oorTitle">{{ oorLabel }}</span>
         <span class="tt-bar" aria-hidden="true"><span class="fill" :style="{ width: barW(r.prob) }"></span></span>
         <span class="tt-pct">{{ pct(r.prob) }}</span>
       </template>

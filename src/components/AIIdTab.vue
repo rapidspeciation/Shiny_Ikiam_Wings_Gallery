@@ -1,8 +1,9 @@
 <script setup>
 // AI Identifier tab: upload butterfly photo(s) -> BioCLIP 2.5-H prediction (genus ▸
 // species ▸ subspecies). Inference runs ONCE per photo (raw leaf probabilities);
-// the country + side-of-Andes prior is a pure client-side re-rank, so each result
-// can change its location after the fact (or tap a suggested one) with no re-inference.
+// the location prior (GBIF records near the photo's GPS or map pin, in a country, or
+// in an Ecuador region) is a pure client-side re-rank, so each result can change its
+// location after the fact (or tap a suggested one) with no re-inference.
 // Photos stream in one-by-one as the model finishes each (concurrency pool). The
 // YOLO wing-crop returns selectable masks: the largest runs on Identify, others run
 // lazily when their bbox is clicked.
@@ -14,7 +15,7 @@
 // iNaturalist field photos and museum photos (AIReferencePanel; a genus shows its
 // top species). Phones get a sticky mini-bar and a bottom sheet that pins the
 // user's photo above the reference photos.
-import { ref, computed, watch, nextTick, onMounted, onActivated, onDeactivated, onBeforeUnmount } from 'vue'
+import { ref, computed, watch, nextTick, toRaw, onMounted, onActivated, onDeactivated, onBeforeUnmount } from 'vue'
 import AILocationChips from './AILocationChips.vue'
 import TaxonTree from './TaxonTree.vue'
 import AIReferencePanel from './AIReferencePanel.vue'
@@ -23,7 +24,9 @@ import InferenceProgress from './InferenceProgress.vue'
 import { taxonInfo, fmtPct, lowConfidenceMessage } from '../utils/aiCandidates.js'
 import { keepSelection, genusMembers, rankOf } from '../utils/taxonTree.js'
 import { predictStream, predictOne, rankLeaves, getStatus, makeJobId, wakeBackend, HAS_BACKEND, PREDICTION_CACHE_VERSION } from '../utils/aiPredict.js'
-import { loadCountries, suggestLocations } from '../utils/geoPrior.js'
+import { suggestLocations, speciesProbs, countryList, countryName, checklistCountry } from '../utils/geoPrior.js'
+import { getGeoPrior, getCountryPresence, resolvePrior, cachedPrior, suggestEcRegion } from '../utils/geoSpatial.js'
+import { readGpsFromFile } from '../utils/exifGps.js'
 import { getChecklist } from '../composables/useCurationData.js'
 
 // ---- intake ----
@@ -69,8 +72,8 @@ async function addFiles(fileList) {
     }
     const previewUrl = URL.createObjectURL(file)
     try {
-      const blob = await downscale(file)
-      items.value.push({ id, name: file.name || `pasted-${_id}.jpg`, previewUrl, blob, status: 'ready', error: null })
+      const [blob, gps] = await Promise.all([downscale(file), readGpsFromFile(file)])   // GPS stays in the browser
+      items.value.push({ id, name: file.name || `pasted-${_id}.jpg`, previewUrl, blob, gps, status: 'ready', error: null })
     } catch {
       items.value.push({ id, name: file.name || 'image', previewUrl, blob: null, status: 'invalid', error: 'Could not read this image.' })
     }
@@ -122,9 +125,9 @@ onMounted(async () => {
     isMobile.value = mobileMq.matches
     mobileMq.addEventListener?.('change', onMq)
   }
-  checklist.value = await getChecklist()
-  for (const r of results.value) if (r.leaves) r.suggest = suggestLocations(checklist.value, r.leaves)
-  countryOptions.value = [ANY, ...(await loadCountries())]
+  getCountryPresence().then((p) => { countries.value = countryList(p) }).catch(() => {})
+  checklist.value = await getChecklist()   // fallback rule only (spatial files unavailable)
+  for (const r of results.value) if (r.leaves) updateSuggest(r)
 })
 // keep-alive caches this tab; re-ping + re-show warm state on return in case it dozed off.
 onActivated(() => { wakeBackend(); startWarm() })
@@ -143,17 +146,21 @@ onBeforeUnmount(() => {
   items.value.forEach((it) => it.previewUrl && URL.revokeObjectURL(it.previewUrl))
 })
 
-// ---- geographic prior (only applied when the user taps a location per photo) ----
-// Each result starts at Any (no prior); the "Where taken?" chips set r.country/r.region.
-const REGION_OPTS = ['West of Andes (Pacific / Chocó)', 'East of Andes (Amazon)']
+// ---- geographic prior (per photo) ----
+// r.loc: null (Any, no prior) | { mode: 'coords', lat, lon, source: 'exif' | 'map' }
+//   | { mode: 'country', iso } | { mode: 'region', region } (Ecuador regions).
+// A photo with EXIF GPS starts at its own location; other photos start at Any and
+// the "Where taken?" chips set r.loc. Suggestions are never applied on their own.
 const ANY = 'Any'
-const countryOptions = ref([ANY])
+const countries = ref([])                    // [{ iso, name }] from the country presence table
+const countryOptions = computed(() => [ANY, ...countries.value.map((c) => c.name)])
 const checklist = ref({})
-const sideOf = (r) => (r?.startsWith('West') ? 'West' : r?.startsWith('East') ? 'East' : '')
-const regionForSide = (s) => (s === 'West' ? REGION_OPTS[0] : s === 'East' ? REGION_OPTS[1] : null)
-const cParam = (c) => (c && c !== ANY ? c : '')
-const hasLocation = (r) => !!r && (r.country !== ANY || !!r.region)
-function resetLocation(r) { r.country = ANY; r.region = null; rerank(r) }
+const hasLocation = (r) => !!r?.loc
+// country for the reference photos (iNaturalist place filter); none for coordinates
+const refCountry = (r) => (r?.loc?.mode === 'country' ? countryName(r.loc.iso) : r?.loc?.mode === 'region' ? countryName('EC') : '')
+const exifLoc = (gps) => (gps ? { mode: 'coords', lat: gps.lat, lon: gps.lon, source: 'exif' } : null)
+function setLoc(r, loc) { r.loc = loc; rerank(r) }
+function resetLocation(r) { setLoc(r, null) }
 
 // ---- layout: phones get the mini-bar + bottom sheet ----
 const MOBILE_QUERY = '(max-width: 767.98px)'
@@ -310,15 +317,50 @@ const progress = computed(() => {
 
 // Species / genera the table lists before "+ all species" (the *_all lists keep the rest).
 const TOP_SPECIES = 10
-function rerank(r) {
-  r.pred = rankLeaves(r.leaves, checklist.value, { country: cParam(r.country), side: sideOf(r.region), topK: TOP_SPECIES })
+function applyRank(r, prior, country = '') {
+  r.pred = rankLeaves(r.leaves, checklist.value, { prior, country, topK: TOP_SPECIES })
   // keep a user-picked taxon while the model still knows it, else follow the top species
   r.selected = keepSelection(r.pred, r.selected, r.userPicked)
+}
+// Re-rank with the photo's location. The spatial files load on the first location
+// (meta 100 KB; the 526 KB cell file only for coordinates) and are cached. If they
+// cannot load, a country or Ecuador region falls back to the checklist rule.
+function rerank(r) {
+  const seq = (r.rankSeq = (r.rankSeq || 0) + 1)
+  const loc = r.loc ? toRaw(r.loc) : null
+  const hit = loc ? cachedPrior(loc) : null
+  if (!loc || hit) { r.priorStatus = ''; applyRank(r, hit); return }
+  if (!r.pred) applyRank(r, null)            // show the unweighted ranking while the data loads
+  r.priorStatus = 'loading'
+  resolvePrior(loc).then((prior) => {
+    if (seq !== r.rankSeq) return
+    r.priorStatus = ''
+    applyRank(r, prior)
+  }).catch(() => {
+    if (seq !== r.rankSeq) return
+    const fallback = loc.mode === 'country' ? checklistCountry(loc.iso) : loc.mode === 'region' ? checklistCountry('EC') : ''
+    r.priorStatus = fallback ? 'Location data did not load; using the country checklist.' : 'Location data did not load; no location applied.'
+    applyRank(r, null, fallback)
+  })
+}
+// Location suggestions: top 3 countries from the country presence table, plus the
+// Ecuador region from the spatial model when Ecuador comes first.
+async function updateSuggest(r) {
+  const leaves = r.leaves
+  let s = []
+  try { s = suggestLocations(await getCountryPresence(), leaves) } catch { s = [] }
+  if (r.leaves !== leaves) return
+  r.suggest = s
+  if (s[0]?.iso !== 'EC') return
+  try {
+    const reg = suggestEcRegion(await getGeoPrior(), speciesProbs(leaves))
+    if (reg && r.leaves === leaves) r.suggest = [...s, { kind: 'region', region: reg.region, score: reg.score }]
+  } catch { /* region suggestion is optional */ }
 }
 // Re-rank after new leaves (upload or mask switch) and refresh the location suggestions.
 function applyLeaves(r, leaves) {
   r.leaves = leaves
-  r.suggest = suggestLocations(checklist.value, leaves)
+  updateSuggest(r)
   rerank(r)
 }
 
@@ -352,7 +394,8 @@ async function run() {
       id: it.id, filename: it.name, previewUrl: it.previewUrl, file: it,
       loading: true, error: null, mock: false, leaves: null,
       boxes: [], unionBox: null, usedIndex: -1, predCache: {}, maskLoading: false,
-      country: ANY, region: null,              // no geographic prior until the user taps one
+      exifGps: it.gps || null, loc: exifLoc(it.gps),   // EXIF GPS applies at once; otherwise Any
+      priorStatus: '', rankSeq: 0,
       suggest: [], pred: null, selected: '', userPicked: false,
     }
     const existing = byId(it.id)
@@ -439,14 +482,21 @@ async function useAll(r) {
 }
 
 // per-photo location change ("Where taken?" row)
-function setCountry(r, v) { r.country = v || ANY; if (r.country !== 'Ecuador') r.region = null; rerank(r) }
-function setRegion(r, v) { r.region = v; rerank(r) }
-const isSuggestActive = (r, s) => r.country === s.country && sideOf(r.region) === s.side
+function setCountry(r, name) {
+  const c = countries.value.find((x) => x.name === name)
+  setLoc(r, c ? { mode: 'country', iso: c.iso } : null)
+}
+// Ecuador region, or null for the whole country
+function setRegion(r, region) { setLoc(r, region ? { mode: 'region', region } : { mode: 'country', iso: 'EC' }) }
+function setPin(r, p) { setLoc(r, { mode: 'coords', lat: p.lat, lon: p.lon, source: 'map' }) }
+function useExif(r) { if (r.exifGps) setLoc(r, exifLoc(r.exifGps)) }
+const isSuggestActive = (r, s) => (s.kind === 'region'
+  ? r.loc?.mode === 'region' && r.loc.region === s.region
+  : r.loc?.mode === 'country' && r.loc.iso === s.iso)
 // tapping the active suggestion returns to Any
 function applySuggestion(r, s) {
-  if (isSuggestActive(r, s)) { r.country = ANY; r.region = null }
-  else { r.country = s.country; r.region = s.country === 'Ecuador' ? regionForSide(s.side) : null }
-  rerank(r)
+  if (isSuggestActive(r, s)) setLoc(r, null)
+  else setLoc(r, s.kind === 'region' ? { mode: 'region', region: s.region } : { mode: 'country', iso: s.iso })
 }
 
 // ---- photo tabs + selection ----
@@ -600,10 +650,11 @@ const showAbout = ref(false)
             <div class="res-grid">
               <div class="area-cands">
                 <div class="cands-side">
-                  <AILocationChips :suggest="active.suggest" :country="active.country" :region="active.region"
-                    :country-options="countryOptions" :region-options="REGION_OPTS"
+                  <AILocationChips :key="active.id" :suggest="active.suggest" :loc="active.loc" :exif-gps="active.exifGps"
+                    :country-options="countryOptions" :status="active.priorStatus"
                     @any="resetLocation(active)" @suggest="(s) => applySuggestion(active, s)"
-                    @set-country="(v) => setCountry(active, v)" @set-region="(v) => setRegion(active, v)" />
+                    @set-country="(v) => setCountry(active, v)" @set-region="(v) => setRegion(active, v)"
+                    @set-pin="(p) => setPin(active, p)" @use-exif="useExif(active)" />
                 </div>
                 <div class="cands-main">
                   <div class="col-title" id="preds-lbl">Predictions</div>
@@ -637,7 +688,7 @@ const showAbout = ref(false)
 
               <div v-if="!isMobile" class="area-ref">
                 <AIReferencePanel :taxon="active.selected" :prob="selectedInfo?.prob ?? null" :members="selectedMembers" former-names
-                  :country="active.country !== ANY ? active.country : ''" />
+                  :country="refCountry(active)" />
               </div>
             </div>
           </template>
@@ -660,7 +711,7 @@ const showAbout = ref(false)
           </div>
           <div class="sheet-scroll">
             <AIReferencePanel ref="sheetPanel" compact former-names :taxon="active.selected" :prob="selectedInfo?.prob ?? null"
-              :members="selectedMembers" :country="active.country !== ANY ? active.country : ''" />
+              :members="selectedMembers" :country="refCountry(active)" />
           </div>
         </div>
       </div>
@@ -765,6 +816,11 @@ const showAbout = ref(false)
             research-grade iNaturalist and museum photos from GBIF, used for training only.
           </p>
           <p class="mb-1"><strong>Changelog</strong></p>
+          <p><strong>27 September 2026:</strong> The location prior now uses GBIF occurrence records dated before
+          12 February 2026 near where the photo was taken: GPS from the photo, a map pin, a country, or a region of
+          Ecuador (Costa, Sierra, Oriente, Galapagos). On 3,694 field photos from observers not used for tuning, Species
+          Top-1 is 85.08% with no location, 87.87% with the country and 88.71% with coordinates. It favours commonly
+          recorded species, so rare species gain little. Photo GPS is read in your browser and is not uploaded.</p>
           <p><strong>27 September 2026:</strong> Fixed the location filter: it had treated a missing checklist record as
           proof that a species is absent, so choosing the correct country lowered accuracy. It now also uses GBIF records and
           down-weights unrecorded species more gently, and the side of the Andes only marks species as off-region. With the

@@ -1,13 +1,10 @@
-// Client-side geographic prior for the AI ID tab. Re-ranks the model's raw
-// per-leaf probabilities: taxa not recorded in the chosen country are down-weighted
-// (x eps). Country records are the region checklist merged with GBIF country
-// presence (mergeGbifPresence), because the checklist alone misses many true
-// occurrences: on the field benchmark it marked the true species absent from its
-// own country for 44.5% of photos and a hard x0.02 penalty cut Top-1 from 86.0% to
-// 73.5%. The merged records with x0.3 gave 86.7% (reports/geo_prior_audit_20260927).
-// Side of the Andes only drives the off-region tag; it no longer re-ranks, since
-// it lowered accuracy in every Ecuador zone. Never up-weights.
-import { getChecklist } from '../composables/useCurationData.js'
+// Country helpers for the AI Identifier location prior. The prior itself is the
+// spatial GBIF prior in geoSpatial.js. The checklist rule below (taxa not recorded
+// in the chosen country x eps, checklist merged with GBIF country presence) is
+// only the fallback when the spatial files cannot load; mergeGbifPresence also
+// feeds the Collection tab's checklist (useCurationData.js). On the field photos
+// the checklist rule at x0.3 gave 86.7% species Top-1, the spatial country prior
+// 88.6% (reports/geo_spatial_prior_20260927). Never up-weights.
 import { checklistNames, taxonNamesVersion } from './taxonNames.js'
 
 export const DEFAULT_EPS = 0.3
@@ -91,92 +88,53 @@ export function mergeGbifPresence(checklist, presence, canonical = (n) => n) {
   return out
 }
 
-// Guess the most likely region from the model's RAW (un-weighted) leaf
-// probabilities, by asking the checklist where those taxa actually occur:
-//   score(region) = Σ_leaf  P(leaf) · 1[leaf documented in region]
-// Returns { country, countryConf, side, sideConf } — '' when undecidable. Used
-// for the "I don't know — guess from photo" option. Side is only inferred among
-// leaves present in the guessed country (defaults to Ecuador), since the East/
-// West split is an Ecuador concept here.
-export function guessRegion(checklist, rawLeaves, topN = 6) {
-  const total = rawLeaves.reduce((a, [, p]) => a + p, 0) || 1
-  const countryMass = new Map()
-  for (const [name, p] of rawLeaves) {
-    const e = entryFor(checklist, name)
-    if (!e || !e.countries) continue
-    for (const c in e.countries) {
-      if (e.countries[c] > 0) countryMass.set(c, (countryMass.get(c) || 0) + p)
-    }
+// Top countries for one-tap picking, from the photo's own predictions: each
+// country scores the summed probability of the photo's top species recorded
+// there in the country presence table (gallery checklist or any GBIF record,
+// ISO2 codes, current names; true country in the top 3 for 89.9% of the field
+// photos). presence = { "Genus species": ["EC", ...] }. Returns
+// [{ kind: 'country', iso, score }]; suggestions are shown, never applied.
+export function speciesProbs(rawLeaves) {
+  const m = new Map()
+  for (const [name, p] of rawLeaves || []) {
+    const sp = String(name).trim().split(/\s+/).slice(0, 2).join(' ')
+    m.set(sp, (m.get(sp) || 0) + p)
   }
-  // Ranked list of the countries the top predictions are recorded from
-  // (share of prediction mass documented in each), so the user can see and pick.
-  const countries = [...countryMass.entries()]
-    .map(([name, m]) => [name, m / total])
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, topN)
-  const country = countries[0]?.[0] || ''
-  const countryConf = countries[0]?.[1] || 0
-
-  // Side: weigh East vs West among leaves present in the guessed country.
-  const sideCountry = country || 'Ecuador'
-  let east = 0, west = 0
-  for (const [name, p] of rawLeaves) {
-    const e = entryFor(checklist, name)
-    if (!e) continue
-    const inCountry = !e.countries || e.countries[sideCountry] > 0
-    if (!inCountry) continue
-    if (e.East > 0) east += p
-    if (e.West > 0) west += p
-  }
-  let side = '', sideConf = 0
-  const sideSum = east + west
-  if (sideSum > 0) {
-    side = east >= west ? 'East' : 'West'
-    sideConf = Math.max(east, west) / sideSum
-  }
-  return { country, countryConf, countries, side, sideConf }
+  return [...m.entries()].sort((a, b) => b[1] - a[1])
 }
 
-// Top location suggestions for one-tap picking. Same evidence as guessRegion,
-// but Ecuador is split by side of the Andes so "Ecuador · East of Andes" can be
-// offered directly. Each score is the share of raw prediction mass documented
-// there. Suggestions are shown, never applied automatically.
-export function suggestLocations(checklist, rawLeaves, n = 3) {
-  const total = rawLeaves.reduce((a, [, p]) => a + p, 0) || 1
+export function suggestLocations(presence, rawLeaves, n = 3, top = 200) {
+  if (!presence) return []
+  const sp = speciesProbs(rawLeaves)
+  const total = sp.reduce((a, [, p]) => a + p, 0) || 1
   const mass = new Map()
-  const add = (key, country, side, p) => {
-    const cur = mass.get(key) || { country, side, score: 0 }
-    cur.score += p
-    mass.set(key, cur)
+  for (const [name, p] of sp.slice(0, top)) {
+    for (const c of presence[name] || []) mass.set(c, (mass.get(c) || 0) + p)
   }
-  for (const [name, p] of rawLeaves) {
-    const e = entryFor(checklist, name)
-    if (!e || !e.countries) continue
-    for (const c in e.countries) {
-      if (!(e.countries[c] > 0)) continue
-      if (c === 'Ecuador' && (e.East > 0 || e.West > 0)) {
-        if (e.East > 0) add('Ecuador|East', c, 'East', p)
-        if (e.West > 0) add('Ecuador|West', c, 'West', p)
-      } else add(c, c, '', p)
-    }
-  }
-  return [...mass.values()]
-    .map((m) => ({ ...m, score: m.score / total }))
+  return [...mass.entries()]
+    .map(([iso, m]) => ({ kind: 'country', iso, score: m / total }))
     .sort((a, b) => b.score - a.score)
     .slice(0, n)
 }
 
-// Sorted list of countries present in the checklist (for the Country dropdown).
-let _countriesPromise = null
-export function loadCountries() {
-  if (_countriesPromise) return _countriesPromise
-  _countriesPromise = getChecklist().then((ck) => {
-    const set = new Set()
-    for (const k in ck) {
-      const c = ck[k] && ck[k].countries
-      if (c) for (const name in c) set.add(name)
-    }
-    return Array.from(set).sort()
-  })
-  return _countriesPromise
+// ISO2 -> English country name (Intl), e.g. 'EC' -> 'Ecuador'.
+let _names = null
+export function countryName(iso) {
+  if (!iso) return ''
+  try {
+    _names = _names || new Intl.DisplayNames(['en'], { type: 'region' })
+    return _names.of(iso) || iso
+  } catch { return iso }
+}
+
+// Gallery checklist country names that differ from the English names, used only
+// by the fallback checklist rule when the spatial prior cannot load.
+const CHECKLIST_NAME = { GF: 'French-Guiana', SR: 'Surinam', US: 'USA', SZ: 'Swaziland' }
+export const checklistCountry = (iso) => CHECKLIST_NAME[iso] || countryName(iso)
+
+// Countries in the presence table, [{ iso, name }] sorted by name (Country dropdown).
+export function countryList(presence) {
+  const set = new Set()
+  for (const cs of Object.values(presence || {})) for (const c of cs) set.add(c)
+  return [...set].map((iso) => ({ iso, name: countryName(iso) })).sort((a, b) => a.name.localeCompare(b.name))
 }

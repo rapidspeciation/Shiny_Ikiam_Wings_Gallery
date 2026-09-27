@@ -25,3 +25,13 @@ test('About shows current held-out results and dated history separately', () => 
     'from 67.50% to 73.37% (+5.87 pp)', 'from 85.59% to 92.05% (+6.46 pp)', 'from 92.04% to 95.22% (+3.18 pp)',
     'from 73.37% to 73.92% (+0.55 pp)', 'from 73.92% to 85.15% (+11.23 pp)', 'Agraulis vanillae is now Dione vanillae']) assert.ok(about.includes(copy), copy)
 })
+
+test('About changelog describes the spatial location prior with held-out numbers', () => {
+  const about = readFileSync('src/components/AIIdTab.vue', 'utf8')
+  const log = about.split('<strong>Changelog</strong>')[1]
+  const first = log.split('<p><strong>')[1]
+  assert.ok(first.startsWith('27 September 2026:</strong> The location prior now uses GBIF occurrence records'))
+  for (const copy of ['dated before\n          12 February 2026', '85.08% with no location', '87.87% with the country',
+    '88.71% with coordinates', 'Costa, Sierra, Oriente, Galapagos', '3,694 field photos']) assert.ok(first.includes(copy), copy)
+  assert.doesNotMatch(first, /—|licen[cs]e/i)
+})

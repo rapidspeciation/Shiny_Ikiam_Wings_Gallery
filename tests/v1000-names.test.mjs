@@ -116,9 +116,10 @@ test('a V1000 response ranks, tags off-region and groups genera through the old-
     const gt = predict.rankLeaves(raw.leaves, CHECKLIST, { country: 'Guatemala', side: '' })
     assert.equal(row(gt.species_all, 'Dione vanillae')[2], 1)
 
-    // location suggestions use the Agraulis vanillae records
-    const sug = geo.suggestLocations(CHECKLIST, raw.leaves)
-    assert.deepEqual([sug[0].country, sug[0].side], ['Ecuador', 'East'])
+    // location suggestions use the presence table under current names (leaves are canonical)
+    const sug = geo.suggestLocations({ 'Dione vanillae': ['EC'], 'Agraulis vanillae': ['GT'] }, raw.leaves)
+    assert.deepEqual([sug[0].kind, sug[0].iso], ['country', 'EC'])
+    assert.ok(!sug.some((x) => x.iso === 'GT'))
 
     // tree: Dione vanillae groups under Dione, no Agraulis genus, no old names anywhere
     const t = tree.buildTree(ec)

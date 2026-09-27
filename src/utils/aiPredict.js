@@ -201,21 +201,47 @@ const speciesOf = (t) => t.split(/\s+/).slice(0, 2).join(' ')
 const isSubsp = (t) => t.split(/\s+/).length >= 3
 const round = (x) => Math.round(x * 1e4) / 1e4
 
+// Tag text for taxa with (almost) no GBIF records at the chosen location.
+export const OOR_LABEL = { coords: 'not recorded near here', country: 'off-region', region: 'off-region', checklist: 'off-region' }
+const OOR_TITLE = {
+  coords: 'Few or no GBIF records within about 100 km',
+  country: 'Few or no GBIF records in this country',
+  region: 'Few or no GBIF records in this region',
+  checklist: 'Not recorded in the selected region',
+}
+
 // Pure re-rank: apply the geographic prior to raw leaves, renormalise, then
 // marginalise into the { genus, species, subspecies, species_all, side } shape
-// PredictionPanel uses. No I/O — safe to call on every country/side change.
+// PredictionPanel uses. No I/O, safe to call on every location change.
+// opts.prior: spatial prior from geoSpatial.js (coordinates, country or Ecuador
+// region); each leaf gets its species' weight. Without it, opts.country applies
+// the checklist rule (fallback when the spatial files cannot load).
 // topK caps the genus/species/subspecies lists; the *_all lists keep every taxon
 // (the AI Identifier's "+ all species / subspecies" rows browse them).
-export function rankLeaves(rawLeaves, checklist, { country = '', side = '', eps = DEFAULT_EPS, topK = 8 } = {}) {
+export function rankLeaves(rawLeaves, checklist, { country = '', side = '', eps = DEFAULT_EPS, topK = 8, prior = null } = {}) {
   // 1. weight + renormalise
   const weighted = rawLeaves.map(([name, p]) => {
-    const w = geoWeight(entryFor(checklist, name), country, side, eps)
+    const w = prior ? prior.weight(speciesOf(name)) : geoWeight(entryFor(checklist, name), country, side, eps)
     return { name, p: p * w }
   })
   const sum = weighted.reduce((a, b) => a + b.p, 0) || 1
   weighted.forEach((l) => (l.p = l.p / sum))
 
-  const oorOf = (taxon) => isOffRegion(checklist, taxon, country, side, eps)
+  // off-region tags. Spatial: a species (and its subspecies) is tagged when g < LOW_G;
+  // a genus when none of its species known to the prior has records there.
+  let oorOf
+  if (prior) {
+    const genusLow = new Map()   // genus -> true (all known species low) / false
+    for (const { name } of weighted) {
+      const sp = speciesOf(name), ge = genusOf(name)
+      if (!prior.known(sp)) continue
+      genusLow.set(ge, (genusLow.get(ge) ?? true) && prior.low(sp))
+    }
+    oorOf = (taxon) => (taxon.includes(' ') ? prior.low(speciesOf(taxon)) : genusLow.get(taxon) === true)
+  } else {
+    oorOf = (taxon) => isOffRegion(checklist, taxon, country, side, eps)
+  }
+  const tagMode = prior ? prior.mode : (country ? 'checklist' : '')
 
   // 2. marginalise
   const spMap = new Map(), geMap = new Map()
@@ -251,6 +277,9 @@ export function rankLeaves(rawLeaves, checklist, { country = '', side = '', eps 
     subspecies: subs.slice(0, topK),
     subspecies_all: subs,
     side: side || '',
+    prior_mode: prior ? prior.mode : '',
+    oor_label: OOR_LABEL[tagMode] || 'off-region',
+    oor_title: OOR_TITLE[tagMode] || OOR_TITLE.checklist,
     n_views: 1,
   }
 }
