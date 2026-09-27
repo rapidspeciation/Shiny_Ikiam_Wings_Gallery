@@ -706,12 +706,13 @@ const showAbout = ref(false)
           <section aria-labelledby="field-benchmark-title">
             <p id="field-benchmark-title" class="mb-1"><strong>AI Identifier accuracy</strong> on 4,566 held-out
             field photos from GBIF (iNaturalist Research Grade, 629 species from Ecuador, Colombia and Peru),
-            recorded between 12 February and 7 September 2026, after BioCLIP 2.5-H was released. No location selected:</p>
+            recorded between 12 February and 7 September 2026, after BioCLIP 2.5-H was released. No location selected;
+            identifications scored under current names:</p>
             <table id="field-benchmark" class="table table-sm table-bordered w-auto small">
               <thead><tr><th>Rank</th><th>Photographs</th><th>Top-1</th><th>Top-5</th></tr></thead>
               <tbody>
-                <tr><td>Species</td><td>4,566</td><td>85.15%</td><td>96.12%</td></tr>
-                <tr><td>Genus</td><td>4,566</td><td>94.61%</td><td>98.47%</td></tr>
+                <tr><td>Species</td><td>4,566</td><td>85.74%</td><td>96.23%</td></tr>
+                <tr><td>Genus</td><td>4,566</td><td>95.38%</td><td>98.45%</td></tr>
               </tbody>
             </table>
           </section>
@@ -764,6 +765,10 @@ const showAbout = ref(false)
             research-grade iNaturalist and museum photos from GBIF, used for training only.
           </p>
           <p class="mb-1"><strong>Changelog</strong></p>
+          <p><strong>27 September 2026:</strong> Updated AI Identifier names to the current taxonomy, following Butterflies of
+          America: 246 duplicate, misspelled or outdated species names were merged into their valid names (for example
+          Agraulis vanillae is now Dione vanillae), and non-adult and mislabelled training photos were removed. Former names
+          are shown next to renamed species. Accuracy is unchanged when test photos are scored under the same names.</p>
           <p><strong>27 September 2026:</strong> Retrained the AI Identifier classifier with about 457,000 additional GBIF
           photos (research-grade iNaturalist observations and museum specimens recorded before 12 February 2026, up to
           1,000 per species). On the GBIF field photos, Species Top-1 rose from 73.92% to 85.15% (+11.23 pp) and Top-5
