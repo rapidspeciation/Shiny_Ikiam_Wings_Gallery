@@ -1,0 +1,203 @@
+// Field photos from iNaturalist (public API, CORS open, no key) for the AI
+// Identifier reference panel and the candidate-row thumbnails.
+//
+// Gentle on rate limits: every request goes through one serial queue that starts
+// at most one request per `minIntervalMs` (default 1 s); the selected taxon can
+// jump the queue (priority). Results are cached per taxon + place in memory and in
+// sessionStorage, and identical in-flight requests are shared.
+//
+// Taxon checks: iNat's taxon_name also returns descendants (a species query can
+// return subspecies observations) and may resolve a synonym. We keep observations
+// whose taxon is the requested one or a descendant of it. For a species request we
+// also accept a species-or-lower taxon under another name (a synonym) and report it
+// as `resolvedAs`; for a subspecies request anything else is dropped so the caller
+// falls back to the species.
+
+const API = 'https://api.inaturalist.org/v1'
+const CACHE_PREFIX = 'inat-photos:v1:'
+const PER_PAGE = 12
+const SPECIES_OR_LOWER = new Set(['species', 'hybrid', 'subspecies', 'variety', 'form', 'infrahybrid'])
+
+export const speciesOf = (t) => String(t || '').trim().split(/\s+/).slice(0, 2).join(' ')
+export const isSubspecies = (t) => String(t || '').trim().split(/\s+/).length >= 3
+
+// iNat photo URLs end in /square.jpg; swap the size segment for other sizes.
+export function photoSize(url, size) {
+  return String(url || '').replace(/\/(square|thumb|small|medium|large|original)\.(jpe?g|png|gif)/i, `/${size}.$2`)
+}
+
+export function inatSearchUrl(name) {
+  return `https://www.inaturalist.org/observations?taxon_name=${encodeURIComponent(name)}&quality_grade=research`
+}
+
+// 'match' = requested taxon or a descendant, 'synonym' = accepted under another
+// name (species requests only), null = reject.
+export function taxonMatch(requested, obsTaxon) {
+  if (!obsTaxon || !obsTaxon.name) return null
+  if (obsTaxon.iconic_taxon_name && obsTaxon.iconic_taxon_name !== 'Insecta') return null
+  const want = requested.trim().toLowerCase()
+  const got = obsTaxon.name.trim().toLowerCase()
+  if (got === want || got.startsWith(want + ' ')) return 'match'
+  if (!isSubspecies(requested) && SPECIES_OR_LOWER.has(obsTaxon.rank)) return 'synonym'
+  return null
+}
+
+// Pure: API response -> { photos, resolvedAs }.
+export function parseObservations(requested, json) {
+  const matched = [], synonyms = []
+  for (const obs of json?.results || []) {
+    const photo = obs?.photos?.[0]
+    if (!photo?.url) continue
+    const kind = taxonMatch(requested, obs.taxon)
+    if (!kind) continue
+    const entry = {
+      id: obs.id,
+      url: photoSize(photo.url, 'medium'),
+      thumb: photoSize(photo.url, 'square'),
+      small: photoSize(photo.url, 'small'),
+      place: obs.place_guess || '',
+      observer: obs.user?.name || obs.user?.login || '',
+      link: obs.uri || (obs.id ? `https://www.inaturalist.org/observations/${obs.id}` : ''),
+      taxon: obs.taxon.name,
+    }
+    ;(kind === 'match' ? matched : synonyms).push(entry)
+  }
+  if (matched.length) return { photos: matched, resolvedAs: '' }
+  if (synonyms.length) return { photos: synonyms, resolvedAs: speciesOf(synonyms[0].taxon) }
+  return { photos: [], resolvedAs: '' }
+}
+
+function defaultStorage() {
+  try { return typeof sessionStorage !== 'undefined' ? sessionStorage : null } catch { return null }
+}
+
+export function createInatClient({
+  fetchImpl = (...a) => globalThis.fetch(...a),
+  storage = defaultStorage(),
+  minIntervalMs = 1000,
+  timeoutMs = 12000,
+  now = () => Date.now(),
+  sleep = (ms) => new Promise((r) => setTimeout(r, ms)),
+} = {}) {
+  const memory = new Map()      // key -> Promise
+  const queue = []              // pending { run, resolve, reject }
+  let pumping = false
+  let lastStart = -Infinity
+
+  async function pump() {
+    if (pumping) return
+    pumping = true
+    try {
+      while (queue.length) {
+        const job = queue.shift()
+        const wait = lastStart + minIntervalMs - now()
+        if (wait > 0) await sleep(wait)
+        lastStart = now()
+        try { job.resolve(await job.run()) } catch (e) { job.reject(e) }
+      }
+    } finally {
+      pumping = false
+    }
+  }
+  function schedule(run, priority = false) {
+    return new Promise((resolve, reject) => {
+      const job = { run, resolve, reject }
+      if (priority) queue.unshift(job); else queue.push(job)
+      pump()
+    })
+  }
+
+  function readStore(key) {
+    try { const s = storage?.getItem(CACHE_PREFIX + key); return s ? JSON.parse(s) : null } catch { return null }
+  }
+  function writeStore(key, value) {
+    try { storage?.setItem(CACHE_PREFIX + key, JSON.stringify(value)) } catch { /* quota or disabled */ }
+  }
+
+  // Memoise per key; failures are not cached so a later call can retry.
+  function cached(key, loader) {
+    if (memory.has(key)) return memory.get(key)
+    const stored = readStore(key)
+    if (stored) { const p = Promise.resolve(stored); memory.set(key, p); return p }
+    const p = loader().then((v) => { writeStore(key, v); return v })
+    p.catch(() => memory.delete(key))
+    memory.set(key, p)
+    return p
+  }
+
+  async function getJson(url, priority) {
+    return schedule(async () => {
+      // a stalled request must not block the serial queue
+      const ctrl = typeof AbortController === 'function' ? new AbortController() : null
+      const timer = ctrl ? setTimeout(() => ctrl.abort(), timeoutMs) : null
+      try {
+        const res = await fetchImpl(url, { headers: { Accept: 'application/json' }, signal: ctrl?.signal })
+        if (!res.ok) throw new Error(`iNaturalist ${res.status}`)
+        return await res.json()
+      } finally {
+        if (timer) clearTimeout(timer)
+      }
+    }, priority)
+  }
+
+  // Country name -> iNat place id (country-level place), or null.
+  function resolvePlace(country, { priority = false } = {}) {
+    if (!country) return Promise.resolve(null)
+    return cached(`place:${country}`, async () => {
+      const json = await getJson(`${API}/places/autocomplete?q=${encodeURIComponent(country)}`, priority)
+      const list = json?.results || []
+      const lc = country.toLowerCase()
+      const hit = list.find((p) => p.admin_level === 0 && String(p.name).toLowerCase() === lc)
+        || list.find((p) => p.admin_level === 0)
+      return hit ? hit.id : null
+    })
+  }
+
+  function observations(name, placeId, { priority = false } = {}) {
+    return cached(`obs:${name}|${placeId || ''}`, async () => {
+      const params = new URLSearchParams({
+        taxon_name: name, quality_grade: 'research', photos: 'true',
+        per_page: String(PER_PAGE), order_by: 'votes',
+      })
+      if (placeId) params.set('place_id', String(placeId))
+      const json = await getJson(`${API}/observations?${params}`, priority)
+      return parseObservations(name, json)
+    })
+  }
+
+  // Field photos for a taxon. Subspecies with no photos fall back to the species;
+  // a country filter with no photos falls back to all places.
+  // -> { photos, requested, shownTaxon, speciesFallback, placeFallback, place, resolvedAs }
+  async function fieldPhotos(taxon, { country = '', priority = false } = {}) {
+    const requested = String(taxon || '').trim()
+    const empty = { photos: [], requested, shownTaxon: requested, speciesFallback: false, placeFallback: false, place: '', resolvedAs: '' }
+    if (!requested) return empty
+    let placeId = null
+    if (country) { try { placeId = await resolvePlace(country, { priority }) } catch { placeId = null } }
+    const names = isSubspecies(requested) ? [requested, speciesOf(requested)] : [requested]
+    for (const name of names) {
+      const tries = placeId ? [placeId, null] : [null]
+      for (const pid of tries) {
+        const r = await observations(name, pid, { priority })
+        if (r.photos.length) {
+          return {
+            photos: r.photos, requested, shownTaxon: name, resolvedAs: r.resolvedAs,
+            speciesFallback: name !== requested,
+            placeFallback: !!placeId && !pid,
+            place: pid ? country : '',
+          }
+        }
+      }
+    }
+    return empty
+  }
+
+  return { fieldPhotos, resolvePlace, observations, _queue: queue }
+}
+
+let _client = null
+export function inatClient() {
+  if (!_client) _client = createInatClient()
+  return _client
+}
+export const fieldPhotos = (taxon, opts) => inatClient().fieldPhotos(taxon, opts)

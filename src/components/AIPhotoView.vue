@@ -60,10 +60,11 @@ function initZoom() {
   pz._wheelHandler = wheelHandler
   layer.value.addEventListener('panzoomzoom', (e) => {
     const s = e.detail.scale
+    if (!pz) return
     pz.setOptions(s > 1.05 ? { touchAction: 'none', cursor: 'move' } : { touchAction: 'pan-y', cursor: 'grab' })
   })
   layer.value.addEventListener('panzoomreset', () => {
-    pz.setOptions({ touchAction: 'pan-y', cursor: 'grab' })
+    pz?.setOptions({ touchAction: 'pan-y', cursor: 'grab' })
   })
 }
 function destroyZoom() {

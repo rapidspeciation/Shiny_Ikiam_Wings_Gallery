@@ -94,7 +94,7 @@ async function gbifOccurrenceMedia(key, museumOnly, max) {
         url: m.identifier,
         thumb: m.identifier,
         caption: occ.basisOfRecord === 'PRESERVED_SPECIMEN' ? 'museum specimen' : 'observation',
-        credit: `${m.rightsHolder || occ.recordedBy || 'GBIF'} · ${m.license ? licenseShort(m.license) : 'see GBIF'}`,
+        credit: m.rightsHolder || occ.recordedBy || 'GBIF',
         link: occ.key ? `https://www.gbif.org/occurrence/${occ.key}` : 'https://www.gbif.org',
         source: 'gbif',
       })
@@ -102,11 +102,6 @@ async function gbifOccurrenceMedia(key, museumOnly, max) {
     }
   }
   return out
-}
-
-function licenseShort(l) {
-  const m = String(l).match(/(CC[\s_-]?(?:BY|0)[\w-]*)/i)
-  return m ? m[1].replace(/_/g, '-') : 'CC'
 }
 
 async function gbifPhotos(taxon, max = 6) {

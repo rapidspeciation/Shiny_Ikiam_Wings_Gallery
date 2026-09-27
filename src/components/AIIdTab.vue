@@ -5,14 +5,19 @@
 // can change its location after the fact (or tap a suggested one) with no re-inference.
 // Photos stream in one-by-one as the model finishes each (concurrency pool). The
 // YOLO wing-crop returns selectable masks: the largest runs on Identify, others run
-// lazily when their bbox is clicked. Reference photos (Sanger first, GBIF fallback)
-// are shown for visual comparison.
-import { ref, computed, watch, onMounted, onActivated, onDeactivated, onBeforeUnmount } from 'vue'
-import FilterSelect from './FilterSelect.vue'
-import PredictionPanel from './PredictionPanel.vue'
-import AIReferenceGallery from './AIReferenceGallery.vue'
+// lazily when their bbox is clicked.
+//
+// Results view, per photo (photos switch via tabs): a flat species-first candidate
+// list with the "Where taken?" chips (AICandidateList), the uploaded photo (sticky),
+// and a reference panel for the selected taxon with iNaturalist field photos and
+// museum photos (AIReferencePanel). Phones get a sticky mini-bar and a bottom sheet
+// that pins the user's photo above the reference photos.
+import { ref, computed, watch, nextTick, onMounted, onActivated, onDeactivated, onBeforeUnmount } from 'vue'
+import AICandidateList from './AICandidateList.vue'
+import AIReferencePanel from './AIReferencePanel.vue'
 import AIPhotoView from './AIPhotoView.vue'
 import InferenceProgress from './InferenceProgress.vue'
+import { speciesCandidates, pickSelection, taxonInfo, fmtPct } from '../utils/aiCandidates.js'
 import { predictStream, predictOne, rankLeaves, getStatus, makeJobId, wakeBackend, HAS_BACKEND, PREDICTION_CACHE_VERSION } from '../utils/aiPredict.js'
 import { loadCountries, suggestLocations } from '../utils/geoPrior.js'
 import { getChecklist } from '../composables/useCurationData.js'
@@ -75,10 +80,11 @@ function removeItem(id) {
   if (i >= 0) { if (items.value[i].previewUrl) URL.revokeObjectURL(items.value[i].previewUrl); items.value.splice(i, 1) }
   const ri = results.value.findIndex((x) => x.id === id)
   if (ri >= 0) results.value.splice(ri, 1)
+  if (activeId.value === id) activeId.value = results.value[0]?.id || ''
 }
 function clearAll() {
   items.value.forEach((it) => it.previewUrl && URL.revokeObjectURL(it.previewUrl))
-  items.value = []; results.value = []; errorMsg.value = ''
+  items.value = []; results.value = []; errorMsg.value = ''; activeId.value = ''; sheetOpen.value = false
 }
 const validItems = computed(() => items.value.filter((i) => i.status === 'ready' && i.blob))
 
@@ -107,6 +113,11 @@ onMounted(async () => {
   window.addEventListener('dragleave', onWinDragLeave)
   window.addEventListener('drop', onWinDrop)
   window.addEventListener('paste', onPaste)
+  if (typeof window.matchMedia === 'function') {
+    mobileMq = window.matchMedia(MOBILE_QUERY)
+    isMobile.value = mobileMq.matches
+    mobileMq.addEventListener?.('change', onMq)
+  }
   checklist.value = await getChecklist()
   for (const r of results.value) if (r.leaves) r.suggest = suggestLocations(checklist.value, r.leaves)
   countryOptions.value = [ANY, ...(await loadCountries())]
@@ -122,22 +133,29 @@ onBeforeUnmount(() => {
   window.removeEventListener('dragleave', onWinDragLeave)
   window.removeEventListener('drop', onWinDrop)
   window.removeEventListener('paste', onPaste)
+  mobileMq?.removeEventListener?.('change', onMq)
+  lockScroll(false)
   stopPolling()
   items.value.forEach((it) => it.previewUrl && URL.revokeObjectURL(it.previewUrl))
 })
 
-// ---- geographic prior (only applied when the user selects a location) ----
+// ---- geographic prior (only applied when the user taps a location per photo) ----
+// Each result starts at Any (no prior); the "Where taken?" chips set r.country/r.region.
 const REGION_OPTS = ['West of Andes (Pacific / Chocó)', 'East of Andes (Amazon)']
 const ANY = 'Any'
-const country = ref(ANY)
-const region = ref(null)
 const countryOptions = ref([ANY])
 const checklist = ref({})
 const sideOf = (r) => (r?.startsWith('West') ? 'West' : r?.startsWith('East') ? 'East' : '')
 const regionForSide = (s) => (s === 'West' ? REGION_OPTS[0] : s === 'East' ? REGION_OPTS[1] : null)
 const cParam = (c) => (c && c !== ANY ? c : '')
-const hasLocation = computed(() => country.value !== ANY || !!region.value)
-function resetLocation() { country.value = ANY; region.value = null }
+const hasLocation = (r) => !!r && (r.country !== ANY || !!r.region)
+function resetLocation(r) { r.country = ANY; r.region = null; rerank(r) }
+
+// ---- layout: phones get the mini-bar + bottom sheet ----
+const MOBILE_QUERY = '(max-width: 767.98px)'
+const isMobile = ref(false)
+let mobileMq = null
+function onMq(e) { isMobile.value = e.matches; if (!e.matches) closeSheet() }
 
 // ---- run ----
 const results = ref([])   // see placeholder shape in run()
@@ -286,8 +304,12 @@ const progress = computed(() => {
   return null
 })
 
+// Top species list size the candidate column can show ("Show more" reaches 10).
+const TOP_SPECIES = 10
 function rerank(r) {
-  r.pred = rankLeaves(r.leaves, checklist.value, { country: cParam(r.country), side: sideOf(r.region) })
+  r.pred = rankLeaves(r.leaves, checklist.value, { country: cParam(r.country), side: sideOf(r.region), topK: TOP_SPECIES })
+  // keep a user-picked taxon while it stays in the list, else follow the top species
+  r.selected = pickSelection(speciesCandidates(r.pred, TOP_SPECIES), r.selected, r.userPicked)
 }
 // Re-rank after new leaves (upload or mask switch) and refresh the location suggestions.
 function applyLeaves(r, leaves) {
@@ -318,6 +340,7 @@ async function run() {
   warmActive.value = false                              // the run notice takes over
   if (readyTimer) { clearTimeout(readyTimer); readyTimer = null }
   batchTotal.value = pending.length; batchDone.value = 0
+  activeId.value = pending[0].id                        // show the first new photo's results
   const jobs = pending.map((it) => makeJobId(it.id))
   startPolling()
   for (const it of pending) {
@@ -325,8 +348,8 @@ async function run() {
       id: it.id, filename: it.name, previewUrl: it.previewUrl, file: it,
       loading: true, error: null, mock: false, leaves: null,
       boxes: [], unionBox: null, usedIndex: -1, predCache: {}, maskLoading: false,
-      country: country.value, region: country.value === 'Ecuador' ? region.value : null,
-      suggest: [], pred: null,
+      country: ANY, region: null,              // no geographic prior until the user taps one
+      suggest: [], pred: null, selected: '', userPicked: false,
     }
     const existing = byId(it.id)
     if (existing) Object.assign(existing, placeholder)
@@ -411,29 +434,62 @@ async function useAll(r) {
   }
 }
 
-// per-card location change
-function setCountry(r, v) { r.country = v; if (v !== 'Ecuador') r.region = null; rerank(r) }
+// per-photo location change ("Where taken?" row)
+function setCountry(r, v) { r.country = v || ANY; if (r.country !== 'Ecuador') r.region = null; rerank(r) }
 function setRegion(r, v) { r.region = v; rerank(r) }
-const suggestLabel = (s) => (s.side ? `${s.country} · ${s.side} of Andes` : s.country)
 const isSuggestActive = (r, s) => r.country === s.country && sideOf(r.region) === s.side
+// tapping the active suggestion returns to Any
 function applySuggestion(r, s) {
   if (isSuggestActive(r, s)) { r.country = ANY; r.region = null }
   else { r.country = s.country; r.region = s.country === 'Ecuador' ? regionForSide(s.side) : null }
   rerank(r)
 }
 
-// Candidate groups for the reference gallery: top predicted species, each fetched
-// at subspecies level when confident, else species level.
-function groupsFor(r) {
-  const out = []
-  for (const sp of (r.pred?.species || []).slice(0, 3)) {
-    const [name, prob, , subs] = sp
-    const topSub = subs && subs[0]
-    const taxon = topSub && topSub[1] >= 0.05 ? topSub[0] : name
-    out.push({ id: name, label: name, sublabel: `${Math.round(prob * 100)}%`, taxon })
-  }
-  return out
+// ---- photo tabs + selection ----
+const activeId = ref('')
+const active = computed(() => results.value.find((r) => r.id === activeId.value) || results.value[0] || null)
+function selectTaxon(r, taxon) { r.selected = taxon; r.userPicked = true }
+const selectedInfo = computed(() => (active.value ? taxonInfo(active.value.pred, active.value.selected) : null))
+const photoTabs = ref(null)
+function onPhotoTabKey(e) {
+  const d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0
+  if (!d || !results.value.length) return
+  e.preventDefault()
+  const i = results.value.findIndex((r) => r.id === active.value?.id)
+  const next = results.value[(i + d + results.value.length) % results.value.length]
+  activeId.value = next.id
+  nextTick(() => photoTabs.value?.querySelector(`[data-id="${next.id}"]`)?.focus())
 }
+const topLabel = (r) => (r.loading ? 'Identifying…' : r.error ? 'Failed' : r.pred?.species?.[0]?.[0] || '')
+
+// ---- mobile bottom sheet ----
+const sheetOpen = ref(false)
+const sheetEl = ref(null)
+const sheetPanel = ref(null)
+const photoArea = ref(null)
+let sheetReturnFocus = null
+function lockScroll(on) { if (typeof document !== 'undefined') document.body.style.overflow = on ? 'hidden' : '' }
+function openSheet() {
+  if (!isMobile.value || !active.value) return
+  sheetReturnFocus = document.activeElement
+  sheetOpen.value = true
+  lockScroll(true)
+  nextTick(() => sheetEl.value?.focus())
+}
+function closeSheet() {
+  if (!sheetOpen.value) return
+  sheetOpen.value = false
+  lockScroll(false)
+  sheetReturnFocus?.focus?.()
+}
+function onSheetKey(e) {
+  if (e.key === 'Escape') { e.preventDefault(); closeSheet() }
+  else if (e.target === sheetEl.value && (e.key === 'ArrowLeft' || e.key === 'ArrowRight')) {
+    e.preventDefault(); sheetPanel.value?.step(e.key === 'ArrowLeft' ? -1 : 1)
+  }
+}
+function scrollToPhoto() { photoArea.value?.scrollIntoView({ behavior: 'smooth', block: 'start' }) }
+onDeactivated(() => closeSheet())
 
 const showAbout = ref(false)
 </script>
@@ -450,64 +506,45 @@ const showAbout = ref(false)
       :title="progress?.title || ''" :detail="progress?.detail || ''" :progress="progress?.progress ?? null"
       :retryable="!!progress?.retryable" @retry="retryWarm" />
 
-    <!-- Upload + prior controls -->
-    <div class="row g-3">
-      <div class="col-12 col-lg-7">
-        <div class="card h-100">
-          <div class="card-body">
-            <div class="d-flex justify-content-between align-items-center">
-              <h6 class="card-title mb-0">Upload butterfly photo(s)</h6>
-              <button v-if="items.length || results.length" class="btn btn-link btn-sm p-0" @click="clearAll">Clear photos</button>
-            </div>
-            <div class="dropzone mt-2" :class="{ over: isOver }"
-              @click="fileInput.click()" @dragover.prevent="isOver = true" @dragleave.prevent="isOver = false"
-              @drop.prevent="isOver = false" role="button" tabindex="0"
-              @keydown.enter.prevent="fileInput.click()" @keydown.space.prevent="fileInput.click()"
-              aria-label="Upload images: drag and drop, or activate to choose files">
-              <div class="text-muted mb-2">Drag &amp; drop <em>anywhere</em>, paste from clipboard, or choose photos. Best results come from a clear shot of the open wings.</div>
-              <div class="d-flex gap-2 justify-content-center flex-wrap" @click.stop>
-                <button class="btn btn-primary btn-sm" @click="fileInput.click()">Choose photos</button>
-                <button class="btn btn-outline-secondary btn-sm" @click="cameraInput.click()">Take photo</button>
-              </div>
-              <!-- accept="image/*" with NO capture lets Android offer Files/Drive/Photos, not just the camera/Photos. -->
-              <input ref="fileInput" type="file" accept="image/*" multiple hidden @change="onPick" />
-              <input ref="cameraInput" type="file" accept="image/*" capture="environment" hidden @change="onPick" />
-            </div>
-
-            <div v-if="preparing" class="small text-muted mt-2">
-              <span class="spinner-border spinner-border-sm" aria-hidden="true"></span> Preparing images…
-            </div>
-
-            <div v-if="items.length" class="preview-grid mt-2">
-              <div v-for="it in items" :key="it.id" class="preview" :class="{ invalid: it.status === 'invalid' }">
-                <img v-if="it.previewUrl" :src="it.previewUrl" :alt="it.name" />
-                <button class="rm" @click="removeItem(it.id)" :aria-label="`Remove ${it.name}`">&times;</button>
-                <div v-if="it.status === 'invalid'" class="small text-danger px-1">{{ it.error }}</div>
-              </div>
-            </div>
-          </div>
+    <!-- Upload -->
+    <div class="card">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center">
+          <h6 class="card-title mb-0">Upload butterfly photo(s)</h6>
+          <button v-if="items.length || results.length" class="btn btn-link btn-sm p-0" @click="clearAll">Clear photos</button>
         </div>
-      </div>
+        <div class="dropzone mt-2" :class="{ over: isOver, compact: results.length }"
+          @click="fileInput.click()" @dragover.prevent="isOver = true" @dragleave.prevent="isOver = false"
+          @drop.prevent="isOver = false" role="button" tabindex="0"
+          @keydown.enter.prevent="fileInput.click()" @keydown.space.prevent="fileInput.click()"
+          aria-label="Upload images: drag and drop, or activate to choose files">
+          <div v-if="!results.length" class="text-muted mb-2">Drag &amp; drop <em>anywhere</em>, paste from clipboard, or choose photos. Best results come from a clear shot of the open wings.</div>
+          <div v-else class="text-muted small">Add more photos: drag, paste, or</div>
+          <div class="d-flex gap-2 justify-content-center flex-wrap" @click.stop>
+            <button class="btn btn-primary btn-sm" @click="fileInput.click()">Choose photos</button>
+            <button class="btn btn-outline-secondary btn-sm" @click="cameraInput.click()">Take photo</button>
+          </div>
+          <!-- accept="image/*" with NO capture lets Android offer Files/Drive/Photos, not just the camera/Photos. -->
+          <input ref="fileInput" type="file" accept="image/*" multiple hidden @change="onPick" />
+          <input ref="cameraInput" type="file" accept="image/*" capture="environment" hidden @change="onPick" />
+        </div>
 
-      <div class="col-12 col-lg-5">
-        <div class="card h-100">
-          <div class="card-body">
-            <h6 class="card-title">Where was it photographed? <span class="text-muted fw-normal small">(optional)</span></h6>
-            <p class="text-muted small mb-2">Helps when look-alikes occur: it down-weights butterflies not recorded in your region. Leave it blank for visual predictions without geographic weighting. You can change this per photo after identifying.</p>
-            <FilterSelect label="Country" :options="countryOptions" v-model="country" placeholder="Any country" />
-            <div v-if="country === 'Ecuador'" class="mt-2">
-              <FilterSelect label="Region (side of the Andes)" :options="REGION_OPTS" v-model="region" placeholder="Either side" />
-            </div>
-            <div class="d-flex align-items-center gap-2 mt-1" style="min-height: 1.5rem">
-              <button v-if="hasLocation" class="btn btn-link btn-sm p-0" @click="resetLocation">Reset location</button>
-            </div>
-            <div class="d-grid mt-2">
-              <button class="btn btn-success" :disabled="!pendingItems.length || running" @click="run">
-                <span v-if="running" class="spinner-border spinner-border-sm" aria-hidden="true"></span>
-                {{ running ? 'Identifying…' : (pendingItems.length ? `Identify ${pendingItems.length > 1 ? pendingItems.length + ' photos' : 'butterfly'}` : 'All photos identified') }}
-              </button>
+        <div v-if="preparing" class="small text-muted mt-2">
+          <span class="spinner-border spinner-border-sm" aria-hidden="true"></span> Preparing images…
+        </div>
+
+        <div class="d-flex flex-wrap align-items-end gap-3 mt-2">
+          <div v-if="items.length" class="preview-grid flex-grow-1" :class="{ small: results.length }">
+            <div v-for="it in items" :key="it.id" class="preview" :class="{ invalid: it.status === 'invalid' }">
+              <img v-if="it.previewUrl" :src="it.previewUrl" :alt="it.name" />
+              <button class="rm" @click="removeItem(it.id)" :aria-label="`Remove ${it.name}`">&times;</button>
+              <div v-if="it.status === 'invalid'" class="small text-danger px-1">{{ it.error }}</div>
             </div>
           </div>
+          <button class="btn btn-success ms-auto identify-btn" :disabled="!pendingItems.length || running" @click="run">
+            <span v-if="running" class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+            {{ running ? 'Identifying…' : (pendingItems.length ? `Identify ${pendingItems.length > 1 ? pendingItems.length + ' photos' : 'butterfly'}` : (results.length ? 'All photos identified' : 'Identify butterfly')) }}
+          </button>
         </div>
       </div>
     </div>
@@ -515,66 +552,102 @@ const showAbout = ref(false)
     <div v-if="errorMsg" class="alert alert-danger mt-3 py-2 small">{{ errorMsg }}</div>
 
     <!-- Results -->
-    <div v-for="r in results" :key="r.id" class="card mt-3">
-      <div class="card-body">
-        <div v-if="r.mock" class="badge text-bg-secondary mb-2">demo: backend not connected</div>
-
-        <!-- still running this photo -->
-        <div v-if="r.loading" class="d-flex align-items-center gap-2 text-muted small">
-          <span class="spinner-border spinner-border-sm" aria-hidden="true"></span> Identifying {{ r.filename }}…
-        </div>
-        <div v-else-if="r.error" class="alert alert-warning py-2 small mb-0">{{ r.filename }}: {{ r.error }}</div>
-
-        <template v-else>
-          <!-- per-photo location override -->
-          <div class="loc-bar mb-3">
-            <div class="loc-field">
-              <FilterSelect label="Country" :options="countryOptions" :model-value="r.country"
-                placeholder="Any country" @update:model-value="(v) => setCountry(r, v)" />
-            </div>
-            <div v-if="r.country === 'Ecuador'" class="loc-field">
-              <FilterSelect label="Region (side of the Andes)" :options="REGION_OPTS" :model-value="r.region"
-                placeholder="Either side" @update:model-value="(v) => setRegion(r, v)" />
-            </div>
-            <div v-if="r.suggest && r.suggest.length" class="loc-guess small">
-              <span class="text-muted">Quick pick, where the top predictions are recorded (tap where the photo was taken):</span>
-              <div class="guess-chips mt-1">
-                <button v-for="s in r.suggest" :key="s.country + s.side"
-                  class="btn btn-sm guess-chip" :class="isSuggestActive(r, s) ? 'btn-success' : 'btn-outline-success'"
-                  :aria-pressed="isSuggestActive(r, s)" @click="applySuggestion(r, s)">
-                  {{ suggestLabel(s) }} <span class="chip-pct">{{ Math.round(s.score * 100) }}%</span>
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div class="row g-3">
-            <div class="col-12 col-lg-6">
-              <AIPhotoView :src="r.previewUrl" :boxes="r.boxes" :used-index="r.usedIndex"
-                :loading="r.maskLoading" :alt="r.filename" @select="(i) => selectMask(r, i)" />
-              <!-- mask controls -->
-              <div class="mask-bar small text-muted">
-                <template v-if="r.boxes.length">
-                  {{ r.boxes.length }} wing mask{{ r.boxes.length > 1 ? 's' : '' }} found.
-                  <span v-if="r.usedIndex === -2">Using all wings together.</span>
-                  <span v-else-if="r.usedIndex >= 0">Using mask {{ r.usedIndex + 1 }}.</span>
-                  <span v-else>Using full image.</span>
-                  <template v-if="r.boxes.length > 1"> Double-click a box to use just that one.</template>
-                  <button v-if="r.usedIndex !== -2" class="btn btn-link btn-sm p-0 ms-1" @click="useAll(r)">Use all wings</button>
-                  <button v-if="r.usedIndex !== -1" class="btn btn-link btn-sm p-0 ms-1" @click="useFull(r)">Use full image</button>
-                </template>
-                <template v-else>No wings detected, using the full image.</template>
-              </div>
-              <PredictionPanel :item="{ CAM_ID: r.id }" :prediction="r.pred" :start-open="true" />
-            </div>
-            <div class="col-12 col-lg-6">
-              <div class="fw-bold small mb-1">Reference photos <span class="text-muted fw-normal">(compare with your photo)</span></div>
-              <AIReferenceGallery :groups="groupsFor(r)" />
-            </div>
-          </div>
-        </template>
+    <section v-if="active" class="results mt-3" aria-label="Results">
+      <!-- one tab per uploaded photo -->
+      <div v-if="results.length > 1" ref="photoTabs" class="photo-tabs" role="tablist" aria-label="Your photos" @keydown="onPhotoTabKey">
+        <button v-for="r in results" :key="r.id" type="button" role="tab" class="photo-tab" :data-id="r.id"
+          :class="{ active: r.id === active.id }" :aria-selected="r.id === active.id" aria-controls="ai-result-panel"
+          :tabindex="r.id === active.id ? 0 : -1" @click="activeId = r.id">
+          <img :src="r.previewUrl" :alt="r.filename" />
+          <span class="pt-text">
+            <span class="pt-name">{{ r.filename }}</span>
+            <span class="pt-top"><span v-if="r.loading" class="spinner-border spinner-border-sm me-1" aria-hidden="true"></span><em>{{ topLabel(r) }}</em></span>
+          </span>
+        </button>
       </div>
-    </div>
+
+      <div id="ai-result-panel" class="card" :role="results.length > 1 ? 'tabpanel' : undefined">
+        <div class="card-body">
+          <div v-if="active.mock" class="badge text-bg-secondary mb-2">demo: backend not connected</div>
+
+          <div v-if="active.loading" class="d-flex align-items-center gap-2 text-muted small">
+            <span class="spinner-border spinner-border-sm" aria-hidden="true"></span> Identifying {{ active.filename }}…
+          </div>
+          <div v-else-if="active.error" class="alert alert-warning py-2 small mb-0">{{ active.filename }}: {{ active.error }}</div>
+
+          <template v-else>
+            <!-- phones: sticky mini-bar with the user's photo + selected taxon -->
+            <div v-if="isMobile" class="mini-bar">
+              <button type="button" class="mini-thumb" @click="scrollToPhoto" aria-label="Scroll to your photo">
+                <img :src="active.previewUrl" alt="Your photo" />
+              </button>
+              <div class="mini-text">
+                <div class="mini-lbl">Selected</div>
+                <div class="mini-name"><em>{{ active.selected }}</em> <span v-if="selectedInfo">{{ fmtPct(selectedInfo.prob) }}</span></div>
+              </div>
+              <button type="button" class="btn btn-sm btn-primary" @click="openSheet">Compare</button>
+            </div>
+
+            <div class="res-grid">
+              <div class="area-cands">
+                <AICandidateList :pred="active.pred" :selected="active.selected" :suggest="active.suggest"
+                  :country="active.country" :region="active.region" :country-options="countryOptions" :region-options="REGION_OPTS"
+                  @select="(t) => selectTaxon(active, t)" @activate="openSheet"
+                  @any="resetLocation(active)" @suggest="(s) => applySuggestion(active, s)"
+                  @set-country="(v) => setCountry(active, v)" @set-region="(v) => setRegion(active, v)" />
+              </div>
+
+              <div ref="photoArea" class="area-photo">
+                <div class="photo-sticky">
+                  <div class="col-title">Your photo</div>
+                  <AIPhotoView :key="active.id" :src="active.previewUrl" :boxes="active.boxes" :used-index="active.usedIndex"
+                    :loading="active.maskLoading" :alt="`Your photo: ${active.filename}`" @select="(i) => selectMask(active, i)" />
+                  <!-- mask controls -->
+                  <div class="mask-bar small text-muted">
+                    <template v-if="active.boxes.length">
+                      {{ active.boxes.length }} wing mask{{ active.boxes.length > 1 ? 's' : '' }} found.
+                      <span v-if="active.usedIndex === -2">Using all wings together.</span>
+                      <span v-else-if="active.usedIndex >= 0">Using mask {{ active.usedIndex + 1 }}.</span>
+                      <span v-else>Using full image.</span>
+                      <template v-if="active.boxes.length > 1"> Double-click a box to use just that one.</template>
+                      <button v-if="active.usedIndex !== -2" class="btn btn-link btn-sm p-0 ms-1" @click="useAll(active)">Use all wings</button>
+                      <button v-if="active.usedIndex !== -1" class="btn btn-link btn-sm p-0 ms-1" @click="useFull(active)">Use full image</button>
+                    </template>
+                    <template v-else>No wings detected, using the full image.</template>
+                  </div>
+                </div>
+              </div>
+
+              <div v-if="!isMobile" class="area-ref">
+                <AIReferencePanel :taxon="active.selected" :prob="selectedInfo?.prob ?? null"
+                  :country="active.country !== ANY ? active.country : ''" />
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+    </section>
+
+    <!-- phones: bottom sheet pins the user's photo above the reference photos -->
+    <Teleport to="body">
+      <div v-if="sheetOpen && isMobile && active" class="sheet-backdrop" @click.self="closeSheet">
+        <div ref="sheetEl" class="sheet" role="dialog" aria-modal="true" aria-label="Compare with reference photos"
+          tabindex="-1" @keydown="onSheetKey">
+          <div class="sheet-head">
+            <span class="sheet-title">Compare</span>
+            <button type="button" class="btn-close" aria-label="Close" @click="closeSheet"></button>
+          </div>
+          <div class="sheet-user">
+            <img :src="active.previewUrl" :alt="`Your photo: ${active.filename}`" />
+            <span class="sheet-user-lbl">Your photo</span>
+          </div>
+          <div class="sheet-scroll">
+            <AIReferencePanel ref="sheetPanel" compact :taxon="active.selected" :prob="selectedInfo?.prob ?? null"
+              :country="active.country !== ANY ? active.country : ''" />
+          </div>
+        </div>
+      </div>
+    </Teleport>
 
     <!-- About (simplified) -->
     <div class="card mt-3">
@@ -710,18 +783,67 @@ const showAbout = ref(false)
 .dropzone { border: 2px dashed #cbd5e1; border-radius: 8px; padding: 1.25rem 1rem; text-align: center; cursor: pointer; transition: border-color .15s, background .15s; }
 .dropzone:hover, .dropzone.over { border-color: #0d6efd; background: #f1f6ff; }
 .dropzone:focus-visible { outline: 2px solid #0d6efd; outline-offset: 2px; }
-.preview-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 0.5rem; }
+.preview-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 110px)); gap: 0.5rem; }
 .preview { position: relative; border: 1px solid #e2e8f0; border-radius: 6px; overflow: hidden; background: #f8fafc; }
 .preview.invalid { border-color: #dc3545; }
 .preview img { width: 100%; height: 84px; object-fit: cover; display: block; }
 .preview .rm { position: absolute; top: 2px; right: 2px; width: 26px; height: 26px; border: none; border-radius: 50%; background: rgba(0,0,0,.6); color: #fff; line-height: 1; cursor: pointer; }
+.dropzone.compact { display: flex; align-items: center; justify-content: center; gap: .6rem; flex-wrap: wrap; padding: .5rem 1rem; }
+.preview-grid.small { grid-template-columns: repeat(auto-fill, 64px); }
+.preview-grid.small .preview img { height: 48px; }
+.preview-grid.small .preview .rm { width: 20px; height: 20px; font-size: .8rem; }
+.identify-btn { min-width: 12rem; }
 .mask-bar { margin-bottom: .35rem; }
-.loc-bar { display: flex; flex-wrap: wrap; align-items: flex-end; gap: .75rem; }
-.loc-field { min-width: 200px; flex: 0 1 240px; }
-.loc-guess { display: flex; flex-direction: column; }
-.guess-chips { display: flex; flex-wrap: wrap; gap: .35rem; }
-.guess-chip { --bs-btn-padding-y: .15rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem; }
-.guess-chip .chip-pct { opacity: .7; font-variant-numeric: tabular-nums; }
+.col-title { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: #64748b; margin-bottom: .35rem; }
+
+/* photo tabs */
+.photo-tabs { display: flex; gap: .4rem; overflow-x: auto; padding-bottom: .4rem; }
+.photo-tab { display: flex; align-items: center; gap: .5rem; flex: 0 0 auto; max-width: 260px; padding: .3rem .6rem .3rem .3rem; border: 1px solid #dee2e6; border-radius: 8px; background: #fff; color: inherit; text-align: left; cursor: pointer; }
+.photo-tab:hover { border-color: #94a3b8; }
+.photo-tab.active { border-color: #16a34a; box-shadow: 0 0 0 1px #16a34a; background: #f0fdf4; }
+.photo-tab:focus-visible { outline: 2px solid #0d6efd; outline-offset: 2px; }
+.photo-tab img { width: 44px; height: 44px; object-fit: cover; border-radius: 5px; flex: 0 0 auto; }
+.pt-text { display: flex; flex-direction: column; min-width: 0; font-size: .75rem; }
+.pt-name { color: #64748b; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pt-top { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* results grid: phones stack candidates then photo (reference opens in a sheet) */
+.res-grid { display: grid; gap: 1rem; grid-template-columns: minmax(0, 1fr); grid-template-areas: "cands" "photo"; }
+.area-cands { grid-area: cands; min-width: 0; }
+.area-photo { grid-area: photo; min-width: 0; scroll-margin-top: 130px; }
+.area-ref { grid-area: ref; min-width: 0; }
+/* medium: photo and reference side by side, candidates below */
+@media (min-width: 768px) {
+  .res-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-areas: "photo ref" "cands cands"; }
+  .area-cands :deep(.cand-list) { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+}
+/* desktop: candidates | photo (sticky) | reference */
+@media (min-width: 1200px) {
+  .res-grid { grid-template-columns: minmax(260px, .85fr) minmax(0, 1fr) minmax(0, 1.15fr); grid-template-areas: "cands photo ref"; }
+  .area-cands :deep(.cand-list) { display: flex; }
+  .photo-sticky { position: sticky; top: 70px; }
+  .photo-sticky :deep(.ai-photo) { height: 440px; }
+}
+
+/* phones: sticky mini-bar */
+.mini-bar { position: sticky; top: 56px; z-index: 20; display: flex; align-items: center; gap: .6rem; margin: -.25rem -.25rem .75rem; padding: .4rem .5rem; background: rgba(255,255,255,.96); border: 1px solid #e2e8f0; border-radius: 8px; box-shadow: 0 2px 8px rgba(15,23,42,.08); }
+.mini-thumb { padding: 0; border: none; background: none; flex: 0 0 auto; }
+.mini-thumb img { width: 48px; height: 48px; object-fit: cover; border-radius: 6px; display: block; }
+.mini-thumb:focus-visible { outline: 2px solid #0d6efd; outline-offset: 2px; }
+.mini-text { min-width: 0; flex: 1 1 auto; }
+.mini-lbl { font-size: .65rem; text-transform: uppercase; letter-spacing: .04em; color: #64748b; }
+.mini-name { font-size: .88rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* phones: bottom sheet (teleported to body) */
+.sheet-backdrop { position: fixed; inset: 0; z-index: 1060; background: rgba(15,23,42,.45); display: flex; align-items: flex-end; }
+.sheet { width: 100%; max-height: 92vh; display: flex; flex-direction: column; background: #fff; border-radius: 14px 14px 0 0; box-shadow: 0 -8px 30px rgba(0,0,0,.25); outline: none; }
+.sheet-head { display: flex; align-items: center; justify-content: space-between; padding: .6rem .9rem .3rem; }
+.sheet-title { font-weight: 600; }
+.sheet-user { position: relative; flex: 0 0 auto; margin: 0 .75rem; background: #0f172a; border-radius: 8px; overflow: hidden; }
+.sheet-user img { display: block; width: 100%; height: 20vh; object-fit: contain; }
+.sheet-user-lbl { position: absolute; left: 6px; top: 6px; font-size: .68rem; color: #fff; background: rgba(0,0,0,.55); border-radius: 4px; padding: 0 5px; }
+.sheet-scroll { overflow-y: auto; padding: .6rem .75rem 1rem; }
+
 .drop-overlay { position: fixed; inset: 0; z-index: 1080; background: rgba(13,110,253,.12); backdrop-filter: blur(1px); display: flex; align-items: center; justify-content: center; pointer-events: none; }
 .drop-overlay-inner { border: 3px dashed #0d6efd; border-radius: 16px; padding: 2rem 3rem; background: #fff; color: #0d6efd; font-weight: 600; font-size: 1.1rem; box-shadow: 0 8px 30px rgba(0,0,0,.15); }
 </style>

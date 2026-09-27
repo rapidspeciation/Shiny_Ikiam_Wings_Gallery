@@ -193,7 +193,9 @@ const round = (x) => Math.round(x * 1e4) / 1e4
 // Pure re-rank: apply the geographic prior to raw leaves, renormalise, then
 // marginalise into the { genus, species, subspecies, species_all, side } shape
 // PredictionPanel uses. No I/O — safe to call on every country/side change.
-export function rankLeaves(rawLeaves, checklist, { country = '', side = '', eps = DEFAULT_EPS } = {}) {
+// topK caps the genus/species/subspecies lists (the AI Identifier asks for 10 so
+// its "Show more" can reach the top 10 species).
+export function rankLeaves(rawLeaves, checklist, { country = '', side = '', eps = DEFAULT_EPS, topK = 8 } = {}) {
   // 1. weight + renormalise
   const weighted = rawLeaves.map(([name, p]) => {
     const w = geoWeight(entryFor(checklist, name), country, side, eps)
@@ -230,10 +232,10 @@ export function rankLeaves(rawLeaves, checklist, { country = '', side = '', eps 
     .map(([name, p]) => [name, round(p), oorOf(name) ? 1 : 0])
 
   return {
-    genus: genus.slice(0, 8),
-    species: species.slice(0, 8),
+    genus: genus.slice(0, topK),
+    species: species.slice(0, topK),
     species_all: species.map((s) => [s[0], s[1], s[2]]),
-    subspecies: subs.sort((a, b) => b[1] - a[1]).slice(0, 8),
+    subspecies: subs.sort((a, b) => b[1] - a[1]).slice(0, topK),
     side: side || '',
     n_views: 1,
   }

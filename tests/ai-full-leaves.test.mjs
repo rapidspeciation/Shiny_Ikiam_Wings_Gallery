@@ -44,13 +44,19 @@ test('new uploads do not infer geography unless the user requests it', () => {
   assert.match(source, /cached\?\.version === PREDICTION_CACHE_VERSION/)
 })
 
-test('manual location selection exposes a bound reactive reset control', () => {
+test('location is chosen per photo with an Any chip that resets the prior', () => {
   const source = readFileSync('src/components/AIIdTab.vue', 'utf8')
   const { descriptor, errors } = parse(source)
   assert.equal(errors.length, 0)
-  const script = compileScript(descriptor, { id: 'ai-identifier' })
-  assert.equal(script.bindings.hasLocation, 'setup-ref')
-  assert.match(descriptor.scriptSetup.content, /const hasLocation = computed\(\(\) => country\.value !== ANY \|\| !!region\.value\)/)
-  assert.match(descriptor.template.content, /<button v-if="hasLocation"[^>]*@click="resetLocation">Reset location<\/button>/)
-  assert.match(descriptor.scriptSetup.content, /function resetLocation\(\) \{ country\.value = ANY; region\.value = null \}/)
+  compileScript(descriptor, { id: 'ai-identifier' })
+  // no pre-upload "Where was it photographed?" panel; each result starts at Any
+  assert.doesNotMatch(descriptor.template.content, /Where was it photographed/)
+  assert.match(descriptor.scriptSetup.content, /country: ANY, region: null,/)
+  assert.match(descriptor.scriptSetup.content, /function resetLocation\(r\) \{ r\.country = ANY; r\.region = null; rerank\(r\) \}/)
+  assert.match(descriptor.template.content, /@any="resetLocation\(active\)"/)
+  const list = parse(readFileSync('src/components/AICandidateList.vue', 'utf8')).descriptor
+  assert.match(list.template.content, /:aria-pressed="!hasLocation" @click="emit\('any'\)">Any<\/button>/)
+  assert.match(list.template.content, /:aria-pressed="isSuggestActive\(s\)"/)
+  // suggestion chips carry no percentages
+  assert.doesNotMatch(list.template.content, /s\.score/)
 })

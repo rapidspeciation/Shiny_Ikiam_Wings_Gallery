@@ -133,7 +133,7 @@ onMounted(async () => {
 
     <!-- Main Content -->
     <div class="container-fluid mt-3">
-      <div class="alert alert-light border text-center py-2 small" role="alert">
+      <div v-if="currentTab !== 'AI Identifier'" class="alert alert-light border text-center py-2 small" role="alert">
         Navigation: Shift + Scroll = Zoom all | Ctrl + Scroll = Zoom one | Drag = Move
         <span class="d-none d-md-inline"> | Github: <a href='https://github.com/rapidspeciation/Shiny_Ikiam_Wings_Gallery/' target='_blank'>rapidspeciation/Shiny_Ikiam_Wings_Gallery</a></span>
       </div>
