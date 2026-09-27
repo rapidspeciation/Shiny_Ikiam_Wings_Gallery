@@ -1,12 +1,16 @@
 // Client-side geographic prior for the AI ID tab. Re-ranks the model's raw
-// per-leaf probabilities using region_checklist.json (already shipped for the
-// gallery), exactly mirroring predict_topk.py's leaf_weights/taxon_weight:
-// down-weight (x eps) taxa not documented in the chosen country, and — for
-// Ecuador — taxa not documented on the chosen side of the Andes. Never up-weights.
+// per-leaf probabilities: taxa not recorded in the chosen country are down-weighted
+// (x eps). Country records are the region checklist merged with GBIF country
+// presence (mergeGbifPresence), because the checklist alone misses many true
+// occurrences: on the field benchmark it marked the true species absent from its
+// own country for 44.5% of photos and a hard x0.02 penalty cut Top-1 from 86.0% to
+// 73.5%. The merged records with x0.3 gave 86.7% (reports/geo_prior_audit_20260927).
+// Side of the Andes only drives the off-region tag; it no longer re-ranks, since
+// it lowered accuracy in every Ecuador zone. Never up-weights.
 import { getChecklist } from '../composables/useCurationData.js'
 import { checklistNames, taxonNamesVersion } from './taxonNames.js'
 
-export const DEFAULT_EPS = 0.02
+export const DEFAULT_EPS = 0.3
 
 // Look up a taxon's checklist entry, falling back trinomial -> binomial. The
 // checklist keeps the old names, so each level also tries the canonical name and
@@ -46,22 +50,45 @@ export function mergeEntries(entries) {
   return out
 }
 
-// weight in (eps, 1]. country '' / 'Any' = no country filter; side '' = no side filter.
+// weight in (eps, 1]. country '' / 'Any' = no country filter. `side` is accepted for
+// compatibility but does not change the weight (see the header comment).
 export function geoWeight(entry, country, side, eps = DEFAULT_EPS) {
   if (!entry) return 1 // unknown to the checklist -> never penalise
   if (country && country !== 'Any') {
     const inCountry = entry.countries && entry.countries[country] > 0
     if (!inCountry) return eps
   }
-  if (side === 'East' || side === 'West') {
-    if (!(entry[side] > 0)) return eps
-  }
   return 1
 }
 
-// Whether a taxon is "off-region" for the chosen prior (drives the off-region tag).
+// Whether a taxon is "off-region" for the chosen location (drives the tag): not
+// recorded in the country, or, for a chosen side of the Andes, not recorded there.
 export function isOffRegion(checklist, taxon, country, side, eps = DEFAULT_EPS) {
-  return geoWeight(entryFor(checklist, taxon), country, side, eps) < 1
+  const e = entryFor(checklist, taxon)
+  if (geoWeight(e, country, side, eps) < 1) return true
+  return !!e && (side === 'East' || side === 'West') && !(e[side] > 0)
+}
+
+// Add GBIF country presence ({ species: { "Genus species": [country, ...] } }, current
+// names) to a checklist keyed by (older) names. Each species' countries are added to
+// its own key and to every checklist subspecies key of that species, so trinomial
+// lookups see them too. `canonical` maps checklist names to current names.
+export function mergeGbifPresence(checklist, presence, canonical = (n) => n) {
+  const bySpecies = (presence && presence.species) || {}
+  const out = { ...checklist }
+  const add = (key, countries) => {
+    const e = out[key] ? { ...out[key], countries: { ...(out[key].countries || {}) } } : { East: 0, West: 0, countries: {} }
+    for (const c of countries) e.countries[c] = (e.countries[c] || 0) + 1
+    out[key] = e
+  }
+  for (const [sp, countries] of Object.entries(bySpecies)) add(sp, countries)
+  for (const key of Object.keys(checklist)) {
+    const p = key.split(/\s+/)
+    if (p.length < 3) continue
+    const sp = canonical(`${p[0]} ${p[1]}`).split(/\s+/).slice(0, 2).join(' ')
+    if (bySpecies[sp]) add(key, bySpecies[sp])
+  }
+  return out
 }
 
 // Guess the most likely region from the model's RAW (un-weighted) leaf

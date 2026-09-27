@@ -11,7 +11,8 @@ import { resolveCamid } from '../utils/galleryPipeline.js'
 import { canonicalTaxon, predictionDiffers, rankComparison } from '../utils/taxonomy.js'
 import { loadCurrentPredictionMaps } from '../utils/predictionCoverage.js'
 import { regionSpecies, regionSubspecies } from '../utils/taxonTree.js'
-import { loadTaxonNames, lookupOrder } from '../utils/taxonNames.js'
+import { loadTaxonNames, lookupOrder, canonical } from '../utils/taxonNames.js'
+import { mergeGbifPresence } from '../utils/geoPrior.js'
 export { resolveCamid, predictionDiffers, canonicalTaxon, rankComparison }
 
 // Module-wide caches (one promise per file -> single fetch, deduped).
@@ -239,12 +240,21 @@ export async function getFormPrediction(camid) {
 
 // Returns the region checklist map keyed at genus / "Genus species" /
 // "Genus species subspecies", cached. {} on failure.
+let _checklistPromise = null
 export async function getChecklist() {
-  try {
-    return await loadFile('region_checklist')
-  } catch {
-    return {}
+  if (!_checklistPromise) {
+    _checklistPromise = (async () => {
+      let ck = {}
+      try { ck = await loadFile('region_checklist') } catch { return {} }
+      try {
+        const [presence] = await Promise.all([loadFile('gbif_country_presence'), loadTaxonNames()])
+        return mergeGbifPresence(ck, presence, canonical)
+      } catch {
+        return ck // GBIF presence is an enhancement; the checklist alone still works
+      }
+    })()
   }
+  return _checklistPromise
 }
 
 // True when the prediction's top species/subspecies disagrees with the recorded

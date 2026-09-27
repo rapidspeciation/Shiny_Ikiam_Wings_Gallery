@@ -175,9 +175,13 @@ test('a chosen location re-ranks the table and tags off-region taxa instead of h
     const any = rankLeaves(leaves, checklist, {})
     assert.equal(buildTree(any)[0].taxon, 'Pteronymia')
     assert.equal(any.species.some((s) => s[2]), false)       // no location: no tags
+    // a country where Pteronymia ozia is not recorded demotes it (x0.3)
+    const co = buildTree(rankLeaves(leaves, { ...checklist, 'Dircenna dero': { countries: { Ecuador: 1, Colombia: 1 }, East: 0, West: 1 } }, { country: 'Colombia' }))
+    assert.equal(co[0].taxon, 'Dircenna')
+    // side of the Andes tags off-region taxa but does not re-rank
     const west = rankLeaves(leaves, checklist, { country: 'Ecuador', side: 'West' })
     const tree = buildTree(west)
-    assert.equal(tree[0].taxon, 'Dircenna')
+    assert.equal(tree[0].taxon, 'Pteronymia')
     const ozia = tree.find((g) => g.taxon === 'Pteronymia').species.find((s) => s.taxon === 'Pteronymia ozia')
     assert.equal(ozia.oor, true)
     assert.equal(ozia.subspecies[0].oor, true)

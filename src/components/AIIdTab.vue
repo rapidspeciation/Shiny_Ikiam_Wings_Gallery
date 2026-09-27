@@ -765,6 +765,10 @@ const showAbout = ref(false)
             research-grade iNaturalist and museum photos from GBIF, used for training only.
           </p>
           <p class="mb-1"><strong>Changelog</strong></p>
+          <p><strong>27 September 2026:</strong> Fixed the location filter: it had treated a missing checklist record as
+          proof that a species is absent, so choosing the correct country lowered accuracy. It now also uses GBIF records and
+          down-weights unrecorded species more gently, and the side of the Andes only marks species as off-region. With the
+          true country selected, Species Top-1 on the field photos is 86.70% (no location: 85.96%).</p>
           <p><strong>27 September 2026:</strong> Updated AI Identifier names to the current taxonomy, following Butterflies of
           America: 246 duplicate, misspelled or outdated species names were merged into their valid names (for example
           Agraulis vanillae is now Dione vanillae), and non-adult and mislabelled training photos were removed. Former names

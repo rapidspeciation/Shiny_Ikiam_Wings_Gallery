@@ -36,10 +36,10 @@ test('the table is built from the (re-ranked) species marginals with strong subs
     assert.deepEqual(ozia.subspecies.map((s) => [s.taxon, s.prob]), [['Pteronymia ozia tanampaya', 0.36]])
     assert.ok(ozia.subspecies.slice(1).every((s) => s.prob >= SUBSP_MIN))
     assert.equal(tree.some((g) => g.species.some((s) => s.oor)), false)
-    // geographic re-rank: West of Andes demotes Pteronymia ozia (East only)
+    // side of the Andes only tags (it no longer re-ranks): Pteronymia ozia is East only
     const west = mod.rankLeaves(leaves, checklist, { country: 'Ecuador', side: 'West', topK: 10 })
     const w = buildTree(west)
-    assert.equal(w[0].taxon, 'Dircenna')
+    assert.equal(w[0].taxon, 'Pteronymia')
     assert.equal(w.find((g) => g.taxon === 'Pteronymia').species[0].oor, true)
     assert.equal(west.species_all.find((c) => c[0] === 'Godyris zavaleta')[2], 1)
     // default topK is unchanged for other callers
