@@ -9,6 +9,7 @@ import { ref, computed, watch, nextTick } from 'vue'
 import FilterSelect from './FilterSelect.vue'
 import { speciesCandidates, formatGenusSummary, fmtPct, stepSelection } from '../utils/aiCandidates.js'
 import { fieldPhotos } from '../utils/inatPhotos.js'
+import { fallbackToDirect } from '../utils/imageProxy.js'
 
 const props = defineProps({
   pred: { type: Object, default: null },
@@ -117,7 +118,7 @@ function activate(taxon) { emit('select', taxon); emit('activate', taxon) }
           </span>
           <span class="bar" aria-hidden="true"><span class="fill" :style="{ width: Math.max(1, Math.round(c.prob * 100)) + '%' }"></span></span>
           <span v-if="i < 5 && thumbs[c.taxon]?.length" class="cand-thumbs" aria-hidden="true">
-            <img v-for="u in thumbs[c.taxon]" :key="u" :src="u" alt="" loading="lazy" referrerpolicy="no-referrer" />
+            <img v-for="u in thumbs[c.taxon]" :key="u" :src="u" alt="" loading="lazy" referrerpolicy="no-referrer" @error="fallbackToDirect($event)" />
           </span>
         </button>
         <div v-if="c.subspecies.length" class="ssp-row">

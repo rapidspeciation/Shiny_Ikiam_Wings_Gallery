@@ -1,6 +1,7 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import { createInatClient, parseObservations, photoSize, taxonMatch, inatSearchUrl } from '../src/utils/inatPhotos.js'
+import { webImageUrl, unproxiedUrl } from '../src/utils/imageProxy.js'
 
 const obs = (id, name, rank = name.split(' ').length > 2 ? 'subspecies' : 'species', extra = {}) => ({
   id, uri: `https://www.inaturalist.org/observations/${id}`, place_guess: `Place ${id}`,
@@ -50,8 +51,11 @@ test('taxon checks accept the taxon and descendants, synonyms only for species, 
   assert.equal(parsed.photos.length, 2)
   const p = parseObservations('Pteronymia ozia', { results: [obs(3, 'Pteronymia ozia'), obs(4, 'Pteronymia aletta')] })
   assert.deepEqual(p.photos.map((x) => x.id), [3])   // exact matches win over synonyms
-  assert.equal(p.photos[0].url.endsWith('/medium.jpg'), true)
-  assert.equal(p.photos[0].thumb.endsWith('/square.jpg'), true)
+  // served through wsrv.nl, with the original iNat size inside
+  const inner = (u) => new URL(u).searchParams.get('url')
+  assert.match(p.photos[0].url, /^https:\/\/wsrv\.nl\/\?url=.*&w=900/)
+  assert.equal(inner(p.photos[0].url).endsWith('/large.jpg'), true)
+  assert.equal(inner(p.photos[0].thumb).endsWith('/small.jpg'), true)
   assert.equal(p.photos[0].observer, 'Observer 3')
   assert.equal(p.photos[0].link, 'https://www.inaturalist.org/observations/3')
   assert.equal('license' in p.photos[0] || 'attribution' in p.photos[0], false)
@@ -119,16 +123,26 @@ test('results are cached in memory and sessionStorage; failures are not cached',
   assert.equal(ok.photos.length, 1)
 })
 
-test('requests are serial, at most one per second, and priority jumps the queue', async () => {
+test('token bucket: a burst goes out at once, then one per second, priority jumps the queue', async () => {
   const clock = fakeClock()
   const { fetchImpl, calls } = mockFetch([], clock)
-  const c = createInatClient({ fetchImpl, storage: null, minIntervalMs: 1000, now: clock.now, sleep: clock.sleep })
-  const jobs = ['A a', 'B b', 'C c', 'D d'].map((t) => c.fieldPhotos(t))
+  const c = createInatClient({ fetchImpl, storage: null, burst: 3, refillPerSec: 1, maxConcurrent: 2, now: clock.now, sleep: clock.sleep })
+  const jobs = ['A a', 'B b', 'C c', 'D d', 'E e'].map((t) => c.fieldPhotos(t))
   const pri = c.fieldPhotos('Z z', { priority: true })
   await Promise.all([...jobs, pri])
   const starts = calls.map((x) => x.at)
-  for (let i = 1; i < starts.length; i++) assert.ok(starts[i] - starts[i - 1] >= 1000, `gap ${i}`)
+  assert.deepEqual(starts.slice(0, 3), [0, 0, 0])            // burst of 3 without waiting
+  for (let i = 3; i < starts.length; i++) assert.ok(starts[i] - starts[i - 1] >= 1000, `gap ${i}`)
   const order = calls.map((x) => new URL(x.url).searchParams.get('taxon_name'))
-  assert.equal(order[0], 'A a')              // already running
-  assert.equal(order[1], 'Z z')              // selected taxon goes next
+  assert.deepEqual(order.slice(0, 2), ['A a', 'B b'])        // already running
+  assert.ok(order.indexOf('Z z') <= 2, 'selected taxon goes next')
+})
+
+test('webImageUrl proxies web images once and unproxiedUrl recovers the original', () => {
+  const u = 'https://api.gbif.org/v1/image/unsafe/x.jpg?a=1&b=2'
+  const w = webImageUrl(u, 300)
+  assert.match(w, /^https:\/\/wsrv\.nl\/\?url=/)
+  assert.equal(unproxiedUrl(w), u)
+  assert.equal(webImageUrl(w, 300), w)
+  assert.equal(webImageUrl('data:image/png;base64,xx', 300), 'data:image/png;base64,xx')
 })

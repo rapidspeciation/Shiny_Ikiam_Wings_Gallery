@@ -24,7 +24,7 @@ const props = defineProps({
   showMasks: { type: Boolean, default: true },   // draw clickable mask overlay (off for reference photos)
   dark: { type: Boolean, default: false },       // dark backdrop (reference hero)
 })
-const emit = defineEmits(['select'])
+const emit = defineEmits(['select', 'error'])
 
 const { register, unregister } = usePanzoomRegistry()
 const { zoomWings } = useGlobalGalleryOptions()
@@ -127,7 +127,7 @@ onBeforeUnmount(() => { window.removeEventListener('resize', onResize); destroyZ
   <div ref="frame" class="ai-photo" :class="{ dark }">
     <div ref="layer" class="zoom-layer">
       <div class="img-rect" :style="layerBox">
-        <img ref="imgEl" :src="src" class="panzoom-img" :alt="alt" referrerpolicy="no-referrer" @load="onImgLoad" />
+        <img ref="imgEl" :src="src" class="panzoom-img" :alt="alt" referrerpolicy="no-referrer" @load="onImgLoad" @error="emit('error', $event)" />
         <!-- clickable wing-mask overlay (aligned to the image; pans/zooms with it) -->
         <svg v-if="showMasks && boxes.length" class="mask-overlay" viewBox="0 0 1 1" preserveAspectRatio="none">
           <rect v-for="(b, i) in boxes" :key="i"

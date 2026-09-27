@@ -3,7 +3,7 @@ import { ref, computed } from 'vue'
 // --- Persisted state (module-level, no store dependency) ---
 const STORAGE_KEY = 'imageProxyMode'
 
-const proxyMode = ref(localStorage.getItem(STORAGE_KEY) || 'auto')
+const proxyMode = ref((typeof localStorage !== 'undefined' && localStorage.getItem(STORAGE_KEY)) || 'auto')
 const tierStatus = ref({
   wsrv: 'unknown',
   lh3: 'unknown',
@@ -149,4 +149,30 @@ export function getThumbnailUrl(url) {
   const fileId = extractGoogleDriveFileId(url)
   if (!fileId) return url
   return thumbnailUrl(fileId, 400)
+}
+
+// Any http(s) image (iNaturalist, GBIF, museum hosts) through wsrv.nl: cached,
+// resized and WebP-compressed, which also avoids hosts that block cross-site
+// embedding. Returns the original URL when the user chose a non-wsrv mode or
+// wsrv has been probed as blocked.
+export function webImageUrl(url, width) {
+  if (!url || !/^https?:\/\//.test(url) || url.includes('wsrv.nl')) return url
+  if (!['auto', 'wsrv'].includes(proxyMode.value) || tierStatus.value.wsrv === 'blocked') return url
+  return `https://wsrv.nl/?url=${encodeURIComponent(url)}&w=${width}&q=85&output=webp`
+}
+
+// The original URL behind a wsrv.nl URL (or the URL itself).
+export function unproxiedUrl(url) {
+  if (!url || !url.includes('wsrv.nl')) return url
+  try { return new URL(url).searchParams.get('url') || url } catch { return url }
+}
+
+// <img @error> helper: retry once without the proxy. Returns false when there
+// is nothing left to try, so the caller can hide the image.
+export function fallbackToDirect(event) {
+  const img = event?.target
+  if (!img) return false
+  const direct = unproxiedUrl(img.getAttribute('src'))
+  if (direct && direct !== img.getAttribute('src')) { img.src = direct; return true }
+  return false
 }

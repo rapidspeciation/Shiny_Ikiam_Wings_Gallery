@@ -1,9 +1,10 @@
 // Field photos from iNaturalist (public API, CORS open, no key) for the AI
 // Identifier reference panel and the candidate-row thumbnails.
 //
-// Gentle on rate limits: every request goes through one serial queue that starts
-// at most one request per `minIntervalMs` (default 1 s); the selected taxon can
-// jump the queue (priority). Results are cached per taxon + place in memory and in
+// Rate limits: a token bucket lets the first 10 requests (the visible candidates)
+// go out at once, 4 in flight, then 1 per second, iNaturalist's recommended
+// 60/min per client. The selected taxon can jump the queue (priority). Photos are
+// served through wsrv.nl (cached, resized WebP), with a direct-URL fallback. Results are cached per taxon + place in memory and in
 // sessionStorage, and identical in-flight requests are shared.
 //
 // Taxon checks: iNat's taxon_name also returns descendants (a species query can
@@ -17,6 +18,8 @@ const API = 'https://api.inaturalist.org/v1'
 const CACHE_PREFIX = 'inat-photos:v1:'
 const PER_PAGE = 12
 const SPECIES_OR_LOWER = new Set(['species', 'hybrid', 'subspecies', 'variety', 'form', 'infrahybrid'])
+
+import { webImageUrl } from './imageProxy.js'
 
 export const speciesOf = (t) => String(t || '').trim().split(/\s+/).slice(0, 2).join(' ')
 export const isSubspecies = (t) => String(t || '').trim().split(/\s+/).length >= 3
@@ -52,8 +55,8 @@ export function parseObservations(requested, json) {
     if (!kind) continue
     const entry = {
       id: obs.id,
-      url: photoSize(photo.url, 'medium'),
-      thumb: photoSize(photo.url, 'square'),
+      url: webImageUrl(photoSize(photo.url, 'large'), 900),
+      thumb: webImageUrl(photoSize(photo.url, 'small'), 160),
       small: photoSize(photo.url, 'small'),
       place: obs.place_guess || '',
       observer: obs.user?.name || obs.user?.login || '',
@@ -74,7 +77,9 @@ function defaultStorage() {
 export function createInatClient({
   fetchImpl = (...a) => globalThis.fetch(...a),
   storage = defaultStorage(),
-  minIntervalMs = 1000,
+  burst = 10,            // requests allowed at once before throttling
+  refillPerSec = 1,       // sustained rate: 60/min, iNaturalist's recommended ceiling per client
+  maxConcurrent = 4,
   timeoutMs = 12000,
   now = () => Date.now(),
   sleep = (ms) => new Promise((r) => setTimeout(r, ms)),
@@ -82,18 +87,30 @@ export function createInatClient({
   const memory = new Map()      // key -> Promise
   const queue = []              // pending { run, resolve, reject }
   let pumping = false
-  let lastStart = -Infinity
+  let active = 0
+  let tokens = burst
+  let lastRefill = now()
 
+  // Token bucket: the first `burst` requests go out immediately (up to
+  // `maxConcurrent` in flight), then one per 1/refillPerSec seconds.
+  function refill() {
+    const t = now()
+    tokens = Math.min(burst, tokens + ((t - lastRefill) / 1000) * refillPerSec)
+    lastRefill = t
+  }
   async function pump() {
     if (pumping) return
     pumping = true
     try {
-      while (queue.length) {
+      while (queue.length && active < maxConcurrent) {
+        refill()
+        if (tokens < 1) { await sleep(Math.ceil(((1 - tokens) / refillPerSec) * 1000)); continue }
+        tokens -= 1
         const job = queue.shift()
-        const wait = lastStart + minIntervalMs - now()
-        if (wait > 0) await sleep(wait)
-        lastStart = now()
-        try { job.resolve(await job.run()) } catch (e) { job.reject(e) }
+        active += 1
+        let started
+        try { started = Promise.resolve(job.run()) } catch (e) { started = Promise.reject(e) }
+        started.then(job.resolve, job.reject).finally(() => { active -= 1; pump() })
       }
     } finally {
       pumping = false
@@ -127,7 +144,7 @@ export function createInatClient({
 
   async function getJson(url, priority) {
     return schedule(async () => {
-      // a stalled request must not block the serial queue
+      // a stalled request must not hold a concurrency slot forever
       const ctrl = typeof AbortController === 'function' ? new AbortController() : null
       const timer = ctrl ? setTimeout(() => ctrl.abort(), timeoutMs) : null
       try {

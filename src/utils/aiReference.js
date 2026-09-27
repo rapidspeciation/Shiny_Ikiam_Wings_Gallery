@@ -3,7 +3,7 @@
 //      quality) — built from collection.json (URLd/URLv Google-Drive photos).
 //   2. GBIF fallback, MUSEUM-first (PRESERVED_SPECIMEN), then any record.
 // Subspecies -> species fallback at each level. We never ship scraped images.
-import { getProxiedUrl } from './imageProxy.js'
+import { webImageUrl, getProxiedUrl } from './imageProxy.js'
 
 const BASE = import.meta.env.BASE_URL
 
@@ -91,8 +91,8 @@ async function gbifOccurrenceMedia(key, museumOnly, max) {
       if (m.type && m.type !== 'StillImage') continue
       if (!m.identifier) continue
       out.push({
-        url: m.identifier,
-        thumb: m.identifier,
+        url: webImageUrl(m.identifier, 900),
+        thumb: webImageUrl(m.identifier, 300),
         caption: occ.basisOfRecord === 'PRESERVED_SPECIMEN' ? 'museum specimen' : 'observation',
         credit: m.rightsHolder || occ.recordedBy || 'GBIF',
         link: occ.key ? `https://www.gbif.org/occurrence/${occ.key}` : 'https://www.gbif.org',

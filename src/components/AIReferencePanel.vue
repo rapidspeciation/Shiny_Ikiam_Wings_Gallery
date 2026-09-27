@@ -12,6 +12,7 @@ import { referencesFor } from '../utils/aiReference.js'
 import { fieldPhotos, inatSearchUrl, isSubspecies } from '../utils/inatPhotos.js'
 import { getBoxes, getLinks, SOURCE_KEYS, SOURCE_LABELS, SOURCE_FULL_NAMES } from '../composables/useCurationData.js'
 import { fmtPct } from '../utils/aiCandidates.js'
+import { fallbackToDirect, unproxiedUrl } from '../utils/imageProxy.js'
 
 const props = defineProps({
   taxon: { type: String, default: '' },
@@ -37,6 +38,14 @@ const photos = computed(() => (tab.value === 'field' ? field.value.photos : muse
   .filter((p) => !broken.value.has(p.thumb || p.url)))
 function markBroken(p) { broken.value = new Set(broken.value).add(p.thumb || p.url) }
 const current = computed(() => photos.value[index.value] || null)
+// Large image failed through the proxy: retry the original URL once, else hide it.
+function onHeroError() {
+  const p = current.value
+  if (!p) return
+  const direct = unproxiedUrl(p.url)
+  if (direct && direct !== p.url) p.url = direct
+  else markBroken(p)
+}
 const count = (s) => (s.state === 'ready' || s.state === 'empty'
   ? String(s.photos.filter((p) => !broken.value.has(p.thumb || p.url)).length) : '…')
 
@@ -180,7 +189,7 @@ const altFor = (p, i) => (tab.value === 'field'
       <template v-else-if="current">
         <div class="hero" @touchstart.passive="onTouchStart" @touchend.passive="onTouchEnd">
           <AIPhotoView :key="current.url" :src="current.url" :boxes="heroBoxes" :used-index="-1"
-            :show-masks="false" dark :alt="altFor(current, index)" />
+            :show-masks="false" dark :alt="altFor(current, index)" @error="onHeroError" />
           <button v-if="index > 0" type="button" class="hnav hprev" aria-label="Previous photo" @click="step(-1)">‹</button>
           <button v-if="index < photos.length - 1" type="button" class="hnav hnext" aria-label="Next photo" @click="step(1)">›</button>
           <span class="counter" aria-live="polite">{{ index + 1 }} / {{ photos.length }}</span>
@@ -201,7 +210,7 @@ const altFor = (p, i) => (tab.value === 'field'
           <button v-for="(p, i) in photos" :key="p.url" type="button" class="thumb" :class="{ active: i === index }"
             :aria-label="`Show photo ${i + 1} of ${photos.length}`" :aria-current="i === index ? 'true' : undefined"
             @click="index = i">
-            <img :src="p.thumb || p.url" alt="" loading="lazy" referrerpolicy="no-referrer" @error="markBroken(p)" />
+            <img :src="p.thumb || p.url" alt="" loading="lazy" referrerpolicy="no-referrer" @error="fallbackToDirect($event) || markBroken(p)" />
           </button>
         </div>
       </template>
