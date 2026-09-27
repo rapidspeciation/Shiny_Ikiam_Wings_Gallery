@@ -11,6 +11,7 @@ import { resolveCamid } from '../utils/galleryPipeline.js'
 import { canonicalTaxon, predictionDiffers, rankComparison } from '../utils/taxonomy.js'
 import { loadCurrentPredictionMaps } from '../utils/predictionCoverage.js'
 import { regionSpecies, regionSubspecies } from '../utils/taxonTree.js'
+import { loadTaxonNames, lookupOrder } from '../utils/taxonNames.js'
 export { resolveCamid, predictionDiffers, canonicalTaxon, rankComparison }
 
 // Module-wide caches (one promise per file -> single fetch, deduped).
@@ -284,24 +285,39 @@ const EU = ['sangay', 'noreste', 'cotacachi']
 //   species    -> BoA species page + each .eu site's genus thumbnails
 //   genus      -> BoA genus page  + each .eu site's genus thumbnails
 // A source the sites don't have for this taxon stays null -> the UI omits the chip.
+// The link tables use the old names, so each source takes the first hit among the
+// requested name, its canonical name and its aliases (taxonNames.js).
 export async function getLinks(taxon) {
   const result = { boa: null, sangay: null, noreste: null, cotacachi: null }
   if (!taxon || typeof taxon !== 'string') return result
-  const p = taxon.trim().split(/\s+/).filter(Boolean)
-  if (!p.length) return result
+  if (!taxon.trim()) return result
 
   let data
   try {
-    data = await loadFile('taxon_links')
+    [data] = await Promise.all([loadFile('taxon_links'), loadTaxonNames()])
   } catch {
     return result
   }
+  // exact pages under every name first, then the species page for a subspecies
+  for (const speciesFallback of [false, true]) {
+    for (const name of lookupOrder(taxon)) {
+      const hit = linksFor(data, name, { speciesFallback })
+      for (const k of Object.keys(result)) if (!result[k] && hit[k]) result[k] = hit[k]
+    }
+  }
+  return result
+}
+
+export function linksFor(data, taxon, { speciesFallback = true } = {}) {
+  const result = { boa: null, sangay: null, noreste: null, cotacachi: null }
+  const p = taxon.trim().split(/\s+/).filter(Boolean)
+  if (!p.length) return result
   const boa = data.boa || {}, thumb = data.eu_thumb || {}, fiche = data.eu_fiche || {}
   const genus = p[0]
 
   if (p.length >= 3) {            // subspecies: exact fiche by epithet only
     const ssp = p[2]
-    result.boa = boa[`${genus} ${p[1]} ${ssp}`] || boa[`${genus} ${p[1]}`] || null
+    result.boa = boa[`${genus} ${p[1]} ${ssp}`] || (speciesFallback && boa[`${genus} ${p[1]}`]) || null
     for (const s of EU) result[s] = (fiche[s] && fiche[s][`${genus} ${ssp}`]) || null
   } else if (p.length === 2) {    // species: BoA species page + .eu genus thumbnails
     result.boa = boa[`${genus} ${p[1]}`] || null

@@ -15,6 +15,7 @@ import { fmtPct } from '../utils/aiCandidates.js'
 import { fieldPhotos } from '../utils/inatPhotos.js'
 import { fallbackToDirect } from '../utils/imageProxy.js'
 import { getChecklist } from '../composables/useCurationData.js'
+import { loadTaxonNames, taxonNamesVersion, formerlyText } from '../utils/taxonNames.js'
 
 const props = defineProps({
   pred: { type: Object, default: null },
@@ -29,12 +30,16 @@ const props = defineProps({
   genusLimit: { type: Number, default: GENUS_LIMIT },
   expandAll: { type: Boolean, default: false },
   label: { type: String, default: 'Model predictions' },
+  formerNames: { type: Boolean, default: false },  // row tooltip adds "formerly <old name>" (AI Identifier)
 })
 const emit = defineEmits(['select', 'activate'])
 
 // ---- checklist (region mode) ----
 const checklist = ref(null)
 onMounted(async () => { if (props.browse === 'region') checklist.value = await getChecklist() })
+// old / new taxon names (taxonNames.js): "+ all" rows list a taxon once under either name
+const namesVersion = ref(taxonNamesVersion())
+onMounted(() => loadTaxonNames().then(() => { namesVersion.value = taxonNamesVersion() }))
 
 // ---- tree + expansion ----
 const tree = computed(() => buildTree(props.pred, props.recorded))
@@ -72,7 +77,7 @@ watch(() => props.selected, (t) => {
 
 // "+ all" candidates, memoised per prediction / checklist
 const opts = computed(() => ({ mode: props.browse, checklist: checklist.value, side: props.side }))
-const extraCache = computed(() => { void props.pred; void opts.value; void tree.value; return { sp: new Map(), ss: new Map() } })
+const extraCache = computed(() => { void props.pred; void opts.value; void tree.value; void namesVersion.value; return { sp: new Map(), ss: new Map() } })
 function extraSpecies(g) {
   const m = extraCache.value.sp
   if (!m.has(g.taxon)) {
@@ -127,6 +132,12 @@ function toggleLabel(r) {
   const where = props.browse === 'region' && props.side ? `, ${props.side}` : ''
   if (r.kind === 'all-species') return r.open ? '− fewer species' : `+ all species in ${r.taxon} (${r.count}${where})`
   return r.open ? '− fewer subspecies' : `+ all subspecies (${r.count}${where})`
+}
+const rowTitle = (r) => {
+  if (!isTaxonRow(r)) return undefined
+  void namesVersion.value
+  const f = props.formerNames && r.rank !== 'genus' ? formerlyText(r.taxon) : ''
+  return f ? `${r.taxon} (${f})` : r.taxon
 }
 const rowLabel = (r) => {
   if (!isTaxonRow(r)) return toggleLabel(r)
@@ -208,7 +219,7 @@ defineExpose({ rows })
         sel: isTaxonRow(r) && r.taxon === selected, extra: r.extra, 'rec-hit': isTaxonRow(r) && isRecorded(r) }]"
       :aria-level="r.level" :aria-expanded="ariaExpanded(r)"
       :aria-selected="isTaxonRow(r) ? r.taxon === selected : undefined" :aria-label="rowLabel(r)"
-      :tabindex="r.key === tabStop ? 0 : -1" :title="isTaxonRow(r) ? r.taxon : undefined"
+      :tabindex="r.key === tabStop ? 0 : -1" :title="rowTitle(r)"
       @click="choose(r)" @keydown="onKey($event, r)">
       <template v-if="isTaxonRow(r)">
         <span v-if="r.expandable" class="tt-chev" :class="{ open: r.open }" aria-hidden="true"

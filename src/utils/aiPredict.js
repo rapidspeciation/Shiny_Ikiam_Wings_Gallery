@@ -9,6 +9,7 @@
 // Set VITE_AIID_API to the HF Space origin to use the real model; otherwise a
 // deterministic mock (real Ithomiini taxa) runs so the whole flow is demoable.
 import { entryFor, geoWeight, isOffRegion, DEFAULT_EPS } from './geoPrior.js'
+import { loadTaxonNames, canonicalLeaves } from './taxonNames.js'
 
 const API_BASE = (import.meta.env.VITE_AIID_API || '').replace(/\/$/, '')
 
@@ -115,7 +116,17 @@ export function wakeBackend() {
 // opts.box   = [x1,y1,x2,y2] normalised -> embed exactly that wing mask (lazy switch)
 // opts.yolo  = 'off' -> use the whole image (no wing crop)
 // opts.jobId = id sent as a (CORS-simple) form field so /status can track this request
-export async function predictOne(f, i = 0, { box = null, yolo = 'auto', jobId = null } = {}) {
+//
+// Leaves come back under canonical names (taxonNames.js): an old-name head (G1000)
+// and a corrected-name head (V1000) give the same names, and leaves merged by the
+// taxonomy vetting are summed. Checklist, museum, guide and iNaturalist lookups
+// map canonical names back to the old names the data files use.
+export async function predictOne(f, i = 0, opts = {}) {
+  const [raw] = await Promise.all([predictOneRaw(f, i, opts), loadTaxonNames()])
+  return { ...raw, leaves: canonicalLeaves(raw.leaves) }
+}
+
+async function predictOneRaw(f, i = 0, { box = null, yolo = 'auto', jobId = null } = {}) {
   const id = f.id || `img_${i}`
   if (!API_BASE) {
     return { id, filename: f.name, leaves: mockRawLeaves(f.name), wing_box: null, boxes: [], mock: true }

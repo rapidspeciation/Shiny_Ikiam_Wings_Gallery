@@ -20,6 +20,13 @@ const PER_PAGE = 12
 const SPECIES_OR_LOWER = new Set(['species', 'hybrid', 'subspecies', 'variety', 'form', 'infrahybrid'])
 
 import { webImageUrl } from './imageProxy.js'
+import { loadTaxonNames, lookupOrder } from './taxonNames.js'
+
+// Names to query for a taxon: itself, then its canonical name and aliases.
+async function defaultNamesFor(name) {
+  await loadTaxonNames()
+  return lookupOrder(name)
+}
 
 export const speciesOf = (t) => String(t || '').trim().split(/\s+/).slice(0, 2).join(' ')
 export const isSubspecies = (t) => String(t || '').trim().split(/\s+/).length >= 3
@@ -83,6 +90,7 @@ export function createInatClient({
   timeoutMs = 12000,
   now = () => Date.now(),
   sleep = (ms) => new Promise((r) => setTimeout(r, ms)),
+  namesFor = defaultNamesFor,   // taxon -> names to try (old / new names of a renamed taxon)
 } = {}) {
   const memory = new Map()      // key -> Promise
   const queue = []              // pending { run, resolve, reject }
@@ -182,8 +190,9 @@ export function createInatClient({
     })
   }
 
-  // Field photos for a taxon. Subspecies with no photos fall back to the species;
-  // a country filter with no photos falls back to all places.
+  // Field photos for a taxon. Each level tries the requested name, then the other
+  // names of a renamed taxon (taxonNames.js); subspecies with no photos fall back
+  // to the species; a country filter with no photos falls back to all places.
   // -> { photos, requested, shownTaxon, speciesFallback, placeFallback, place, resolvedAs }
   async function fieldPhotos(taxon, { country = '', priority = false } = {}) {
     const requested = String(taxon || '').trim()
@@ -191,17 +200,24 @@ export function createInatClient({
     if (!requested) return empty
     let placeId = null
     if (country) { try { placeId = await resolvePlace(country, { priority }) } catch { placeId = null } }
-    const names = isSubspecies(requested) ? [requested, speciesOf(requested)] : [requested]
-    for (const name of names) {
-      const tries = placeId ? [placeId, null] : [null]
-      for (const pid of tries) {
-        const r = await observations(name, pid, { priority })
-        if (r.photos.length) {
-          return {
-            photos: r.photos, requested, shownTaxon: name, resolvedAs: r.resolvedAs,
-            speciesFallback: name !== requested,
-            placeFallback: !!placeId && !pid,
-            place: pid ? country : '',
+    const levels = isSubspecies(requested) ? [requested, speciesOf(requested)] : [requested]
+    for (const level of levels) {
+      let names = [level]
+      try { names = (await namesFor(level)) || [level] } catch { names = [level] }
+      if (!names.includes(level)) names.unshift(level)
+      for (const name of names) {
+        const tries = placeId ? [placeId, null] : [null]
+        for (const pid of tries) {
+          const r = await observations(name, pid, { priority })
+          if (r.photos.length) {
+            return {
+              photos: r.photos, requested, shownTaxon: name,
+              // found under another name of the taxon: say which
+              resolvedAs: r.resolvedAs || (name !== level ? name : ''),
+              speciesFallback: level !== requested,
+              placeFallback: !!placeId && !pid,
+              place: pid ? country : '',
+            }
           }
         }
       }

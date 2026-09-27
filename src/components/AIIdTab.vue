@@ -609,7 +609,7 @@ const showAbout = ref(false)
                   <div class="col-title" id="preds-lbl">Predictions</div>
                   <div v-if="lowConfidence" class="low-conf" role="status">{{ lowConfidence }}</div>
                   <TaxonTree :pred="active.pred" :selected="active.selected" :reset-key="treeKey(active)"
-                    browse="vocabulary" thumbs :genus-limit="4" label="Predictions"
+                    browse="vocabulary" thumbs former-names :genus-limit="4" label="Predictions"
                     @select="(t) => selectTaxon(active, t)" @activate="openSheet" />
                 </div>
               </div>
@@ -636,7 +636,7 @@ const showAbout = ref(false)
               </div>
 
               <div v-if="!isMobile" class="area-ref">
-                <AIReferencePanel :taxon="active.selected" :prob="selectedInfo?.prob ?? null" :members="selectedMembers"
+                <AIReferencePanel :taxon="active.selected" :prob="selectedInfo?.prob ?? null" :members="selectedMembers" former-names
                   :country="active.country !== ANY ? active.country : ''" />
               </div>
             </div>
@@ -659,7 +659,7 @@ const showAbout = ref(false)
             <span class="sheet-user-lbl">Your photo</span>
           </div>
           <div class="sheet-scroll">
-            <AIReferencePanel ref="sheetPanel" compact :taxon="active.selected" :prob="selectedInfo?.prob ?? null"
+            <AIReferencePanel ref="sheetPanel" compact former-names :taxon="active.selected" :prob="selectedInfo?.prob ?? null"
               :members="selectedMembers" :country="active.country !== ANY ? active.country : ''" />
           </div>
         </div>

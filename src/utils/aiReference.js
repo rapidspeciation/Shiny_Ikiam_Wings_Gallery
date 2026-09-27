@@ -3,9 +3,13 @@
 //      quality) — built from collection.json (URLd/URLv Google-Drive photos).
 //   2. GBIF fallback, MUSEUM-first (PRESERVED_SPECIMEN), then any record.
 // Subspecies -> species fallback at each level. We never ship scraped images.
+// Collection records keep the recorded (old) names, so every level also tries
+// the canonical name and its aliases (taxonNames.js): specimens recorded under
+// any name of a merged taxon are shown together, the requested name first.
 import { webImageUrl, getProxiedUrl } from './imageProxy.js'
+import { loadTaxonNames, lookupOrder } from './taxonNames.js'
 
-const BASE = import.meta.env.BASE_URL
+const BASE = import.meta.env?.BASE_URL ?? '/'
 
 const clean = (v) => {
   if (v == null) return ''
@@ -48,9 +52,20 @@ function buildSangerIndex() {
 
 async function sangerPhotos(taxon, max = 6) {
   const { byBinomial, byTrinomial } = await buildSangerIndex()
+  const collect = (map, name) => {
+    const names = [], specimens = []
+    for (const n of lookupOrder(name)) {
+      const hit = map.get(n)
+      if (hit?.length) { names.push(n); specimens.push(...hit) }
+    }
+    return { names, specimens }
+  }
   const isSub = taxon.split(/\s+/).length >= 3
-  const specimens = (isSub && byTrinomial.get(taxon)) || byBinomial.get(binomialOf(taxon)) || []
-  const level = isSub && byTrinomial.get(taxon) ? 'subspecies' : 'species'
+  const sub = isSub ? collect(byTrinomial, taxon) : { names: [], specimens: [] }
+  const hit = sub.specimens.length ? sub : collect(byBinomial, binomialOf(taxon))
+  const { specimens } = hit
+  const level = sub.specimens.length ? 'subspecies' : 'species'
+  const recordedAs = hit.names.filter((n) => n !== taxon && n !== binomialOf(taxon))
   const photos = []
   for (const sp of specimens) {
     for (const ph of sp.photos) {
@@ -64,10 +79,10 @@ async function sangerPhotos(taxon, max = 6) {
         // these reference photos too — GBIF photos have no boxes (boxKey stays null).
         boxKey: sp.camid ? `${sp.camid}${ph.view === 'dorsal' ? 'd' : 'v'}` : null,
       })
-      if (photos.length >= max) return { photos, level }
+      if (photos.length >= max) return { photos, level, recordedAs }
     }
   }
-  return { photos, level }
+  return { photos, level, recordedAs }
 }
 
 // --- GBIF fallback, museum-first ---
@@ -105,7 +120,8 @@ async function gbifOccurrenceMedia(key, museumOnly, max) {
 }
 
 async function gbifPhotos(taxon, max = 6) {
-  for (const name of dedupe([taxon, binomialOf(taxon)])) {
+  const names = dedupe([...lookupOrder(taxon), ...lookupOrder(binomialOf(taxon))])
+  for (const name of names) {
     const key = await gbifKey(name)
     if (!key) continue
     // museum first, then top up with any record
@@ -114,9 +130,13 @@ async function gbifPhotos(taxon, max = 6) {
       const more = await gbifOccurrenceMedia(key, false, max - photos.length)
       photos = photos.concat(more.filter((p) => !photos.some((q) => q.url === p.url)))
     }
-    if (photos.length) return { photos, level: name === taxon ? 'subspecies' : 'species' }
+    if (photos.length) {
+      const level = name.split(/\s+/).length >= 3 ? 'subspecies' : 'species'
+      const recordedAs = name !== taxon && name !== binomialOf(taxon) ? [name] : []
+      return { photos, level, recordedAs }
+    }
   }
-  return { photos: [], level: 'none' }
+  return { photos: [], level: 'none', recordedAs: [] }
 }
 
 const dedupe = (a) => [...new Set(a)]
@@ -141,6 +161,7 @@ export async function referencesFor(taxon, max = 6) {
   }
   const key = `${taxon}|${max}`
   const job = (async () => {
+    await loadTaxonNames()
     const sanger = await sangerPhotos(taxon, max)
     if (sanger.photos.length) return { ...sanger, source: 'sanger' }
     const gbif = await gbifPhotos(taxon, max)

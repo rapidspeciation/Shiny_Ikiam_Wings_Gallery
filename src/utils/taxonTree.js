@@ -6,6 +6,7 @@
 // genus or species (sorted by probability, then name). No I/O, unit tested in
 // tests/taxon-tree.test.mjs.
 import { fmtPct } from './aiCandidates.js'
+import { canonical } from './taxonNames.js'
 
 export const SUBSP_MIN = 0.05        // show the 2nd/3rd subspecies only if >= 5%
 export const GENUS_LIMIT = 4         // genera visible before the "N more genera" row
@@ -174,14 +175,17 @@ export function expandEverything(tree) {
 
 // Rows for "+ all species in <genus>" / "+ all subspecies": every candidate
 // name not already shown, with the model's probability when it has one
-// (prob -1 = not in the model output), sorted by probability then name.
+// (prob -1 = not in the model output), sorted by probability then name. Old and
+// new names of the same taxon (taxonNames.js) count once: a name already shown,
+// or listed earlier in `candidates`, hides its synonyms.
 // probOf(name) -> { prob, oor } | null
 export function extraRows(candidates, shown, probOf, rank) {
-  const seen = new Set(shown)
+  const seen = new Set(shown.map(canonical))
   const out = []
   for (const taxon of candidates) {
-    if (seen.has(taxon)) continue
-    seen.add(taxon)
+    const key = canonical(taxon)
+    if (seen.has(key)) continue
+    seen.add(key)
     const hit = probOf(taxon)
     out.push({ taxon, rank, prob: hit ? hit.prob : -1, oor: hit ? !!hit.oor : false, subspecies: [], extra: true })
   }
@@ -193,19 +197,20 @@ export function extraRows(candidates, shown, probOf, rank) {
 //     taken from the full re-ranked distribution (species_all, subspecies_all),
 //     so 0% taxa are listed and off-region ones are tagged, not hidden.
 //   'region' (Collection): taxa of the region checklist on the specimen's side of
-//     the Andes, as the old tree did, plus any the prediction scored.
+//     the Andes, as the old tree did, plus any the prediction scored. Model names
+//     come first so extraRows keeps them over a checklist synonym.
 export function speciesCandidates(pred, genus, { mode = 'region', checklist = null, side = '' } = {}) {
   const prefix = `${genus} `
   const fromPred = (pred?.species_all || pred?.species || []).map((r) => r[0]).filter((t) => t.startsWith(prefix))
   if (mode === 'vocabulary') return fromPred
-  return [...new Set([...regionSpecies(checklist, genus, side), ...fromPred])]
+  return [...new Set([...fromPred, ...regionSpecies(checklist, genus, side)])]
 }
 export function subspeciesCandidates(pred, species, { mode = 'region', checklist = null, side = '' } = {}) {
   const prefix = `${species} `
   const fromPred = (pred?.subspecies_all || pred?.subspecies || []).map((r) => r[0])
     .filter((t) => t.startsWith(prefix) && t.split(/\s+/).length >= 3)
   if (mode === 'vocabulary') return fromPred
-  return [...new Set([...regionSubspecies(checklist, species, side), ...fromPred])]
+  return [...new Set([...fromPred, ...regionSubspecies(checklist, species, side)])]
 }
 
 // name -> { prob, oor } lookups over the prediction's longest lists.

@@ -4,17 +4,46 @@
 // down-weight (x eps) taxa not documented in the chosen country, and — for
 // Ecuador — taxa not documented on the chosen side of the Andes. Never up-weights.
 import { getChecklist } from '../composables/useCurationData.js'
+import { checklistNames, taxonNamesVersion } from './taxonNames.js'
 
 export const DEFAULT_EPS = 0.02
 
-// Look up a taxon's checklist entry, falling back trinomial -> binomial.
+// Look up a taxon's checklist entry, falling back trinomial -> binomial. The
+// checklist keeps the old names, so each level also tries the canonical name and
+// its aliases (taxonNames.js); when several keys match (a merge, e.g. Dryas julia
+// + Dryas iulia) their records are combined.
 export function entryFor(checklist, taxon) {
-  if (!taxon) return null
-  let e = checklist[taxon]
+  if (!taxon || !checklist) return null
+  const e = lookupEntry(checklist, taxon)
   if (e) return e
-  const p = taxon.split(/\s+/)
-  if (p.length >= 2) e = checklist[`${p[0]} ${p[1]}`]
-  return e || null
+  const p = String(taxon).trim().split(/\s+/)
+  return p.length >= 3 ? lookupEntry(checklist, `${p[0]} ${p[1]}`) : null
+}
+
+const _merged = new WeakMap()   // checklist -> { version, map: name -> merged entry }
+function lookupEntry(checklist, name) {
+  const names = checklistNames(name)
+  if (names.length <= 1) return checklist[names[0] ?? name] || null
+  let m = _merged.get(checklist)
+  if (!m || m.version !== taxonNamesVersion()) { m = { version: taxonNamesVersion(), map: new Map() }; _merged.set(checklist, m) }
+  const key = names.join('|')
+  if (!m.map.has(key)) {
+    const hits = names.map((n) => checklist[n]).filter(Boolean)
+    m.map.set(key, hits.length > 1 ? mergeEntries(hits) : hits[0] || null)
+  }
+  return m.map.get(key)
+}
+
+// Union of checklist records: counts add up per country and side.
+export function mergeEntries(entries) {
+  const out = { East: 0, West: 0, countries: {} }
+  for (const e of entries) {
+    out.East += e.East || 0
+    out.West += e.West || 0
+    if (e.ec) out.ec = Math.max(out.ec || 0, e.ec)
+    for (const [c, n] of Object.entries(e.countries || {})) out.countries[c] = (out.countries[c] || 0) + n
+  }
+  return out
 }
 
 // weight in (eps, 1]. country '' / 'Any' = no country filter; side '' = no side filter.

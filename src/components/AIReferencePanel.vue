@@ -15,6 +15,7 @@ import { fieldPhotos, inatSearchUrl, isSubspecies } from '../utils/inatPhotos.js
 import { getBoxes, getLinks, SOURCE_KEYS, SOURCE_LABELS, SOURCE_FULL_NAMES } from '../composables/useCurationData.js'
 import { fmtPct } from '../utils/aiCandidates.js'
 import { fallbackToDirect, unproxiedUrl } from '../utils/imageProxy.js'
+import { loadTaxonNames, taxonNamesVersion, formerlyText } from '../utils/taxonNames.js'
 
 const props = defineProps({
   taxon: { type: String, default: '' },
@@ -22,6 +23,7 @@ const props = defineProps({
   country: { type: String, default: '' },   // '' = any place
   compact: { type: Boolean, default: false }, // bottom-sheet variant (smaller image)
   members: { type: Array, default: () => [] }, // genus selection: its top species
+  formerNames: { type: Boolean, default: false }, // header adds "formerly <old name>" (AI Identifier)
 })
 
 const MUSEUM_MAX = 16
@@ -36,6 +38,14 @@ const allPlaces = ref(false)
 const broken = ref(new Set())   // image URLs that failed to load (e.g. blocked by the host)
 let token = 0
 let fieldTimer = null
+
+// "formerly Agraulis vanillae" for a taxon the AI Identifier shows under its corrected name
+const namesVersion = ref(taxonNamesVersion())
+loadTaxonNames().then(() => { namesVersion.value = taxonNamesVersion() })
+const formerly = computed(() => {
+  void namesVersion.value
+  return props.formerNames && !isGenus.value ? formerlyText(props.taxon) : ''
+})
 
 const place = computed(() => (allPlaces.value ? '' : props.country))
 const photos = computed(() => (tab.value === 'field' ? field.value.photos : museum.value.photos)
@@ -156,7 +166,8 @@ const museumNote = computed(() => {
   if (m.genus) return `A few specimens of each top species in ${props.taxon}.`
   const src = m.source === 'sanger' ? 'Sanger / Ikiam collection' : m.source === 'gbif' ? 'GBIF museum and other records' : ''
   const lvl = isSub.value && m.level === 'species' ? 'No museum photos for this subspecies; showing the species. ' : ''
-  return lvl + src
+  const as = m.recordedAs?.length ? `. Includes records under ${m.recordedAs.join(', ')}.` : ''
+  return lvl + src + as
 })
 const altFor = (p, i) => (tab.value === 'field'
   ? `Field photo ${i + 1} of ${photos.value.length} of ${p.taxon || p.group || props.taxon}${p.place ? `, ${p.place}` : ''}`
@@ -169,6 +180,7 @@ const altFor = (p, i) => (tab.value === 'field'
       <div class="ref-title">
         <em>{{ taxon || 'No taxon selected' }}</em>
         <span v-if="prob != null" class="ref-pct">{{ fmtPct(prob) }}</span>
+        <span v-if="formerly" class="ref-formerly">{{ formerly }}</span>
       </div>
       <div v-if="links.length" class="guides">
         <span class="text-muted">Guides:</span>
@@ -253,6 +265,7 @@ const altFor = (p, i) => (tab.value === 'field'
 .ref-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: .35rem .75rem; }
 .ref-title { font-size: 1.05rem; display: flex; align-items: baseline; gap: .5rem; min-width: 0; }
 .ref-title em { overflow-wrap: anywhere; }
+.ref-formerly { font-size: .75rem; color: #64748b; }
 .ref-pct { font-weight: 600; color: #475569; font-size: .9rem; font-variant-numeric: tabular-nums; }
 .guides { display: flex; flex-wrap: wrap; align-items: center; gap: .25rem; font-size: .72rem; }
 .src-chip { display: inline-flex; align-items: center; min-height: 22px; padding: 0 7px; font-size: .7rem; text-decoration: none; color: #0d6efd; background: #eef4ff; border: 1px solid #cfe0ff; border-radius: 999px; }
