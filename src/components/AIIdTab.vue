@@ -620,8 +620,8 @@ const showAbout = ref(false)
             <table id="field-benchmark" class="table table-sm table-bordered w-auto small">
               <thead><tr><th>Rank</th><th>Photographs</th><th>Top-1</th><th>Top-5</th></tr></thead>
               <tbody>
-                <tr><td>Species</td><td>4,566</td><td>73.37%</td><td>92.05%</td></tr>
-                <tr><td>Genus</td><td>4,566</td><td>90.63%</td><td>97.22%</td></tr>
+                <tr><td>Species</td><td>4,566</td><td>73.92%</td><td>92.05%</td></tr>
+                <tr><td>Genus</td><td>4,566</td><td>90.60%</td><td>97.22%</td></tr>
               </tbody>
             </table>
           </section>
@@ -673,9 +673,12 @@ const showAbout = ref(false)
             Taxonomic Inventory</a> and other hawkmoth/saturniid resources.
           </p>
           <p class="mb-1"><strong>Changelog</strong></p>
+          <p><strong>26 September 2026:</strong> Retrained the AI Identifier classifier after correcting 558 training
+          labels using their source captions. On the GBIF field photos, Species Top-1 rose from 73.37% to 73.92% (+0.55 pp);
+          Top-5 is unchanged at 92.05%.</p>
           <p><strong>26 September 2026:</strong> AI Identifier now uses the corrected v6 wing crop, fixes 92 taxon
           names, and no longer guesses a location when none is selected. On the GBIF field photos, Species Top-1 rose
-          from 67.50% to 73.37% (+5.87 pp) and Top-5 from 85.59% to 92.05% (+6.46 pp). The classification head is unchanged.</p>
+          from 67.50% to 73.37% (+5.87 pp) and Top-5 from 85.59% to 92.05% (+6.46 pp), with the previous classification head.</p>
           <p><strong>26 September 2026:</strong> Collection predictions for verified dorsal/ventral pairs now use an
           attention model. On 314 held-out pairs, Species Top-1 rose from 92.04% to 95.22% (+3.18 pp) over averaging
           single-photo predictions across the two views.</p>
