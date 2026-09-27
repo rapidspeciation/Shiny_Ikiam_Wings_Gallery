@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import { usePanzoomRegistry } from './composables/usePanzoomRegistry.js'
 import { useGlobalGalleryOptions } from './composables/useGlobalGalleryOptions.js'
 import { useDataset } from './composables/useDataset.js'
@@ -13,6 +13,8 @@ import SearchTab from './components/SearchTab.vue'
 import UpdateTab from './components/UpdateTab.vue'
 import AIIdTab from './components/AIIdTab.vue'
 import GalleryOptionsBar from './components/GalleryOptionsBar.vue'
+import TaxonDrawer from './components/TaxonDrawer.vue'
+import { useTaxonDrawer } from './composables/useTaxonDrawer.js'
 
 // Pinned in the top navbar so they stay reachable while scrolling through photos.
 const { zoomWings, expandPredictions } = useGlobalGalleryOptions()
@@ -54,6 +56,9 @@ function navigate(name) {
   }
 }
 function onPopState() { currentTab.value = tabFromUrl() }
+// the compare drawer belongs to the gallery tab it was opened from
+const { closeDrawer } = useTaxonDrawer()
+watch(currentTab, () => closeDrawer())
 
 // Zoom Logic
 const { attachGlobalListeners, resetAll } = usePanzoomRegistry()
@@ -143,6 +148,7 @@ onMounted(async () => {
       <keep-alive>
         <component :is="tabs[currentTab]" />
       </keep-alive>
+      <TaxonDrawer />
     </div>
   </div>
 </template>

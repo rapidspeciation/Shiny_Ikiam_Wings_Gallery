@@ -7,17 +7,21 @@
 // YOLO wing-crop returns selectable masks: the largest runs on Identify, others run
 // lazily when their bbox is clicked.
 //
-// Results view, per photo (photos switch via tabs): a flat species-first candidate
-// list with the "Where taken?" chips (AICandidateList), the uploaded photo (sticky),
-// and a reference panel for the selected taxon with iNaturalist field photos and
-// museum photos (AIReferencePanel). Phones get a sticky mini-bar and a bottom sheet
-// that pins the user's photo above the reference photos.
+// Results view, per photo (photos switch via tabs): the "Where taken?" chips
+// (AILocationChips), a low-confidence banner and the shared taxonomy table
+// (TaxonTree: genus > species > subspecies with every taxon browsable), the
+// uploaded photo (sticky), and a reference panel for the selected taxon with
+// iNaturalist field photos and museum photos (AIReferencePanel; a genus shows its
+// top species). Phones get a sticky mini-bar and a bottom sheet that pins the
+// user's photo above the reference photos.
 import { ref, computed, watch, nextTick, onMounted, onActivated, onDeactivated, onBeforeUnmount } from 'vue'
-import AICandidateList from './AICandidateList.vue'
+import AILocationChips from './AILocationChips.vue'
+import TaxonTree from './TaxonTree.vue'
 import AIReferencePanel from './AIReferencePanel.vue'
 import AIPhotoView from './AIPhotoView.vue'
 import InferenceProgress from './InferenceProgress.vue'
-import { speciesCandidates, pickSelection, taxonInfo, fmtPct } from '../utils/aiCandidates.js'
+import { taxonInfo, fmtPct, lowConfidenceMessage } from '../utils/aiCandidates.js'
+import { keepSelection, genusMembers, rankOf } from '../utils/taxonTree.js'
 import { predictStream, predictOne, rankLeaves, getStatus, makeJobId, wakeBackend, HAS_BACKEND, PREDICTION_CACHE_VERSION } from '../utils/aiPredict.js'
 import { loadCountries, suggestLocations } from '../utils/geoPrior.js'
 import { getChecklist } from '../composables/useCurationData.js'
@@ -304,12 +308,12 @@ const progress = computed(() => {
   return null
 })
 
-// Top species list size the candidate column can show ("Show more" reaches 10).
+// Species / genera the table lists before "+ all species" (the *_all lists keep the rest).
 const TOP_SPECIES = 10
 function rerank(r) {
   r.pred = rankLeaves(r.leaves, checklist.value, { country: cParam(r.country), side: sideOf(r.region), topK: TOP_SPECIES })
-  // keep a user-picked taxon while it stays in the list, else follow the top species
-  r.selected = pickSelection(speciesCandidates(r.pred, TOP_SPECIES), r.selected, r.userPicked)
+  // keep a user-picked taxon while the model still knows it, else follow the top species
+  r.selected = keepSelection(r.pred, r.selected, r.userPicked)
 }
 // Re-rank after new leaves (upload or mask switch) and refresh the location suggestions.
 function applyLeaves(r, leaves) {
@@ -450,6 +454,11 @@ const activeId = ref('')
 const active = computed(() => results.value.find((r) => r.id === activeId.value) || results.value[0] || null)
 function selectTaxon(r, taxon) { r.selected = taxon; r.userPicked = true }
 const selectedInfo = computed(() => (active.value ? taxonInfo(active.value.pred, active.value.selected) : null))
+// a genus selection shows photos of its top species
+const selectedMembers = computed(() => (active.value && rankOf(active.value.selected) === 'genus'
+  ? genusMembers(active.value.pred, active.value.selected, 3) : []))
+const lowConfidence = computed(() => (active.value?.pred ? lowConfidenceMessage(active.value.pred, hasLocation(active.value)) : ''))
+const treeKey = (r) => `${r.id}|${r.usedIndex}`
 const photoTabs = ref(null)
 function onPhotoTabKey(e) {
   const d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0
@@ -590,11 +599,19 @@ const showAbout = ref(false)
 
             <div class="res-grid">
               <div class="area-cands">
-                <AICandidateList :pred="active.pred" :selected="active.selected" :suggest="active.suggest"
-                  :country="active.country" :region="active.region" :country-options="countryOptions" :region-options="REGION_OPTS"
-                  @select="(t) => selectTaxon(active, t)" @activate="openSheet"
-                  @any="resetLocation(active)" @suggest="(s) => applySuggestion(active, s)"
-                  @set-country="(v) => setCountry(active, v)" @set-region="(v) => setRegion(active, v)" />
+                <div class="cands-side">
+                  <AILocationChips :suggest="active.suggest" :country="active.country" :region="active.region"
+                    :country-options="countryOptions" :region-options="REGION_OPTS"
+                    @any="resetLocation(active)" @suggest="(s) => applySuggestion(active, s)"
+                    @set-country="(v) => setCountry(active, v)" @set-region="(v) => setRegion(active, v)" />
+                </div>
+                <div class="cands-main">
+                  <div class="col-title" id="preds-lbl">Predictions</div>
+                  <div v-if="lowConfidence" class="low-conf" role="status">{{ lowConfidence }}</div>
+                  <TaxonTree :pred="active.pred" :selected="active.selected" :reset-key="treeKey(active)"
+                    browse="vocabulary" thumbs :genus-limit="4" label="Predictions"
+                    @select="(t) => selectTaxon(active, t)" @activate="openSheet" />
+                </div>
               </div>
 
               <div ref="photoArea" class="area-photo">
@@ -619,7 +636,7 @@ const showAbout = ref(false)
               </div>
 
               <div v-if="!isMobile" class="area-ref">
-                <AIReferencePanel :taxon="active.selected" :prob="selectedInfo?.prob ?? null"
+                <AIReferencePanel :taxon="active.selected" :prob="selectedInfo?.prob ?? null" :members="selectedMembers"
                   :country="active.country !== ANY ? active.country : ''" />
               </div>
             </div>
@@ -643,7 +660,7 @@ const showAbout = ref(false)
           </div>
           <div class="sheet-scroll">
             <AIReferencePanel ref="sheetPanel" compact :taxon="active.selected" :prob="selectedInfo?.prob ?? null"
-              :country="active.country !== ANY ? active.country : ''" />
+              :members="selectedMembers" :country="active.country !== ANY ? active.country : ''" />
           </div>
         </div>
       </div>
@@ -794,6 +811,7 @@ const showAbout = ref(false)
 .preview-grid.small .preview .rm { width: 20px; height: 20px; font-size: .8rem; }
 .identify-btn { min-width: 12rem; }
 .mask-bar { margin-bottom: .35rem; }
+.low-conf { font-size: .78rem; color: #854d0e; background: #fefce8; border: 1px solid #fde68a; border-radius: 6px; padding: .35rem .55rem; margin-bottom: .45rem; }
 .col-title { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: #64748b; margin-bottom: .35rem; }
 
 /* photo tabs */
@@ -810,17 +828,20 @@ const showAbout = ref(false)
 /* results grid: phones stack candidates then photo (reference opens in a sheet) */
 .res-grid { display: grid; gap: 1rem; grid-template-columns: minmax(0, 1fr); grid-template-areas: "cands" "photo"; }
 .area-cands { grid-area: cands; min-width: 0; }
+.cands-main { margin-top: 1rem; min-width: 0; }
 .area-photo { grid-area: photo; min-width: 0; scroll-margin-top: 130px; }
 .area-ref { grid-area: ref; min-width: 0; }
-/* medium: photo and reference side by side, candidates below */
+/* medium: photo and reference side by side, predictions below */
 @media (min-width: 768px) {
   .res-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-areas: "photo ref" "cands cands"; }
-  .area-cands :deep(.cand-list) { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+  .area-cands { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: 1.25rem; align-items: start; }
+  .cands-main { margin-top: 0; }
 }
-/* desktop: candidates | photo (sticky) | reference */
+/* desktop: predictions | photo (sticky) | reference */
 @media (min-width: 1200px) {
-  .res-grid { grid-template-columns: minmax(260px, .85fr) minmax(0, 1fr) minmax(0, 1.15fr); grid-template-areas: "cands photo ref"; }
-  .area-cands :deep(.cand-list) { display: flex; }
+  .res-grid { grid-template-columns: minmax(280px, .9fr) minmax(0, 1fr) minmax(0, 1.15fr); grid-template-areas: "cands photo ref"; }
+  .area-cands { display: block; }
+  .cands-main { margin-top: 1rem; }
   .photo-sticky { position: sticky; top: 70px; }
   .photo-sticky :deep(.ai-photo) { height: 440px; }
 }

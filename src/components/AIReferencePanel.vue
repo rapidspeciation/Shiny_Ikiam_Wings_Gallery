@@ -1,7 +1,9 @@
 <script setup>
-// Reference panel for the selected AI Identifier taxon (species or subspecies):
-// header with name + probability and the guide links (BoA, Sangay, Noreste,
-// Cotacachi, once per taxon), then tabs [Field photos] [Museum]. Field photos come
+// Reference panel for the selected taxon (genus, species or subspecies), used by
+// the AI Identifier and the Collection compare drawer: header with name +
+// probability and the guide links (BoA, Sangay, Noreste, Cotacachi, once per
+// taxon), then tabs [Field photos] [Museum]. A genus shows a few photos of each
+// of its top species (`members`), labelled by species. Field photos come
 // from iNaturalist (research grade, place-filtered when a country is chosen);
 // Museum reuses referencesFor() (Sanger collection first, GBIF fallback) with
 // zoom-to-wings boxes. One large image with prev/next (arrow keys, swipe) and a
@@ -19,9 +21,11 @@ const props = defineProps({
   prob: { type: Number, default: null },
   country: { type: String, default: '' },   // '' = any place
   compact: { type: Boolean, default: false }, // bottom-sheet variant (smaller image)
+  members: { type: Array, default: () => [] }, // genus selection: its top species
 })
 
 const MUSEUM_MAX = 16
+const PER_MEMBER = 4   // genus mode: photos per species
 const tab = ref('field')
 const index = ref(0)
 const field = ref({ state: 'idle', photos: [] })
@@ -49,9 +53,23 @@ function onHeroError() {
 const count = (s) => (s.state === 'ready' || s.state === 'empty'
   ? String(s.photos.filter((p) => !broken.value.has(p.thumb || p.url)).length) : '…')
 
+// Genus mode: when the taxon is a genus with known member species.
+const groupMembers = computed(() => (isGenus.value ? props.members.slice(0, 3) : []))
+const isGenus = computed(() => !!props.taxon && props.taxon.trim().split(/\s+/).length === 1)
+const tag = (photos, group) => photos.slice(0, PER_MEMBER).map((p) => ({ ...p, group }))
+
 async function loadField(t, my) {
   field.value = { state: 'loading', photos: [] }
   try {
+    if (groupMembers.value.length) {
+      const all = await Promise.all(groupMembers.value.map((m) => fieldPhotos(m, { country: place.value, priority: true })
+        .then((r) => ({ ...r, photos: tag(r.photos, m) })).catch(() => ({ photos: [] }))))
+      if (my !== token) return
+      const photos = all.flatMap((r) => r.photos)
+      field.value = { state: photos.length ? 'ready' : 'empty', photos, genus: true,
+        placeFallback: all.some((r) => r.placeFallback) && !all.some((r) => r.photos.length && !r.placeFallback) }
+      return
+    }
     const r = await fieldPhotos(t, { country: place.value, priority: true })
     if (my !== token) return
     field.value = { state: r.photos.length ? 'ready' : 'empty', ...r }
@@ -62,6 +80,14 @@ async function loadField(t, my) {
 async function loadMuseum(t, my) {
   museum.value = { state: 'loading', photos: [] }
   try {
+    if (groupMembers.value.length) {
+      const all = await Promise.all(groupMembers.value.map((m) => referencesFor(m, PER_MEMBER)
+        .then((r) => ({ ...r, photos: tag(r.photos, m) })).catch(() => ({ photos: [] }))))
+      if (my !== token) return
+      const photos = all.flatMap((r) => r.photos)
+      museum.value = { state: photos.length ? 'ready' : 'empty', photos, genus: true, source: 'mixed', level: 'species' }
+      return
+    }
     const r = await referencesFor(t, MUSEUM_MAX)
     if (my !== token) return
     museum.value = { state: r.photos.length ? 'ready' : 'empty', ...r }
@@ -87,7 +113,7 @@ function reload() {
   field.value = { state: 'loading', photos: [] }
   fieldTimer = setTimeout(() => loadField(t, my), 250)
 }
-watch(() => props.taxon, reload, { immediate: true })
+watch(() => [props.taxon, groupMembers.value.join('|')].join('#'), reload, { immediate: true })
 watch(() => props.country, () => { allPlaces.value = false })
 watch(place, () => { if (props.taxon) { index.value = 0; loadField(props.taxon, token) } })
 watch(tab, () => { index.value = 0 })
@@ -127,13 +153,14 @@ const isSub = computed(() => isSubspecies(props.taxon))
 const museumNote = computed(() => {
   const m = museum.value
   if (m.state !== 'ready') return ''
+  if (m.genus) return `A few specimens of each top species in ${props.taxon}.`
   const src = m.source === 'sanger' ? 'Sanger / Ikiam collection' : m.source === 'gbif' ? 'GBIF museum and other records' : ''
   const lvl = isSub.value && m.level === 'species' ? 'No museum photos for this subspecies; showing the species. ' : ''
   return lvl + src
 })
 const altFor = (p, i) => (tab.value === 'field'
-  ? `Field photo ${i + 1} of ${photos.value.length} of ${p.taxon || props.taxon}${p.place ? `, ${p.place}` : ''}`
-  : `Museum photo ${i + 1} of ${photos.value.length} of ${props.taxon}: ${p.caption || ''}`)
+  ? `Field photo ${i + 1} of ${photos.value.length} of ${p.taxon || p.group || props.taxon}${p.place ? `, ${p.place}` : ''}`
+  : `Museum photo ${i + 1} of ${photos.value.length} of ${p.group || props.taxon}: ${p.caption || ''}`)
 </script>
 
 <template>
@@ -164,6 +191,7 @@ const altFor = (p, i) => (tab.value === 'field'
     <div id="ref-tabpanel" role="tabpanel" :aria-labelledby="tab === 'field' ? 'ref-tab-field' : 'ref-tab-museum'" class="ref-body">
       <!-- notes above the image -->
       <div v-if="tab === 'field'" class="notes">
+        <div v-if="field.genus && field.state === 'ready'">A few photos of each top species in {{ taxon }}.</div>
         <div v-if="field.speciesFallback">No field photos for this subspecies; showing the species.</div>
         <div v-if="field.resolvedAs">iNaturalist lists these as <em>{{ field.resolvedAs }}</em>.</div>
         <div v-if="country && field.state === 'ready'">
@@ -195,6 +223,7 @@ const altFor = (p, i) => (tab.value === 'field'
           <span class="counter" aria-live="polite">{{ index + 1 }} / {{ photos.length }}</span>
         </div>
         <div class="caption">
+          <em v-if="current.group" class="cap-group">{{ current.group }}</em>
           <template v-if="tab === 'field'">
             <span v-if="current.place" class="cap-place">{{ current.place }}</span>
             <span v-if="current.observer" class="text-muted">Photo: {{ current.observer }}</span>
@@ -207,8 +236,9 @@ const altFor = (p, i) => (tab.value === 'field'
           </template>
         </div>
         <div class="strip" aria-label="Photos">
-          <button v-for="(p, i) in photos" :key="p.url" type="button" class="thumb" :class="{ active: i === index }"
-            :aria-label="`Show photo ${i + 1} of ${photos.length}`" :aria-current="i === index ? 'true' : undefined"
+          <button v-for="(p, i) in photos" :key="`${i}|${p.url}`" type="button" class="thumb"
+            :aria-label="`Show photo ${i + 1} of ${photos.length}${p.group ? `, ${p.group}` : ''}`" :aria-current="i === index ? 'true' : undefined"
+            :title="p.group || undefined" :class="{ active: i === index, 'group-start': p.group && i > 0 && photos[i - 1].group !== p.group }"
             @click="index = i">
             <img :src="p.thumb || p.url" alt="" loading="lazy" referrerpolicy="no-referrer" @error="fallbackToDirect($event) || markBroken(p)" />
           </button>
@@ -241,6 +271,8 @@ const altFor = (p, i) => (tab.value === 'field'
 .counter { position: absolute; top: 6px; left: 8px; z-index: 5; font-size: .7rem; color: #e2e8f0; background: rgba(0,0,0,.5); border-radius: 4px; padding: 0 5px; }
 .caption { display: flex; flex-wrap: wrap; gap: .25rem .75rem; font-size: .78rem; align-items: baseline; }
 .cap-place { font-weight: 600; color: #334155; }
+.cap-group { color: #166534; font-weight: 600; }
+.thumb.group-start { margin-left: 8px; }
 .strip { display: flex; gap: 4px; overflow-x: auto; padding-bottom: 4px; }
 .thumb { flex-shrink: 0; width: 60px; height: 60px; padding: 0; border: 2px solid transparent; border-radius: 4px; background: #e2e8f0; overflow: hidden; cursor: pointer; }
 .thumb img { width: 100%; height: 100%; object-fit: cover; }

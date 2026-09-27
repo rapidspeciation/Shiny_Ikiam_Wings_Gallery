@@ -10,6 +10,7 @@ const BASE = import.meta.env.BASE_URL
 import { resolveCamid } from '../utils/galleryPipeline.js'
 import { canonicalTaxon, predictionDiffers, rankComparison } from '../utils/taxonomy.js'
 import { loadCurrentPredictionMaps } from '../utils/predictionCoverage.js'
+import { regionSpecies, regionSubspecies } from '../utils/taxonTree.js'
 export { resolveCamid, predictionDiffers, canonicalTaxon, rankComparison }
 
 // Module-wide caches (one promise per file -> single fetch, deduped).
@@ -258,15 +259,7 @@ export async function regionSubspeciesOf(species, side) {
   if (!species) return []
   const ck = 'ss|' + species + '|' + (side || '')
   if (_regionCache.has(ck)) return _regionCache.get(ck)
-  const checklist = await getChecklist()
-  const prefix = `${species} `
-  const out = []
-  for (const k in checklist) {
-    if (!k.startsWith(prefix)) continue
-    if (k.split(/\s+/).length !== 3) continue
-    if (onSide(checklist[k], side)) out.push(k)
-  }
-  out.sort()
+  const out = regionSubspecies(await getChecklist(), species, side)
   _regionCache.set(ck, out)
   return out
 }
@@ -278,28 +271,9 @@ export async function regionSpeciesOf(genus, side) {
   if (!genus) return []
   const ck = 'sp|' + genus + '|' + (side || '')
   if (_regionCache.has(ck)) return _regionCache.get(ck)
-  const checklist = await getChecklist()
-  const prefix = `${genus} `
-  const set = new Set()
-  for (const k in checklist) {
-    if (!k.startsWith(prefix)) continue
-    if (!onSide(checklist[k], side)) continue
-    const parts = k.split(/\s+/)
-    if (parts.length < 2) continue
-    set.add(`${parts[0]} ${parts[1]}`)
-  }
-  const out = Array.from(set).sort()
+  const out = regionSpecies(await getChecklist(), genus, side)
   _regionCache.set(ck, out)
   return out
-}
-
-// --- internal helpers -----------------------------------------------------
-
-function onSide(entry, side) {
-  if (!entry) return false
-  if (side === 'East') return entry.East > 0
-  if (side === 'West') return entry.West > 0
-  return entry.East > 0 || entry.West > 0   // unknown side: either side counts
 }
 
 const EU = ['sangay', 'noreste', 'cotacachi']

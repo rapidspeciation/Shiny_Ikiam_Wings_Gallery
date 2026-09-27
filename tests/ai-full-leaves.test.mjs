@@ -54,7 +54,7 @@ test('location is chosen per photo with an Any chip that resets the prior', () =
   assert.match(descriptor.scriptSetup.content, /country: ANY, region: null,/)
   assert.match(descriptor.scriptSetup.content, /function resetLocation\(r\) \{ r\.country = ANY; r\.region = null; rerank\(r\) \}/)
   assert.match(descriptor.template.content, /@any="resetLocation\(active\)"/)
-  const list = parse(readFileSync('src/components/AICandidateList.vue', 'utf8')).descriptor
+  const list = parse(readFileSync('src/components/AILocationChips.vue', 'utf8')).descriptor
   assert.match(list.template.content, /:aria-pressed="!hasLocation" @click="emit\('any'\)">Any<\/button>/)
   assert.match(list.template.content, /:aria-pressed="isSuggestActive\(s\)"/)
   // suggestion chips carry no percentages

@@ -55,6 +55,8 @@ defineEmits(['loadMore'])
   display: grid;
   gap: 1.5rem;
 }
+/* cards never force the column wider than the screen */
+.grid-item { min-width: 0; }
 
 /* 1 Column */
 .cols-1 { grid-template-columns: 1fr; }
