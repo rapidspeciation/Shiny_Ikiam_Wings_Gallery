@@ -225,13 +225,17 @@ export function probIndex(pred) {
 
 // Flatten the tree into the visible rows, in display order.
 // state: { genera, species, allSpecies, allSubspecies (Sets), showAllGenera,
-//   genusLimit, keepGenera (Set of genera always visible), extraSpecies(gNode),
+//   genusLimit, keepGenera (Set of genera always visible), browseSpecies (Set of
+//   species that may offer "+ all subspecies": the top path and species the user
+//   opened; omit to allow every open species), extraSpecies(gNode),
 //   extraSubspecies(sNode) -> rows }
+// "+ all" rows only appear under open branches, and only when they would list
+// more than one taxon.
 // Row kinds: genus | species | subspecies | all-species | all-subspecies | more-genera.
 export function flattenTree(tree, state) {
   const {
     genera, species, allSpecies = new Set(), allSubspecies = new Set(),
-    showAllGenera = false, genusLimit = GENUS_LIMIT, keepGenera = new Set(),
+    showAllGenera = false, genusLimit = GENUS_LIMIT, keepGenera = new Set(), browseSpecies = null,
     extraSpecies = () => [], extraSubspecies = () => [],
   } = state
   const rows = []
@@ -242,9 +246,11 @@ export function flattenTree(tree, state) {
     const key = `s:${s.taxon}`
     const more = extraSubspecies(s)
     const open = species.has(s.taxon)
-    rows.push({ key, kind: 'species', level: 2, taxon: s.taxon, rank: 'species', prob: s.prob, oor: s.oor, extra,
-      parent: gKey, expandable: s.subspecies.length > 0 || more.length > 0, open })
+    const row = { key, kind: 'species', level: 2, taxon: s.taxon, rank: 'species', prob: s.prob, oor: s.oor, extra,
+      parent: gKey, expandable: s.subspecies.length > 0 || s.subspecies.length + more.length > 1, open }
+    rows.push(row)
     if (!open) return
+    const before = rows.length
     for (const ss of s.subspecies) {
       rows.push({ key: `ss:${ss.taxon}`, kind: 'subspecies', level: 3, taxon: ss.taxon, rank: 'subspecies', prob: ss.prob, oor: ss.oor, extra, parent: key })
     }
@@ -252,10 +258,11 @@ export function flattenTree(tree, state) {
     if (showMore) for (const ss of more) {
       rows.push({ key: `ss:${ss.taxon}`, kind: 'subspecies', level: 3, taxon: ss.taxon, rank: 'subspecies', prob: ss.prob, oor: ss.oor, extra: true, parent: key })
     }
-    if (more.length) {
-      rows.push({ key: `as:${s.taxon}`, kind: 'all-subspecies', level: 3, taxon: s.taxon, open: showMore,
-        count: s.subspecies.length + more.length, parent: key })
+    const count = s.subspecies.length + more.length
+    if (more.length && count > 1 && (showMore || !browseSpecies || browseSpecies.has(s.taxon))) {
+      rows.push({ key: `as:${s.taxon}`, kind: 'all-subspecies', level: 3, taxon: s.taxon, open: showMore, count, parent: key })
     }
+    if (rows.length === before) row.open = false   // nothing to show under it: display as closed
   }
 
   for (const g of visible) {
@@ -263,14 +270,14 @@ export function flattenTree(tree, state) {
     const more = extraSpecies(g)
     const open = genera.has(g.taxon)
     rows.push({ key, kind: 'genus', level: 1, taxon: g.taxon, rank: 'genus', prob: g.prob, oor: g.oor, extra: false,
-      parent: null, expandable: g.species.length > 0 || more.length > 0, open })
+      parent: null, expandable: g.species.length > 0 || g.species.length + more.length > 1, open })
     if (!open) continue
     for (const s of g.species) pushSpecies(s, key, false)
     const showMore = allSpecies.has(g.taxon)
     if (showMore) for (const s of more) pushSpecies(s, key, true)
-    if (more.length) {
-      rows.push({ key: `ag:${g.taxon}`, kind: 'all-species', level: 2, taxon: g.taxon, open: showMore,
-        count: g.species.length + more.length, parent: key })
+    const count = g.species.length + more.length
+    if (more.length && count > 1) {
+      rows.push({ key: `ag:${g.taxon}`, kind: 'all-species', level: 2, taxon: g.taxon, open: showMore, count, parent: key })
     }
   }
   if (hidden > 0 || (showAllGenera && tree.length > genusLimit)) {

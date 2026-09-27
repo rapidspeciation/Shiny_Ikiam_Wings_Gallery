@@ -99,6 +99,28 @@ test('all-species and all-subspecies rows list every taxon, including 0%, sorted
   assert.deepEqual(sorted.map((r) => r.taxon), ['C c', 'A a', 'B b'])
 })
 
+test('"+ all" rows only appear on the top path, on branches the user opens, and when they add something', () => {
+  const tree = buildTree(pred)
+  const open = expandEverything(tree)            // "Show predictions" opens every branch
+  const path = defaultExpansion(tree, { topSpecies: 'Hypothyris euclea' }).species
+  const rows = flattenTree(tree, vocabState(tree, { ...open }, { showAllGenera: true, browseSpecies: new Set(path) }))
+  const allSs = rows.filter((r) => r.kind === 'all-subspecies').map((r) => r.taxon)
+  assert.deepEqual(allSs.sort(), ['Godyris zavaleta', 'Hypothyris euclea'])
+  // the user opens another species: it may browse too
+  const withUser = flattenTree(tree, vocabState(tree, { ...open }, { browseSpecies: new Set([...path, 'Oleria onega']) }))
+  assert.equal(withUser.some((r) => r.kind === 'all-subspecies' && r.taxon === 'Oleria onega'), false)   // N <= 1: nothing extra
+  // "+ all species" only under open genera, and only when N > 1
+  const closed = flattenTree(tree, vocabState(tree, { genera: new Set(), species: new Set() }))
+  assert.equal(closed.some((r) => r.kind === 'all-species'), false)
+  const one = { genus: [['Solo', 1, 0]], species: [['Solo one', 1, 0, []]], species_all: [['Solo one', 1, 0]] }
+  const soloTree = buildTree(one)
+  const solo = flattenTree(soloTree, { genera: new Set(['Solo']), species: new Set(),
+    extraSpecies: (g) => extraRows(speciesCandidates(one, g.taxon, { mode: 'vocabulary' }), g.species.map((x) => x.taxon), probIndex(one).species, 'species') })
+  assert.equal(solo.some((r) => r.kind === 'all-species'), false)
+  const oneMore = flattenTree(soloTree, { genera: new Set(['Solo']), species: new Set(), extraSpecies: () => [{ taxon: 'Solo two', prob: 0, subspecies: [] }] })
+  assert.equal(oneMore.find((r) => r.kind === 'all-species').count, 2)
+})
+
 test('region browsing keeps the old side-of-Andes filter', () => {
   const checklist = {
     'Godyris zavaleta sosunga': { East: 3, West: 0 },

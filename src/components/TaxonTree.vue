@@ -44,6 +44,8 @@ const topSubsp = computed(() => props.pred?.subspecies?.[0]?.[0] || '')
 
 const open = reactive({ genera: new Set(), species: new Set(), allSpecies: new Set(), allSubspecies: new Set() })
 const showAllGenera = ref(false)
+// species allowed to offer "+ all subspecies": the default path plus any the user opens
+const browseSpecies = reactive(new Set())
 function assign(next) {
   for (const k of ['genera', 'species', 'allSpecies', 'allSubspecies']) {
     open[k].clear()
@@ -53,6 +55,8 @@ function assign(next) {
 function reset() {
   showAllGenera.value = false
   assign(defaultExpansion(tree.value, { topSpecies: topSpecies.value, recordedSpecies: props.recorded?.species || '', selected: props.selected }))
+  browseSpecies.clear()
+  for (const v of open.species) browseSpecies.add(v)
   if (props.expandAll) { showAllGenera.value = true; assign({ ...open, ...expandEverything(tree.value) }) }
 }
 // only a new photo / specimen (or its first prediction) resets; a re-rank keeps the user's layout
@@ -63,6 +67,7 @@ watch(() => props.selected, (t) => {
   if (!t || rows.value.some((r) => r.taxon === t && r.rank)) return
   const d = defaultExpansion(tree.value, { selected: t })
   for (const k of ['genera', 'species', 'allSpecies', 'allSubspecies']) for (const v of d[k]) open[k].add(v)
+  for (const v of d.species) browseSpecies.add(v)
 })
 
 // "+ all" candidates, memoised per prediction / checklist
@@ -86,13 +91,15 @@ function extraSubspecies(s) {
 const keepGenera = computed(() => new Set([genusOf(props.selected), genusOf(props.recorded?.species || '')].filter(Boolean)))
 const rows = computed(() => flattenTree(tree.value, {
   ...open, showAllGenera: showAllGenera.value, genusLimit: props.genusLimit, keepGenera: keepGenera.value,
-  extraSpecies, extraSubspecies,
+  browseSpecies, extraSpecies, extraSubspecies,
 }))
 
 function toggle(r) {
   if (r.kind === 'genus') flip(open.genera, r.taxon)
   else if (r.kind === 'species') {
-    flip(open.species, r.taxon)
+    // follow what the row shows: an open species with nothing visible counts as closed
+    if (r.open) open.species.delete(r.taxon)
+    else { open.species.add(r.taxon); browseSpecies.add(r.taxon) }
     // a browsed species has no model subspecies of its own: list them all at once
     if (r.extra && open.species.has(r.taxon)) open.allSubspecies.add(r.taxon)
   } else if (r.kind === 'all-species') flip(open.allSpecies, r.taxon)
