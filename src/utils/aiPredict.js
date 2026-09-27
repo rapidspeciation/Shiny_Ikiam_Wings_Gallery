@@ -44,14 +44,17 @@ function mockRawLeaves(filename) {
 
 // Whether a real backend is configured (vs. the offline demo mock).
 export const HAS_BACKEND = !!API_BASE
-export const PREDICTION_CACHE_VERSION = 'full-leaves-v1'
+export const PREDICTION_CACHE_VERSION = 'full-leaves-v2'
 
 // The new Space supplies all leaves for exact marginalisation. Older or mock
 // responses still have only the preview, which remains usable while it warms.
+// The leaf count follows the served head (7,841 since the 26 September retrain),
+// so any distribution well beyond the 64-leaf preview is accepted.
+const MIN_FULL_LEAVES = 1000
 export function predictionLeaves(result) {
   const full = result?.full_leaves
   if (result?.leaf_distribution_complete === true && !result?.mock &&
-      Array.isArray(full) && full.length === 7933) {
+      Array.isArray(full) && full.length >= MIN_FULL_LEAVES) {
     let total = 0
     const names = new Set()
     for (const entry of full) {

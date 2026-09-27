@@ -18,6 +18,8 @@ test('AI Identifier prefers complete unweighted leaves and safely falls back', a
     const full = Array.from({ length: 7933 }, (_, i) => [`Taxon ${i}`, i === 0 ? 1 : 0])
     const response = { leaves: preview, full_leaves: full, leaf_distribution_complete: true }
     assert.equal(predictionLeaves(response), full)
+    const retrained = full.slice(0, 7841)
+    assert.equal(predictionLeaves({ ...response, full_leaves: retrained }), retrained)
     assert.equal(predictionLeaves({ ...response, mock: true }), preview)
     assert.equal(predictionLeaves({ ...response, leaf_distribution_complete: false }), preview)
     assert.equal(predictionLeaves({ ...response, full_leaves: full.slice(0, 64) }), preview)
@@ -26,7 +28,7 @@ test('AI Identifier prefers complete unweighted leaves and safely falls back', a
     assert.equal(predictionLeaves({ ...response, full_leaves: full.map((v, i) => i === 1 ? ['Taxon 1', NaN] : v) }), preview)
     assert.equal(rankLeaves(preview, checklist, { country: '', side: '' }).species[0][0], 'Mechanitis messenoides')
     assert.equal(rankLeaves(preview, checklist, { country: 'Ecuador', side: 'East' }).species[0][0], 'Mechanitis messenoides')
-    assert.equal(PREDICTION_CACHE_VERSION, 'full-leaves-v1')
+    assert.equal(PREDICTION_CACHE_VERSION, 'full-leaves-v2')
   } finally {
     await vite.close()
   }
