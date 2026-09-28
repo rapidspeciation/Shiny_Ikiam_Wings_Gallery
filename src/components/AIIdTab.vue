@@ -818,6 +818,13 @@ const showAbout = ref(false)
             research-grade iNaturalist and museum photos from GBIF, used for training only.
           </p>
           <p class="mb-1"><strong>Changelog</strong></p>
+          <p class="mb-1"><strong>28 September 2026:</strong></p>
+          <ul class="mb-2">
+            <li>Field photos now come from a prebuilt list of research-grade iNaturalist photos (via GBIF) for
+            2,645 species and 1,681 subspecies, instead of a live iNaturalist search that took several seconds per
+            taxon. Taxa not on the list still use the live search.</li>
+            <li>On phones, tapping a collapsed genus or species now only expands it; tap it again to see its photos.</li>
+          </ul>
           <p class="mb-1"><strong>27 September 2026:</strong></p>
           <ul class="mb-2">
             <li>Retrained the AI Identifier classifier with about 457,000 additional GBIF photos (research-grade

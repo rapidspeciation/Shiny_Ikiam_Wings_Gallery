@@ -1,5 +1,6 @@
-// Field photos from iNaturalist (public API, CORS open, no key) for the AI
-// Identifier reference panel and the candidate-row thumbnails.
+// Field photos from iNaturalist for the AI Identifier reference panel and the
+// candidate-row thumbnails. The prebuilt index (fieldPhotoIndex.js) answers
+// first; taxa it lacks use the live public API (CORS open, no key).
 //
 // Rate limits: a token bucket lets the first 10 requests (the visible candidates)
 // go out at once, 4 in flight, then 1 per second, iNaturalist's recommended
@@ -20,6 +21,7 @@ const PER_PAGE = 12
 const SPECIES_OR_LOWER = new Set(['species', 'hybrid', 'subspecies', 'variety', 'form', 'infrahybrid'])
 
 import { webImageUrl } from './imageProxy.js'
+import { createFieldPhotoIndex } from './fieldPhotoIndex.js'
 import { loadTaxonNames, lookupOrder } from './taxonNames.js'
 
 // Names to query for a taxon: itself, then its canonical name and aliases.
@@ -91,6 +93,7 @@ export function createInatClient({
   now = () => Date.now(),
   sleep = (ms) => new Promise((r) => setTimeout(r, ms)),
   namesFor = defaultNamesFor,   // taxon -> names to try (old / new names of a renamed taxon)
+  index = null,           // prebuilt photo index: async name -> { photos } | null (fieldPhotoIndex.js)
 } = {}) {
   const memory = new Map()      // key -> Promise
   const queue = []              // pending { run, resolve, reject }
@@ -198,13 +201,37 @@ export function createInatClient({
     const requested = String(taxon || '').trim()
     const empty = { photos: [], requested, shownTaxon: requested, speciesFallback: false, placeFallback: false, place: '', resolvedAs: '' }
     if (!requested) return empty
-    let placeId = null
-    if (country) { try { placeId = await resolvePlace(country, { priority }) } catch { placeId = null } }
     const levels = isSubspecies(requested) ? [requested, speciesOf(requested)] : [requested]
+    const namesByLevel = []
     for (const level of levels) {
       let names = [level]
       try { names = (await namesFor(level)) || [level] } catch { names = [level] }
       if (!names.includes(level)) names.unshift(level)
+      namesByLevel.push([level, names])
+    }
+    // 1. the prebuilt index (no network wait beyond one small static file)
+    if (index) {
+      for (const [level, names] of namesByLevel) {
+        for (const name of names) {
+          let hit = null
+          try { hit = await index(name) } catch { hit = null }
+          if (!hit?.photos?.length) continue
+          const lc = country.toLowerCase()
+          const here = country ? hit.photos.filter((p) => String(p.country || '').toLowerCase() === lc) : []
+          return {
+            photos: (here.length ? here : hit.photos).slice(0, PER_PAGE), requested, shownTaxon: name,
+            resolvedAs: name !== level ? name : '',
+            speciesFallback: level !== requested,
+            placeFallback: !!country && !here.length,
+            place: here.length ? country : '',
+          }
+        }
+      }
+    }
+    // 2. live iNaturalist search
+    let placeId = null
+    if (country) { try { placeId = await resolvePlace(country, { priority }) } catch { placeId = null } }
+    for (const [level, names] of namesByLevel) {
       for (const name of names) {
         const tries = placeId ? [placeId, null] : [null]
         for (const pid of tries) {
@@ -230,7 +257,7 @@ export function createInatClient({
 
 let _client = null
 export function inatClient() {
-  if (!_client) _client = createInatClient()
+  if (!_client) _client = createInatClient({ index: createFieldPhotoIndex() })
   return _client
 }
 export const fieldPhotos = (taxon, opts) => inatClient().fieldPhotos(taxon, opts)

@@ -31,7 +31,11 @@ test('About changelog has one entry per date and describes the spatial location 
   const log = about.split('<strong>Changelog</strong>')[1]
   const dates = [...log.matchAll(/<strong>(\d{1,2} September 2026):<\/strong>/g)].map((m) => m[1])
   assert.equal(new Set(dates).size, dates.length, 'one changelog entry per date')
-  assert.equal(dates[0], '27 September 2026')
+  assert.deepEqual(dates.slice(0, 2), ['28 September 2026', '27 September 2026'])
+  const latest = log.split('28 September 2026:</strong>')[1].split('27 September 2026:</strong>')[0].replace(/\s+/g, ' ')
+  for (const copy of ['prebuilt list of research-grade iNaturalist photos', '2,645 species and 1,681 subspecies',
+    'still use the live search', 'tapping a collapsed genus or species now only expands it']) assert.ok(latest.includes(copy), copy)
+  assert.doesNotMatch(latest, /—|licen[cs]e/i)
   const first = log.split('27 September 2026:</strong>')[1].split('26 September 2026:</strong>')[0].replace(/\s+/g, ' ')
   for (const copy of ['dated before 12 February 2026', '85.08% with no location', '87.87% with the country',
     '88.71% with coordinates', 'Costa, Sierra, Oriente, Galapagos', '3,694 field photos', 'shared as links']) assert.ok(first.includes(copy), copy)

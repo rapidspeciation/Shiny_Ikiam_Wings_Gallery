@@ -146,3 +146,44 @@ test('webImageUrl proxies web images once and unproxiedUrl recovers the original
   assert.equal(webImageUrl(w, 300), w)
   assert.equal(webImageUrl('data:image/png;base64,xx', 300), 'data:image/png;base64,xx')
 })
+
+test('the prebuilt field-photo index answers before any live search and filters by country', async () => {
+  const { createFieldPhotoIndex } = await import('../src/utils/fieldPhotoIndex.js')
+  const files = {
+    '/d/index.json': { genera: { Oleria: 2 } },
+    '/d/Oleria.json': { t: {
+      'Oleria onega': [[11, '', 101, 'Ana', 'EC', 'Napo'], [12, 'jpeg', 102, 'Luis', 'PE', 'Cusco']],
+      'Oleria onega janarilla': [[13, '', 103, 'Eva', 'EC', 'Pastaza']],
+    } },
+  }
+  const staticCalls = []
+  const index = createFieldPhotoIndex({ base: '/d', fetchImpl: async (url) => {
+    staticCalls.push(url)
+    return files[url] ? { ok: true, json: async () => files[url] } : { ok: false, json: async () => null }
+  } })
+  const { fetchImpl, calls } = mockFetch([])
+  const c = createInatClient({ fetchImpl, storage: null, index, namesFor: async (n) => [n] })
+
+  const sp = await c.fieldPhotos('Oleria onega', { country: 'Peru' })
+  assert.deepEqual(sp.photos.map((p) => p.id), [102])
+  assert.equal(sp.place, 'Peru')
+  assert.equal(sp.placeFallback, false)
+  assert.equal(new URL(sp.photos[0].url).searchParams.get('url'), 'https://inaturalist-open-data.s3.amazonaws.com/photos/12/large.jpeg')
+  assert.equal(sp.photos[0].place, 'Cusco, Peru')
+  assert.equal(sp.photos[0].link, 'https://www.inaturalist.org/observations/102')
+
+  const none = await c.fieldPhotos('Oleria onega', { country: 'Bolivia' })
+  assert.equal(none.placeFallback, true)
+  assert.equal(none.photos.length, 2)
+
+  const ssp = await c.fieldPhotos('Oleria onega janarilla')
+  assert.deepEqual(ssp.photos.map((p) => p.id), [103])
+  const miss = await c.fieldPhotos('Oleria onega foo')   // unknown subspecies: species photos, no live wait
+  assert.equal(miss.speciesFallback, true)
+  assert.equal(miss.photos.length, 2)
+  assert.equal(calls.length, 0, 'no live iNaturalist request for indexed taxa')
+  assert.equal(staticCalls.filter((u) => u === '/d/Oleria.json').length, 1, 'one shard fetch per genus')
+
+  await c.fieldPhotos('Pteronymia ozia')   // genus not indexed: live search
+  assert.ok(calls.some((x) => x.url.includes('taxon_name=Pteronymia+ozia')))
+})

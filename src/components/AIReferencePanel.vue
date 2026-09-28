@@ -4,7 +4,7 @@
 // probability and the guide links (BoA, Sangay, Noreste, Cotacachi, once per
 // taxon), then tabs [Field photos] [Museum]. A genus shows a few photos of each
 // of its top species (`members`), labelled by species. Field photos come
-// from iNaturalist (research grade, place-filtered when a country is chosen);
+// from iNaturalist (research grade; the prebuilt index first, place-filtered when a country is chosen);
 // Museum reuses referencesFor() (Sanger collection first, GBIF fallback) with
 // zoom-to-wings boxes. One large image with prev/next (arrow keys, swipe) and a
 // thumbnail strip.
