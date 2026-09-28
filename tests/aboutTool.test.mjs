@@ -14,7 +14,7 @@ test('About shows current held-out results and dated history separately', () => 
     '12 February and 7 September 2026, after BioCLIP 2.5-H was released',
     'should not be compared with each other', 'may be slightly optimistic',
     '<strong>Sex prediction</strong>', 'Sex prediction is not yet supported for uploaded photos.',
-    'single-photo head:', 'wing cropper:', 'collection attention model:',
+    'single-photo head:', 'butterfly segmentation model</a>', 'collection attention model:',
     'href="https://huggingface.co/spaces/fr4nzzch/butterfly-id/blob/main/assets/wing_seg_v6.pt"',
     'href="https://github.com/rapidspeciation/Shiny_Ikiam_Wings_Gallery/releases/tag/collection-attention-20260926"'
   ]) assert.ok(current.includes(copy), copy)
@@ -36,4 +36,9 @@ test('About changelog has one entry per date and describes the spatial location 
   for (const copy of ['dated before 12 February 2026', '85.08% with no location', '87.87% with the country',
     '88.71% with coordinates', 'Costa, Sierra, Oriente, Galapagos', '3,694 field photos', 'shared as links']) assert.ok(first.includes(copy), copy)
   assert.doesNotMatch(first, /—|licen[cs]e/i)
+})
+
+test('About text does not expose internal model names (links excluded)', () => {
+  const about = readFileSync('src/components/AIIdTab.vue', 'utf8').split('About this tool')[1].replace(/href="[^"]*"/g, '')
+  for (const internal of [/\bv6\b/i, /Wings-v\d/i, /wing_seg/i, /Candidate D/, /\bG1000\b|\bV1000\b|\bVF_DH_PARTS\b/]) assert.doesNotMatch(about, internal)
 })

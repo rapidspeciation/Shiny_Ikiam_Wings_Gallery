@@ -798,8 +798,7 @@ const showAbout = ref(false)
             <strong>Models &amp; code:</strong>
             single-photo head:
             <a href="https://huggingface.co/fr4nzzch/butterfly-id-classifier" target="_blank" rel="noopener noreferrer">fr4nzzch/butterfly-id-classifier</a>
-            · wing cropper:
-            <a href="https://huggingface.co/spaces/fr4nzzch/butterfly-id/blob/main/assets/wing_seg_v6.pt" target="_blank" rel="noopener noreferrer">wing_seg_v6.pt</a>
+            · <a href="https://huggingface.co/spaces/fr4nzzch/butterfly-id/blob/main/assets/wing_seg_v6.pt" target="_blank" rel="noopener noreferrer">butterfly segmentation model</a>
             · collection attention model:
             <a href="https://github.com/rapidspeciation/Shiny_Ikiam_Wings_Gallery/releases/tag/collection-attention-20260926" target="_blank" rel="noopener noreferrer">collection-attention-20260926</a>
             · <a href="https://huggingface.co/spaces/fr4nzzch/butterfly-id" target="_blank" rel="noopener noreferrer">inference Space</a>
@@ -844,7 +843,7 @@ const showAbout = ref(false)
           <ul class="mb-2">
             <li>Collection predictions for verified dorsal/ventral pairs now use an attention model. On 314 held-out pairs,
             Species Top-1 rose from 92.04% to 95.22% (+3.18 pp) over averaging single-photo predictions across the two views.</li>
-            <li>AI Identifier now uses the corrected v6 wing crop, fixes 92 taxon names, and no longer guesses a location
+            <li>AI Identifier now crops photos with the current butterfly segmentation model, fixes 92 taxon names, and no longer guesses a location
             when none is selected. On the GBIF field photos, Species Top-1 rose from 67.50% to 73.37% (+5.87 pp) and Top-5
             from 85.59% to 92.05% (+6.46 pp), with the previous classification head.</li>
             <li>Retrained the AI Identifier classifier after correcting 558 training labels using their source captions.
