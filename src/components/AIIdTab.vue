@@ -786,7 +786,7 @@ const showAbout = ref(false)
             </tbody>
           </table>
           <p>Scores average three models that each excluded the specimen from training and checkpoint selection.
-          <strong>Supported</strong> requires confidence of at least 85% and a reliable record for that species on other
+          <strong>Supported</strong> requires confidence of at least 85% and a good track record for that species on other
           specimens; otherwise <strong>Uncertain</strong>. Supported predictions were 98.2% correct, and 26 disagree with
           the recorded sex and are candidates for review. Groups outside Ithomiini have fewer examples and are mostly Uncertain.</p>
           <p>Sex prediction is not yet supported for uploaded photos. The current method uses separate features from
@@ -836,7 +836,8 @@ const showAbout = ref(false)
             your browser and is not uploaded.</li>
             <li>Retrained collection sex prediction on 3,462 specimens (was 1,220) and added predictions for 347 specimens
             without a recorded or with an uncertain sex. On the original 1,220 benchmark specimens, accuracy rose from 89.7%
-            to 92.0%. Supported now requires a reliable record for the species and covers 1,435 predictions.</li>
+            to 92.0%. Supported now requires at least 85% confidence and a good track record for that species on other
+            specimens; 1,435 predictions qualify (98.2% correct in testing).</li>
             <li>Gallery views, including Search by CAMID lists, can be shared as links.</li>
           </ul>
           <p class="mb-1"><strong>26 September 2026:</strong></p>
