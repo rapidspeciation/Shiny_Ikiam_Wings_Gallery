@@ -818,13 +818,6 @@ const showAbout = ref(false)
             research-grade iNaturalist and museum photos from GBIF, used for training only.
           </p>
           <p class="mb-1"><strong>Changelog</strong></p>
-          <p class="mb-1"><strong>28 September 2026:</strong></p>
-          <ul class="mb-2">
-            <li>Field photos now come from a prebuilt list of research-grade iNaturalist photos (via GBIF) for
-            2,645 species and 1,681 subspecies, instead of a live iNaturalist search that took several seconds per
-            taxon. Taxa not on the list still use the live search.</li>
-            <li>On phones, tapping a collapsed genus or species now only expands it; tap it again to see its photos.</li>
-          </ul>
           <p class="mb-1"><strong>27 September 2026:</strong></p>
           <ul class="mb-2">
             <li>Retrained the AI Identifier classifier with about 457,000 additional GBIF photos (research-grade
@@ -845,7 +838,6 @@ const showAbout = ref(false)
             without a recorded or with an uncertain sex. On the original 1,220 benchmark specimens, accuracy rose from 89.7%
             to 92.0%. Supported now requires at least 85% confidence and a good track record for that species on other
             specimens; 1,435 predictions qualify (98.2% correct in testing).</li>
-            <li>Gallery views, including Search by CAMID lists, can be shared as links.</li>
           </ul>
           <p class="mb-1"><strong>26 September 2026:</strong></p>
           <ul class="mb-2">
@@ -863,13 +855,11 @@ const showAbout = ref(false)
           (+0.87 pp, Top-5: 97.33%), on a five-fold Sanger evaluation of 3,355 specimens with the geographic prior (Genus Top-1: 95.55%,
           Family Top-1: 99.32%). For uploaded photos, the model does not yet support combining dorsal and ventral photos of the same individual.</p>
           <p><strong>9 September 2026:</strong> Added out-of-fold sex predictions from separate ventral forewing and dorsal
-          hindwing features, confidence scores, Supported/Uncertain labels, sex agreement filters, and confidence sorting
-          that places supported predictions first.</p>
+          hindwing features, confidence scores and Supported/Uncertain labels.</p>
           <p><strong>6 September 2026:</strong> Retrained the taxonomic classification head with the expanded Butterflies of America
           dataset, retaining rare species down to single observations (covering 4,478 species and 4,958 subspecies).
           BioCLIP features are extracted from tight crops focused strictly on the wings, improving Species Top-1 accuracy
-          to 91.6% (+1.4 pp, Top-5: 98.0%) and Subspecies Top-1 to 85.7% (+1.0 pp, Top-5: 96.5%). Also corrected EXIF 180° orientation
-          for gallery bounding boxes so zoom-to-wings centers over visible butterfly wings.</p>
+          to 91.6% (+1.4 pp, Top-5: 98.0%) and Subspecies Top-1 to 85.7% (+1.0 pp, Top-5: 96.5%).</p>
           <p><strong>3 September 2026:</strong> Updated wing segmentation to reduce crops of envelopes and color charts,
           improving Species Top-1 by +1.0 pp and Genus Top-1 by +0.8 pp. Corrected taxonomic synonyms, spelling variants,
           and eliminated 315 invalid placeholder classes (such as <em>NOT_FOUND</em>), lifting overall Subspecies Top-1 by
