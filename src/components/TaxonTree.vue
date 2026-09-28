@@ -200,9 +200,12 @@ function focusRow(key) {
 function choose(r) {
   if (!isTaxonRow(r)) { toggle(r); return }
   focusKey.value = r.key
-  if (r.expandable && !r.open) toggle(r)
+  // a collapsed row only opens (and selects) on the first tap; 'activate' (the
+  // mobile photo sheet) waits for a tap on an open row or a leaf
+  const opening = r.expandable && !r.open
+  if (opening) toggle(r)
   emit('select', r.taxon)
-  emit('activate', r.taxon)
+  if (!opening) emit('activate', r.taxon)
 }
 function onKey(e, r) {
   const act = treeKeyAction(rows.value, r.key, e.key)

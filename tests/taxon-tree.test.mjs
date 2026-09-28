@@ -214,3 +214,11 @@ test('both tabs use the shared table without per-row guide buttons', () => {
     assert.doesNotMatch(parse(readFileSync(f, 'utf8')).descriptor.template.content, /—/, `${f} uses an em dash`)
   }
 })
+
+test('tapping a collapsed row only expands it; the photo sheet waits for an open row or leaf', () => {
+  const src = readFileSync('src/components/TaxonTree.vue', 'utf8')
+  const choose = src.slice(src.indexOf('function choose('), src.indexOf('function onKey('))
+  assert.match(choose, /const opening = r\.expandable && !r\.open/)
+  assert.match(choose, /if \(!opening\) emit\('activate', r\.taxon\)/)
+  assert.match(choose, /emit\('select', r\.taxon\)/)
+})
