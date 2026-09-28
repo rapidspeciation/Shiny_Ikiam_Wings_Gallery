@@ -26,12 +26,14 @@ test('About shows current held-out results and dated history separately', () => 
     'from 73.37% to 73.92% (+0.55 pp)', 'from 73.92% to 85.15% (+11.23 pp)', 'Agraulis vanillae is now Dione vanillae']) assert.ok(about.includes(copy), copy)
 })
 
-test('About changelog describes the spatial location prior with held-out numbers', () => {
+test('About changelog has one entry per date and describes the spatial location prior', () => {
   const about = readFileSync('src/components/AIIdTab.vue', 'utf8')
   const log = about.split('<strong>Changelog</strong>')[1]
-  const first = log.split('<p><strong>')[1]
-  assert.ok(first.startsWith('27 September 2026:</strong> The location prior now uses GBIF occurrence records'))
-  for (const copy of ['dated before\n          12 February 2026', '85.08% with no location', '87.87% with the country',
-    '88.71% with coordinates', 'Costa, Sierra, Oriente, Galapagos', '3,694 field photos']) assert.ok(first.includes(copy), copy)
+  const dates = [...log.matchAll(/<strong>(\d{1,2} September 2026):<\/strong>/g)].map((m) => m[1])
+  assert.equal(new Set(dates).size, dates.length, 'one changelog entry per date')
+  assert.equal(dates[0], '27 September 2026')
+  const first = log.split('27 September 2026:</strong>')[1].split('26 September 2026:</strong>')[0].replace(/\s+/g, ' ')
+  for (const copy of ['dated before 12 February 2026', '85.08% with no location', '87.87% with the country',
+    '88.71% with coordinates', 'Costa, Sierra, Oriente, Galapagos', '3,694 field photos', 'shared as links']) assert.ok(first.includes(copy), copy)
   assert.doesNotMatch(first, /—|licen[cs]e/i)
 })

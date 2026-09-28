@@ -819,36 +819,37 @@ const showAbout = ref(false)
             research-grade iNaturalist and museum photos from GBIF, used for training only.
           </p>
           <p class="mb-1"><strong>Changelog</strong></p>
-          <p><strong>27 September 2026:</strong> The location prior now uses GBIF occurrence records dated before
-          12 February 2026 near where the photo was taken: GPS from the photo, a map pin, a country, or a region of
-          Ecuador (Costa, Sierra, Oriente, Galapagos). On 3,694 field photos from observers not used for tuning, Species
-          Top-1 is 85.08% with no location, 87.87% with the country and 88.71% with coordinates. It favours commonly
-          recorded species, so rare species gain little. Photo GPS is read in your browser and is not uploaded.</p>
-          <p><strong>27 September 2026:</strong> Retrained collection sex prediction on 3,462 specimens (was 1,220) and
-          added predictions for 347 specimens without a recorded or with an uncertain sex. On the original 1,220 benchmark
-          specimens, accuracy rose from 89.7% to 92.0%. Supported now requires a reliable record for the species and covers
-          1,435 predictions.</p>
-          <p><strong>27 September 2026:</strong> Fixed the location filter: it had treated a missing checklist record as
-          proof that a species is absent, so choosing the correct country lowered accuracy. It now also uses GBIF records and
-          down-weights unrecorded species more gently, and the side of the Andes only marks species as off-region. With the
-          true country selected, Species Top-1 on the field photos is 86.70% (no location: 85.96%).</p>
-          <p><strong>27 September 2026:</strong> Updated AI Identifier names to the current taxonomy, following Butterflies of
-          America: 246 duplicate, misspelled or outdated species names were merged into their valid names (for example
-          Agraulis vanillae is now Dione vanillae), and non-adult and mislabelled training photos were removed. Former names
-          are shown next to renamed species. Accuracy is unchanged when test photos are scored under the same names.</p>
-          <p><strong>27 September 2026:</strong> Retrained the AI Identifier classifier with about 457,000 additional GBIF
-          photos (research-grade iNaturalist observations and museum specimens recorded before 12 February 2026, up to
-          1,000 per species). On the GBIF field photos, Species Top-1 rose from 73.92% to 85.15% (+11.23 pp) and Top-5
-          from 92.05% to 96.12% (+4.07 pp).</p>
-          <p><strong>26 September 2026:</strong> Retrained the AI Identifier classifier after correcting 558 training
-          labels using their source captions. On the GBIF field photos, Species Top-1 rose from 73.37% to 73.92% (+0.55 pp);
-          Top-5 is unchanged at 92.05%.</p>
-          <p><strong>26 September 2026:</strong> AI Identifier now uses the corrected v6 wing crop, fixes 92 taxon
-          names, and no longer guesses a location when none is selected. On the GBIF field photos, Species Top-1 rose
-          from 67.50% to 73.37% (+5.87 pp) and Top-5 from 85.59% to 92.05% (+6.46 pp), with the previous classification head.</p>
-          <p><strong>26 September 2026:</strong> Collection predictions for verified dorsal/ventral pairs now use an
-          attention model. On 314 held-out pairs, Species Top-1 rose from 92.04% to 95.22% (+3.18 pp) over averaging
-          single-photo predictions across the two views.</p>
+          <p class="mb-1"><strong>27 September 2026:</strong></p>
+          <ul class="mb-2">
+            <li>Retrained the AI Identifier classifier with about 457,000 additional GBIF photos (research-grade
+            iNaturalist observations and museum specimens recorded before 12 February 2026, up to 1,000 per species).
+            On the GBIF field photos, Species Top-1 rose from 73.92% to 85.15% (+11.23 pp) and Top-5 from 92.05% to
+            96.12% (+4.07 pp).</li>
+            <li>Updated AI Identifier names to the current taxonomy, following Butterflies of America: 246 duplicate,
+            misspelled or outdated species names were merged into their valid names (for example
+            Agraulis vanillae is now Dione vanillae), and non-adult and mislabelled training photos were removed. Former names are shown next to
+            renamed species. Accuracy is unchanged when test photos are scored under the same names.</li>
+            <li>New location prior based on GBIF occurrence records dated before 12 February 2026 near where the photo was
+            taken: GPS from the photo, a map pin, a country, or a region of Ecuador (Costa, Sierra, Oriente, Galapagos).
+            The previous filter treated a missing checklist record as proof of absence, so choosing the correct country
+            lowered accuracy. On 3,694 field photos from observers not used for tuning, Species Top-1 is 85.08% with no
+            location, 87.87% with the country and 88.71% with coordinates. Rare species gain little. Photo GPS is read in
+            your browser and is not uploaded.</li>
+            <li>Retrained collection sex prediction on 3,462 specimens (was 1,220) and added predictions for 347 specimens
+            without a recorded or with an uncertain sex. On the original 1,220 benchmark specimens, accuracy rose from 89.7%
+            to 92.0%. Supported now requires a reliable record for the species and covers 1,435 predictions.</li>
+            <li>Gallery views, including Search by CAMID lists, can be shared as links.</li>
+          </ul>
+          <p class="mb-1"><strong>26 September 2026:</strong></p>
+          <ul class="mb-2">
+            <li>Collection predictions for verified dorsal/ventral pairs now use an attention model. On 314 held-out pairs,
+            Species Top-1 rose from 92.04% to 95.22% (+3.18 pp) over averaging single-photo predictions across the two views.</li>
+            <li>AI Identifier now uses the corrected v6 wing crop, fixes 92 taxon names, and no longer guesses a location
+            when none is selected. On the GBIF field photos, Species Top-1 rose from 67.50% to 73.37% (+5.87 pp) and Top-5
+            from 85.59% to 92.05% (+6.46 pp), with the previous classification head.</li>
+            <li>Retrained the AI Identifier classifier after correcting 558 training labels using their source captions.
+            On the GBIF field photos, Species Top-1 rose from 73.37% to 73.92% (+0.55 pp); Top-5 is unchanged at 92.05%.</li>
+          </ul>
           <p><strong>10 September 2026:</strong> Added joint dorsal/ventral features for taxonomic prediction
           in specimens with verified paired photos, retaining the previous method for other specimens.
           Species Top-1 accuracy reaches 91.33% (+0.85 pp, Top-5: 97.91%) and Subspecies Top-1 reaches 87.93%
