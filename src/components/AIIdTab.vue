@@ -1,5 +1,5 @@
 <script setup>
-// AI Identifier tab: upload butterfly photo(s) -> BioCLIP 2.5-H prediction (genus ▸
+// AI Identifier tab: upload butterfly or moth photo(s) -> BioCLIP 2.5-H prediction (genus ▸
 // species ▸ subspecies). Inference runs ONCE per photo (raw leaf probabilities);
 // the location prior (GBIF records near the photo's GPS or map pin, in a country, or
 // in an Ecuador region) is a pure client-side re-rank, so each result can change its
@@ -569,7 +569,7 @@ const showAbout = ref(false)
     <div class="card">
       <div class="card-body">
         <div class="d-flex justify-content-between align-items-center">
-          <h6 class="card-title mb-0">Upload butterfly photo(s)</h6>
+          <h6 class="card-title mb-0">Upload butterfly or moth photo(s)</h6>
           <button v-if="items.length || results.length" class="btn btn-link btn-sm p-0" @click="clearAll">Clear photos</button>
         </div>
         <div class="dropzone mt-2" :class="{ over: isOver, compact: results.length }"
@@ -602,7 +602,7 @@ const showAbout = ref(false)
           </div>
           <button class="btn btn-success ms-auto identify-btn" :disabled="!pendingItems.length || running" @click="run">
             <span v-if="running" class="spinner-border spinner-border-sm" aria-hidden="true"></span>
-            {{ running ? 'Identifying…' : (pendingItems.length ? `Identify ${pendingItems.length > 1 ? pendingItems.length + ' photos' : 'butterfly'}` : (results.length ? 'All photos identified' : 'Identify butterfly')) }}
+            {{ running ? 'Identifying…' : (pendingItems.length ? `Identify ${pendingItems.length > 1 ? pendingItems.length + ' photos' : 'photo'}` : (results.length ? 'All photos identified' : 'Identify photo')) }}
           </button>
         </div>
       </div>
@@ -730,14 +730,14 @@ const showAbout = ref(false)
           and rolls those predictions up the taxonomy, keeping them consistent across subspecies, species, genus, and
           higher ranks. To focus it on wing pattern, images are first cropped to the wings by a lightweight
           YOLO26s-seg-based butterfly segmentation model trained on wing masks generated with SAM 3.</p>
-          <p><strong>Coverage:</strong> the label space spans Neotropical butterflies across all major families
-          (Nymphalidae, Hesperiidae, Riodinidae, Lycaenidae, Pieridae, Papilionidae) and now a substantial component of
-          <strong>nocturnal moths</strong> — predominantly <em>Sphingidae</em> (hawkmoths), with Saturniidae, Geometridae,
-          Notodontidae, Erebidae and others.
+          <p><strong>Coverage:</strong> the label space spans about 4,100 Neotropical butterfly species across all
+          major families (Nymphalidae, Hesperiidae, Riodinidae, Lycaenidae, Pieridae, Papilionidae) and about 8,000
+          moth species, mainly Erebidae, Sphingidae, Geometridae, Saturniidae, Crambidae and Noctuidae.
           Rare species represented by even single observations are included in training. Sampling remains
-          uneven: most of the butterfly data sits in the <em>Ithomiini</em> mimicry radiation and most of the moth data
-          in <em>Sphingidae</em>, so confident calls on sparsely-sampled groups (skippers, hairstreaks, micromoths)
-          warrant extra caution. Even within Ithomiini, Müllerian mimicry makes subspecies look-alikes genuinely hard to
+          uneven: most of the butterfly data sits in the <em>Ithomiini</em> mimicry radiation, and small or rarely
+          photographed moths have few training photos, so confident calls on sparsely-sampled groups (skippers,
+          hairstreaks, micromoths) warrant extra caution. Moths outside the label space receive the name of a similar
+          species. Even within Ithomiini, Müllerian mimicry makes subspecies look-alikes genuinely hard to
           tell apart.</p>
           <p>The collection classifier uses an attention model to combine dorsal and ventral photos for 3,829
           specimens with verified pairs, learning how much to rely on each view. Other specimens keep their previous
@@ -762,13 +762,26 @@ const showAbout = ref(false)
             <table id="field-benchmark" class="table table-sm table-bordered w-auto small">
               <thead><tr><th>Rank</th><th>Photographs</th><th>Top-1</th><th>Top-5</th></tr></thead>
               <tbody>
-                <tr><td>Species</td><td>4,566</td><td>85.74%</td><td>96.23%</td></tr>
-                <tr><td>Genus</td><td>4,566</td><td>95.38%</td><td>98.45%</td></tr>
+                <tr><td>Species</td><td>4,566</td><td>85.74%</td><td>96.01%</td></tr>
+                <tr><td>Genus</td><td>4,566</td><td>95.16%</td><td>98.49%</td></tr>
+              </tbody>
+            </table>
+          </section>
+          <section aria-labelledby="moth-benchmark-title">
+            <p id="moth-benchmark-title" class="mb-1"><strong>AI Identifier accuracy on moths</strong> on 10,582
+            iNaturalist Research Grade moth photos from 1,387 observers whose photos were not used for training
+            (recorded before 12 February 2026, before BioCLIP 2.5-H was released, so the backbone may have seen some of
+            them). No location selected; species scores cover the 9,750 photos of species in the label space:</p>
+            <table id="moth-benchmark" class="table table-sm table-bordered w-auto small">
+              <thead><tr><th>Rank</th><th>Photographs</th><th>Top-1</th><th>Top-5</th></tr></thead>
+              <tbody>
+                <tr><td>Species</td><td>9,750</td><td>85.15%</td><td>96.86%</td></tr>
+                <tr><td>Family</td><td>10,582</td><td>98.38%</td><td></td></tr>
               </tbody>
             </table>
           </section>
           <p class="text-muted">Top-1: the recorded identification ranks first. Top-5: it is among the first five.
-          The two tables measure different tasks and should not be compared with each other. Both test sets were also
+          The tables measure different tasks and should not be compared with each other. All three test sets were also
           used while choosing between model versions, so these scores may be slightly optimistic. They do not cover
           species outside the label space.</p>
           <!-- Sex benchmark and support details are generated from the verified OOF export. -->
@@ -812,12 +825,25 @@ const showAbout = ref(false)
             <a href="https://www.sangay.eu" target="_blank" rel="noopener noreferrer">Sangay</a>,
             <a href="https://www.noreste.eu" target="_blank" rel="noopener noreferrer">Noreste</a>, and
             <a href="https://www.cotacachi.eu" target="_blank" rel="noopener noreferrer">Cotacachi</a>, expanded with
-            additional Neotropical butterfly photo databases from across the region and, for the nocturnal moths,
+            additional Neotropical butterfly photo databases from across the region and, for moths,
             specialist collections such as the <a href="https://sphingidae.myspecies.info" target="_blank" rel="noopener noreferrer">Sphingidae
-            Taxonomic Inventory</a> and other hawkmoth/saturniid resources. The AI Identifier classifier is also trained on
+            Taxonomic Inventory</a>, other hawkmoth, silkmoth and light-trap resources, and research-grade iNaturalist
+            moth observations. The AI Identifier classifier is also trained on
             research-grade iNaturalist and museum photos from GBIF, used for training only.
           </p>
           <p class="mb-1"><strong>Changelog</strong></p>
+          <p class="mb-1"><strong>29 September 2026:</strong></p>
+          <ul class="mb-2">
+            <li>Added about 8,000 moth species to the AI Identifier, mainly Erebidae, Sphingidae, Geometridae, Saturniidae,
+            Crambidae and Noctuidae, trained with specimen and light-trap photos and about 102,000 research-grade
+            iNaturalist moth photos recorded before 12 February 2026. Before, about two in three moth photos received a
+            butterfly name. On 9,750 moth photos from iNaturalist observers not used for training, Species Top-1 is
+            85.15% (Top-5: 96.86%) with no location and 87.94% with coordinates. On the 4,566 GBIF butterfly field photos,
+            Species Top-1 is unchanged at 85.74% and Top-5 is 96.01% (was 96.23%); 0.39% of butterfly photos now receive
+            a moth name. Hawkmoth genitalia preparations and label photos were removed from training, and the location
+            prior now includes GBIF records of the moth species (on 3,694 butterfly field photos, Species Top-1 is 87.93%
+            with the country and 88.66% with coordinates).</li>
+          </ul>
           <p class="mb-1"><strong>27 September 2026:</strong></p>
           <ul class="mb-2">
             <li>Retrained the AI Identifier classifier with about 457,000 additional GBIF photos (research-grade

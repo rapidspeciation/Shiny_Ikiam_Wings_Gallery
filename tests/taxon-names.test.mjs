@@ -26,7 +26,7 @@ const MOCK = {
 
 test('the shipped map has the expected shape and no chains', () => {
   assert.equal(REAL.schema, 'wings-taxon-name-map/1')
-  assert.equal(Object.keys(REAL.species).length, 246)
+  assert.equal(Object.keys(REAL.species).length, 252)
   for (const part of ['species', 'leaves']) {
     for (const [o, n] of Object.entries(REAL[part])) {
       assert.ok(typeof n === 'string' && n && o !== n, `${part}: ${o}`)

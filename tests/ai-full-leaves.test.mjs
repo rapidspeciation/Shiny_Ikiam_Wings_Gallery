@@ -28,7 +28,7 @@ test('AI Identifier prefers complete unweighted leaves and safely falls back', a
     assert.equal(predictionLeaves({ ...response, full_leaves: full.map((v, i) => i === 1 ? ['Taxon 1', NaN] : v) }), preview)
     assert.equal(rankLeaves(preview, checklist, { country: '', side: '' }).species[0][0], 'Mechanitis messenoides')
     assert.equal(rankLeaves(preview, checklist, { country: 'Ecuador', side: 'East' }).species[0][0], 'Mechanitis messenoides')
-    assert.equal(PREDICTION_CACHE_VERSION, 'full-leaves-v2')
+    assert.equal(PREDICTION_CACHE_VERSION, 'full-leaves-v3')
   } finally {
     await vite.close()
   }
