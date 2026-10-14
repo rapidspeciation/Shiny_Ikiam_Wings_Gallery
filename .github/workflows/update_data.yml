@@ -8,6 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      actions: write  # to start the site's publishing once the data is committed
 
     steps:
       - name: Checkout repository
@@ -27,6 +28,7 @@ jobs:
           python scripts/process_data.py
 
       - name: Commit and Push Changes
+        id: commit
         run: |
           git config --global user.name "GitHub Action"
           git config --global user.email "action@github.com"
@@ -35,6 +37,15 @@ jobs:
             git add public/data/*.json
             git commit -m "Auto-update database from Google Sheets"
             git push
+            echo "pushed=true" >> $GITHUB_OUTPUT
           else
             echo "No changes in data detected."
           fi
+
+      # A push made with the workflow's own token starts no other workflow: the site is published here.
+      - name: Publish the site
+        if: steps.commit.outputs.pushed == 'true'
+        run: gh workflow run deploy.yml --ref main
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
