@@ -22,6 +22,7 @@ import AIReferencePanel from './AIReferencePanel.vue'
 import AIPhotoView from './AIPhotoView.vue'
 import InferenceProgress from './InferenceProgress.vue'
 import { taxonInfo, fmtPct, lowConfidenceMessage } from '../utils/aiCandidates.js'
+import { lifeStageNote } from '../utils/lifeStage.js'
 import { keepSelection, genusMembers, rankOf } from '../utils/taxonTree.js'
 import { predictStream, predictOne, rankLeaves, getStatus, makeJobId, wakeBackend, HAS_BACKEND, PREDICTION_CACHE_VERSION } from '../utils/aiPredict.js'
 import { suggestLocations, speciesProbs, countryList, countryName, checklistCountry } from '../utils/geoPrior.js'
@@ -393,7 +394,7 @@ async function run() {
     const placeholder = {
       id: it.id, filename: it.name, previewUrl: it.previewUrl, file: it,
       loading: true, error: null, mock: false, leaves: null,
-      boxes: [], unionBox: null, usedIndex: -1, predCache: {}, maskLoading: false,
+      boxes: [], unionBox: null, usedIndex: -1, predCache: {}, maskLoading: false, lifeStage: null,
       exifGps: it.gps || null, loc: exifLoc(it.gps),   // EXIF GPS applies at once; otherwise Any
       priorStatus: '', rankSeq: 0,
       suggest: [], pred: null, selected: '', userPicked: false,
@@ -414,6 +415,7 @@ async function run() {
         r.usedIndex = r.boxes.length ? -2 : -1     // -2 = all wings (union), -1 = full image, >=0 = one mask
         r.predCache = {}
         cacheLeaves(r, r.boxes.length ? 'all' : 'full', raw.leaves)
+        r.lifeStage = raw.life_stage || null      // from the photo's default crop; mask switches keep it
         r.mock = raw.mock; r.loading = false
         applyLeaves(r, raw.leaves)
       },
@@ -508,6 +510,7 @@ const selectedInfo = computed(() => (active.value ? taxonInfo(active.value.pred,
 const selectedMembers = computed(() => (active.value && rankOf(active.value.selected) === 'genus'
   ? genusMembers(active.value.pred, active.value.selected, 3) : []))
 const lowConfidence = computed(() => (active.value?.pred ? lowConfidenceMessage(active.value.pred, hasLocation(active.value)) : ''))
+const lifeNote = computed(() => lifeStageNote(active.value?.lifeStage))
 const treeKey = (r) => `${r.id}|${r.usedIndex}`
 const photoTabs = ref(null)
 function onPhotoTabKey(e) {
@@ -658,6 +661,7 @@ const showAbout = ref(false)
                 </div>
                 <div class="cands-main">
                   <div class="col-title" id="preds-lbl">Predictions</div>
+                  <div v-if="lifeNote" class="life-note" role="status">{{ lifeNote }}</div>
                   <div v-if="lowConfidence" class="low-conf" role="status">{{ lowConfidence }}</div>
                   <TaxonTree :pred="active.pred" :selected="active.selected" :reset-key="treeKey(active)"
                     browse="vocabulary" thumbs former-names :genus-limit="4" label="Predictions"
@@ -681,7 +685,7 @@ const showAbout = ref(false)
                       <button v-if="active.usedIndex !== -2" class="btn btn-link btn-sm p-0 ms-1" @click="useAll(active)">Use all wings</button>
                       <button v-if="active.usedIndex !== -1" class="btn btn-link btn-sm p-0 ms-1" @click="useFull(active)">Use full image</button>
                     </template>
-                    <template v-else>No wings detected, using the full image.</template>
+                    <template v-else>No wings detected, using the centre of the photo.</template>
                   </div>
                 </div>
               </div>
@@ -739,6 +743,8 @@ const showAbout = ref(false)
           hairstreaks, micromoths) warrant extra caution. Moths outside the label space receive the name of a similar
           species. Even within Ithomiini, Müllerian mimicry makes subspecies look-alikes genuinely hard to
           tell apart.</p>
+          <!-- MERGE SPOT (collection About text, 14 October 2026 release): the collection-model agent replaces or extends
+               the collection paragraph and table below. Nothing in this release changes them. -->
           <p>The collection classifier uses an attention model to combine dorsal and ventral photos for 3,829
           specimens with verified pairs, learning how much to rely on each view. Other specimens keep their previous
           predictions. AI Identifier uses a separate single-photo classifier.</p>
@@ -762,8 +768,8 @@ const showAbout = ref(false)
             <table id="field-benchmark" class="table table-sm table-bordered w-auto small">
               <thead><tr><th>Rank</th><th>Photographs</th><th>Top-1</th><th>Top-5</th></tr></thead>
               <tbody>
-                <tr><td>Species</td><td>4,566</td><td>85.74%</td><td>96.01%</td></tr>
-                <tr><td>Genus</td><td>4,566</td><td>95.16%</td><td>98.49%</td></tr>
+                <tr><td>Species</td><td>4,566</td><td>87.25%</td><td>96.58%</td></tr>
+                <tr><td>Genus</td><td>4,566</td><td>95.69%</td><td>98.60%</td></tr>
               </tbody>
             </table>
           </section>
@@ -775,15 +781,18 @@ const showAbout = ref(false)
             <table id="moth-benchmark" class="table table-sm table-bordered w-auto small">
               <thead><tr><th>Rank</th><th>Photographs</th><th>Top-1</th><th>Top-5</th></tr></thead>
               <tbody>
-                <tr><td>Species</td><td>9,750</td><td>85.15%</td><td>96.86%</td></tr>
-                <tr><td>Family</td><td>10,582</td><td>98.38%</td><td></td></tr>
+                <tr><td>Species</td><td>9,750</td><td>85.52%</td><td>96.87%</td></tr>
+                <tr><td>Family</td><td>10,582</td><td>98.40%</td><td></td></tr>
               </tbody>
             </table>
           </section>
           <p class="text-muted">Top-1: the recorded identification ranks first. Top-5: it is among the first five.
           The tables measure different tasks and should not be compared with each other. All three test sets were also
           used while choosing between model versions, so these scores may be slightly optimistic. They do not cover
-          species outside the label space.</p>
+          species outside the label space. On 3,782 newer iNaturalist photos recorded after 7 September 2026, which
+          were not used for training, Species Top-1 is 86.83% (Top-5: 96.19%) with no location.</p>
+          <!-- MERGE SPOT (collection sex predictions, 14 October 2026 release): the sex-prediction agent updates this
+               section (benchmark table and support text). This release does not change it. -->
           <!-- Sex benchmark and support details are generated from the verified OOF export. -->
           <section aria-labelledby="sex-benchmark-title">
           <p id="sex-benchmark-title" class="mb-1"><strong>Sex prediction</strong></p>
@@ -832,6 +841,24 @@ const showAbout = ref(false)
             research-grade iNaturalist and museum photos from GBIF, used for training only.
           </p>
           <p class="mb-1"><strong>Changelog</strong></p>
+          <p class="mb-1"><strong>14 October 2026:</strong></p>
+          <ul class="mb-2">
+            <li>Retrained the AI Identifier classifier with the same species and names: iNaturalist photos and
+            species-level examples count more in training, and species with fewer than 60 training photos received
+            additional research-grade iNaturalist photos recorded before 8 September 2026. On 3,782 iNaturalist photos
+            recorded after 7 September 2026 (2,260 butterflies, 1,522 moths) and not used for training, Species
+            Top-1 rose from 84.29% to 86.83% (Top-5: 96.19%) with no location. On the 4,566 GBIF butterfly field
+            photos, Species Top-1 rose from 85.74% to 87.25% (Top-5: 96.58%), and on the 9,750 moth photos from 85.15%
+            to 85.52%. With a location, Species Top-1 on 3,694 butterfly field photos is 89.12% with
+            the country and 89.74% with coordinates. On 797 photos of pinned moth specimens, Species Top-1 fell from
+            71.14% to 68.51%.</li>
+            <li>When no butterfly or moth is found in a photo, the identifier now uses the central part of the photo
+            instead of the whole photo.</li>
+            <li>A short note now appears when a photo looks like an egg, caterpillar or pupa, or like a specimen label or
+            preparation. The note comes from a separate small classifier and does not change the names offered.</li>
+            <!-- MERGE SPOT (collection sex predictions, same date): add the collection model item here, as another list item
+                 in this single 14 October 2026 entry. -->
+          </ul>
           <p class="mb-1"><strong>29 September 2026:</strong></p>
           <ul class="mb-2">
             <li>Added about 8,000 moth species to the AI Identifier, mainly Erebidae, Sphingidae, Geometridae, Saturniidae,
@@ -912,6 +939,7 @@ const showAbout = ref(false)
 .preview-grid.small .preview .rm { width: 20px; height: 20px; font-size: .8rem; }
 .identify-btn { min-width: 12rem; }
 .mask-bar { margin-bottom: .35rem; }
+.life-note { font-size: .78rem; color: #334155; background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: .35rem .55rem; margin-bottom: .45rem; }
 .low-conf { font-size: .78rem; color: #854d0e; background: #fefce8; border: 1px solid #fde68a; border-radius: 6px; padding: .35rem .55rem; margin-bottom: .45rem; }
 .col-title { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: #64748b; margin-bottom: .35rem; }
 

@@ -10,6 +10,7 @@
 // deterministic mock (real Ithomiini taxa) runs so the whole flow is demoable.
 import { entryFor, geoWeight, isOffRegion, DEFAULT_EPS } from './geoPrior.js'
 import { loadTaxonNames, canonicalLeaves } from './taxonNames.js'
+import { normalizeLifeStage } from './lifeStage.js'
 
 const API_BASE = (import.meta.env.VITE_AIID_API || '').replace(/\/$/, '')
 
@@ -45,7 +46,7 @@ function mockRawLeaves(filename) {
 
 // Whether a real backend is configured (vs. the offline demo mock).
 export const HAS_BACKEND = !!API_BASE
-export const PREDICTION_CACHE_VERSION = 'full-leaves-v3'
+export const PREDICTION_CACHE_VERSION = 'full-leaves-v4'
 
 // The new Space supplies all leaves for exact marginalisation. Older or mock
 // responses still have only the preview, which remains usable while it warms.
@@ -112,7 +113,8 @@ export function wakeBackend() {
 }
 
 // Fetch RAW leaves for ONE prepared image item. Returns
-//   { id, filename, leaves: [[taxon, prob], ...], wing_box, boxes, mock }
+//   { id, filename, leaves: [[taxon, prob], ...], wing_box, boxes, life_stage, mock }
+// life_stage = { flag, notAdult } or null (see lifeStage.js)
 // opts.box   = [x1,y1,x2,y2] normalised -> embed exactly that wing mask (lazy switch)
 // opts.yolo  = 'off' -> use the whole image (no wing crop)
 // opts.jobId = id sent as a (CORS-simple) form field so /status can track this request
@@ -129,7 +131,7 @@ export async function predictOne(f, i = 0, opts = {}) {
 async function predictOneRaw(f, i = 0, { box = null, yolo = 'auto', jobId = null } = {}) {
   const id = f.id || `img_${i}`
   if (!API_BASE) {
-    return { id, filename: f.name, leaves: mockRawLeaves(f.name), wing_box: null, boxes: [], mock: true }
+    return { id, filename: f.name, leaves: mockRawLeaves(f.name), wing_box: null, boxes: [], life_stage: null, mock: true }
   }
   const form = new FormData()
   form.append('images', f.blob || f.file || f, f.name)
@@ -152,6 +154,7 @@ async function predictOneRaw(f, i = 0, { box = null, yolo = 'auto', jobId = null
         id, filename: r.filename || f.name,
         leaves: predictionLeaves({ ...r, mock: !!json.mock }),
         wing_box: r.wing_box || null, boxes: r.boxes || [], mock: !!json.mock,
+        life_stage: json.mock ? null : normalizeLifeStage(r.life_stage),
       }
     } catch (e) {
       lastErr = e

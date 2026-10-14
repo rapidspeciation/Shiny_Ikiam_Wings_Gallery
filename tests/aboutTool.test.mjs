@@ -4,15 +4,16 @@ import { readFileSync } from 'node:fs'
 test('About shows current held-out results and dated history separately', () => {
   const about = readFileSync('src/components/AIIdTab.vue', 'utf8')
   const current = about.split('<strong>Changelog</strong>')[0].split('About this tool')[1]
-  assert.doesNotMatch(current, /<strong>\d{1,2} September 2026:<\/strong>/)
+  assert.doesNotMatch(current, /<strong>\d{1,2} (September|October) 2026:<\/strong>/)
   for (const copy of ['3,829', 'Collection accuracy', 'AI Identifier accuracy',
     '<tr><td>Named subspecies</td><td>296</td><td>89.86%</td><td>98.65%</td></tr>',
     '<tr><td>Species</td><td>314</td><td>95.22%</td><td>99.04%</td></tr>',
     '<tr><td>Genus</td><td>314</td><td>98.09%</td><td>99.36%</td></tr>',
-    '<tr><td>Species</td><td>4,566</td><td>85.74%</td><td>96.01%</td></tr>',
-    '<tr><td>Genus</td><td>4,566</td><td>95.16%</td><td>98.49%</td></tr>',
-    '<tr><td>Species</td><td>9,750</td><td>85.15%</td><td>96.86%</td></tr>',
-    '<tr><td>Family</td><td>10,582</td><td>98.38%</td><td></td></tr>',
+    '<tr><td>Species</td><td>4,566</td><td>87.25%</td><td>96.58%</td></tr>',
+    '<tr><td>Genus</td><td>4,566</td><td>95.69%</td><td>98.60%</td></tr>',
+    '<tr><td>Species</td><td>9,750</td><td>85.52%</td><td>96.87%</td></tr>',
+    '<tr><td>Family</td><td>10,582</td><td>98.40%</td><td></td></tr>',
+    'recorded after 7 September 2026, which\n          were not used for training, Species Top-1 is 86.83% (Top-5: 96.19%)',
     '12 February and 7 September 2026, after BioCLIP 2.5-H was released',
     'should not be compared with each other', 'may be slightly optimistic',
     '<strong>Sex prediction</strong>', 'Sex prediction is not yet supported for uploaded photos.',
@@ -31,15 +32,21 @@ test('About shows current held-out results and dated history separately', () => 
 test('About changelog has one entry per date and describes the spatial location prior', () => {
   const about = readFileSync('src/components/AIIdTab.vue', 'utf8')
   const log = about.split('<strong>Changelog</strong>')[1]
-  const dates = [...log.matchAll(/<strong>(\d{1,2} September 2026):<\/strong>/g)].map((m) => m[1])
+  const dates = [...log.matchAll(/<strong>(\d{1,2} (?:September|October) 2026):<\/strong>/g)].map((m) => m[1])
   assert.equal(new Set(dates).size, dates.length, 'one changelog entry per date')
-  assert.equal(dates[0], '29 September 2026')
+  assert.equal(dates[0], '14 October 2026')
   // reserved for model changes: no interface-only entries
   assert.doesNotMatch(log, /shared as links|Field photos now|tapping a collapsed|agreement filters|confidence sorting|zoom-to-wings/)
   const first = log.split('27 September 2026:</strong>')[1].split('26 September 2026:</strong>')[0].replace(/\s+/g, ' ')
   for (const copy of ['dated before 12 February 2026', '85.08% with no location', '87.87% with the country',
     '88.71% with coordinates', 'Costa, Sierra, Oriente, Galapagos', '3,694 field photos']) assert.ok(first.includes(copy), copy)
   assert.doesNotMatch(first, /—|licen[cs]e/i)
+  const release = log.split('14 October 2026:</strong>')[1].split('29 September 2026:</strong>')[0].replace(/\s+/g, ' ')
+  for (const copy of ['3,782 iNaturalist photos recorded after 7 September 2026', 'from 84.29% to 86.83% (Top-5: 96.19%)',
+    'from 85.74% to 87.25% (Top-5: 96.58%)', 'from 85.15% to 85.52%', '89.12% with the country', '89.74% with coordinates',
+    'fell from 71.14% to 68.51%', 'central part of the photo', 'egg, caterpillar or pupa', 'does not change the names offered']) assert.ok(release.includes(copy), copy)
+  assert.doesNotMatch(release, /\u2014|licen[cs]e|state-of-the-art|best|always|guarantee/i)
+  assert.ok((release.match(/<li>/g) || []).length >= 3, 'one entry holds the identifier changes (the collection item may join it)')
   const moths = log.split('29 September 2026:</strong>')[1].split('27 September 2026:</strong>')[0].replace(/\s+/g, ' ')
   for (const copy of ['about 8,000 moth species', 'recorded before 12 February 2026', '85.15% (Top-5: 96.86%)',
     'unchanged at 85.74%', '87.93% with the country', '88.66% with coordinates']) assert.ok(moths.includes(copy), copy)
