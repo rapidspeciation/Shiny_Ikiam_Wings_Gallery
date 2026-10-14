@@ -6,9 +6,11 @@ test('About shows current held-out results and dated history separately', () => 
   const current = about.split('<strong>Changelog</strong>')[0].split('About this tool')[1]
   assert.doesNotMatch(current, /<strong>\d{1,2} (September|October) 2026:<\/strong>/)
   for (const copy of ['3,829', 'Collection accuracy', 'AI Identifier accuracy',
-    '<tr><td>Named subspecies</td><td>296</td><td>89.86%</td><td>98.65%</td></tr>',
-    '<tr><td>Species</td><td>314</td><td>95.22%</td><td>99.04%</td></tr>',
-    '<tr><td>Genus</td><td>314</td><td>98.09%</td><td>99.36%</td></tr>',
+    '<tr><td>Named subspecies</td><td>502</td><td>84.46%</td><td></td></tr>',
+    '<tr><td>Species</td><td>539</td><td>90.54%</td><td>97.03%</td></tr>',
+    '<tr><td>Genus</td><td>539</td><td>96.47%</td><td></td></tr>',
+    '<tr><td>Species with 5 or fewer specimens in training</td><td>123</td><td>73.17%</td><td></td></tr>',
+    'overstates accuracy for the collection as a whole',
     '<tr><td>Species</td><td>4,566</td><td>87.25%</td><td>96.58%</td></tr>',
     '<tr><td>Genus</td><td>4,566</td><td>95.69%</td><td>98.60%</td></tr>',
     '<tr><td>Species</td><td>9,750</td><td>85.52%</td><td>96.87%</td></tr>',

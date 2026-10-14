@@ -743,22 +743,26 @@ const showAbout = ref(false)
           hairstreaks, micromoths) warrant extra caution. Moths outside the label space receive the name of a similar
           species. Even within Ithomiini, Müllerian mimicry makes subspecies look-alikes genuinely hard to
           tell apart.</p>
-          <!-- MERGE SPOT (collection About text, 14 October 2026 release): the collection-model agent replaces or extends
-               the collection paragraph and table below. Nothing in this release changes them. -->
           <p>The collection classifier uses an attention model to combine dorsal and ventral photos for 3,829
           specimens with verified pairs, learning how much to rely on each view. Other specimens keep their previous
           predictions. AI Identifier uses a separate single-photo classifier.</p>
           <section aria-labelledby="attention-benchmark-title">
-            <p id="attention-benchmark-title" class="mb-1"><strong>Collection accuracy</strong> on 314 held-out
-            Sanger dorsal/ventral pairs, with the side-of-Andes + Ecuador prior:</p>
+            <p id="attention-benchmark-title" class="mb-1"><strong>Collection accuracy</strong> on 539 Sanger
+            dorsal/ventral pairs picked at random within each tribe and scored by a copy of the model retrained
+            without them, without the side-of-Andes + Ecuador prior that the gallery applies:</p>
             <table id="attention-benchmark" class="table table-sm table-bordered w-auto small">
               <thead><tr><th>Rank</th><th>Specimens</th><th>Top-1</th><th>Top-5</th></tr></thead>
               <tbody>
-                <tr><td>Named subspecies</td><td>296</td><td>89.86%</td><td>98.65%</td></tr>
-                <tr><td>Species</td><td>314</td><td>95.22%</td><td>99.04%</td></tr>
-                <tr><td>Genus</td><td>314</td><td>98.09%</td><td>99.36%</td></tr>
+                <tr><td>Named subspecies</td><td>502</td><td>84.46%</td><td></td></tr>
+                <tr><td>Species</td><td>539</td><td>90.54%</td><td>97.03%</td></tr>
+                <tr><td>Genus</td><td>539</td><td>96.47%</td><td></td></tr>
+                <tr><td>Species with 5 or fewer specimens in training</td><td>123</td><td>73.17%</td><td></td></tr>
               </tbody>
             </table>
+            <p>Cross-validation over 2,154 other verified pairs gives nearly the same result (species 90.5%, named
+            subspecies 83.5%). Species with few photographed specimens cause more than half of the species errors.
+            Earlier versions of this page reported 95.22% on 314 held-out pairs; those pairs come from species with
+            many specimens, so that figure overstates accuracy for the collection as a whole.</p>
           </section>
           <section aria-labelledby="field-benchmark-title">
             <p id="field-benchmark-title" class="mb-1"><strong>AI Identifier accuracy</strong> on 4,566 held-out
@@ -787,33 +791,33 @@ const showAbout = ref(false)
             </table>
           </section>
           <p class="text-muted">Top-1: the recorded identification ranks first. Top-5: it is among the first five.
-          The tables measure different tasks and should not be compared with each other. All three test sets were also
-          used while choosing between model versions, so these scores may be slightly optimistic. They do not cover
-          species outside the label space. On 3,782 newer iNaturalist photos recorded after 7 September 2026, which
+          The tables measure different tasks and should not be compared with each other. The two AI Identifier test sets
+          were also used while choosing between model versions, so those scores may be slightly optimistic; the 539
+          collection pairs were not. The tables do not cover species outside the label space. On 3,782 newer iNaturalist photos recorded after 7 September 2026, which
           were not used for training, Species Top-1 is 86.83% (Top-5: 96.19%) with no location.</p>
-          <!-- MERGE SPOT (collection sex predictions, 14 October 2026 release): the sex-prediction agent updates this
-               section (benchmark table and support text). This release does not change it. -->
           <!-- Sex benchmark and support details are generated from the verified OOF export. -->
           <section aria-labelledby="sex-benchmark-title">
           <p id="sex-benchmark-title" class="mb-1"><strong>Sex prediction</strong></p>
-          <p>Collection predictions use separate BioCLIP features from the two ventral forewings and two dorsal hindwings,
-          for 3,809 Sanger specimens. The benchmark below covers 3,462 specimens with a recorded sex across 381 species.</p>
+          <p>Collection predictions look at four wing crops (the two ventral forewings and the two dorsal hindwings) and
+          eight close-up tiles of the wing regions that carry male scent scales, for 3,809 Sanger specimens. The
+          benchmark below covers 3,462 specimens with a recorded sex across 381 species.</p>
           <table id="sex-benchmark" class="table table-sm table-bordered w-auto small">
             <thead><tr><th scope="col">Evaluation</th><th scope="col">Specimens</th><th scope="col">Accuracy</th></tr></thead>
             <tbody>
-              <tr><td>All scored specimens</td><td>3,462</td><td>90.2%</td></tr>
-              <tr><td>Ithomiini</td><td>2,733</td><td>94.0%</td></tr>
-              <tr><td>Heliconiini</td><td>305</td><td>79.7%</td></tr>
-              <tr><td>Species not seen in training</td><td>3,462</td><td>85.5%</td></tr>
+              <tr><td>All scored specimens</td><td>3,462</td><td>92.3%</td></tr>
+              <tr><td>Ithomiini</td><td>2,733</td><td>95.7%</td></tr>
+              <tr><td>Heliconiini</td><td>305</td><td>86.6%</td></tr>
+              <tr><td>Species not seen in training</td><td>3,462</td><td>90.1%</td></tr>
             </tbody>
           </table>
-          <p>Scores average three models that each excluded the specimen from training and checkpoint selection.
-          <strong>Supported</strong> requires confidence of at least 85% and a good track record for that species on other
-          specimens; otherwise <strong>Uncertain</strong>. Supported predictions were 98.2% correct, and 26 disagree with
-          the recorded sex and are candidates for review. Groups outside Ithomiini have fewer examples and are mostly Uncertain.</p>
-          <p>Sex prediction is not yet supported for uploaded photos. The current method uses separate features from
-          ventral forewing and dorsal hindwing crops of Sanger specimens. These views expose regions that may show
-          sexual differences, including androconia in some taxa.</p>
+          <p>Scores average three models that each excluded the specimen from training and checkpoint selection. The model
+          design was chosen using 2,771 of these specimens; on the other 691, held back from every choice, it recorded the
+          correct sex for 93.8%. <strong>Supported</strong> requires confidence of at least 85% and a good track record
+          for that species on other specimens; otherwise <strong>Uncertain</strong>. Supported predictions were 98.0%
+          correct, and 32 disagree with the recorded sex and are candidates for review. Groups outside Ithomiini and
+          Heliconiini have fewer examples (74.3% correct) and are mostly Uncertain.</p>
+          <p>Sex prediction is not yet supported for uploaded photos. The current method needs the wing crops and
+          close-up tiles from both the dorsal and the ventral photo of a Sanger specimen.</p>
 
           </section>
           <p class="mb-1">
@@ -856,8 +860,10 @@ const showAbout = ref(false)
             instead of the whole photo.</li>
             <li>A short note now appears when a photo looks like an egg, caterpillar or pupa, or like a specimen label or
             preparation. The note comes from a separate small classifier and does not change the names offered.</li>
-            <!-- MERGE SPOT (collection sex predictions, same date): add the collection model item here, as another list item
-                 in this single 14 October 2026 entry. -->
+            <li>Collection sex prediction now also looks at eight close-up tiles of the wing regions that carry male
+            scent scales. Out-of-fold accuracy on 3,462 specimens rose from 90.2% to 92.3% (Ithomiini 94.0% to 95.7%,
+            Heliconiini 79.7% to 86.6%; species not seen in training 85.5% to 90.1%), and 1,592 predictions are now
+            Supported (was 1,435), 98.0% correct in testing.</li>
           </ul>
           <p class="mb-1"><strong>29 September 2026:</strong></p>
           <ul class="mb-2">
