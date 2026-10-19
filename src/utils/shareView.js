@@ -1,7 +1,7 @@
 export const VIEW_DEFAULTS = {
   columns: 'Auto', sortBy: 'Preservation_date', sortOrder: 'desc',
   side: 'Dorsal and Ventral', onlyPhotos: true, onePerSubspecies: false,
-  showBoxes: false, zoomWings: false, expandPredictions: false
+  showBoxes: false, zoomWings: false, showOutlines: false, expandPredictions: false
 }
 const choices = {
   columns: ['Auto', '1', '2', '3'],

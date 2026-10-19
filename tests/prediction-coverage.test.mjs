@@ -24,6 +24,33 @@ test('current prediction maps prefer expanded rows, then coverage, then live inf
   })
 })
 
+test('the Database Manager readings fill specimens below the release, above live inference', () => {
+  const merged = mergeCurrentPredictionMaps({
+    expanded: { CAM1: { source: 'expanded' } },
+    coverage: { CAM2: { source: 'coverage' } },
+    app: { CAM1: { source: 'app' }, CAM2: { source: 'app' }, CAM3: { source: 'app' }, CAM4: { source: 'app' } },
+    live: { CAM3: { source: 'live' }, CAM5: { source: 'live' } }
+  })
+  assert.deepEqual(merged, {
+    CAM1: { source: 'expanded' },
+    CAM2: { source: 'coverage' },
+    CAM3: { source: 'app' },
+    CAM4: { source: 'app' },
+    CAM5: { source: 'live' }
+  })
+})
+
+test('a missing or broken readings file leaves the release predictions', async () => {
+  for (const failure of [Object.assign(new Error('missing'), { status: 404 }), new SyntaxError('Unexpected token <')]) {
+    const load = async name => {
+      if (name === CURRENT_PREDICTION_FILES.app) throw failure
+      if (name === CURRENT_PREDICTION_FILES.expanded) return { CAM1: { source: 'expanded' } }
+      return {}
+    }
+    assert.deepEqual(await loadCurrentPredictionMaps(load), { CAM1: { source: 'expanded' } })
+  }
+})
+
 test('missing optional coverage asset does not fall back to predictions.json', async () => {
   const requested = []
   const maps = {

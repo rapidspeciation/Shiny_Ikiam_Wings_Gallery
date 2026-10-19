@@ -3,7 +3,9 @@ import Panzoom from '@panzoom/panzoom'
 import { onMounted, onBeforeUnmount, ref, reactive, computed, watch, nextTick } from 'vue'
 import { usePanzoomRegistry } from '../composables/usePanzoomRegistry.js'
 import { useGlobalGalleryOptions } from '../composables/useGlobalGalleryOptions.js'
-import { getBoxes, getBoxReason } from '../composables/useCurationData.js'
+import { getBoxes, getBoxReason, outlinesFor, driveFileId } from '../composables/useCurationData.js'
+import { useWingOutlines } from '../composables/useWingOutlines.js'
+import { useNearViewport } from '../composables/useNearViewport.js'
 import { getProxiedUrl, notifyTierFailed, getProxyState } from '../utils/imageProxy.js'
 import { unionBox, unionBoxScale } from '../utils/wingBoxes.js'
 import PredictionPanel from './PredictionPanel.vue'
@@ -14,7 +16,18 @@ const props = defineProps({
 })
 
 const { register, unregister } = usePanzoomRegistry()
-const { showBoxes, zoomWings } = useGlobalGalleryOptions()
+const { showBoxes, zoomWings, showOutlines } = useGlobalGalleryOptions()
+
+// Wing outlines: one small SVG per photo, only while the card is near the viewport.
+const cardRef = ref(null)
+const nearViewport = useNearViewport(cardRef)
+const { outlinePhotos } = useWingOutlines()
+const photoOutlines = computed(() => {
+  const map = outlinePhotos.value
+  if (!showOutlines.value || !nearViewport.value || !map) return []
+  return displayPhotos().map(photo => outlinesFor(map, photo.Name, driveFileId(photo.URL_to_view)))
+})
+const outlinesOf = (index) => photoOutlines.value[index] || []
 
 const imgRefs = ref([])
 const layerRefs = ref([])
@@ -91,6 +104,12 @@ const initZoom = (el) => {
     }
   })
 
+  // non-scaling-stroke ignores the layer's CSS transform: thin the overlay
+  // strokes by the zoom so they stay ~1.5 px on screen.
+  el.addEventListener('panzoomchange', (e) => {
+    el.style.setProperty('--pz-scale', String(e.detail.scale || 1))
+  })
+
   el.addEventListener('panzoomreset', () => {
     pz.setOptions({ disablePan: true, touchAction: 'pan-y', cursor: 'grab' })
   })
@@ -121,10 +140,11 @@ const detachPanzoomAll = () => {
 }
 
 // --- Wing-box loading (lazy, on first need per photo) ---
-const ensureBoxes = async (index, name) => {
+const ensureBoxes = async (index, photo) => {
   if (photoState[index] && photoState[index].loaded) return
   if (!photoState[index]) photoState[index] = { boxes: [], loaded: false }
-  const [boxes, boxReason] = await Promise.all([getBoxes(name), getBoxReason(name)])
+  const name = photo.Name
+  const [boxes, boxReason] = await Promise.all([getBoxes(name, 'current', driveFileId(photo.URL_to_view)), getBoxReason(name)])
   photoState[index] = { boxes, boxReason, loaded: true }
 }
 
@@ -133,10 +153,9 @@ const ensureBoxes = async (index, name) => {
 // framing runs before the boxes have loaded).
 const loadVisibleBoxes = () => {
   const photos = displayPhotos()
-  return Promise.all(photos.map((photo, index) => ensureBoxes(index, photo.Name)))
+  return Promise.all(photos.map((photo, index) => ensureBoxes(index, photo)))
 }
 
-// Union bbox of all boxes for a photo, or null if none.
 // Frame the union wing bbox THROUGH panzoom, so the user can keep zooming/panning
 // from there. Panzoom transform is `scale(S) translate(Xpx,Ypx)` about the layer's
 // centre, so to put the bbox centre (cx,cy) at the viewport centre: X=W(0.5-cx),
@@ -146,12 +165,14 @@ const applyWingFrame = (index) => {
   const pz = pzInstances[index]
   const st = photoState[index]
   if (!el || !pz || !st || !st.loaded) return
-  const u = unionBox(st.boxes, { padding: 0, aspect: 1.15 })
+  // The box is already padded (1.5 % of the photo's shorter side for the
+  // Database Manager's boxes): frame it as is, filling the photo's frame.
+  const u = unionBox(st.boxes, { padding: 0, aspect: null })
   if (!u) { pz.reset({ animate: false }); return }
   const W = el.offsetWidth, H = el.offsetHeight
   if (!W || !H) return
   const cx = (u.x1 + u.x2) / 2, cy = (u.y1 + u.y2) / 2
-  const scale = unionBoxScale(u, 8, 0.95)
+  const scale = unionBoxScale(u, 8, 1)
   pz.zoom(scale, { animate: false })
   // force: true — pan() is a no-op while disablePan is set (the panel's default),
   // which would frame off-centre wings on the image middle instead of the bbox.
@@ -249,7 +270,7 @@ const displayPhotos = () => {
 </script>
 
 <template>
-  <div class="gallery-card h-100 border rounded bg-white d-flex flex-column">
+  <div ref="cardRef" class="gallery-card h-100 border rounded bg-white d-flex flex-column">
     <h5 class="fw-bold text-center mt-2">{{ item.CAM_ID }}</h5>
 
     <div class="photo-grid-container p-2">
@@ -286,6 +307,23 @@ const displayPhotos = () => {
                :width="Math.max(0, b.box[2] - b.box[0])"
                :height="Math.max(0, b.box[3] - b.box[1])"
                class="wing-rect"
+             />
+           </svg>
+
+           <!-- Wing outlines: 0..1000 grid of the photo as displayed; the layer is the
+                image's own box, so the grid is stretched onto it (preserveAspectRatio none) -->
+           <svg
+             v-if="outlinesOf(index).length"
+             class="wing-overlay"
+             viewBox="0 0 1000 1000"
+             preserveAspectRatio="none"
+             aria-hidden="true"
+           >
+             <path
+               v-for="(w, wi) in outlinesOf(index)"
+               :key="'o-' + wi"
+               :d="w.d"
+               :class="w.kind === 'fw' ? 'wing-outline-fw' : 'wing-outline-hw'"
              />
            </svg>
 
@@ -369,10 +407,17 @@ const displayPhotos = () => {
   height: 100%;
   pointer-events: none;
 }
+.wing-outline-fw, .wing-outline-hw {
+  stroke-width: calc(1.5px / var(--pz-scale, 1));
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+.wing-outline-fw { fill: rgba(255, 122, 0, 0.22); stroke: #ff7a00; }
+.wing-outline-hw { fill: rgba(0, 170, 255, 0.22); stroke: #00aaff; }
 .wing-rect {
   fill: none;
   stroke: #00e0ff;
-  stroke-width: 2;
+  stroke-width: calc(2px / var(--pz-scale, 1));
   vector-effect: non-scaling-stroke;
   pointer-events: none;
 }

@@ -27,6 +27,18 @@ jobs:
         run: |
           python scripts/process_data.py
 
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # Species, sex, wing boxes and wing outlines read by the Database Manager for new photos.
+      # Any file it cannot serve keeps the gallery's current copy; this step never stops the update.
+      - name: Download the Database Manager's readings
+        continue-on-error: true
+        timeout-minutes: 10
+        run: node scripts/fetch-app-readings.mjs
+
       - name: Commit and Push Changes
         id: commit
         run: |
@@ -35,7 +47,7 @@ jobs:
           
           if [[ -n $(git status -s public/data) ]]; then
             git add public/data/*.json
-            git commit -m "Auto-update database from Google Sheets"
+            git commit -m "Auto-update database from Google Sheets and the Database Manager's readings"
             git push
             echo "pushed=true" >> $GITHUB_OUTPUT
           else

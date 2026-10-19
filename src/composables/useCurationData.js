@@ -3,6 +3,10 @@
 //
 // Files (in public/data/, keyed as documented):
 //   wing_boxes.json    -> { "<CAMID+view>": [ { box:[x1,y1,x2,y2], conf }, ... ] }  (normalized 0..1)
+//   wing_boxes_app.json -> same shape, one tight union box per photo from the Database Manager's readings
+//                          (+ file: Drive ID of the photo read); preferred over wing_boxes_v6.json
+//   wing_outlines.json -> { photos: { "<CAMID+view>": { file, w: [[kind, half, "M x y ... Z"], ...] } } }
+//                          (0..1000 grid; fetched only when "Wing outlines" is first turned on)
 //   predictions.json   -> { "<CAMID>": { subspecies:[[t,c]], species:[[t,c]], genus:[[t,c]], n_views } }
 //   taxon_links.json   -> { "<taxon>": { boa, sangay, noreste, cotacachi } }
 
@@ -13,6 +17,7 @@ import { loadCurrentPredictionMaps } from '../utils/predictionCoverage.js'
 import { regionSpecies, regionSubspecies } from '../utils/taxonTree.js'
 import { loadTaxonNames, lookupOrder, canonical } from '../utils/taxonNames.js'
 import { mergeGbifPresence } from '../utils/geoPrior.js'
+import { driveFileId, pickBoxes, photoOutlines } from '../utils/wingBoxes.js'
 export { resolveCamid, predictionDiffers, canonicalTaxon, rankComparison }
 
 // Module-wide caches (one promise per file -> single fetch, deduped).
@@ -20,6 +25,8 @@ const fileCache = new Map()
 let currentPredictionsPromise = null
 
 export const BOX_SOURCES = {
+  // The app's tight boxes where a photo has one, else wing_boxes_v6 (see getBoxes).
+  current: { file: 'wing_boxes_app', fallback: 'v6', label: 'Current wing boxes (Database Manager readings, else the segmentation boxes)' },
   v6: { file: 'wing_boxes_v6', label: 'Current butterfly segmentation boxes' },
   legacy: { file: 'wing_boxes', label: 'Previous butterfly segmentation boxes' }
 }
@@ -55,6 +62,24 @@ function loadFile(name) {
 function sourceFile(sources, source, fallback) {
   return (sources[source] || sources[fallback]).file
 }
+
+// Files published by the Database Manager (downloaded by update_data.yml). They
+// are absent until its first readings; a missing or broken copy reads as {}.
+const optionalCache = new Map()
+function loadOptionalFile(name) {
+  if (!optionalCache.has(name)) optionalCache.set(name, loadFile(name).catch(() => ({})))
+  return optionalCache.get(name)
+}
+
+// Box map for a source; a source with a fallback is a layer over it, by photo.
+async function loadBoxMap(source) {
+  const src = BOX_SOURCES[source] || BOX_SOURCES.current
+  if (!src.fallback) return loadFile(src.file)
+  const [layer, fallback] = await Promise.all([loadOptionalFile(src.file), loadFile(BOX_SOURCES[src.fallback].file).catch(() => ({}))])
+  return { layer, fallback }
+}
+
+export { driveFileId }
 
 function loadCurrentPredictions() {
   if (currentPredictionsPromise) return currentPredictionsPromise
@@ -103,21 +128,39 @@ export const SOURCE_FULL_NAMES = {
 // Warm the wing-boxes cache in the background so the first "Zoom to wings" /
 // "Wing boxes" toggle doesn't pay for the ~2 MB cold fetch. Safe to call repeatedly
 // (loadFile dedupes to a single request). Errors are swallowed; getBoxes retries.
-export function preloadBoxes(source = 'v6') {
-  return loadFile(sourceFile(BOX_SOURCES, source, 'v6')).catch(() => {})
+export function preloadBoxes(source = 'current') {
+  return loadBoxMap(source).catch(() => {})
 }
 
 // Returns the array of boxes for a photo Name, or [] if none / not loaded yet.
-export async function getBoxes(name, source = 'v6') {
+// The default source takes the app's tight box when it read this very file
+// (fileId: the photo's Drive ID, when known), else the wing_boxes_v6 box.
+export async function getBoxes(name, source = 'current', fileId = null) {
   const key = boxKeyFromName(name)
   if (!key) return []
   try {
-    const data = await loadFile(sourceFile(BOX_SOURCES, source, 'v6'))
-    const boxes = data[key] || data[key.toUpperCase()] || data[key.toLowerCase()]
-    return Array.isArray(boxes) ? boxes : []
+    const data = await loadBoxMap(source)
+    return data.layer ? pickBoxes(data.layer, data.fallback, key, fileId) : pickBoxes(null, data, key)
   } catch {
     return []
   }
+}
+
+// Wing outlines, loaded once on first use (the file is several MB). Resolves to
+// the `photos` map, frozen and never made reactive; {} when not published yet.
+let outlinesPromise = null
+export function loadOutlines() {
+  if (!outlinesPromise) {
+    outlinesPromise = loadFile('wing_outlines')
+      .then(data => Object.freeze(data && typeof data.photos === 'object' && data.photos ? data.photos : {}))
+      .catch(error => { outlinesPromise = null; throw error })
+  }
+  return outlinesPromise
+}
+
+// Drawable outlines of one photo (by Name) from the loaded map: [{ kind, half, d }].
+export function outlinesFor(photos, name, fileId = null) {
+  return photoOutlines(photos, boxKeyFromName(name), fileId)
 }
 
 export async function getAllBoxes(source = 'v6') {
@@ -142,14 +185,22 @@ export async function getAllPredictions(source = 'candidate_d') {
 
 // Out-of-fold sex predictions keyed by CAM_ID. These are collection-only;
 // AI Identifier uploads do not use this asset.
-export async function getSexPrediction(camid) {
-  if (!camid) return null
-  const data = await loadFile('sex_predictions')
-  return data[camid] || data[String(camid).toUpperCase()] || null
+// The Database Manager's readings (sex_predictions_app.json) fill specimens the
+// release has not scored.
+let sexPredictionsPromise = null
+export async function getAllSexPredictions() {
+  if (!sexPredictionsPromise) {
+    sexPredictionsPromise = Promise.all([loadFile('sex_predictions'), loadOptionalFile('sex_predictions_app')])
+      .then(([release, app]) => ({ ...app, ...release }))
+      .catch(error => { sexPredictionsPromise = null; throw error })
+  }
+  return sexPredictionsPromise
 }
 
-export async function getAllSexPredictions() {
-  return loadFile('sex_predictions')
+export async function getSexPrediction(camid) {
+  if (!camid) return null
+  const data = await getAllSexPredictions()
+  return data[camid] || data[String(camid).toUpperCase()] || null
 }
 
 export async function getPredictionMissingReason(camid, rank = null) {
@@ -341,7 +392,7 @@ export function linksFor(data, taxon, { speciesFallback = true } = {}) {
 
 export function useCurationData() {
   return {
-    getBoxes, getAllBoxes, preloadBoxes, getPredictions, getAllPredictions,
+    getBoxes, getAllBoxes, preloadBoxes, loadOutlines, outlinesFor, driveFileId, getPredictions, getAllPredictions,
     getSexPrediction, getAllSexPredictions, getLinks, boxKeyFromName,
     getCurationSourceMeta, compareCurationVersions, topPredictionTaxon,
     getPredictionMissingReason, getAllPredictionMissingReasons, getBoxReason, getAllBoxReasons,

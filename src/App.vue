@@ -4,6 +4,7 @@ import { usePanzoomRegistry } from './composables/usePanzoomRegistry.js'
 import { useGlobalGalleryOptions } from './composables/useGlobalGalleryOptions.js'
 import { useDataset } from './composables/useDataset.js'
 import { preloadBoxes } from './composables/useCurationData.js'
+import { useWingOutlines } from './composables/useWingOutlines.js'
 import { extractGoogleDriveFileId, checkAllTiers } from './utils/imageProxy.js'
 
 import CollectionTab from './components/CollectionTab.vue'
@@ -17,7 +18,12 @@ import TaxonDrawer from './components/TaxonDrawer.vue'
 import { useTaxonDrawer } from './composables/useTaxonDrawer.js'
 
 // Pinned in the top navbar so they stay reachable while scrolling through photos.
-const { zoomWings, expandPredictions } = useGlobalGalleryOptions()
+const { zoomWings, showOutlines, expandPredictions } = useGlobalGalleryOptions()
+
+// The outlines file (several MB) is fetched the first time the switch is on,
+// also when a shared link turns it on.
+const { outlineStatus, ensureOutlines } = useWingOutlines()
+watch(showOutlines, on => { if (on) ensureOutlines() }, { immediate: true })
 
 const tabs = {
   'Collection': CollectionTab,
@@ -122,6 +128,12 @@ onMounted(async () => {
             <div class="form-check form-switch mb-0">
               <input class="form-check-input" type="checkbox" role="switch" id="navZoomWings" v-model="zoomWings">
               <label class="form-check-label small text-light" for="navZoomWings">Zoom to wings</label>
+            </div>
+            <div class="form-check form-switch mb-0" title="Wing outlines from the Database Manager's readings: forewings orange, hindwings blue">
+              <input class="form-check-input" type="checkbox" role="switch" id="navShowOutlines" v-model="showOutlines">
+              <label class="form-check-label small text-light" for="navShowOutlines">
+                Wing outlines<span v-if="showOutlines && outlineStatus === 'loading'" class="text-white-50"> (loading&hellip;)</span><span v-else-if="showOutlines && ['empty', 'error'].includes(outlineStatus)" class="text-white-50"> (not available)</span>
+              </label>
             </div>
             <div class="form-check form-switch mb-0">
               <input class="form-check-input" type="checkbox" role="switch" id="navShowPred" v-model="expandPredictions">
