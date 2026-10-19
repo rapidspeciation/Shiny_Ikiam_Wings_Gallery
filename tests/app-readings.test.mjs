@@ -3,11 +3,13 @@ import assert from 'node:assert/strict'
 import { mkdtempSync, readFileSync, writeFileSync, existsSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { checkReadings, fetchReadings, READINGS } from '../scripts/fetch-app-readings.mjs'
+import { checkReadings, fetchReadings, outlinePoints, READINGS } from '../scripts/fetch-app-readings.mjs'
 import { driveFileId, pickBoxes, photoOutlines, unionBox, unionBoxScale } from '../src/utils/wingBoxes.js'
 import { VIEW_DEFAULTS, readView } from '../src/utils/shareView.js'
 
 const PATH = 'M100 120 180 110 260 150 240 300 120 280Z'
+// the same outline as relative path data (wing_outlines.json version 2)
+const REL = 'm100 120l80-10 80 40-20 150-120-20z'
 const files = {
   'predictions_app.json': {
     CAM036744: {
@@ -23,7 +25,7 @@ const files = {
     CAM036744v: [{ box: [0.1031, 0.1621, 0.6512, 0.6204], conf: 0.961, model: 'v5n', union: true, file: 'F1' }]
   },
   'wing_outlines.json': {
-    version: 1, source: 'test', photos: { CAM036744v: { file: 'F1', w: [['fw', 'l', PATH], ['hw', 'r', PATH], ['x', 'u', PATH]] } }
+    version: 1, source: 'test', photos: { CAM036744v: { file: 'F1', w: [['fw', 'l', PATH], ['hw', 'r', REL], ['x', 'u', PATH]] } }
   }
 }
 
@@ -41,6 +43,10 @@ test('invalid rows are left out and a file without valid rows is refused', () =>
   assert.deepEqual(checkReadings('wing_boxes_app.json', boxes), { doc: files['wing_boxes_app.json'], kept: 1, dropped: 2 })
   const outlines = { photos: { CAM1d: { w: [['fw', 'l', 'M1 2 3 4 5 6Z" onload="x']] }, CAM2d: { w: [['fw', 'l', 'M1 2 1200 4 5 6Z']] } } }
   assert.match(checkReadings('wing_outlines.json', outlines).error, /no valid rows/)
+  // relative paths: a step that leaves the 0..1000 grid, an odd number of steps, markup
+  const rel = { photos: { CAM1d: { w: [['fw', 'l', 'm990 10l20 0 0 5 -5 5z']] }, CAM2d: { w: [['fw', 'l', 'm1 2l3 4 5 6 7z']] },
+    CAM3d: { w: [['fw', 'l', 'm1 2l3 4 5 6z" onload="x']] } } }
+  assert.match(checkReadings('wing_outlines.json', rel).error, /no valid rows/)
   assert.match(checkReadings('sex_predictions_app.json', { CAM1: { sex: 'unknown', confidence: 2 } }).error, /no valid rows/)
   assert.match(checkReadings('predictions_app.json', []).error, /not a JSON object/)
 })
@@ -114,4 +120,10 @@ test('outlines: wings only, never a replaced file; the switch is part of a share
   assert.deepEqual(photoOutlines(null, 'CAM036744v'), [])
   assert.equal(VIEW_DEFAULTS.showOutlines, false)
   assert.equal(readView('?showOutlines=1', VIEW_DEFAULTS).showOutlines, true)
+})
+
+test('relative outline paths read back to the absolute points', () => {
+  assert.deepEqual(outlinePoints(REL), outlinePoints(PATH))
+  assert.deepEqual(outlinePoints('m108 177l44-7-2 20z'), [108, 177, 152, 170, 150, 190])
+  assert.equal(outlinePoints('m1 2 3 4z'), null)
 })

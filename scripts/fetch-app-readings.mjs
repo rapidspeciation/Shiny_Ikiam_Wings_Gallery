@@ -20,7 +20,23 @@ const isRankList = list => Array.isArray(list) && list.length > 0 &&
   list.every(row => Array.isArray(row) && typeof row[0] === 'string' && row[0].trim() && isProb(row[1]))
 const camKey = key => /^(CAM\d{5,7}|M\d{4,5})$/i.test(key)
 const photoKey = key => /^(CAM\d{5,7}|M\d{4,5})\S*$/i.test(key)
+// version 1: absolute "M x y x y … Z"; version 2: relative "m x y l dx dy dx dy … z" (a minus sign may stand
+// for the space before a number)
 const OUTLINE_PATH = /^M\d{1,4}(?: \d{1,4}){5,}Z$/
+const OUTLINE_PATH_REL = /^m\d{1,4} \d{1,4}l-?\d{1,4}(?:(?: |(?=-))-?\d{1,4}){3,}z$/
+
+// The outline's points (flat, absolute 0..1000 grid), or null when the path is not one of the two forms.
+export function outlinePoints(d) {
+  if (typeof d !== 'string') return null
+  if (OUTLINE_PATH.test(d)) return d.slice(1, -1).split(' ').map(Number)
+  if (!OUTLINE_PATH_REL.test(d)) return null
+  const [head, tail] = d.slice(1, -1).split('l')
+  const flat = head.split(' ').map(Number)
+  const steps = tail.match(/-?\d+/g).map(Number)
+  if (steps.length % 2) return null
+  for (const step of steps) flat.push(flat[flat.length - 2] + step)
+  return flat
+}
 
 function validBox(row) {
   const box = row?.box
@@ -30,8 +46,7 @@ function validBox(row) {
 
 function validOutline(wing) {
   return Array.isArray(wing) && ['fw', 'hw', 'x'].includes(wing[0]) && ['l', 'r', 'u'].includes(wing[1]) &&
-    typeof wing[2] === 'string' && OUTLINE_PATH.test(wing[2]) &&
-    wing[2].slice(1, -1).split(' ').every(n => +n <= 1000)
+    (outlinePoints(wing[2]) || [-1]).every(n => n >= 0 && n <= 1000)
 }
 
 // Each file: which rows are valid, and where the rows live in the document.

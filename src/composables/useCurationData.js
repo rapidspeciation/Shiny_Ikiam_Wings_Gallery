@@ -5,7 +5,7 @@
 //   wing_boxes.json    -> { "<CAMID+view>": [ { box:[x1,y1,x2,y2], conf }, ... ] }  (normalized 0..1)
 //   wing_boxes_app.json -> same shape, one tight union box per photo from the Database Manager's readings
 //                          (+ file: Drive ID of the photo read); preferred over wing_boxes_v6.json
-//   wing_outlines.json -> { photos: { "<CAMID+view>": { file, w: [[kind, half, "M x y ... Z"], ...] } } }
+//   wing_outlines.json -> { photos: { "<CAMID+view>": { file, w: [[kind, half, SVG path data: "m x y l dx dy ... z" (v2) or "M x y ... Z" (v1)], ...] } } }
 //                          (0..1000 grid; fetched only when "Wing outlines" is first turned on)
 //   predictions.json   -> { "<CAMID>": { subspecies:[[t,c]], species:[[t,c]], genus:[[t,c]], n_views } }
 //   taxon_links.json   -> { "<taxon>": { boa, sangay, noreste, cotacachi } }
