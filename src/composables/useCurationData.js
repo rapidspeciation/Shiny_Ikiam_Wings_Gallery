@@ -8,6 +8,8 @@
 //   wing_outlines.json -> { photos: { "<CAMID+view>": { file, w: [[kind, half, SVG path data: "m x y l dx dy ... z" (v2) or "M x y ... Z" (v1)], ...] } } }
 //                          (0..1000 grid; fetched only when "Wing outlines" is first turned on)
 //   predictions.json   -> { "<CAMID>": { subspecies:[[t,c]], species:[[t,c]], genus:[[t,c]], n_views } }
+//   predictions_oof.json -> the out-of-fold rows of predictions.json, slimmed (scripts/build-oof-predictions.mjs);
+//                          shown before any final-fit prediction (utils/predictionCoverage.js)
 //   taxon_links.json   -> { "<taxon>": { boa, sangay, noreste, cotacachi } }
 
 const BASE = import.meta.env.BASE_URL

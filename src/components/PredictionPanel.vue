@@ -5,7 +5,7 @@
 // line per taxon with RECORDED / PREDICTED badges and region "+ all" browsing).
 // Clicking a taxon opens the compare drawer (TaxonDrawer) with guide links and
 // reference photos beside this specimen. British spelling throughout.
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, toRaw } from 'vue'
 import { useGlobalGalleryOptions } from '../composables/useGlobalGalleryOptions.js'
 import {
   getPredictions, getSexPrediction, getFormPrediction, predictionDiffers, getPredictionMissingReason,
@@ -16,6 +16,7 @@ import TaxonTree from './TaxonTree.vue'
 import { resolveCamid } from '../utils/galleryPipeline.js'
 import { REVIEW_RANKS, rankComparison, recordedPredictionEvidence, recordedTaxonomy } from '../utils/taxonomy.js'
 import { formatSexPrediction } from '../utils/sexPrediction.js'
+import { predictionFitNote } from '../utils/predictionCoverage.js'
 
 // `item` drives the existing CAMID-based curation flow (Collection tab).
 // `prediction` passes a model result directly (no CAMID, no recorded taxon).
@@ -52,6 +53,8 @@ const recordedTaxon = computed(() => {
 const hasRecordedSubsp = computed(() => !!recordedSubsp.value)
 
 const side = computed(() => pred.value?.side || '')
+// Out-of-fold or final-fit, and which file the row came from (predictionCoverage.js).
+const fitNote = computed(() => predictionFitNote(toRaw(pred.value)))
 const topSpeciesName = computed(() => pred.value?.species?.[0]?.[0] || '')
 
 // "differs from recorded" badge uses the SAME helper as the gallery filter.
@@ -158,7 +161,8 @@ watch([camid, () => props.prediction], load, { immediate: true })
       @click="open = !open"
     >
       <span class="d-flex align-items-center gap-2 flex-wrap">
-        <span class="fw-bold small" title="Corrected out-of-fold model predictions; each specimen is scored by a model that never trained on it.">Model predictions</span>
+        <span class="fw-bold small" :title="fitNote.title">Model predictions</span>
+        <span v-if="state === 'ready' && fitNote.badge" class="badge text-bg-light border text-secondary fw-normal" :title="fitNote.title">{{ fitNote.badge }}</span>
         <span v-if="state === 'ready' && side" class="badge text-bg-light border text-secondary fw-normal" :title="`Recorded ${side}-of-Andes side; paired model predictions include geographic weighting.`">{{ side }} of Andes</span>
         <span
           v-if="state === 'ready' && !hasRecordedSubsp && suggestedSubsp"

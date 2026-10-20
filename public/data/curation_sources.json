@@ -50,7 +50,7 @@
   },
   "schema_contract": {
     "recorded_taxonomy": "recorded_taxonomy.raw/canonical is immutable record context",
-    "model_taxonomy": "the active gallery map merges expanded paired predictions, current coverage, then live released inference",
+    "model_taxonomy": "per specimen, out-of-fold predictions first (predictions_oof.json: the out-of-fold rows of predictions.json; the paired head's held-out rows; the Database Manager's predictions_app.json rows marked oof), then the final-fit ones (expanded paired, current coverage, the Database Manager's, live released inference); src/utils/predictionCoverage.js",
     "missing_reasons": "prediction_missing_reasons.json covers CAMIDs without an active prediction and any rank-specific gaps"
   }
 }
