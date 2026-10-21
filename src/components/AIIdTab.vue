@@ -798,26 +798,27 @@ const showAbout = ref(false)
           <!-- Sex benchmark and support details are generated from the verified OOF export. -->
           <section aria-labelledby="sex-benchmark-title">
           <p id="sex-benchmark-title" class="mb-1"><strong>Sex prediction</strong></p>
-          <p>Collection predictions look at four wing crops (the two ventral forewings and the two dorsal hindwings) and
-          eight close-up tiles of the wing regions that carry male scent scales, for 3,809 Sanger specimens. The
-          benchmark below covers 3,462 specimens with a recorded sex across 381 species.</p>
+          <p>Collection predictions look at four narrow wing strips where males carry scent scales: the front edge of
+          each dorsal hindwing and the inner edge of each ventral forewing. A small image network reads the strips a
+          specimen has, for 3,809 Sanger specimens. The benchmark below covers 3,462 specimens with a recorded sex
+          across 381 species.</p>
           <table id="sex-benchmark" class="table table-sm table-bordered w-auto small">
             <thead><tr><th scope="col">Evaluation</th><th scope="col">Specimens</th><th scope="col">Accuracy</th></tr></thead>
             <tbody>
-              <tr><td>All scored specimens</td><td>3,462</td><td>92.3%</td></tr>
-              <tr><td>Ithomiini</td><td>2,733</td><td>95.7%</td></tr>
-              <tr><td>Heliconiini</td><td>305</td><td>86.6%</td></tr>
-              <tr><td>Species not seen in training</td><td>3,462</td><td>90.1%</td></tr>
+              <tr><td>All scored specimens</td><td>3,462</td><td>94.0%</td></tr>
+              <tr><td>Ithomiini</td><td>2,733</td><td>97.2%</td></tr>
+              <tr><td>Heliconiini</td><td>305</td><td>91.8%</td></tr>
+              <tr><td>Species not seen in training</td><td>3,462</td><td>92.8%</td></tr>
             </tbody>
           </table>
           <p>Scores average three models that each excluded the specimen from training and checkpoint selection. The model
           design was chosen using 2,771 of these specimens; on the other 691, held back from every choice, it recorded the
-          correct sex for 93.8%. <strong>Supported</strong> requires confidence of at least 85% and a good track record
-          for that species on other specimens; otherwise <strong>Uncertain</strong>. Supported predictions were 98.0%
-          correct, and 32 disagree with the recorded sex and are candidates for review. Groups outside Ithomiini and
-          Heliconiini have fewer examples (74.3% correct) and are mostly Uncertain.</p>
-          <p>Sex prediction is not yet supported for uploaded photos. The current method needs the wing crops and
-          close-up tiles from both the dorsal and the ventral photo of a Sanger specimen.</p>
+          correct sex for 95.4%. <strong>Supported</strong> requires confidence of at least 85% and a good track record
+          for that species on other specimens; otherwise <strong>Uncertain</strong>. Supported predictions were 97.6%
+          correct, and 43 disagree with the recorded sex and are candidates for review. Groups outside Ithomiini and
+          Heliconiini have fewer examples (75.2% correct) and are mostly Uncertain.</p>
+          <p>Sex prediction is not yet supported for uploaded photos. The current method needs the wing strips from the
+          dorsal and the ventral photo of a Sanger specimen.</p>
 
           </section>
           <p class="mb-1">
@@ -845,6 +846,18 @@ const showAbout = ref(false)
             research-grade iNaturalist and museum photos from GBIF, used for training only.
           </p>
           <p class="mb-1"><strong>Changelog</strong></p>
+          <p class="mb-1"><strong>20 October 2026:</strong></p>
+          <ul class="mb-2">
+            <li>Collection sex prediction now reads only four narrow wing strips where males carry scent scales, with a
+            small image network, instead of four wing crops and eight close-up tiles. Out-of-fold accuracy on 3,462
+            specimens rose from 92.3% to 94.0% (Ithomiini 95.7% to 97.2%, Heliconiini 86.6% to 91.8%; species not seen
+            in training 90.1% to 92.8%), and 1,828 predictions are now Supported (was 1,592). It also gives a sex for
+            specimens with a missing or damaged wing.</li>
+            <li>Each specimen now shows an out-of-fold species prediction (from a model that did not see it in
+            training) whenever one exists.</li>
+            <li>Specimens photographed after the last release get species and sex predictions from the Database
+            Manager, updated automatically after new photos are read.</li>
+          </ul>
           <p class="mb-1"><strong>14 October 2026:</strong></p>
           <ul class="mb-2">
             <li>Retrained the AI Identifier classifier with the same species and names: iNaturalist photos and

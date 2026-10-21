@@ -36,7 +36,9 @@ test('About changelog has one entry per date and describes the spatial location 
   const log = about.split('<strong>Changelog</strong>')[1]
   const dates = [...log.matchAll(/<strong>(\d{1,2} (?:September|October) 2026):<\/strong>/g)].map((m) => m[1])
   assert.equal(new Set(dates).size, dates.length, 'one changelog entry per date')
-  assert.equal(dates[0], '14 October 2026')
+  assert.equal(dates[0], '20 October 2026')
+  const sex = log.split('20 October 2026:</strong>')[1].split('14 October 2026:</strong>')[0].replace(/\s+/g, ' ')
+  for (const copy of ['from 92.3% to 94.0%', 'Heliconiini 86.6% to 91.8%', '1,828 predictions are now Supported (was 1,592)']) assert.ok(sex.includes(copy), copy)
   // reserved for model changes: no interface-only entries
   assert.doesNotMatch(log, /shared as links|Field photos now|tapping a collapsed|agreement filters|confidence sorting|zoom-to-wings/)
   const first = log.split('27 September 2026:</strong>')[1].split('26 September 2026:</strong>')[0].replace(/\s+/g, ' ')

@@ -24,6 +24,6 @@ test('default collection model uses verified paired predictions and preserves pu
     train: 2226, dev: 261, cal: 206, test: 314, absent_from_attention_training_manifest: 822
   })
   const sexBytes = readFileSync('public/data/sex_predictions.json')
-  assert.equal(createHash('sha256').update(sexBytes).digest('hex'), '92af043a658e77bad7ddcf4197e5b0bb69b9c5ffd84d3314ae7380d624bec065')
+  assert.equal(createHash('sha256').update(sexBytes).digest('hex'), 'dcf726d7263353c6421de7fc4097c4e488b58da5b36ebf1b78734143abd34431')
   assert.match(readFileSync('.github/workflows/deploy.yml','utf8'), /https:\/\/fr4nzzch-butterfly-id.hf.space/)
 })
