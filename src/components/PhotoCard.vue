@@ -371,7 +371,7 @@ const displayPhotos = () => {
   grid-template-columns: 1fr 1fr;
   gap: 8px;
   align-content: start;   /* top-align images so cards in a row line up (don't centre in stretched height) */
-  min-height: 200px;
+  min-height: min(200px, 25vw);   /* phones: 200px left a blank band under ~110px photos */
 }
 .img-wrapper {
   display: flex;

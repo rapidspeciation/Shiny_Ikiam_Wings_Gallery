@@ -60,6 +60,10 @@ function navigate(name) {
   if (window.location.pathname.replace(/\/+$/, '') !== url.replace(/\/+$/, '')) {
     window.history.pushState({}, '', url)
   }
+  // collapsed (phone) menu: close it after a tab is picked, via Bootstrap's own toggler
+  if (document.getElementById('navbarContent')?.classList.contains('show')) {
+    document.querySelector('.navbar-toggler')?.click()
+  }
 }
 function onPopState() { currentTab.value = tabFromUrl() }
 // the compare drawer belongs to the gallery tab it was opened from
@@ -96,8 +100,8 @@ onMounted(async () => {
 <template>
   <div>
     <!-- Navbar -->
-    <!-- Changed to navbar-expand-md for better tablet support -->
-    <nav class="navbar navbar-expand-md navbar-dark bg-dark sticky-top">
+    <!-- Collapses below xl: from md the tabs and switches wrapped into a ~170 px sticky bar -->
+    <nav class="navbar navbar-expand-xl navbar-dark bg-dark sticky-top">
       <div class="container-fluid">
         <a class="navbar-brand" href="#">Ikiam Wings Gallery</a>
         
@@ -110,10 +114,10 @@ onMounted(async () => {
         <div class="collapse navbar-collapse" id="navbarContent">
           
           <!-- Tabs List -->
-          <ul class="navbar-nav mb-2 mb-md-0">
+          <ul class="navbar-nav mb-2 mb-xl-0">
             <li class="nav-item" v-for="(component, name) in tabs" :key="name">
               <a 
-                class="nav-link px-2 small-text" 
+                class="nav-link px-2 small-text text-nowrap" 
                 :class="{ active: currentTab === name }"
                 :href="BASE + (slugByTab[name] || '')"
                 @click.prevent="navigate(name)"
@@ -124,7 +128,7 @@ onMounted(async () => {
           </ul>
           
           <!-- Pinned curation toggles + Reset (stay reachable while scrolling) -->
-          <div class="d-flex flex-wrap align-items-center gap-3 ms-md-auto mt-2 mt-md-0">
+          <div class="d-flex flex-wrap align-items-center gap-3 ms-xl-auto mt-2 mt-xl-0">
             <div class="form-check form-switch mb-0">
               <input class="form-check-input" type="checkbox" role="switch" id="navZoomWings" v-model="zoomWings">
               <label class="form-check-label small text-light" for="navZoomWings">Zoom to wings</label>
@@ -150,7 +154,8 @@ onMounted(async () => {
 
     <!-- Main Content -->
     <div class="container-fluid mt-3">
-      <div v-if="currentTab !== 'AI Identifier'" class="alert alert-light border text-center py-2 small" role="alert">
+      <!-- mouse and keyboard shortcuts only, so not shown on phones -->
+      <div v-if="currentTab !== 'AI Identifier'" class="alert alert-light border text-center py-2 small d-none d-md-block" role="alert">
         Navigation: Shift + Scroll = Zoom all | Ctrl + Scroll = Zoom one | Drag = Move
         <span class="d-none d-md-inline"> | Github: <a href='https://github.com/rapidspeciation/Shiny_Ikiam_Wings_Gallery/' target='_blank'>rapidspeciation/Shiny_Ikiam_Wings_Gallery</a></span>
       </div>

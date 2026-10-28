@@ -573,7 +573,7 @@ const showAbout = ref(false)
       <div class="card-body">
         <div class="d-flex justify-content-between align-items-center">
           <h6 class="card-title mb-0">Upload butterfly or moth photo(s)</h6>
-          <button v-if="items.length || results.length" class="btn btn-link btn-sm p-0" @click="clearAll">Clear photos</button>
+          <button v-if="items.length || results.length" class="btn btn-link btn-sm p-0 ms-2 text-nowrap" @click="clearAll">Clear photos</button>
         </div>
         <div class="dropzone mt-2" :class="{ over: isOver, compact: results.length }"
           @click="fileInput.click()" @dragover.prevent="isOver = true" @dragleave.prevent="isOver = false"
