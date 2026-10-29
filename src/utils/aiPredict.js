@@ -46,7 +46,7 @@ function mockRawLeaves(filename) {
 
 // Whether a real backend is configured (vs. the offline demo mock).
 export const HAS_BACKEND = !!API_BASE
-export const PREDICTION_CACHE_VERSION = 'full-leaves-v4'
+export const PREDICTION_CACHE_VERSION = 'full-leaves-v5-alias-b8127dbf'
 
 // The new Space supplies all leaves for exact marginalisation. Older or mock
 // responses still have only the preview, which remains usable while it warms.
