@@ -733,15 +733,16 @@ const showAbout = ref(false)
           image backbone with a hierarchical classification head that predicts the finest taxon
           and rolls those predictions up the taxonomy, keeping them consistent across subspecies, species, genus, and
           higher ranks. To focus it on wing pattern, images are first cropped to the wings by a lightweight
-          YOLO26s-seg-based butterfly segmentation model trained on wing masks generated with SAM 3.</p>
+          YOLO26n-seg butterfly segmentation model trained on wing masks generated with SAM 3.</p>
           <p><strong>Coverage:</strong> the label space spans about 4,100 Neotropical butterfly species across all
           major families (Nymphalidae, Hesperiidae, Riodinidae, Lycaenidae, Pieridae, Papilionidae) and about 8,000
           moth species, mainly Erebidae, Sphingidae, Geometridae, Saturniidae, Crambidae and Noctuidae.
           Rare species represented by even single observations are included in training. Sampling remains
-          uneven: most of the butterfly data sits in the <em>Ithomiini</em> mimicry radiation, and small or rarely
+          uneven: in the September 2026 butterfly training set, the <em>Ithomiini</em> mimicry radiation made up about
+          4% of the photos (21,901 of 508,718), and small or rarely
           photographed moths have few training photos, so confident calls on sparsely-sampled groups (skippers,
           hairstreaks, micromoths) warrant extra caution. Moths outside the label space receive the name of a similar
-          species. Even within Ithomiini, Müllerian mimicry makes subspecies look-alikes genuinely hard to
+          species. Within Ithomiini, Müllerian mimicry makes subspecies look-alikes genuinely hard to
           tell apart.</p>
           <p>The collection classifier uses an attention model to combine dorsal and ventral photos for 3,829
           specimens with verified pairs, learning how much to rely on each view. Other specimens keep their previous
@@ -772,8 +773,8 @@ const showAbout = ref(false)
             <table id="field-benchmark" class="table table-sm table-bordered w-auto small">
               <thead><tr><th>Rank</th><th>Photographs</th><th>Top-1</th><th>Top-5</th></tr></thead>
               <tbody>
-                <tr><td>Species</td><td>4,566</td><td>87.25%</td><td>96.58%</td></tr>
-                <tr><td>Genus</td><td>4,566</td><td>95.69%</td><td>98.60%</td></tr>
+                <tr><td>Species</td><td>4,566</td><td>87.32%</td><td>96.58%</td></tr>
+                <tr><td>Genus</td><td>4,566</td><td>95.75%</td><td></td></tr>
               </tbody>
             </table>
           </section>
@@ -785,8 +786,8 @@ const showAbout = ref(false)
             <table id="moth-benchmark" class="table table-sm table-bordered w-auto small">
               <thead><tr><th>Rank</th><th>Photographs</th><th>Top-1</th><th>Top-5</th></tr></thead>
               <tbody>
-                <tr><td>Species</td><td>9,750</td><td>85.52%</td><td>96.87%</td></tr>
-                <tr><td>Family</td><td>10,582</td><td>98.40%</td><td></td></tr>
+                <tr><td>Species</td><td>9,750</td><td>85.43%</td><td>96.88%</td></tr>
+                <tr><td>Family</td><td>10,582</td><td>98.43%</td><td></td></tr>
               </tbody>
             </table>
           </section>
@@ -794,7 +795,7 @@ const showAbout = ref(false)
           The tables measure different tasks and should not be compared with each other. The two AI Identifier test sets
           were also used while choosing between model versions, so those scores may be slightly optimistic; the 539
           collection pairs were not. The tables do not cover species outside the label space. On 3,782 newer iNaturalist photos recorded after 7 September 2026, which
-          were not used for training, Species Top-1 is 86.83% (Top-5: 96.19%) with no location.</p>
+          were not used for training, Species Top-1 is 86.67% (Top-5: 96.22%) with no location.</p>
           <!-- Sex benchmark and support details are generated from the verified OOF export. -->
           <section aria-labelledby="sex-benchmark-title">
           <p id="sex-benchmark-title" class="mb-1"><strong>Sex prediction</strong></p>
@@ -825,7 +826,7 @@ const showAbout = ref(false)
             <strong>Models &amp; code:</strong>
             single-photo head:
             <a href="https://huggingface.co/fr4nzzch/butterfly-id-classifier" target="_blank" rel="noopener noreferrer">fr4nzzch/butterfly-id-classifier</a>
-            · <a href="https://huggingface.co/spaces/fr4nzzch/butterfly-id/blob/main/assets/wing_seg_v6.pt" target="_blank" rel="noopener noreferrer">butterfly segmentation model</a>
+            · <a href="https://huggingface.co/spaces/fr4nzzch/butterfly-id/blob/main/assets/wing_seg_v5n.pt" target="_blank" rel="noopener noreferrer">butterfly segmentation model</a>
             · collection attention model:
             <a href="https://github.com/rapidspeciation/Shiny_Ikiam_Wings_Gallery/releases/tag/collection-attention-20260926" target="_blank" rel="noopener noreferrer">collection-attention-20260926</a>
             · <a href="https://huggingface.co/spaces/fr4nzzch/butterfly-id" target="_blank" rel="noopener noreferrer">inference Space</a>
@@ -846,6 +847,13 @@ const showAbout = ref(false)
             research-grade iNaturalist and museum photos from GBIF, used for training only.
           </p>
           <p class="mb-1"><strong>Changelog</strong></p>
+          <p class="mb-1"><strong>27 October 2026:</strong></p>
+          <ul class="mb-2">
+            <li>Retrained the AI Identifier classifier with the same species and names, adding 28,318 research-grade
+            iNaturalist photos of 667 species that GBIF files under another name (older genus combinations and
+            spelling variants). On 78 held-out photos of such species, Species Top-1 rose from 53.85% to 71.79%. On the
+            other test sets the change is within noise; the accuracy tables above show the new classifier.</li>
+          </ul>
           <p class="mb-1"><strong>20 October 2026:</strong></p>
           <ul class="mb-2">
             <li>Collection sex prediction now reads only four narrow wing strips where males carry scent scales, with a

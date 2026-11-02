@@ -11,16 +11,16 @@ test('About shows current held-out results and dated history separately', () => 
     '<tr><td>Genus</td><td>539</td><td>96.47%</td><td></td></tr>',
     '<tr><td>Species with 5 or fewer specimens in training</td><td>123</td><td>73.17%</td><td></td></tr>',
     'overstates accuracy for the collection as a whole',
-    '<tr><td>Species</td><td>4,566</td><td>87.25%</td><td>96.58%</td></tr>',
-    '<tr><td>Genus</td><td>4,566</td><td>95.69%</td><td>98.60%</td></tr>',
-    '<tr><td>Species</td><td>9,750</td><td>85.52%</td><td>96.87%</td></tr>',
-    '<tr><td>Family</td><td>10,582</td><td>98.40%</td><td></td></tr>',
-    'recorded after 7 September 2026, which\n          were not used for training, Species Top-1 is 86.83% (Top-5: 96.19%)',
+    '<tr><td>Species</td><td>4,566</td><td>87.32%</td><td>96.58%</td></tr>',
+    '<tr><td>Genus</td><td>4,566</td><td>95.75%</td><td></td></tr>',
+    '<tr><td>Species</td><td>9,750</td><td>85.43%</td><td>96.88%</td></tr>',
+    '<tr><td>Family</td><td>10,582</td><td>98.43%</td><td></td></tr>',
+    'recorded after 7 September 2026, which\n          were not used for training, Species Top-1 is 86.67% (Top-5: 96.22%)',
     '12 February and 7 September 2026, after BioCLIP 2.5-H was released',
     'should not be compared with each other', 'may be slightly optimistic',
     '<strong>Sex prediction</strong>', 'Sex prediction is not yet supported for uploaded photos.',
     'single-photo head:', 'butterfly segmentation model</a>', 'collection attention model:',
-    'href="https://huggingface.co/spaces/fr4nzzch/butterfly-id/blob/main/assets/wing_seg_v6.pt"',
+    'href="https://huggingface.co/spaces/fr4nzzch/butterfly-id/blob/main/assets/wing_seg_v5n.pt"',
     'href="https://github.com/rapidspeciation/Shiny_Ikiam_Wings_Gallery/releases/tag/collection-attention-20260926"'
   ]) assert.ok(current.includes(copy), copy)
   assert.doesNotMatch(current, /Review candidates \(CSV\)|Taxon reliability \(CSV\)/)
@@ -36,7 +36,7 @@ test('About changelog has one entry per date and describes the spatial location 
   const log = about.split('<strong>Changelog</strong>')[1]
   const dates = [...log.matchAll(/<strong>(\d{1,2} (?:September|October) 2026):<\/strong>/g)].map((m) => m[1])
   assert.equal(new Set(dates).size, dates.length, 'one changelog entry per date')
-  assert.equal(dates[0], '20 October 2026')
+  assert.equal(dates[0], '27 October 2026')
   const sex = log.split('20 October 2026:</strong>')[1].split('14 October 2026:</strong>')[0].replace(/\s+/g, ' ')
   for (const copy of ['from 92.3% to 94.0%', 'Heliconiini 86.6% to 91.8%', '1,828 predictions are now Supported (was 1,592)']) assert.ok(sex.includes(copy), copy)
   // reserved for model changes: no interface-only entries

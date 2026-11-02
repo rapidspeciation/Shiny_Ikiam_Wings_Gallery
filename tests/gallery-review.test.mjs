@@ -236,7 +236,7 @@ test('AI Identifier About copy uses one matched-prior Top-1 and Top-5 contract',
     assert.doesNotMatch(about, new RegExp(obsolete))
   }
   for (const required of [
-    'YOLO26s-seg-based butterfly segmentation model',
+    'YOLO26n-seg butterfly segmentation model',
     'Changelog',
     'side-of-Andes + Ecuador prior',
     '<th>Top-1</th><th>Top-5</th>',
