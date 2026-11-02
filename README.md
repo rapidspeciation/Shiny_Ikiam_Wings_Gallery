@@ -94,3 +94,7 @@ For detailed configuration and setup instructions, see [DEPLOYMENT.md](DEPLOYMEN
 - **Idea & Development**: Franz Chandi
 - **AI Assistance (Original App)**: ChatGPT (OpenAI) - Assisted in the development of the initial R-Shiny codebase.
 - **AI Assistance (Migration)**: Gemini 3 Pro (Google) - Assisted in the complete architecture migration from R-Shiny to the modern static web stack.
+
+## License and citation
+
+This tool is released under the MIT licence (see [LICENSE](LICENSE)). If you use this tool, please cite the repository (see [CITATION.cff](CITATION.cff)); a paper describing the tools is in preparation.
