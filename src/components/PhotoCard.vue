@@ -9,6 +9,7 @@ import { useNearViewport } from '../composables/useNearViewport.js'
 import { getProxiedUrl, notifyTierFailed, getProxyState } from '../utils/imageProxy.js'
 import { unionBox, unionBoxScale } from '../utils/wingBoxes.js'
 import PredictionPanel from './PredictionPanel.vue'
+import { usePhotoLightbox } from '../composables/usePhotoLightbox.js'
 
 const props = defineProps({
   item: Object,
@@ -81,7 +82,8 @@ const initZoom = (el) => {
     maxScale: 8,
     minScale: 0.5,
     touchAction: 'pan-y',
-    disablePan: true
+    disablePan: true,
+    cursor: 'zoom-in'   // a click opens the photo large (see enlarge)
   })
 
   register(pz)
@@ -100,7 +102,7 @@ const initZoom = (el) => {
     if (currentScale > 1.05) {
       pz.setOptions({ disablePan: false, touchAction: 'none', cursor: 'move' })
     } else {
-      pz.setOptions({ disablePan: true, touchAction: 'pan-y', cursor: 'grab' })
+      pz.setOptions({ disablePan: true, touchAction: 'pan-y', cursor: 'zoom-in' })
     }
   })
 
@@ -111,7 +113,7 @@ const initZoom = (el) => {
   })
 
   el.addEventListener('panzoomreset', () => {
-    pz.setOptions({ disablePan: true, touchAction: 'pan-y', cursor: 'grab' })
+    pz.setOptions({ disablePan: true, touchAction: 'pan-y', cursor: 'zoom-in' })
   })
 
   return pz
@@ -201,6 +203,31 @@ const fmtConf = (conf) => {
   return `${Math.round(conf * 100)}%`
 }
 
+// --- Enlarge: a click or tap on a photo (not zoomed in, not dragged) or Enter/Space
+// on it opens the lightbox with the image the card already shows.
+const { openLightbox } = usePhotoLightbox()
+let downAt = null
+const onPointerDown = (e) => { downAt = { x: e.clientX, y: e.clientY } }
+const viewName = (photo) => /d\d*\./i.test(photo.Name) ? 'dorsal' : /v\d*\./i.test(photo.Name) ? 'ventral' : ''
+const photoCaption = (photo) => [props.item.CAM_ID, viewName(photo)].filter(Boolean).join(' ')
+const enlarge = (index, photo) => {
+  const img = imgRefs.value[index]
+  openLightbox({
+    src: img?.currentSrc || img?.src || resolvePhotoUrl(photo.URL_to_view),
+    alt: `${photoCaption(photo)}, large`,
+    caption: photoCaption(photo),
+  })
+}
+const onPhotoClick = (e, index, photo) => {
+  const moved = downAt ? Math.hypot(e.clientX - downAt.x, e.clientY - downAt.y) : 0
+  downAt = null
+  const scale = pzInstances[index]?.getScale?.() ?? 1
+  if (moved > 6 || scale > 1.05) return   // a drag or a zoomed-in photo keeps panning
+  // panzoom's pointerdown keeps the photo from taking focus; give it focus so closing returns here
+  e.currentTarget?.focus?.({ preventScroll: true })
+  enlarge(index, photo)
+}
+
 // --- Reactive orchestration --------------------------------------------
 
 // Zoom-to-wings keeps panzoom LIVE and just sets the initial frame. When it turns
@@ -274,7 +301,10 @@ const displayPhotos = () => {
     <h5 class="fw-bold text-center mt-2">{{ item.CAM_ID }}</h5>
 
     <div class="photo-grid-container p-2">
-       <div v-for="(photo, index) in displayPhotos()" :key="index" class="img-wrapper">
+       <div v-for="(photo, index) in displayPhotos()" :key="index" class="img-wrapper"
+         role="button" tabindex="0" :aria-label="`Enlarge photo: ${photoCaption(photo)}`"
+         @pointerdown.capture="onPointerDown" @click="onPhotoClick($event, index, photo)"
+         @keydown.enter.prevent="enlarge(index, photo)" @keydown.space.prevent="enlarge(index, photo)">
          <!-- zoom-layer holds img + overlay together so the SVG zooms WITH the image -->
          <div
            class="zoom-layer"
@@ -382,20 +412,20 @@ const displayPhotos = () => {
   position: relative;
 }
 .img-wrapper:only-child { grid-column: span 2; }
+.img-wrapper:focus-visible { outline: 2px solid var(--bs-primary); outline-offset: 2px; }
 
 /* The zoom-layer wraps img + overlay so panzoom transforms them together. */
 .zoom-layer {
   position: relative;
   width: 100%;
   line-height: 0;
-  cursor: grab;
+  cursor: zoom-in;
 }
 
 .panzoom-img {
   width: 100%;
   height: auto;
   object-fit: contain;
-  cursor: grab;
   display: block;
 }
 

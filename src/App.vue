@@ -15,6 +15,7 @@ import UpdateTab from './components/UpdateTab.vue'
 import AIIdTab from './components/AIIdTab.vue'
 import GalleryOptionsBar from './components/GalleryOptionsBar.vue'
 import TaxonDrawer from './components/TaxonDrawer.vue'
+import PhotoLightbox from './components/PhotoLightbox.vue'
 import { useTaxonDrawer } from './composables/useTaxonDrawer.js'
 
 // Pinned in the top navbar so they stay reachable while scrolling through photos.
@@ -166,6 +167,7 @@ onMounted(async () => {
         <component :is="tabs[currentTab]" />
       </keep-alive>
       <TaxonDrawer />
+      <PhotoLightbox />
     </div>
   </div>
 </template>
@@ -180,6 +182,24 @@ onMounted(async () => {
   border-radius: 8px;
   background: var(--wg-card);
   color: var(--bs-body-color);
+}
+/* alive cards: lift on hover, press on click */
+.gallery-card {
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+@media (hover: hover) {
+  .gallery-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px var(--wg-shadow);
+  }
+}
+.gallery-card:active {
+  transform: translateY(0) scale(0.995);
+  box-shadow: 0 2px 6px var(--wg-shadow);
+}
+@media (prefers-reduced-motion: reduce) {
+  .gallery-card { transition: none; }
+  .gallery-card:hover, .gallery-card:active { transform: none; }
 }
 /* a shade apart from the page in both themes */
 .wg-navbar {
