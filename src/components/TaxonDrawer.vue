@@ -122,12 +122,12 @@ const recordedLabel = computed(() => recordedTaxon.value || 'No ID recorded')
 
 <style scoped>
 .drawer-backdrop { position: fixed; inset: 0; z-index: 1060; background: rgba(15,23,42,.45); display: flex; justify-content: flex-end; }
-.drawer { width: min(1040px, 94vw); height: 100%; display: flex; flex-direction: column; background: #fff; box-shadow: -8px 0 30px rgba(0,0,0,.25); outline: none; animation: slide-in .18s ease-out; }
+.drawer { width: min(1040px, 94vw); height: 100%; display: flex; flex-direction: column; background: var(--wg-card); box-shadow: -8px 0 30px rgba(0,0,0,.25); outline: none; animation: slide-in .18s ease-out; }
 @keyframes slide-in { from { transform: translateX(40px); opacity: .6; } to { transform: none; opacity: 1; } }
-.drawer-head { display: flex; align-items: center; justify-content: space-between; gap: .75rem; padding: .7rem 1rem; border-bottom: 1px solid #e2e8f0; }
+.drawer-head { display: flex; align-items: center; justify-content: space-between; gap: .75rem; padding: .7rem 1rem; border-bottom: 1px solid var(--wg-line); }
 .drawer-title { display: flex; flex-direction: column; min-width: 0; }
 .drawer-body { flex: 1 1 auto; overflow-y: auto; display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); gap: 1rem; padding: .8rem 1rem 1rem; }
-.col-title { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: #64748b; margin-bottom: .35rem; }
+.col-title { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--wg-muted); margin-bottom: .35rem; }
 .spec-photos { display: flex; flex-direction: column; gap: .5rem; }
 .spec-photo { position: relative; }
 .spec-photo :deep(.ai-photo) { height: 300px; margin-bottom: 0; }

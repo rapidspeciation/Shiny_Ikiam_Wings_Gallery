@@ -3,6 +3,8 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'
 // Import standard styles for the multiselect component
 import 'vue-multiselect/dist/vue-multiselect.css'
+// shared theme tokens (light and dark) after the libraries so they can override them
+import './style.css'
 
 import App from './App.vue'
 

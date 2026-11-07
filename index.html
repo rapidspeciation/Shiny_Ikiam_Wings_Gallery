@@ -4,7 +4,18 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
     <title>Ikiam Wings Gallery</title>
+    <!-- theme from the system setting before the first paint (no white flash), and live on change -->
+    <script>
+      (function () {
+        var mq = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null
+        function apply() { document.documentElement.setAttribute('data-bs-theme', mq && mq.matches ? 'dark' : 'light') }
+        apply()
+        if (mq && mq.addEventListener) mq.addEventListener('change', apply)
+        else if (mq && mq.addListener) mq.addListener(apply)
+      })()
+    </script>
   </head>
   <body>
     <div id="app"></div>

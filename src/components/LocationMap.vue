@@ -48,5 +48,5 @@ onBeforeUnmount(() => { map?.remove(); map = null; marker = null })
 </template>
 
 <style scoped>
-.loc-map { height: 260px; width: 100%; border-radius: .5rem; border: 1px solid #cbd5e1; cursor: crosshair; }
+.loc-map { height: 260px; width: 100%; border-radius: .5rem; border: 1px solid var(--wg-line-strong); cursor: crosshair; }
 </style>

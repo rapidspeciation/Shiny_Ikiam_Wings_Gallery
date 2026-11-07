@@ -265,15 +265,15 @@ const altFor = (p, i) => (tab.value === 'field'
 .ref-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: .35rem .75rem; }
 .ref-title { font-size: 1.05rem; display: flex; align-items: baseline; gap: .5rem; min-width: 0; }
 .ref-title em { overflow-wrap: anywhere; }
-.ref-formerly { font-size: .75rem; color: #64748b; }
-.ref-pct { font-weight: 600; color: #475569; font-size: .9rem; font-variant-numeric: tabular-nums; }
+.ref-formerly { font-size: .75rem; color: var(--wg-muted); }
+.ref-pct { font-weight: 600; color: var(--wg-text-3); font-size: .9rem; font-variant-numeric: tabular-nums; }
 .guides { display: flex; flex-wrap: wrap; align-items: center; gap: .25rem; font-size: .72rem; }
-.src-chip { display: inline-flex; align-items: center; min-height: 22px; padding: 0 7px; font-size: .7rem; text-decoration: none; color: #0d6efd; background: #eef4ff; border: 1px solid #cfe0ff; border-radius: 999px; }
-.src-chip:hover { background: #dbe8ff; }
+.src-chip { display: inline-flex; align-items: center; min-height: 22px; padding: 0 7px; font-size: .7rem; text-decoration: none; color: var(--wg-chip-text); background: var(--wg-chip-bg); border: 1px solid var(--wg-chip-border); border-radius: 999px; }
+.src-chip:hover { background: var(--wg-chip-hover); }
 .src-chip:focus-visible, .thumb:focus-visible, .hnav:focus-visible { outline: 2px solid #0d6efd; outline-offset: 2px; }
 .ref-tabs .nav-link { font-size: .85rem; padding: .35rem .75rem; }
-.notes { font-size: .75rem; color: #64748b; }
-.ref-empty { min-height: 200px; display: flex; align-items: center; justify-content: center; gap: .25rem; background: #f1f5f9; border-radius: 8px; color: #64748b; font-size: .85rem; text-align: center; padding: 1rem; }
+.notes { font-size: .75rem; color: var(--wg-muted); }
+.ref-empty { min-height: 200px; display: flex; align-items: center; justify-content: center; gap: .25rem; background: var(--wg-hover); border-radius: 8px; color: var(--wg-muted); font-size: .85rem; text-align: center; padding: 1rem; }
 .hero { position: relative; }
 .hero :deep(.ai-photo) { height: 380px; margin-bottom: 0; }
 .compact .hero :deep(.ai-photo) { height: 42vh; min-height: 220px; }
@@ -283,13 +283,13 @@ const altFor = (p, i) => (tab.value === 'field'
 .hnext { right: 0; border-radius: 6px 0 0 6px; }
 .counter { position: absolute; top: 6px; left: 8px; z-index: 5; font-size: .7rem; color: #e2e8f0; background: rgba(0,0,0,.5); border-radius: 4px; padding: 0 5px; }
 .caption { display: flex; flex-wrap: wrap; gap: .25rem .75rem; font-size: .78rem; align-items: baseline; }
-.cap-place { font-weight: 600; color: #334155; }
+.cap-place { font-weight: 600; color: var(--wg-text-2); }
 .cap-group { color: #166534; font-weight: 600; }
 .thumb.group-start { margin-left: 8px; }
 .strip { display: flex; gap: 4px; overflow-x: auto; padding-bottom: 4px; }
-.thumb { flex-shrink: 0; width: 60px; height: 60px; padding: 0; border: 2px solid transparent; border-radius: 4px; background: #e2e8f0; overflow: hidden; cursor: pointer; }
+.thumb { flex-shrink: 0; width: 60px; height: 60px; padding: 0; border: 2px solid transparent; border-radius: 4px; background: var(--wg-line); overflow: hidden; cursor: pointer; }
 .thumb img { width: 100%; height: 100%; object-fit: cover; }
-.thumb:hover { border-color: #94a3b8; }
+.thumb:hover { border-color: var(--wg-faint); }
 .thumb.active { border-color: #16a34a; box-shadow: 0 0 0 1px #16a34a; }
 @media (max-width: 575px) { .hero :deep(.ai-photo) { height: 300px; } .thumb { width: 52px; height: 52px; } }
 </style>

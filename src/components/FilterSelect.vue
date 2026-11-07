@@ -38,7 +38,7 @@ const updateValue = (val) => {
   min-height: 38px;
   padding-top: 6px;
   border-radius: 0.375rem; /* Bootstrap rounded */
-  border: 1px solid #dee2e6;
+  border: 1px solid var(--bs-border-color);
 }
 /* long names (e.g. "Mechanitis polymnia" in a half-width phone column) wrap instead of being cut */
 :deep(.multiselect__tag) {

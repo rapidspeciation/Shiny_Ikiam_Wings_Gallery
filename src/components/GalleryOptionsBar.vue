@@ -43,7 +43,7 @@ function statusClass(tier) {
 </script>
 
 <template>
-  <div class="row g-2 mb-3 align-items-end bg-light p-3 rounded border">
+  <div class="row g-2 mb-3 align-items-end wg-box p-3 rounded border">
     <!-- phones always show one column (PhotoGrid), so Columns is hidden there and Side gets a full row -->
     <div class="d-none d-md-block col-md-2">
       <label class="form-label small fw-bold">Columns</label>
@@ -137,7 +137,7 @@ function statusClass(tier) {
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.03em;
-  color: #6c757d;
+  color: var(--wg-muted);
   width: auto;
   float: none;
 }

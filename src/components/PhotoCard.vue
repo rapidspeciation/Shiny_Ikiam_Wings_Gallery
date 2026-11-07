@@ -270,7 +270,7 @@ const displayPhotos = () => {
 </script>
 
 <template>
-  <div ref="cardRef" class="gallery-card h-100 border rounded bg-white d-flex flex-column">
+  <div ref="cardRef" class="gallery-card h-100 d-flex flex-column">
     <h5 class="fw-bold text-center mt-2">{{ item.CAM_ID }}</h5>
 
     <div class="photo-grid-container p-2">
@@ -336,14 +336,14 @@ const displayPhotos = () => {
                :style="{ left: (b.box[0] * 100) + '%', top: (b.box[1] * 100) + '%' }"
            >{{ fmtConf(b.conf) }}</span>
            </template>
-           <div v-if="(showBoxes || zoomWings) && !boxesFor(index).length && boxReasonFor(index)?.reason" class="box-status small text-muted" role="status">
+           <div v-if="(showBoxes || zoomWings) && !boxesFor(index).length && boxReasonFor(index)?.reason" class="box-status small" role="status">
              {{ boxReasonFor(index).reason }}
            </div>
          </div>
        </div>
     </div>
 
-    <div class="mt-2 text-start small bg-light p-2 rounded-bottom border-top">
+    <div class="mt-2 text-start small wg-box p-2 rounded-bottom border-top">
       <div class="row g-1">
         <div :class="[item.Subspecies_Form && item.Subspecies_Form !== 'None' ? 'col-6' : 'col-12']">
           <strong>Species:</strong><br> {{ item.Species }}
@@ -444,6 +444,7 @@ const displayPhotos = () => {
   padding: 2px 4px;
   line-height: 1.2;
   background: rgba(255, 255, 255, 0.88);
+  color: #475569;   /* fixed: it sits on the photo, not on the themed card */
   border-radius: 3px;
   pointer-events: none;
 }

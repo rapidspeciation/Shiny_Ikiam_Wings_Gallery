@@ -152,7 +152,7 @@ watch([camid, () => props.prediction], load, { immediate: true })
 </script>
 
 <template>
-  <div class="pred-panel border rounded mt-2 bg-white">
+  <div class="pred-panel border rounded mt-2">
     <button
       type="button"
       class="pred-head btn btn-sm w-100 d-flex align-items-center justify-content-between text-start px-2 py-1"
@@ -162,8 +162,8 @@ watch([camid, () => props.prediction], load, { immediate: true })
     >
       <span class="d-flex align-items-center gap-2 flex-wrap">
         <span class="fw-bold small" :title="fitNote.title">Model predictions</span>
-        <span v-if="state === 'ready' && fitNote.badge" class="badge text-bg-light border text-secondary fw-normal" :title="fitNote.title">{{ fitNote.badge }}</span>
-        <span v-if="state === 'ready' && side" class="badge text-bg-light border text-secondary fw-normal" :title="`Recorded ${side}-of-Andes side; paired model predictions include geographic weighting.`">{{ side }} of Andes</span>
+        <span v-if="state === 'ready' && fitNote.badge" class="badge bg-body-tertiary border text-body-secondary fw-normal" :title="fitNote.title">{{ fitNote.badge }}</span>
+        <span v-if="state === 'ready' && side" class="badge bg-body-tertiary border text-body-secondary fw-normal" :title="`Recorded ${side}-of-Andes side; paired model predictions include geographic weighting.`">{{ side }} of Andes</span>
         <span
           v-if="state === 'ready' && !hasRecordedSubsp && suggestedSubsp"
           class="badge text-bg-info-subtle text-info-emphasis border border-info-subtle fw-normal"
@@ -217,17 +217,17 @@ watch([camid, () => props.prediction], load, { immediate: true })
 </template>
 
 <style scoped>
-.pred-panel { font-size: 0.8rem; }
-.pred-sex { color: #334155; font-weight: 600; }
+.pred-panel { font-size: 0.8rem; background: var(--wg-card); }
+.pred-sex { color: var(--wg-text-2); font-weight: 600; }
 .pred-head {
-  background: #f1f5f9;
+  background: var(--wg-hover);
   border: none;
   border-radius: inherit;
   min-height: 36px;
-  color: #1e293b;
+  color: var(--wg-text-strong);
 }
 .pred-head:focus-visible { outline: 2px solid #0d6efd; outline-offset: -2px; }
-.chevron { transition: transform 0.15s ease; color: #64748b; }
+.chevron { transition: transform 0.15s ease; color: var(--wg-muted); }
 .chevron.open { transform: rotate(90deg); }
 .pred-tree { text-align: left; }
 
@@ -250,20 +250,20 @@ watch([camid, () => props.prediction], load, { immediate: true })
 .pred-pct {
   font-variant-numeric: tabular-nums;
   font-weight: 600;
-  color: #475569;
+  color: var(--wg-text-3);
   flex: 0 0 auto;
 }
 .pred-group-title {
   font-size: 0.62rem;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: #94a3b8;
+  color: var(--wg-faint);
   font-weight: 700;
   margin-bottom: 0.1rem;
 }
-.pred-form { border-top: 1px dashed #cbd5e1; padding-top: 0.35rem; text-align: left; }
+.pred-form { border-top: 1px dashed var(--wg-line-strong); padding-top: 0.35rem; text-align: left; }
 /* the recorded (database) form */
-.rec-hit { background: #fff8e1; box-shadow: inset 3px 0 0 #f59e0b; border-radius: 3px; }
+.rec-hit { background: var(--wg-rec-bg); box-shadow: inset 3px 0 0 #f59e0b; border-radius: 3px; }
 .rec-badge, .pred-badge {
   font-size: 0.58rem;
   font-weight: 700;

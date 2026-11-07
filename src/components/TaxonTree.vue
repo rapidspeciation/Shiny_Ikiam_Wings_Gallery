@@ -255,36 +255,36 @@ defineExpose({ rows })
 <style scoped>
 .taxon-tree { font-size: .8rem; line-height: 1.25; }
 .tt-row { display: flex; align-items: center; gap: .35rem; min-height: 20px; padding: 1px 6px; border-radius: 4px; cursor: pointer; }
-.tt-row:hover { background: #f1f5f9; }
+.tt-row:hover { background: var(--wg-hover); }
 .tt-row:focus-visible { outline: 2px solid #0d6efd; outline-offset: -2px; }
 .lv1 { margin-top: 2px; }
-.lv1.k-genus { background: #e9eef5; font-weight: 700; color: #1e293b; }
-.lv1.k-genus:hover { background: #dde5ef; }
+.lv1.k-genus { background: var(--wg-genus); font-weight: 700; color: var(--wg-text-strong); }
+.lv1.k-genus:hover { background: var(--wg-genus-hover); }
 .lv2 { padding-left: calc(6px + 1rem); }
 .lv3 { padding-left: calc(6px + 2.3rem); }
-.tt-row.sel { background: #dcfce7; box-shadow: inset 3px 0 0 #16a34a; }
-.tt-row.sel:hover { background: #d1fadf; }
-.rec-hit:not(.sel) { background: #fff8e1; box-shadow: inset 3px 0 0 #f59e0b; }
-.tt-chev { flex: 0 0 14px; width: 14px; text-align: center; color: #64748b; font-size: .7rem; transition: transform .15s ease; }
+.tt-row.sel { background: var(--wg-sel-bg); box-shadow: inset 3px 0 0 #16a34a; }
+.tt-row.sel:hover { background: var(--wg-sel-hover); }
+.rec-hit:not(.sel) { background: var(--wg-rec-bg); box-shadow: inset 3px 0 0 #f59e0b; }
+.tt-chev { flex: 0 0 14px; width: 14px; text-align: center; color: var(--wg-muted); font-size: .7rem; transition: transform .15s ease; }
 .tt-chev.open { transform: rotate(90deg); }
-.tt-thumb { flex: 0 0 auto; width: 28px; height: 28px; border-radius: 4px; background: #e2e8f0; overflow: hidden; }
+.tt-thumb { flex: 0 0 auto; width: 28px; height: 28px; border-radius: 4px; background: var(--wg-line); overflow: hidden; }
 .tt-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .with-thumbs .tt-row { min-height: 32px; }
 .with-thumbs .k-subspecies, .with-thumbs .tt-row:not(.k-genus):not(.k-species) { min-height: 24px; }
 .tt-name { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.ssp { color: #94a3b8; font-size: .9em; }
-.extra .tt-name { color: #64748b; }
+.ssp { color: var(--wg-faint); font-size: .9em; }
+.extra .tt-name { color: var(--wg-muted); }
 .tt-badge { flex: 0 0 auto; font-size: .58rem; font-weight: 700; text-transform: uppercase; letter-spacing: .03em; border-radius: 4px; padding: 0 4px; border: 1px solid; }
 .tt-badge.rec { color: #92400e; background: #fef3c7; border-color: #fde68a; }
 .tt-badge.pred { color: #166534; background: #dcfce7; border-color: #bbf7d0; }
 .tt-badge.oor { color: #b45309; background: #fff7ed; border-color: #fed7aa; text-transform: none; font-weight: 400; letter-spacing: 0; font-size: .62rem; }
-.tt-bar { flex: 0 0 44px; height: 4px; background: #e2e8f0; border-radius: 2px; overflow: hidden; }
+.tt-bar { flex: 0 0 44px; height: 4px; background: var(--wg-line); border-radius: 2px; overflow: hidden; }
 .tt-bar .fill { display: block; height: 100%; background: #16a34a; }
-.k-genus .tt-bar .fill { background: #64748b; }
-.extra .tt-bar .fill { background: #94a3b8; }
-.tt-pct { flex: 0 0 2.4rem; text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; color: #475569; }
-.tt-more { color: #475569; font-size: .72rem; border: 1px dashed #cbd5e1; background: #f8fafc; border-radius: 999px; padding: 0 8px; }
-.tt-row:hover .tt-more { border-color: #94a3b8; background: #eef2f7; }
+.k-genus .tt-bar .fill { background: var(--wg-muted); }
+.extra .tt-bar .fill { background: var(--wg-faint); }
+.tt-pct { flex: 0 0 2.4rem; text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; color: var(--wg-text-3); }
+.tt-more { color: var(--wg-text-3); font-size: .72rem; border: 1px dashed var(--wg-line-strong); background: var(--wg-card-2); border-radius: 999px; padding: 0 8px; }
+.tt-row:hover .tt-more { border-color: var(--wg-faint); background: var(--wg-hover); }
 .k-all-species, .k-all-subspecies, .k-more-genera { min-height: 22px; }
 .k-all-species { padding-left: calc(6px + 1rem + 14px + .35rem); }
 .k-all-subspecies { padding-left: calc(6px + 2.3rem); }

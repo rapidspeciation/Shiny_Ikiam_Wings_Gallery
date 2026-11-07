@@ -1,8 +1,138 @@
+/*
+  Shared colour tokens, one per pattern, for the light and the dark theme.
+  index.html sets data-bs-theme on <html> from prefers-color-scheme before the first
+  paint and follows later changes, so Bootstrap's own components switch too.
+  Components use these tokens (or Bootstrap's --bs-* variables) instead of fixed greys.
+*/
+:root,
+[data-bs-theme="light"] {
+  --wg-page: #f8f9fa;          /* page behind the cards */
+  --wg-card: #fff;             /* gallery card, panels, drawers */
+  --wg-card-2: #f8f9fa;        /* one step from the card: facts box, options box */
+  --wg-card-border: #dee2e6;   /* gallery card outline */
+  --wg-line: #e2e8f0;          /* soft borders, bar tracks, thumbnail placeholders */
+  --wg-line-strong: #cbd5e1;   /* dashed and stronger soft borders */
+  --wg-hover: #f1f5f9;         /* row hover, header strips */
+  --wg-genus: #e9eef5;
+  --wg-genus-hover: #dde5ef;
+  --wg-text-strong: #1e293b;
+  --wg-text-2: #334155;
+  --wg-text-3: #475569;
+  --wg-muted: #64748b;
+  --wg-faint: #94a3b8;
+  --wg-sel-bg: #dcfce7;        /* selected taxon row */
+  --wg-sel-hover: #d1fadf;
+  --wg-rec-bg: #fff8e1;        /* recorded taxon row */
+  --wg-warn-bg: #fefce8;
+  --wg-warn-text: #854d0e;
+  --wg-warn-border: #fde68a;
+  --wg-chip-bg: #eef4ff;
+  --wg-chip-hover: #dbe8ff;
+  --wg-chip-border: #cfe0ff;
+  --wg-chip-text: #0d6efd;
+  --wg-nav: #212529;
+  --wg-nav-border: transparent;
+  --wg-float-bg: rgba(255, 255, 255, 0.96);
+  --wg-shadow: rgba(15, 23, 42, 0.12);
+}
+
+[data-bs-theme="dark"] {
+  --wg-page: #16191d;
+  --wg-card: #23272c;
+  --wg-card-2: #2e3339;
+  --wg-card-border: #6c757d;   /* >= 3:1 against the page */
+  --wg-line: #495057;
+  --wg-line-strong: #5c636a;
+  --wg-hover: #30363d;
+  --wg-genus: #353b43;
+  --wg-genus-hover: #3e454e;
+  --wg-text-strong: #f1f3f5;
+  --wg-text-2: #e3e6e9;
+  --wg-text-3: #ced4da;
+  --wg-muted: #adb5bd;
+  --wg-faint: #9aa3ac;
+  --wg-sel-bg: rgba(34, 197, 94, 0.22);
+  --wg-sel-hover: rgba(34, 197, 94, 0.3);
+  --wg-rec-bg: rgba(245, 158, 11, 0.2);
+  --wg-warn-bg: rgba(250, 204, 21, 0.12);
+  --wg-warn-text: #fde68a;
+  --wg-warn-border: #a16207;
+  --wg-chip-bg: rgba(13, 110, 253, 0.2);
+  --wg-chip-hover: rgba(13, 110, 253, 0.32);
+  --wg-chip-border: #3b6fc0;
+  --wg-chip-text: #a5c8ff;
+  --wg-nav: #2b3035;
+  --wg-nav-border: #3e454e;
+  --wg-float-bg: rgba(35, 39, 44, 0.96);
+  --wg-shadow: rgba(0, 0, 0, 0.5);
+  color-scheme: dark;
+}
+
+/* boxed group one step from its surroundings: options box, facts box */
+.wg-box {
+  background: var(--wg-card-2);
+}
+
 body {
   margin: 0;
-  background: #f8f9fa;
+  background: var(--wg-page);
 }
 
 #app {
   min-height: 100vh;
+}
+
+/* ---- vue-multiselect follows the theme (its stylesheet uses fixed whites) ---- */
+[data-bs-theme="dark"] .multiselect,
+[data-bs-theme="dark"] .multiselect__input,
+[data-bs-theme="dark"] .multiselect__single {
+  color: var(--bs-body-color);
+}
+[data-bs-theme="dark"] .multiselect__tags,
+[data-bs-theme="dark"] .multiselect__input,
+[data-bs-theme="dark"] .multiselect__single,
+[data-bs-theme="dark"] .multiselect__spinner,
+[data-bs-theme="dark"] .multiselect__content-wrapper {
+  background: var(--bs-body-bg);
+}
+[data-bs-theme="dark"] .multiselect__tags,
+[data-bs-theme="dark"] .multiselect__content-wrapper {
+  border-color: var(--bs-border-color);
+}
+[data-bs-theme="dark"] .multiselect__input::placeholder,
+[data-bs-theme="dark"] .multiselect__placeholder {
+  color: var(--bs-secondary-color);
+}
+[data-bs-theme="dark"] .multiselect__option--selected {
+  background: var(--bs-tertiary-bg);
+  color: var(--bs-body-color);
+}
+[data-bs-theme="dark"] .multiselect__option--disabled,
+[data-bs-theme="dark"] .multiselect--disabled .multiselect__tags {
+  background: var(--bs-secondary-bg) !important;
+  color: var(--bs-secondary-color) !important;
+}
+/* dark text on the green chips and highlighted option (white on it was 2.5:1) */
+.multiselect__tag,
+.multiselect__tag-icon::after,
+.multiselect__option--highlight,
+.multiselect__option--highlight::after {
+  color: #0b2e1f;
+}
+
+/* ---- Leaflet map: dark tiles and controls in the dark theme ---- */
+[data-bs-theme="dark"] .leaflet-container {
+  background: #1b1f23;
+}
+[data-bs-theme="dark"] .leaflet-tile-pane {
+  filter: invert(1) hue-rotate(180deg) brightness(0.95) contrast(0.9);
+}
+[data-bs-theme="dark"] .leaflet-bar a,
+[data-bs-theme="dark"] .leaflet-control-attribution {
+  background: var(--wg-card);
+  color: var(--bs-body-color);
+  border-color: var(--bs-border-color);
+}
+[data-bs-theme="dark"] .leaflet-control-attribution a {
+  color: var(--bs-link-color);
 }

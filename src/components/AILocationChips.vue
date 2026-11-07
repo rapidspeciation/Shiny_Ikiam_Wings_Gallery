@@ -106,13 +106,13 @@ function pick(p) { emit('set-pin', p) }
 </template>
 
 <style scoped>
-.col-title { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: #64748b; margin-bottom: .35rem; }
+.col-title { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--wg-muted); margin-bottom: .35rem; }
 .chips { display: flex; flex-wrap: wrap; gap: .35rem; }
 .loc-chip { --bs-btn-padding-y: .2rem; --bs-btn-padding-x: .6rem; --bs-btn-font-size: .78rem; border-radius: 999px; }
-.hint { font-size: .72rem; margin-top: .35rem; color: #64748b; }
+.hint { font-size: .72rem; margin-top: .35rem; color: var(--wg-muted); }
 .other-sel { max-width: 360px; }
 .map-box { max-width: 520px; }
 .exif-row { font-size: .8rem; margin-bottom: .4rem; }
 .exif-row .btn-link { font-size: .8rem; }
-.sub-lbl { display: block; font-size: .72rem; font-weight: 600; color: #475569; margin-bottom: .25rem; }
+.sub-lbl { display: block; font-size: .72rem; font-weight: 600; color: var(--wg-text-3); margin-bottom: .25rem; }
 </style>

@@ -161,7 +161,7 @@ onBeforeUnmount(() => { window.removeEventListener('resize', onResize); destroyZ
 </template>
 
 <style scoped>
-.ai-photo { position: relative; width: 100%; height: 380px; overflow: hidden; background: #f1f5f9; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: .5rem; }
+.ai-photo { position: relative; width: 100%; height: 380px; overflow: hidden; background: var(--wg-hover); border-radius: 8px; border: 1px solid var(--wg-line); margin-bottom: .5rem; }
 .ai-photo.dark { background: #0f172a; border-color: #0f172a; margin-bottom: 0; }
 .zoom-layer { position: absolute; inset: 0; line-height: 0; cursor: grab; transform-origin: center center; }
 .img-rect { position: absolute; pointer-events: none; }

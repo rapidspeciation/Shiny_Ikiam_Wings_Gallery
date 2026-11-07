@@ -68,8 +68,8 @@ const showBar = computed(() => props.kind !== 'ready' && !isDown.value)
   gap: .75rem;
   align-items: center;
   padding: .8rem .9rem;
-  background: #fff;
-  border: 1px solid #e6eaf0;
+  background: var(--wg-card);
+  border: 1px solid var(--wg-line);
   border-radius: 14px;
   box-shadow: 0 10px 30px rgba(15, 23, 42, .14), 0 2px 6px rgba(15, 23, 42, .06);
 }
@@ -119,12 +119,12 @@ const showBar = computed(() => props.kind !== 'ready' && !isDown.value)
 .ip-title {
   font-size: .9rem;
   font-weight: 600;
-  color: #0f172a;
+  color: var(--wg-text-strong);
   line-height: 1.2;
 }
 .ip-detail {
   font-size: .78rem;
-  color: #64748b;
+  color: var(--wg-muted);
   margin-top: .12rem;
   line-height: 1.25;
 }
@@ -133,7 +133,7 @@ const showBar = computed(() => props.kind !== 'ready' && !isDown.value)
   height: 4px;
   margin-top: .55rem;
   border-radius: 999px;
-  background: #eef1f6;
+  background: var(--wg-line);
   overflow: hidden;
 }
 .ip-fill {

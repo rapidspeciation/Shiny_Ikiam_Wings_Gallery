@@ -101,7 +101,7 @@ onMounted(async () => {
   <div>
     <!-- Navbar -->
     <!-- Collapses below xl: from md the tabs and switches wrapped into a ~170 px sticky bar -->
-    <nav class="navbar navbar-expand-xl navbar-dark bg-dark sticky-top">
+    <nav class="navbar navbar-expand-xl navbar-dark wg-navbar sticky-top">
       <div class="container-fluid">
         <a class="navbar-brand" href="#">Ikiam Wings Gallery</a>
         
@@ -175,10 +175,16 @@ onMounted(async () => {
 .gallery-card {
   height: 100%;
   text-align: center;
-  border: 1px solid #ddd;
+  border: 1px solid var(--wg-card-border);
   padding: 10px;
   border-radius: 8px;
-  background: #fff;
+  background: var(--wg-card);
+  color: var(--bs-body-color);
+}
+/* a shade apart from the page in both themes */
+.wg-navbar {
+  background: var(--wg-nav);
+  border-bottom: 1px solid var(--wg-nav-border);
 }
 .nav-link {
   cursor: pointer;
