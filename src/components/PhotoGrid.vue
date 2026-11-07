@@ -35,6 +35,11 @@ watch(() => props.scrollKey, async () => {
     
     <div v-if="error" class="alert alert-danger">{{ error }}</div>
 
+    <!-- before the first query the page below the button was blank, with no hint -->
+    <p v-if="!loading && !error && !isFiltered" class="text-center text-muted small py-4 mb-0">
+      Set any filters, then press Show Photos.
+    </p>
+
     <!-- Results -->
     <div v-if="!loading && isFiltered" ref="resultsEl">
       <h4 class="text-center mb-4 fw-bold">{{ totalCount }} individuals found</h4>
