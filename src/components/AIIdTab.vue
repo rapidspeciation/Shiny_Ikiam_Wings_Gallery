@@ -378,6 +378,8 @@ function alreadyDone(id) { const r = byId(id); return !!(r && !r.loading && !r.e
 // only photos not yet (successfully) analysed are sent on Identify, so re-clicking
 // after adding one more photo doesn't re-run the model on the earlier ones.
 const pendingItems = computed(() => validItems.value.filter((it) => !alreadyDone(it.id)))
+// every photo identified and nothing waiting: the upload card folds into one row
+const uploadFolded = computed(() => results.value.length > 0 && !pendingItems.value.length && !running.value && !preparing.value)
 
 async function run() {
   if (running.value) return
@@ -568,9 +570,23 @@ const showAbout = ref(false)
       :title="progress?.title || ''" :detail="progress?.detail || ''" :progress="progress?.progress ?? null"
       :retryable="!!progress?.retryable" @retry="retryWarm" />
 
-    <!-- Upload -->
+    <!-- Upload; after a finished run it folds into one row (thumbnails + Add photos) so the result fits the screen -->
     <div class="card">
-      <div class="card-body">
+      <!-- accept="image/*" with NO capture lets Android offer Files/Drive/Photos, not just the camera/Photos. -->
+      <input ref="fileInput" type="file" accept="image/*" multiple hidden @change="onPick" />
+      <input ref="cameraInput" type="file" accept="image/*" capture="environment" hidden @change="onPick" />
+      <div v-if="uploadFolded" class="card-body py-2 d-flex flex-wrap align-items-center gap-2">
+        <div class="preview-grid small">
+          <div v-for="it in items" :key="it.id" class="preview" :class="{ invalid: it.status === 'invalid' }">
+            <img v-if="it.previewUrl" :src="it.previewUrl" :alt="it.name" />
+            <button class="rm" @click="removeItem(it.id)" :aria-label="`Remove ${it.name}`">&times;</button>
+          </div>
+        </div>
+        <button type="button" class="btn btn-outline-primary btn-sm" @click="fileInput.click()">Add photos</button>
+        <span class="small text-success-emphasis">&#10003; Identified</span>
+        <button class="btn btn-link btn-sm p-0 ms-auto text-nowrap" @click="clearAll">Clear photos</button>
+      </div>
+      <div v-else class="card-body">
         <div class="d-flex justify-content-between align-items-center">
           <h6 class="card-title mb-0">Upload butterfly or moth photo(s)</h6>
           <button v-if="items.length || results.length" class="btn btn-link btn-sm p-0 ms-2 text-nowrap" @click="clearAll">Clear photos</button>
@@ -587,9 +603,6 @@ const showAbout = ref(false)
             <button class="btn btn-primary btn-sm" @click="fileInput.click()">Choose photos</button>
             <button class="btn btn-outline-secondary btn-sm" @click="cameraInput.click()">Take photo</button>
           </div>
-          <!-- accept="image/*" with NO capture lets Android offer Files/Drive/Photos, not just the camera/Photos. -->
-          <input ref="fileInput" type="file" accept="image/*" multiple hidden @change="onPick" />
-          <input ref="cameraInput" type="file" accept="image/*" capture="environment" hidden @change="onPick" />
         </div>
 
         <div v-if="preparing" class="small text-muted mt-2">
@@ -604,9 +617,10 @@ const showAbout = ref(false)
               <div v-if="it.status === 'invalid'" class="small text-danger px-1">{{ it.error }}</div>
             </div>
           </div>
-          <button class="btn btn-success ms-auto identify-btn" :disabled="!pendingItems.length || running" @click="run">
+          <!-- only while a photo waits; the same blue as the other primary actions -->
+          <button v-if="pendingItems.length || running" class="btn btn-primary ms-auto identify-btn" :disabled="running" @click="run">
             <span v-if="running" class="spinner-border spinner-border-sm" aria-hidden="true"></span>
-            {{ running ? 'Identifying…' : (pendingItems.length ? `Identify ${pendingItems.length > 1 ? pendingItems.length + ' photos' : 'photo'}` : (results.length ? 'All photos identified' : 'Identify photo')) }}
+            {{ running ? 'Identifying…' : `Identify ${pendingItems.length > 1 ? pendingItems.length + ' photos' : 'photo'}` }}
           </button>
         </div>
       </div>
@@ -991,8 +1005,8 @@ const showAbout = ref(false)
 .pt-name { color: var(--wg-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .pt-top { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-/* results grid: phones stack candidates then photo (reference opens in a sheet) */
-.res-grid { display: grid; gap: 1rem; grid-template-columns: minmax(0, 1fr); grid-template-areas: "cands" "photo"; }
+/* results grid: phones stack the photo, then the candidates (reference opens in a sheet) */
+.res-grid { display: grid; gap: 1rem; grid-template-columns: minmax(0, 1fr); grid-template-areas: "photo" "cands"; }
 .area-cands { grid-area: cands; min-width: 0; }
 .cands-main { margin-top: 1rem; min-width: 0; }
 .area-photo { grid-area: photo; min-width: 0; scroll-margin-top: 130px; }
