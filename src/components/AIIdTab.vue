@@ -580,8 +580,9 @@ const showAbout = ref(false)
           @drop.prevent="isOver = false" role="button" tabindex="0"
           @keydown.enter.prevent="fileInput.click()" @keydown.space.prevent="fileInput.click()"
           aria-label="Upload images: drag and drop, or activate to choose files">
-          <div v-if="!results.length" class="text-muted mb-2">Drag &amp; drop <em>anywhere</em>, paste from clipboard, or choose photos. Best results come from a clear shot of the open wings.</div>
-          <div v-else class="text-muted small">Add more photos: drag, paste, or</div>
+          <!-- touch screens cannot drag or paste photos: they get the touch wording -->
+          <div v-if="!results.length" class="text-muted mb-2"><span class="hint-pointer">Drag &amp; drop <em>anywhere</em>, paste from clipboard, or choose photos.</span><span class="hint-touch">Choose photos or take one.</span> Best results come from a clear shot of the open wings.</div>
+          <div v-else class="text-muted small"><span class="hint-pointer">Add more photos: drag, paste, or</span><span class="hint-touch">Add more photos:</span></div>
           <div class="d-flex gap-2 justify-content-center flex-wrap" @click.stop>
             <button class="btn btn-primary btn-sm" @click="fileInput.click()">Choose photos</button>
             <button class="btn btn-outline-secondary btn-sm" @click="cameraInput.click()">Take photo</button>
@@ -955,6 +956,11 @@ const showAbout = ref(false)
 .dropzone { border: 2px dashed #cbd5e1; border-radius: 8px; padding: 1.25rem 1rem; text-align: center; cursor: pointer; transition: border-color .15s, background .15s; }
 .dropzone:hover, .dropzone.over { border-color: #0d6efd; background: #f1f6ff; }
 .dropzone:focus-visible { outline: 2px solid #0d6efd; outline-offset: 2px; }
+.hint-touch { display: none; }
+@media (hover: none) and (pointer: coarse) {
+  .hint-pointer { display: none; }
+  .hint-touch { display: inline; }
+}
 .preview-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 110px)); gap: 0.5rem; }
 .preview { position: relative; border: 1px solid #e2e8f0; border-radius: 6px; overflow: hidden; background: #f8fafc; }
 .preview.invalid { border-color: #dc3545; }
