@@ -142,14 +142,15 @@ const { shareUrl } = useShareView({ slug: 'search', filters: searchFilters,
       Error loading search data.
     </div>
 
-    <div v-if="hasSearched && !loading" ref="resultsEl">
+    <!-- at least a screen tall, so a single result can scroll up under the navbar with its facts in view -->
+    <div v-if="hasSearched && !loading" ref="resultsEl" class="search-results">
       
       <!-- Collection Results -->
       <div v-if="displayResults.Collection.length > 0" class="mb-5">
         <h4 class="border-bottom pb-2">Collection Results ({{ displayResults.Collection.length }})</h4>
         <PhotoGrid 
           :loading="false" :isFiltered="true" :items="displayResults.Collection" 
-          :totalCount="displayResults.Collection.length" :hasMore="false" 
+          :totalCount="displayResults.Collection.length" :hasMore="false" hide-count
           :side="side" :columns="columns" 
         />
       </div>
@@ -159,7 +160,7 @@ const { shareUrl } = useShareView({ slug: 'search', filters: searchFilters,
         <h4 class="border-bottom pb-2">CRISPR Results ({{ displayResults.CRISPR.length }})</h4>
         <PhotoGrid 
           :loading="false" :isFiltered="true" :items="displayResults.CRISPR" 
-          :totalCount="displayResults.CRISPR.length" :hasMore="false" 
+          :totalCount="displayResults.CRISPR.length" :hasMore="false" hide-count
           :side="side" :columns="columns" 
         />
       </div>
@@ -169,7 +170,7 @@ const { shareUrl } = useShareView({ slug: 'search', filters: searchFilters,
         <h4 class="border-bottom pb-2">Insectary Results ({{ displayResults.Insectary.length }})</h4>
         <PhotoGrid 
           :loading="false" :isFiltered="true" :items="displayResults.Insectary" 
-          :totalCount="displayResults.Insectary.length" :hasMore="false" 
+          :totalCount="displayResults.Insectary.length" :hasMore="false" hide-count
           :side="side" :columns="columns" 
         />
       </div>
@@ -182,3 +183,7 @@ const { shareUrl } = useShareView({ slug: 'search', filters: searchFilters,
     </div>
   </div>
 </template>
+
+<style scoped>
+.search-results { min-height: calc(100vh - 64px); }
+</style>
