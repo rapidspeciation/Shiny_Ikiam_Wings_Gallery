@@ -412,6 +412,11 @@ const displayPhotos = () => {
   position: relative;
 }
 .img-wrapper:only-child { grid-column: span 2; }
+/* phones: dorsal over ventral at the card's full width (about 340 px each at 390 px) */
+@media (max-width: 575.98px) {
+  .photo-grid-container { grid-template-columns: 1fr; padding: 0.25rem 0 !important; }
+  .img-wrapper:only-child { grid-column: auto; }
+}
 .img-wrapper:focus-visible { outline: 2px solid var(--bs-primary); outline-offset: 2px; }
 
 /* The zoom-layer wraps img + overlay so panzoom transforms them together. */
