@@ -59,12 +59,12 @@ test('taxon lookup and percent formatting', () => {
   assert.equal(fmtPct(0.364), '36%')
 })
 
-test('low-confidence banner shows below 50% and suggests a location only when none is set', () => {
+test('low-confidence banner shows below 50% and leaves the location advice to the location chips', () => {
   assert.equal(LOW_CONFIDENCE, 0.5)
   const at = (p) => ({ species: [['Godyris zavaleta', p, 0, []]] })
-  assert.equal(lowConfidenceMessage(at(0.34), false),
-    'Uncertain: the top guess is only 34%. Compare the candidates below before trusting it. Selecting where the photo was taken can help.')
-  assert.equal(lowConfidenceMessage(at(0.34), true), 'Uncertain: the top guess is only 34%. Compare the candidates below before trusting it.')
+  assert.equal(lowConfidenceMessage(at(0.34), false), 'Uncertain: the top guess is only 34%. Compare the candidates below.')
+  assert.equal(lowConfidenceMessage(at(0.34), true), 'Uncertain: the top guess is only 34%. Compare the candidates below.')
+  assert.doesNotMatch(lowConfidenceMessage(at(0.34), false), /where the photo was taken/)
   assert.match(lowConfidenceMessage(at(0.499), true), /only 50%/)
   assert.equal(lowConfidenceMessage(at(0.5), false), '')
   assert.equal(lowConfidenceMessage(at(0.91), false), '')

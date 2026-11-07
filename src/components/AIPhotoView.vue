@@ -107,7 +107,8 @@ function toggleFrame() { framed.value = !framed.value; refreshFrame() }
 
 function onImgLoad() { computeLayer(); if (framed.value) nextTick(applyWingFrame); else if (pz) pz.reset({ animate: false }) }
 function onResize() { computeLayer(); refreshFrame() }
-const fmtConf = (c) => (typeof c === 'number' && !Number.isNaN(c) ? `${Math.round(c * 100)}%` : '')
+// "wings", numbered only when the photo has more than one set (no detector score)
+const boxLabel = (i) => (props.boxes.length > 1 ? `wings ${i + 1}` : 'wings')
 
 watch(zoomWings, (on) => { framed.value = on; refreshFrame() })
 watch(() => props.usedIndex, () => { if (framed.value) refreshFrame() })
@@ -141,9 +142,9 @@ onBeforeUnmount(() => { window.removeEventListener('resize', onResize); destroyZ
           <button v-for="(b, i) in boxes" :key="'lbl-' + i" type="button"
             class="mask-lbl" :class="{ used: usedIndex === -2 || i === usedIndex }"
             :style="{ left: (b.box[0] * 100) + '%', top: (b.box[1] * 100) + '%' }"
-            :title="'Double-click to use this mask'"
+            :title="boxes.length > 1 ? 'Double-click to use just these wings' : undefined"
             @dblclick.stop.prevent="emit('select', i)">
-            {{ (usedIndex === -2 || i === usedIndex) ? '✓ ' : '' }}mask {{ i + 1 }} {{ fmtConf(b.conf) }}
+            {{ (usedIndex === -2 || i === usedIndex) ? '✓ ' : '' }}{{ boxLabel(i) }}
           </button>
         </template>
       </div>

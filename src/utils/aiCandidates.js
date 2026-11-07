@@ -26,11 +26,10 @@ export function taxonInfo(pred, taxon) {
   return null
 }
 
-// Banner text when the top species is a weak call ('' when it is not).
+// Banner text when the top species is a weak call ('' when it is not). The location
+// advice is not repeated here: the "Where taken?" chips above already say it.
 export function lowConfidenceMessage(pred, hasLocation = false) {
   const top = pred?.species?.[0]
   if (!top || typeof top[1] !== 'number' || !(top[1] < LOW_CONFIDENCE)) return ''
-  let msg = `Uncertain: the top guess is only ${fmtPct(top[1])}. Compare the candidates below before trusting it.`
-  if (!hasLocation) msg += ' Selecting where the photo was taken can help.'
-  return msg
+  return `Uncertain: the top guess is only ${fmtPct(top[1])}. Compare the candidates below.`
 }

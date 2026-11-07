@@ -678,11 +678,15 @@ const showAbout = ref(false)
                   <!-- mask controls -->
                   <div class="mask-bar small text-muted">
                     <template v-if="active.boxes.length">
-                      {{ active.boxes.length }} wing mask{{ active.boxes.length > 1 ? 's' : '' }} found.
-                      <span v-if="active.usedIndex === -2">Using all wings together.</span>
-                      <span v-else-if="active.usedIndex >= 0">Using mask {{ active.usedIndex + 1 }}.</span>
-                      <span v-else>Using full image.</span>
-                      <template v-if="active.boxes.length > 1"> Double-click a box to use just that one.</template>
+                      <!-- one set of wings: nothing to choose, so no count or "using" sentence -->
+                      <template v-if="active.boxes.length > 1">
+                        {{ active.boxes.length }} wing masks found.
+                        <span v-if="active.usedIndex === -2">Using all wings together.</span>
+                        <span v-else-if="active.usedIndex >= 0">Using mask {{ active.usedIndex + 1 }}.</span>
+                        <span v-else>Using full image.</span>
+                        Double-click a box to use just that one.
+                      </template>
+                      <span v-else-if="active.usedIndex === -1">Using full image.</span>
                       <button v-if="active.usedIndex !== -2" class="btn btn-link btn-sm p-0 ms-1" @click="useAll(active)">Use all wings</button>
                       <button v-if="active.usedIndex !== -1" class="btn btn-link btn-sm p-0 ms-1" @click="useFull(active)">Use full image</button>
                     </template>
