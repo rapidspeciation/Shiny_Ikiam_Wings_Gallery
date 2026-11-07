@@ -126,6 +126,12 @@ body {
   color: #0b2e1f;
 }
 
+/* outline buttons (location chips, quick chips): Bootstrap's grey was 3.6:1 on the dark page */
+[data-bs-theme="dark"] .btn-outline-secondary {
+  --bs-btn-color: #c3c9cf;
+  --bs-btn-border-color: #7a828a;
+}
+
 /* ---- Leaflet map: dark tiles and controls in the dark theme ---- */
 [data-bs-theme="dark"] .leaflet-container {
   background: #1b1f23;
