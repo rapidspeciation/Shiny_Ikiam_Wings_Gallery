@@ -1,5 +1,7 @@
 <script setup>
+import { ref, watch, nextTick } from 'vue'
 import PhotoCard from './PhotoCard.vue'
+import { scrollToResults } from '../utils/scrollToResults.js'
 
 const props = defineProps({
   loading: Boolean,
@@ -9,10 +11,18 @@ const props = defineProps({
   hasMore: Boolean,
   side: String,
   error: String,
-  columns: { type: [String, Number], default: 'Auto' }
+  columns: { type: [String, Number], default: 'Auto' },
+  // changes once per new query (not per re-sort): bring the new results into view
+  scrollKey: { type: Number, default: 0 }
 })
 
 defineEmits(['loadMore'])
+
+const resultsEl = ref(null)
+watch(() => props.scrollKey, async () => {
+  await nextTick()
+  scrollToResults(resultsEl.value)
+})
 </script>
 
 <template>
@@ -26,7 +36,7 @@ defineEmits(['loadMore'])
     <div v-if="error" class="alert alert-danger">{{ error }}</div>
 
     <!-- Results -->
-    <div v-if="!loading && isFiltered">
+    <div v-if="!loading && isFiltered" ref="resultsEl">
       <h4 class="text-center mb-4 fw-bold">{{ totalCount }} individuals found</h4>
       <p v-if="totalCount > 0" class="text-center text-muted small mb-4">
         Showing {{ items.length }} of {{ totalCount }} photos

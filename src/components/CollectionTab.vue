@@ -17,7 +17,7 @@ const { columns, sortBy, sortOrder, side, onlyPhotos, onePerSubspecies } = useGl
 
 // Initialize the Gallery Logic
 const {
-  isFiltered, allMatches, paginatedData, hasMore, loadMore, applyFilters
+  isFiltered, allMatches, paginatedData, hasMore, loadMore, applyFilters, queryCount
 } = useGallery(rawData, { sortBy, sortOrder, side, onlyPhotos, onePerSubspecies })
 
 const filters = ref({
@@ -187,6 +187,7 @@ const { shareUrl } = useShareView({ slug: 'collection', filters, ensureLoaded, a
 
     <!-- Grid -->
     <PhotoGrid
+      :scroll-key="queryCount"
       :loading="loading"
       :error="error"
       :isFiltered="isFiltered"

@@ -13,7 +13,7 @@ const { data: rawData, loading, error, ensureLoaded } = useDataset('crispr', './
 const { columns, sortBy, sortOrder, side, onlyPhotos, onePerSubspecies } = useGlobalGalleryOptions()
 
 const {
-  isFiltered, allMatches, paginatedData, hasMore, loadMore, applyFilters
+  isFiltered, allMatches, paginatedData, hasMore, loadMore, applyFilters, queryCount
 } = useGallery(rawData, { sortBy, sortOrder, side, onlyPhotos, onePerSubspecies })
 
 const filters = ref({
@@ -73,6 +73,7 @@ const { shareUrl } = useShareView({ slug: 'crispr', filters, ensureLoaded, apply
     </div>
 
     <PhotoGrid
+      :scroll-key="queryCount"
       :loading="loading" :error="error" :isFiltered="isFiltered"
       :items="paginatedData" :totalCount="allMatches.length" :hasMore="hasMore"
       :side="side" :columns="columns" @loadMore="loadMore"

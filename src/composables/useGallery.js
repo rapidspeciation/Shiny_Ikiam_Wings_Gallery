@@ -11,6 +11,7 @@ export function useGallery(rawData, options) {
   const lastFilterFn = ref(null)
   const lastSexPredictions = ref(null)
   const lastPredictions = ref(null)  // cached for re-sorts (e.g. sort-dropdown change)
+  const queryCount = ref(0)          // +1 per Show Photos / shared link, not per re-sort
 
   const { sortBy, sortOrder, side, onlyPhotos, onePerSubspecies, reviewRank } = options
 
@@ -20,7 +21,7 @@ export function useGallery(rawData, options) {
   // predictions: optional CAM_ID -> prediction map, needed only for the "Model
   // confidence" sort. The Tab loads it lazily and passes it in; we cache it so a
   // later sort-dropdown change (which re-runs via the watcher) still has it.
-  const applyFilters = (filterFn, predictions, sexPredictions) => {
+  const runFilters = (filterFn, predictions, sexPredictions) => {
     lastFilterFn.value = filterFn
     if (sexPredictions !== undefined) lastSexPredictions.value = sexPredictions
     if (predictions !== undefined) lastPredictions.value = predictions
@@ -40,6 +41,10 @@ export function useGallery(rawData, options) {
     allMatches.value = results
     displayedCount.value = PAGE_SIZE
     isFiltered.value = true
+  }
+  const applyFilters = (...args) => {
+    runFilters(...args)
+    queryCount.value++
   }
 
   // 2. Pagination Trigger
@@ -62,7 +67,7 @@ export function useGallery(rawData, options) {
     () => [sortBy.value, sortOrder.value, onlyPhotos.value, onePerSubspecies.value],
     () => {
       if (isFiltered.value && lastFilterFn.value) {
-        applyFilters(lastFilterFn.value)
+        runFilters(lastFilterFn.value)
       }
     }
   )
@@ -73,6 +78,7 @@ export function useGallery(rawData, options) {
     paginatedData,
     hasMore,
     loadMore,
-    applyFilters
+    applyFilters,
+    queryCount
   }
 }

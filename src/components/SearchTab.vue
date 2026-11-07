@@ -1,5 +1,6 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, nextTick } from 'vue'
+import { scrollToResults } from '../utils/scrollToResults.js'
 import { useDataset } from '../composables/useDataset.js'
 import { useGlobalGalleryOptions } from '../composables/useGlobalGalleryOptions.js'
 import { applyGlobalPipeline } from '../utils/galleryPipeline.js'
@@ -78,7 +79,9 @@ const performSearch = () => {
   results.value.Insectary = searchIn(datasets.Insectary.value)
 
   hasSearched.value = true
+  nextTick(() => scrollToResults(resultsEl.value))
 }
+const resultsEl = ref(null)
 
 const displayResults = computed(() => {
   const options = {
@@ -123,7 +126,7 @@ const { shareUrl } = useShareView({ slug: 'search', filters: searchFilters,
       Error loading search data.
     </div>
 
-    <div v-if="hasSearched && !loading">
+    <div v-if="hasSearched && !loading" ref="resultsEl">
       
       <!-- Collection Results -->
       <div v-if="displayResults.Collection.length > 0" class="mb-5">
