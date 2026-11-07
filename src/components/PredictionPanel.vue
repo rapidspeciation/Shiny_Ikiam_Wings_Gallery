@@ -15,7 +15,8 @@ import { speciesOf } from '../utils/taxonTree.js'
 import TaxonTree from './TaxonTree.vue'
 import { resolveCamid } from '../utils/galleryPipeline.js'
 import { REVIEW_RANKS, rankComparison, recordedPredictionEvidence, recordedTaxonomy } from '../utils/taxonomy.js'
-import { formatSexPrediction } from '../utils/sexPrediction.js'
+import { formatSexPrediction, sexComparison } from '../utils/sexPrediction.js'
+import { fmtPct } from '../utils/aiCandidates.js'
 import { predictionFitNote } from '../utils/predictionCoverage.js'
 
 // `item` drives the existing CAMID-based curation flow (Collection tab).
@@ -57,8 +58,17 @@ const side = computed(() => pred.value?.side || '')
 const fitNote = computed(() => predictionFitNote(toRaw(pred.value)))
 const topSpeciesName = computed(() => pred.value?.species?.[0]?.[0] || '')
 
-// "differs from recorded" badge uses the SAME helper as the gallery filter.
+// "differs from recorded" badge uses the SAME helper as the gallery filter, and names
+// what differs: the species, the sex, or both.
 const differs = computed(() => predictionDiffers(props.item, pred.value))
+const sexDiffers = computed(() => sexState.value === 'ready' && sexComparison(props.item, sexPred.value) === 'differs')
+const differsText = computed(() => {
+  const sp = state.value === 'ready' && differs.value
+  if (sp && sexDiffers.value) return 'species and sex differ from recorded'
+  if (sp) return 'species differs from recorded'
+  if (sexDiffers.value) return 'sex differs from recorded'
+  return ''
+})
 
 const rankRows = computed(() => REVIEW_RANKS.map(rank => rankComparison(props.item, pred.value, rank)))
 const publicReason = (reason) => String(reason || '')
@@ -84,6 +94,13 @@ const suggestedSubsp = computed(() => {
   if (!(prob >= SUGGEST_MIN)) return ''
   if (speciesOf(name).toLowerCase() !== topSpeciesName.value.toLowerCase()) return ''
   return name
+})
+// chip text for that suggestion: the subspecies epithet and its probability
+const suggestedSubspText = computed(() => {
+  const name = suggestedSubsp.value
+  if (!name) return ''
+  const prob = pred.value?.subspecies?.[0]?.[1]
+  return `suggests ssp. ${name.split(/\s+/).pop()}${typeof prob === 'number' ? ' · ' + fmtPct(prob) : ''}`
 })
 
 // --- Taxonomy table (shared TaxonTree; logic in utils/taxonTree.js) ----------
@@ -165,13 +182,14 @@ watch([camid, () => props.prediction], load, { immediate: true })
         <span v-if="state === 'ready' && fitNote.badge" class="badge bg-body-tertiary border text-body-secondary fw-normal" :title="fitNote.title">{{ fitNote.badge }}</span>
         <span v-if="state === 'ready' && side" class="badge bg-body-tertiary border text-body-secondary fw-normal" :title="`Recorded ${side}-of-Andes side; paired model predictions include geographic weighting.`">{{ side }} of Andes</span>
         <span
+          v-if="differsText"
+          class="badge text-bg-warning-subtle text-warning-emphasis border border-warning-subtle fw-normal"
+        >&#9888; {{ differsText }}</span>
+        <span
           v-if="state === 'ready' && !hasRecordedSubsp && suggestedSubsp"
           class="badge text-bg-info-subtle text-info-emphasis border border-info-subtle fw-normal"
-        >No subspecies recorded</span>
-        <span
-          v-else-if="state === 'ready' && differs"
-          class="badge text-bg-warning-subtle text-warning-emphasis border border-warning-subtle fw-normal"
-        >&#9888; differs from recorded</span>
+          :title="suggestedSubsp"
+        >{{ suggestedSubspText }}</span>
       </span>
       <span class="chevron small" :class="{ open }" aria-hidden="true">&#9656;</span>
     </button>
@@ -205,7 +223,7 @@ watch([camid, () => props.prediction], load, { immediate: true })
           <div v-for="(a, i) in formPred.alts" :key="'fm-' + a[0]" class="pred-row pred-subsp"
                :class="{ 'rec-hit': formPred.recorded && a[0] === formPred.recorded }">
             <span class="pred-name italic">f. {{ a[0] }}</span>
-            <span class="pred-pct">{{ Math.round(a[1] * 100) }}%</span>
+            <span class="pred-pct">{{ fmtPct(a[1]) }}</span>
             <span v-if="i === 0" class="pred-badge" title="Model's top form prediction">predicted</span>
             <span v-if="formPred.recorded && a[0] === formPred.recorded" class="rec-badge" title="Recorded form in the database">recorded</span>
           </div>

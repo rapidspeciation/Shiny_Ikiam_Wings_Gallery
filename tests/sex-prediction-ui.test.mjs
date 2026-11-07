@@ -51,3 +51,22 @@ test('AI Identifier direct predictions do not request collection sex predictions
   assert.match(panel, /if \(!props\.prediction\) \{[\s\S]*getSexPrediction\(camid\.value\)/)
   assert.doesNotMatch(panel, /sexPrediction:\s*\{\s*type:/)
 })
+
+test('confidences that round to 100% read ">99%", not certainty', async () => {
+  const { fmtPct } = await import('../src/utils/aiCandidates.js')
+  assert.equal(fmtPct(0.996), '>99%')
+  assert.equal(fmtPct(1), '>99%')
+  assert.equal(fmtPct(0.994), '99%')
+  assert.equal(
+    formatSexPrediction({ sex: 'male', confidence: 0.998, supported: true, species: 'Ithomia salapia' }, 'Ithomia salapia').text,
+    'Predicted sex: Male · >99% · Supported'
+  )
+})
+
+test('the prediction chip names what differs from the record', () => {
+  const panel = readFileSync('src/components/PredictionPanel.vue', 'utf8')
+  assert.match(panel, /species differs from recorded/)
+  assert.match(panel, /sex differs from recorded/)
+  assert.match(panel, /species and sex differ from recorded/)
+  assert.doesNotMatch(panel, /No subspecies recorded/)
+})

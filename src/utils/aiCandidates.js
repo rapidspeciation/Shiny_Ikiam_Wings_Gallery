@@ -5,9 +5,11 @@
 // Below this top-species probability the results show the "Uncertain" banner.
 export const LOW_CONFIDENCE = 0.5
 
+// Rounded percentage; never "100%" (a rounded 100 reads as certainty), so ">99%".
 export function fmtPct(p) {
   if (typeof p !== 'number' || Number.isNaN(p)) return ''
   if (p > 0 && p < 0.005) return '<1%'
+  if (p >= 0.995) return '>99%'
   return `${Math.round(p * 100)}%`
 }
 

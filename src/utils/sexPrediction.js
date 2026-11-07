@@ -1,3 +1,5 @@
+import { fmtPct } from './aiCandidates.js'
+
 const VALID_SEXES = new Set(['male', 'female'])
 
 export function normalizeSex(value) {
@@ -40,7 +42,7 @@ export function formatSexPrediction(value, recordedSpecies = '') {
   const prediction = normalizeSexPrediction(value)
   if (!prediction) return null
   const sex = prediction.sex[0].toUpperCase() + prediction.sex.slice(1)
-  const confidence = `${Math.round(prediction.confidence * 100)}%`
+  const confidence = fmtPct(prediction.confidence)
   const recorded = comparableSpecies(recordedSpecies)
   const conditioned = comparableSpecies(prediction.species)
   const speciesStillMatches = !conditioned || recorded === conditioned
