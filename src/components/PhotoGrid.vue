@@ -77,6 +77,7 @@ watch(() => props.scrollKey, async () => {
 .custom-grid {
   display: grid;
   gap: 1.5rem;
+  align-items: start;   /* opening one card's predictions does not stretch its row neighbours */
 }
 /* cards never force the column wider than the screen */
 .grid-item { min-width: 0; }
