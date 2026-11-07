@@ -136,3 +136,35 @@ body {
 [data-bs-theme="dark"] .leaflet-control-attribution a {
   color: var(--bs-link-color);
 }
+
+/* ---- Touch screens: primary controls at least 44 px tall (one shared rule) ---- */
+@media (pointer: coarse) {
+  .btn:not(.btn-link):not(.btn-close),
+  .form-select,
+  .form-control:not(textarea),
+  .multiselect,
+  .multiselect__tags {
+    min-height: 44px;
+  }
+  .btn:not(.btn-link):not(.btn-close) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+  }
+  .multiselect__tags { display: flex; align-items: center; flex-wrap: wrap; }
+  .navbar-toggler { min-width: 44px; min-height: 44px; }
+  .form-check {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    margin-bottom: 0;
+  }
+  .form-check-input { margin-top: 0; }
+  .form-check-label {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    padding-left: 0.4rem;
+  }
+}
