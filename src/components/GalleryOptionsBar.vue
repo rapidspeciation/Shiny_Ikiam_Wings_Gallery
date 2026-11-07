@@ -1,7 +1,6 @@
 <script setup>
 import { computed, watch } from 'vue'
 import { useGlobalGalleryOptions } from '../composables/useGlobalGalleryOptions.js'
-import { getProxyState, setProxyMode } from '../utils/imageProxy.js'
 
 const props = defineProps({ currentTab: { type: String, default: '' } })
 
@@ -25,21 +24,6 @@ watch(supportsModelConfidence, (ok) => {
   if (!ok && ['ModelConfidence', 'SexConfidence'].includes(sortBy.value)) sortBy.value = DEFAULT_SORT
 }, { immediate: true })
 
-const { mode: proxyMode, tierStatus } = getProxyState()
-
-const proxyOptions = [
-  { value: 'auto', label: 'Auto' },
-  { value: 'wsrv', label: 'wsrv.nl' },
-  { value: 'lh3', label: 'Google CDN' },
-  { value: 'thumbnail', label: 'Thumbnail' }
-]
-
-function statusClass(tier) {
-  const s = tierStatus.value[tier]
-  if (s === 'ok') return 'bg-success'
-  if (s === 'blocked') return 'bg-danger'
-  return 'bg-secondary'
-}
 </script>
 
 <template>
@@ -58,7 +42,7 @@ function statusClass(tier) {
       <label class="form-label small fw-bold">Sort By</label>
       <select class="form-select form-select-sm" v-model="sortBy">
         <option value="Preservation_date">Date</option>
-        <option value="CAM_ID">CAM_ID</option>
+        <option value="CAM_ID">CAMID</option>
         <option value="Row Number">Row #</option>
         <option v-if="supportsModelConfidence" value="ModelConfidence">Model confidence (taxonomy)</option>
         <option v-if="supportsModelConfidence" value="SexConfidence">Model confidence (sex)</option>
@@ -88,45 +72,13 @@ function statusClass(tier) {
         <input class="form-check-input" type="checkbox" v-model="onePerSubspecies" id="chkOneGlobal">
         <label class="form-check-label small" for="chkOneGlobal">Unique Subsp</label>
       </div>
-    </div>
-
-    <!-- Curation toggles + Image Cache on a single row -->
-    <div class="col-12 mt-1">
-      <div class="d-flex flex-wrap align-items-center gap-3">
-        <div class="form-check form-switch mb-0">
-          <input class="form-check-input" type="checkbox" role="switch" id="chkShowBoxes"
-                 v-model="showBoxes" aria-describedby="chkShowBoxesHelp">
-          <label class="form-check-label small" for="chkShowBoxes">Wing boxes</label>
-        </div>
-        <a class="small fw-bold text-decoration-none" data-bs-toggle="collapse" href="#imageCacheCollapse" role="button" aria-expanded="false" aria-controls="imageCacheCollapse">
-          Image Cache <span class="small">&#9660;</span>
-        </a>
+      <!-- the image cache choice moved to the page footer (troubleshooting) -->
+      <div class="form-check form-switch form-check-inline">
+        <input class="form-check-input" type="checkbox" role="switch" id="chkShowBoxes"
+               v-model="showBoxes" aria-describedby="chkShowBoxesHelp">
+        <label class="form-check-label small" for="chkShowBoxes">Wing boxes</label>
       </div>
       <span id="chkShowBoxesHelp" class="visually-hidden">Draw detected wing bounding boxes over each photo</span>
-      <div class="collapse" id="imageCacheCollapse">
-        <div class="d-flex flex-wrap gap-2 mt-1">
-          <div v-for="opt in proxyOptions" :key="opt.value" class="form-check form-check-inline mb-0">
-            <input
-              class="form-check-input"
-              type="radio"
-              name="proxyMode"
-              :id="'proxy-' + opt.value"
-              :value="opt.value"
-              :checked="proxyMode === opt.value"
-              @change="setProxyMode(opt.value)"
-            >
-            <label class="form-check-label small" :for="'proxy-' + opt.value">
-              {{ opt.label }}
-              <span
-                v-if="opt.value !== 'auto'"
-                class="d-inline-block rounded-circle ms-1"
-                :class="statusClass(opt.value)"
-                style="width: 8px; height: 8px;"
-              ></span>
-            </label>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 </template>

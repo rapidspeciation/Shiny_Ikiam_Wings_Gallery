@@ -16,6 +16,7 @@ import AIIdTab from './components/AIIdTab.vue'
 import GalleryOptionsBar from './components/GalleryOptionsBar.vue'
 import TaxonDrawer from './components/TaxonDrawer.vue'
 import PhotoLightbox from './components/PhotoLightbox.vue'
+import ImageCacheSettings from './components/ImageCacheSettings.vue'
 import { useTaxonDrawer } from './composables/useTaxonDrawer.js'
 
 // Pinned in the top navbar so they stay reachable while scrolling through photos.
@@ -69,6 +70,18 @@ function navigate(name) {
 function onPopState() { currentTab.value = tabFromUrl() }
 // zoom switches and Reset zoom act on gallery photos: hidden where there are none
 const hasPhotoTools = computed(() => !['AI Identifier', 'Update DB'].includes(currentTab.value))
+
+// "Skip to filters": first Tab stop, moves focus past the navbar and the view options
+const mainTask = ref(null)
+const skipLabel = computed(() => (['Collection', 'Insectary', 'CRISPR'].includes(currentTab.value) ? 'Skip to filters' : 'Skip to main content'))
+function skipToMain() {
+  const el = mainTask.value
+  if (!el) return
+  el.focus({ preventScroll: true })
+  const nav = document.querySelector('nav.sticky-top')
+  const top = el.getBoundingClientRect().top + window.scrollY - (nav ? nav.getBoundingClientRect().height : 0) - 8
+  window.scrollTo({ top: Math.max(0, top) })
+}
 // the compare drawer belongs to the gallery tab it was opened from
 const { closeDrawer } = useTaxonDrawer()
 watch(currentTab, () => closeDrawer())
@@ -102,6 +115,7 @@ onMounted(async () => {
 
 <template>
   <div>
+    <a class="visually-hidden-focusable skip-link" href="#main-task" @click.prevent="skipToMain">{{ skipLabel }}</a>
     <!-- Navbar -->
     <!-- Collapses below xl: from md the tabs and switches wrapped into a ~170 px sticky bar -->
     <nav class="navbar navbar-expand-xl navbar-dark wg-navbar sticky-top">
@@ -146,6 +160,20 @@ onMounted(async () => {
               <input class="form-check-input" type="checkbox" role="switch" id="navShowPred" v-model="expandPredictions">
               <label class="form-check-label small text-light" for="navShowPred">Show predictions</label>
             </div>
+            <!-- mouse and keyboard shortcuts (not on phones) -->
+            <div class="dropdown d-none d-md-block">
+              <button type="button" class="btn btn-sm btn-outline-light nav-icon-btn" data-bs-toggle="dropdown" aria-expanded="false"
+                aria-label="Photo shortcuts" title="Photo shortcuts">?</button>
+              <div class="dropdown-menu dropdown-menu-end p-3 small help-menu">
+                <div class="fw-bold mb-1">Photo shortcuts</div>
+                <ul class="list-unstyled mb-0">
+                  <li>Click a photo: open it large</li>
+                  <li>Shift + scroll: zoom all photos</li>
+                  <li>Ctrl + scroll: zoom one photo</li>
+                  <li>Drag: move a zoomed photo</li>
+                </ul>
+              </div>
+            </div>
             <button type="button" class="btn btn-sm btn-outline-light nav-icon-btn" aria-label="Reset zoom" title="Reset zoom" @click="resetAll">
               <!-- arrow-counterclockwise (Bootstrap Icons, MIT) -->
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
@@ -161,20 +189,21 @@ onMounted(async () => {
 
     <!-- Main Content -->
     <div class="container-fluid mt-3">
-      <!-- mouse and keyboard shortcuts only, so not shown on phones -->
-      <div v-if="currentTab !== 'AI Identifier'" class="alert alert-light border text-center py-2 small d-none d-md-block" role="alert">
-        Navigation: Shift + Scroll = Zoom all | Ctrl + Scroll = Zoom one | Drag = Move
-        <span class="d-none d-md-inline"> | Github: <a href='https://github.com/rapidspeciation/Shiny_Ikiam_Wings_Gallery/' target='_blank'>rapidspeciation/Shiny_Ikiam_Wings_Gallery</a></span>
-      </div>
-
       <GalleryOptionsBar v-if="currentTab !== 'AI Identifier'" :current-tab="currentTab" />
 
-      <keep-alive>
-        <component :is="tabs[currentTab]" />
-      </keep-alive>
+      <div id="main-task" ref="mainTask" tabindex="-1" class="main-task">
+        <keep-alive>
+          <component :is="tabs[currentTab]" />
+        </keep-alive>
+      </div>
       <TaxonDrawer />
       <PhotoLightbox />
     </div>
+
+    <footer class="container-fluid small text-body-secondary py-3 mt-4 d-flex flex-wrap justify-content-center align-items-start column-gap-4 row-gap-2">
+      <span>GitHub: <a href="https://github.com/rapidspeciation/Shiny_Ikiam_Wings_Gallery/" target="_blank" rel="noopener noreferrer">rapidspeciation/Shiny_Ikiam_Wings_Gallery</a></span>
+      <ImageCacheSettings v-if="hasPhotoTools" />
+    </footer>
   </div>
 </template>
 
@@ -226,6 +255,19 @@ onMounted(async () => {
   .navbar-nav .small-text { font-size: 0.875rem; }
   .nav-tools .form-check-label { font-size: 0.8125rem; }
 }
+.skip-link {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  z-index: 1100;
+  padding: 0.5rem 0.9rem;
+  border-radius: 0.375rem;
+  background: var(--bs-body-bg);
+  color: var(--bs-link-color);
+  box-shadow: 0 2px 10px var(--wg-shadow);
+}
+.main-task:focus { outline: none; }
+.help-menu { min-width: 15rem; }
 .nav-icon-btn {
   display: inline-flex;
   align-items: center;
