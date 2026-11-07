@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, nextTick } from 'vue'
+import { ref, computed, nextTick, onActivated } from 'vue'
 import { scrollToResults } from '../utils/scrollToResults.js'
 import { useDataset } from '../composables/useDataset.js'
 import { useGlobalGalleryOptions } from '../composables/useGlobalGalleryOptions.js'
@@ -50,6 +50,17 @@ const results = ref({
   Collection: [],
   CRISPR: [],
   Insectary: []
+})
+
+// Enter searches (Shift+Enter adds a line); ignored while the datasets load
+const onEnter = () => { if (!loading.value) performSearch() }
+
+// Mouse and keyboard users can type a CAMID straight away; phones skip this
+// so the on-screen keyboard does not pop up on its own.
+const camidInput = ref(null)
+onActivated(() => {
+  const fine = typeof window.matchMedia === 'function' && window.matchMedia('(hover: hover) and (pointer: fine)').matches
+  if (fine && camidInput.value && document.activeElement !== camidInput.value) camidInput.value.focus({ preventScroll: true })
 })
 
 const performSearch = () => {
@@ -105,12 +116,17 @@ const { shareUrl } = useShareView({ slug: 'search', filters: searchFilters,
   <div class="container">
     <div class="row justify-content-center mb-4">
       <div class="col-md-8">
-        <label class="form-label fw-bold">Enter CAMID(s)</label>
+        <label class="form-label fw-bold" for="camid-input">Enter CAMID(s)</label>
         <textarea 
+          id="camid-input"
+          ref="camidInput"
           class="form-control mb-3" 
           v-model="inputIds" 
           rows="3" 
-          placeholder="Enter one or more CAMIDs (e.g. CAM01234), separated by spaces or new lines"
+          placeholder="Enter one or more CAMIDs (e.g. CAM01234), separated by spaces or new lines. Press Enter to search."
+          @keydown.enter.exact.prevent="onEnter"
+          @keydown.ctrl.enter.prevent="onEnter"
+          @keydown.meta.enter.prevent="onEnter"
         ></textarea>
         <div class="d-flex flex-wrap justify-content-center gap-2">
         <button class="btn btn-primary px-5" @click="performSearch" :disabled="loading">
