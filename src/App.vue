@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch, onMounted } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 import { usePanzoomRegistry } from './composables/usePanzoomRegistry.js'
 import { useGlobalGalleryOptions } from './composables/useGlobalGalleryOptions.js'
 import { useDataset } from './composables/useDataset.js'
@@ -30,7 +30,7 @@ const tabs = {
   'Collection': CollectionTab,
   'Insectary': InsectaryTab,
   'CRISPR': CrisprTab,
-  'Search by CAMID': SearchTab,
+  'Search CAMID': SearchTab,
   'Update DB': UpdateTab,
   'AI Identifier': AIIdTab
 }
@@ -43,7 +43,7 @@ const slugByTab = {
   'Collection': 'collection',
   'Insectary': 'insectary',
   'CRISPR': 'crispr',
-  'Search by CAMID': 'search',
+  'Search CAMID': 'search',
   'Update DB': 'update',
   'AI Identifier': 'ai_identifier'
 }
@@ -67,6 +67,8 @@ function navigate(name) {
   }
 }
 function onPopState() { currentTab.value = tabFromUrl() }
+// zoom switches and Reset zoom act on gallery photos: hidden where there are none
+const hasPhotoTools = computed(() => !['AI Identifier', 'Update DB'].includes(currentTab.value))
 // the compare drawer belongs to the gallery tab it was opened from
 const { closeDrawer } = useTaxonDrawer()
 watch(currentTab, () => closeDrawer())
@@ -128,8 +130,8 @@ onMounted(async () => {
             </li>
           </ul>
           
-          <!-- Pinned curation toggles + Reset (stay reachable while scrolling) -->
-          <div class="d-flex flex-wrap align-items-center gap-3 ms-xl-auto mt-2 mt-xl-0">
+          <!-- Pinned curation toggles + Reset (stay reachable while scrolling); only on the photo tabs -->
+          <div v-if="hasPhotoTools" class="d-flex flex-wrap align-items-center gap-2 ms-xl-auto mt-2 mt-xl-0 nav-tools">
             <div class="form-check form-switch mb-0">
               <input class="form-check-input" type="checkbox" role="switch" id="navZoomWings" v-model="zoomWings">
               <label class="form-check-label small text-light" for="navZoomWings">Zoom to wings</label>
@@ -144,8 +146,12 @@ onMounted(async () => {
               <input class="form-check-input" type="checkbox" role="switch" id="navShowPred" v-model="expandPredictions">
               <label class="form-check-label small text-light" for="navShowPred">Show predictions</label>
             </div>
-            <button class="btn btn-sm btn-outline-light text-nowrap" @click="resetAll">
-              Reset Zoom
+            <button type="button" class="btn btn-sm btn-outline-light nav-icon-btn" aria-label="Reset zoom" title="Reset zoom" @click="resetAll">
+              <!-- arrow-counterclockwise (Bootstrap Icons, MIT) -->
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+                <path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2z"/>
+                <path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466"/>
+              </svg>
             </button>
           </div>
           
@@ -204,10 +210,27 @@ onMounted(async () => {
 /* a shade apart from the page in both themes */
 .wg-navbar {
   background: var(--wg-nav);
-  border-bottom: 1px solid var(--wg-nav-border);
+  box-shadow: inset 0 -1px 0 var(--wg-nav-border);   /* no extra height */
 }
 .nav-link {
   cursor: pointer;
+}
+/* 1200 to 1399 px: tabs and switches share one row (they wrapped to 87 px) */
+@media (min-width: 1200px) and (max-width: 1399.98px) {
+  .navbar-nav .nav-link.px-2 { padding-left: 0.4rem !important; padding-right: 0.4rem !important; }
+  .nav-tools { column-gap: 0.75rem !important; }
+  .navbar-brand { margin-right: 0.6rem; }
+}
+@media (min-width: 1200px) and (max-width: 1279.98px) {
+  .navbar-brand { font-size: 1.125rem; }
+  .navbar-nav .small-text { font-size: 0.875rem; }
+  .nav-tools .form-check-label { font-size: 0.8125rem; }
+}
+.nav-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem 0.45rem;
 }
 /* Slightly smaller text for tabs to fit more on screen */
 .small-text {
