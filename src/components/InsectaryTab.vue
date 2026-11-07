@@ -64,8 +64,8 @@ const { shareUrl } = useShareView({ slug: 'insectary', filters, ensureLoaded, ap
       <div class="col-6 col-md-3"><FilterSelect label="Species" v-model="filters.species" :options="speciesList" :multiple="true" /></div>
       <div class="col-6 col-md-3"><FilterSelect label="Subspecies" v-model="filters.subspecies" :options="subspeciesList" :multiple="true" /></div>
       <div class="col-6 col-md-3">
-         <label class="form-label small fw-bold">Sex</label>
-         <select class="form-select" v-model="filters.sex">
+         <label class="form-label small fw-bold" for="ins-sex">Sex</label>
+         <select id="ins-sex" class="form-select" v-model="filters.sex">
            <option>male and female</option>
            <option>male</option>
            <option>female</option>

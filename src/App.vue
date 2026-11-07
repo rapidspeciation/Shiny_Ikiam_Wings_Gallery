@@ -123,7 +123,8 @@ onMounted(async () => {
         <a class="navbar-brand" href="#">Ikiam Wings Gallery</a>
         
         <!-- Mobile Toggler -->
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+          aria-controls="navbarContent" aria-expanded="false" aria-label="Menu">
           <span class="navbar-toggler-icon"></span>
         </button>
 

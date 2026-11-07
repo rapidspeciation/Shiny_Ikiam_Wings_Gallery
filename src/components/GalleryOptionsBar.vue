@@ -30,8 +30,8 @@ watch(supportsModelConfidence, (ok) => {
   <div class="row g-2 mb-3 align-items-end wg-box p-3 rounded border">
     <!-- phones always show one column (PhotoGrid), so Columns is hidden there and Side gets a full row -->
     <div class="d-none d-md-block col-md-2">
-      <label class="form-label small fw-bold">Columns</label>
-      <select class="form-select form-select-sm" v-model="columns">
+      <label class="form-label small fw-bold" for="opt-columns">Columns</label>
+      <select id="opt-columns" class="form-select form-select-sm" v-model="columns">
         <option value="Auto">Auto</option>
         <option value="1">1</option>
         <option value="2">2</option>
@@ -39,8 +39,8 @@ watch(supportsModelConfidence, (ok) => {
       </select>
     </div>
     <div class="col-6 col-md-2">
-      <label class="form-label small fw-bold">Sort By</label>
-      <select class="form-select form-select-sm" v-model="sortBy">
+      <label class="form-label small fw-bold" for="opt-sort">Sort By</label>
+      <select id="opt-sort" class="form-select form-select-sm" v-model="sortBy">
         <option value="Preservation_date">Date</option>
         <option value="CAM_ID">CAMID</option>
         <option value="Row Number">Row #</option>
@@ -49,15 +49,15 @@ watch(supportsModelConfidence, (ok) => {
       </select>
     </div>
     <div class="col-6 col-md-2">
-      <label class="form-label small fw-bold">Order</label>
-      <select class="form-select form-select-sm" v-model="sortOrder">
+      <label class="form-label small fw-bold" for="opt-order">Order</label>
+      <select id="opt-order" class="form-select form-select-sm" v-model="sortOrder">
         <option value="desc">Desc</option>
         <option value="asc">Asc</option>
       </select>
     </div>
     <div class="col-12 col-md-2">
-      <label class="form-label small fw-bold">Side</label>
-      <select class="form-select form-select-sm" v-model="side">
+      <label class="form-label small fw-bold" for="opt-side">Side</label>
+      <select id="opt-side" class="form-select form-select-sm" v-model="side">
         <option>Dorsal</option>
         <option>Ventral</option>
         <option>Dorsal and Ventral</option>

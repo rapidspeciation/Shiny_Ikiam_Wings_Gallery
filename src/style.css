@@ -83,6 +83,11 @@ body {
 }
 
 /* ---- vue-multiselect follows the theme (its stylesheet uses fixed whites) ---- */
+/* its placeholder grey ("All") was 2.3:1 on white */
+.multiselect__placeholder,
+.multiselect__input::placeholder {
+  color: var(--bs-secondary-color);
+}
 [data-bs-theme="dark"] .multiselect,
 [data-bs-theme="dark"] .multiselect__input,
 [data-bs-theme="dark"] .multiselect__single {
@@ -98,10 +103,6 @@ body {
 [data-bs-theme="dark"] .multiselect__tags,
 [data-bs-theme="dark"] .multiselect__content-wrapper {
   border-color: var(--bs-border-color);
-}
-[data-bs-theme="dark"] .multiselect__input::placeholder,
-[data-bs-theme="dark"] .multiselect__placeholder {
-  color: var(--bs-secondary-color);
 }
 [data-bs-theme="dark"] .multiselect__option--selected {
   background: var(--bs-tertiary-bg);

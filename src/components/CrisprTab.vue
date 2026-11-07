@@ -48,16 +48,16 @@ const { shareUrl } = useShareView({ slug: 'crispr', filters, ensureLoaded, apply
     <div class="row g-3 mb-4">
       <div class="col-6 col-md-3"><FilterSelect label="Species" v-model="filters.species" :options="speciesList" :multiple="true" /></div>
       <div class="col-6 col-md-3">
-         <label class="form-label small fw-bold">Sex</label>
-         <select class="form-select" v-model="filters.sex">
+         <label class="form-label small fw-bold" for="crispr-sex">Sex</label>
+         <select id="crispr-sex" class="form-select" v-model="filters.sex">
            <option>male and female</option>
            <option>male</option>
            <option>female</option>
          </select>
       </div>
       <div class="col-6 col-md-3">
-         <label class="form-label small fw-bold">Mutant</label>
-         <select class="form-select" v-model="filters.mutant">
+         <label class="form-label small fw-bold" for="crispr-mutant">Mutant</label>
+         <select id="crispr-mutant" class="form-select" v-model="filters.mutant">
            <option>All</option>
            <option>Yes</option>
            <option>No</option>

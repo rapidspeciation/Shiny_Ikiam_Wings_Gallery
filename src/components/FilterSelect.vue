@@ -1,4 +1,5 @@
 <script setup>
+import { ref, useId, onMounted, onUpdated } from 'vue'
 import VueMultiselect from 'vue-multiselect'
 
 defineProps({
@@ -14,12 +15,30 @@ const emit = defineEmits(['update:modelValue'])
 const updateValue = (val) => {
   emit('update:modelValue', val)
 }
+
+// The visible label names the control: its search input gets the id the <label> points
+// at, and the combobox, input and list are labelled by it (vue-multiselect would name the
+// input "<name>-searchbox").
+const uid = `fs-${useId()}`
+const labelId = `${uid}-label`
+const root = ref(null)
+const nameParts = () => {
+  const el = root.value
+  if (!el) return
+  for (const part of el.querySelectorAll('.multiselect, .multiselect__input, .multiselect__content')) {
+    part.removeAttribute('aria-label')
+    part.setAttribute('aria-labelledby', labelId)
+  }
+}
+onMounted(nameParts)
+onUpdated(nameParts)
 </script>
 
 <template>
-  <div class="filter-wrapper">
-    <label class="form-label small fw-bold">{{ label }}</label>
+  <div ref="root" class="filter-wrapper">
+    <label :id="labelId" class="form-label small fw-bold" :for="uid">{{ label }}</label>
     <VueMultiselect
+      :id="uid"
       :model-value="modelValue"
       @update:model-value="updateValue"
       :options="options"
@@ -39,6 +58,11 @@ const updateValue = (val) => {
   padding-top: 6px;
   border-radius: 0.375rem; /* Bootstrap rounded */
   border: 1px solid var(--bs-border-color);
+}
+/* clear keyboard focus, like Bootstrap's form controls */
+.filter-wrapper:focus-within :deep(.multiselect__tags) {
+  border-color: #86b7fe;
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
 }
 /* long names (e.g. "Mechanitis polymnia" in a half-width phone column) wrap instead of being cut */
 :deep(.multiselect__tag) {
