@@ -40,4 +40,10 @@ const updateValue = (val) => {
   border-radius: 0.375rem; /* Bootstrap rounded */
   border: 1px solid #dee2e6;
 }
+/* long names (e.g. "Mechanitis polymnia" in a half-width phone column) wrap instead of being cut */
+:deep(.multiselect__tag) {
+  white-space: normal;
+  text-overflow: clip;
+  line-height: 1.2;
+}
 </style>

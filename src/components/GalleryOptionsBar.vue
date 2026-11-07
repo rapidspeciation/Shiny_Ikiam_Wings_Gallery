@@ -44,7 +44,8 @@ function statusClass(tier) {
 
 <template>
   <div class="row g-2 mb-3 align-items-end bg-light p-3 rounded border">
-    <div class="col-6 col-md-2">
+    <!-- phones always show one column (PhotoGrid), so Columns is hidden there and Side gets a full row -->
+    <div class="d-none d-md-block col-md-2">
       <label class="form-label small fw-bold">Columns</label>
       <select class="form-select form-select-sm" v-model="columns">
         <option value="Auto">Auto</option>
@@ -70,7 +71,7 @@ function statusClass(tier) {
         <option value="asc">Asc</option>
       </select>
     </div>
-    <div class="col-6 col-md-2">
+    <div class="col-12 col-md-2">
       <label class="form-label small fw-bold">Side</label>
       <select class="form-select form-select-sm" v-model="side">
         <option>Dorsal</option>
