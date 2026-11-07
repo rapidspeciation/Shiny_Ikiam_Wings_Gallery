@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, provide } from 'vue'
 import { useDataset } from '../composables/useDataset.js'
 import { useGallery } from '../composables/useGallery.js'
 import { useGlobalGalleryOptions } from '../composables/useGlobalGalleryOptions.js'
@@ -9,6 +9,8 @@ import FilterSelect from './FilterSelect.vue'
 import PhotoGrid from './PhotoGrid.vue'
 
 const { data: rawData, loading, error, ensureLoaded } = useDataset('crispr', './data/crispr.json')
+// filters whose option list is still empty once the data is in hide themselves (FilterSelect)
+provide('filterDataReady', computed(() => (rawData.value?.length ?? 0) > 0))
 
 const { columns, sortBy, sortOrder, side, onlyPhotos, onePerSubspecies } = useGlobalGalleryOptions()
 

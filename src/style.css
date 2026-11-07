@@ -82,6 +82,11 @@ body {
   min-height: 100vh;
 }
 
+/* a filter with nothing to pick hides itself (FilterSelect); its grid column goes too */
+[class*="col-"]:has(> .filter-wrapper[hidden]) {
+  display: none;
+}
+
 /* ---- vue-multiselect follows the theme (its stylesheet uses fixed whites) ---- */
 /* its placeholder grey ("All") was 2.3:1 on white */
 .multiselect__placeholder,

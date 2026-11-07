@@ -1,8 +1,8 @@
 <script setup>
-import { ref, useId, onMounted, onUpdated } from 'vue'
+import { ref, computed, inject, useId, onMounted, onUpdated } from 'vue'
 import VueMultiselect from 'vue-multiselect'
 
-defineProps({
+const props = defineProps({
   label: String,
   modelValue: [String, Array, Object, null],
   options: { type: Array, default: () => [] },
@@ -12,6 +12,11 @@ defineProps({
 
 const emit = defineEmits(['update:modelValue'])
 
+// A filter with nothing to pick (e.g. Family, empty in every collection record) is hidden,
+// with its grid column, once the tab's data has loaded; a set value keeps it visible.
+const dataReady = inject('filterDataReady', computed(() => true))
+const hasValue = computed(() => (Array.isArray(props.modelValue) ? props.modelValue.length > 0 : !!props.modelValue))
+const isEmpty = computed(() => dataReady.value && !props.options.length && !hasValue.value)
 const updateValue = (val) => {
   emit('update:modelValue', val)
 }
@@ -35,7 +40,7 @@ onUpdated(nameParts)
 </script>
 
 <template>
-  <div ref="root" class="filter-wrapper">
+  <div ref="root" class="filter-wrapper" :hidden="isEmpty">
     <label :id="labelId" class="form-label small fw-bold" :for="uid">{{ label }}</label>
     <VueMultiselect
       :id="uid"
