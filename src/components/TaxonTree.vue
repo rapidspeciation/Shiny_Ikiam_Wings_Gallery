@@ -163,6 +163,11 @@ const thumbFor = (r) => {
   return ''
 }
 const thumbUrl = ref({})   // taxon -> url | '' (loading / none)
+// taxa whose photo failed through the proxy and directly: the empty slot, not a broken-image icon
+const thumbFailed = reactive({})
+function onThumbError(e, taxon) {
+  if (!fallbackToDirect(e)) thumbFailed[taxon] = true
+}
 function loadThumb(taxon) {
   if (!taxon || taxon in thumbUrl.value) return
   thumbUrl.value = { ...thumbUrl.value, [taxon]: '' }
@@ -231,9 +236,10 @@ defineExpose({ rows })
         <span v-if="r.expandable" class="tt-chev" :class="{ open: r.open }" aria-hidden="true"
           @click.stop="toggle(r)">&#9656;</span>
         <span v-else class="tt-chev none" aria-hidden="true"></span>
-        <span v-if="thumbFor(r)" :ref="observeThumb" :data-thumb="thumbFor(r)" class="tt-thumb" aria-hidden="true">
-          <img v-if="thumbUrl[thumbFor(r)]" :src="thumbUrl[thumbFor(r)]" alt="" loading="lazy" referrerpolicy="no-referrer"
-            @error="fallbackToDirect($event)" />
+        <span v-if="thumbFor(r)" :ref="observeThumb" :data-thumb="thumbFor(r)" class="tt-thumb"
+          :class="{ empty: thumbFailed[thumbFor(r)] }" aria-hidden="true">
+          <img v-if="thumbUrl[thumbFor(r)] && !thumbFailed[thumbFor(r)]" :src="thumbUrl[thumbFor(r)]" alt="" loading="lazy"
+            referrerpolicy="no-referrer" @error="onThumbError($event, thumbFor(r))" />
         </span>
         <span v-else-if="thumbs && r.kind !== 'subspecies'" class="tt-thumb empty" aria-hidden="true"></span>
         <span class="tt-label">
