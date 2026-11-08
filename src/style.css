@@ -8,9 +8,9 @@
 [data-bs-theme="light"] {
   --wg-page: #fff;             /* page behind the cards (white, as before the themes) */
   --wg-card: #fff;             /* gallery card, panels, drawers */
-  --wg-card-2: #f8f9fa;        /* one step from the card: facts box, options box */
-  --wg-card-border: #dee2e6;   /* gallery card outline */
-  --wg-control-border: #868e96; /* form control edges: 3.3:1 on white, 3.15:1 on the options box */
+  --wg-card-2: #f1f3f5;        /* one step from the card: facts box, options box (1.11:1, was #f8f9fa at 1.05:1) */
+  --wg-card-border: #ced4da;   /* gallery card outline (1.49:1 on white, was #dee2e6 at 1.30:1) */
+  --wg-control-border: #7a828a; /* form control edges: 3.9:1 on white, 3.5:1 on the options box */
   --wg-line: #e2e8f0;          /* soft borders, bar tracks, thumbnail placeholders */
   --wg-line-strong: #cbd5e1;   /* dashed and stronger soft borders */
   --wg-hover: #f1f5f9;         /* row hover, header strips */
@@ -19,7 +19,7 @@
   --wg-text-strong: #1e293b;
   --wg-text-2: #334155;
   --wg-text-3: #475569;
-  --wg-muted: #64748b;
+  --wg-muted: #5e6e84;         /* 4.67:1 on the facts and options box */
   --wg-faint: #5b6b80;         /* small secondary text ("ssp.", group titles): 5.1:1 on the recorded cream row */
   --wg-sel-bg: #dcfce7;        /* selected taxon row */
   --wg-sel-hover: #d1fadf;
