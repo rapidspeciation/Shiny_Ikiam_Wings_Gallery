@@ -126,8 +126,9 @@ onMounted(async () => {
         <!-- Light/dark button and settings (image cache): always visible, beside the phone menu button
              below xl, at the far right from xl -->
         <div class="d-flex align-items-center gap-2 ms-auto ms-xl-2 order-xl-last nav-end">
-          <ThemeToggle />
+          <!-- the gear comes and goes with the tab; the theme button stays put at the end -->
           <SettingsMenu :show-image-cache="hasPhotoTools" />
+          <ThemeToggle />
         </div>
 
         <!-- Mobile Toggler -->
