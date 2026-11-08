@@ -1,22 +1,18 @@
 <script setup>
-// Settings button in the top navbar (gear): theme (System, Light, Dark; useTheme.js) and,
-// on the photo tabs, the image cache and the photo shortcuts. Reachable from the sticky navbar at any scroll depth.
+// Settings button in the top navbar (gear): on the photo tabs the image cache and the photo
+// shortcuts; once a theme was picked with the sun/moon button, a way back to the device's setting.
+// Reachable from the sticky navbar at any scroll depth. Hidden when it would be empty.
 import { useTheme } from '../composables/useTheme.js'
 import ImageCacheSettings from './ImageCacheSettings.vue'
 
 defineProps({ showImageCache: { type: Boolean, default: false } })
 
 const { themeMode, setTheme } = useTheme()
-const THEMES = [
-  { value: 'system', label: 'System' },
-  { value: 'light', label: 'Light' },
-  { value: 'dark', label: 'Dark' },
-]
 </script>
 
 <template>
-  <div class="dropdown">
-    <button type="button" class="btn btn-sm btn-outline-light nav-icon-btn" data-bs-toggle="dropdown" data-bs-auto-close="outside"
+  <div v-if="showImageCache || themeMode !== 'system'" class="dropdown">
+    <button type="button" class="btn btn-outline-light nav-icon-btn nav-square" data-bs-toggle="dropdown" data-bs-auto-close="outside"
       aria-expanded="false" aria-label="Settings" title="Settings">
       <!-- gear-fill (Bootstrap Icons, MIT) -->
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
@@ -24,14 +20,11 @@ const THEMES = [
       </svg>
     </button>
     <div class="dropdown-menu dropdown-menu-end p-3 settings-menu">
-      <div class="fw-bold mb-1" id="theme-label">Theme</div>
-      <div class="btn-group btn-group-sm w-100 theme-switch" role="group" aria-labelledby="theme-label">
-        <button v-for="t in THEMES" :key="t.value" type="button" class="btn"
-          :class="themeMode === t.value ? 'btn-primary' : 'btn-outline-secondary'"
-          :aria-pressed="themeMode === t.value" @click="setTheme(t.value)">{{ t.label }}</button>
-      </div>
+      <button v-if="themeMode !== 'system'" type="button" class="btn btn-link btn-sm p-0 text-start" @click="setTheme('system')">
+        Theme: follow system setting
+      </button>
       <template v-if="showImageCache">
-        <hr class="my-3">
+        <hr v-if="themeMode !== 'system'" class="my-3">
         <ImageCacheSettings />
         <!-- mouse and keyboard shortcuts (not on phones) -->
         <div class="d-none d-md-block small">

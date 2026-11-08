@@ -17,6 +17,7 @@ import GalleryOptionsBar from './components/GalleryOptionsBar.vue'
 import TaxonDrawer from './components/TaxonDrawer.vue'
 import PhotoLightbox from './components/PhotoLightbox.vue'
 import SettingsMenu from './components/SettingsMenu.vue'
+import ThemeToggle from './components/ThemeToggle.vue'
 import { useTaxonDrawer } from './composables/useTaxonDrawer.js'
 
 // Pinned in the top navbar so they stay reachable while scrolling through photos.
@@ -122,8 +123,10 @@ onMounted(async () => {
       <div class="container-fluid">
         <a class="navbar-brand" href="#">Ikiam Wings Gallery</a>
 
-        <!-- Settings (theme, image cache): beside the phone menu button below xl, at the far right from xl -->
-        <div class="d-flex align-items-center ms-auto ms-xl-2 order-xl-last nav-end">
+        <!-- Light/dark button and settings (image cache): always visible, beside the phone menu button
+             below xl, at the far right from xl -->
+        <div class="d-flex align-items-center gap-2 ms-auto ms-xl-2 order-xl-last nav-end">
+          <ThemeToggle />
           <SettingsMenu :show-image-cache="hasPhotoTools" />
         </div>
 
@@ -235,16 +238,32 @@ onMounted(async () => {
 .nav-link {
   cursor: pointer;
 }
-/* 1200 to 1399 px: tabs and switches share one row (they wrapped to 87 px) */
+/* 1200 to 1399 px: tabs, switches and the theme and settings buttons share one row (they wrapped to 74 to 87 px) */
 @media (min-width: 1200px) and (max-width: 1399.98px) {
   .navbar-nav .nav-link.px-2 { padding-left: 0.4rem !important; padding-right: 0.4rem !important; }
   .nav-tools { column-gap: 0.6rem !important; }
   .navbar-brand { margin-right: 0.6rem; }
 }
+@media (min-width: 1200px) and (max-width: 1365.98px) {
+  .navbar-nav .nav-link.px-2 { padding-left: 0.3rem !important; padding-right: 0.3rem !important; }
+  .nav-tools { column-gap: 0.45rem !important; }
+  .nav-tools .form-switch { padding-left: 2.25em; }
+  .navbar-brand { margin-right: 0.4rem; }
+  .nav-end { gap: 0.35rem !important; }
+}
 @media (min-width: 1200px) and (max-width: 1279.98px) {
-  .navbar-brand { font-size: 1.125rem; }
-  .navbar-nav .small-text { font-size: 0.875rem; }
+  .navbar-brand { font-size: 1.0625rem; }
+  .navbar-nav .small-text { font-size: 0.85rem; }
   .nav-tools .form-check-label { font-size: 0.8125rem; }
+}
+@media (min-width: 1280px) and (max-width: 1365.98px) {
+  .navbar-nav .small-text { font-size: 0.9rem; }   /* a little room to spare beside the switches */
+}
+/* narrow phones: brand, theme, settings and menu buttons on one row */
+@media (max-width: 399.98px) {
+  .navbar-brand { font-size: 1.1rem; margin-right: 0.5rem; }
+  .nav-end { gap: 0.35rem !important; }
+  .navbar-toggler { padding: 0.25rem 0.5rem; }
 }
 .skip-link {
   position: absolute;
@@ -267,6 +286,16 @@ onMounted(async () => {
   align-items: center;
   justify-content: center;
   padding: 0.25rem 0.45rem;
+}
+/* theme and settings buttons: one square size, hairline edge (as on the Caligo site) */
+.nav-square {
+  width: 2.4rem;
+  height: 2.4rem;
+  padding: 0;
+  --bs-btn-border-color: rgba(255, 255, 255, 0.45);
+}
+@media (pointer: coarse) {
+  .nav-square { width: 2.75rem; height: 2.75rem; }
 }
 /* Slightly smaller text for tabs to fit more on screen */
 .small-text {
