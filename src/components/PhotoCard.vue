@@ -185,8 +185,14 @@ const applyWingFrame = (index) => {
 
 const applyWingFramesAll = () => displayPhotos().forEach((_, i) => applyWingFrame(i))
 
+// Photos that have arrived (by file name): until then the frame is a tinted 3:2 slot.
+const loadedPhotos = reactive({})
+
 // img onload: dimensions are now known, so (re)apply the wing frame if active.
-const onImgLoad = (index) => { if (zoomWings.value) applyWingFrame(index) }
+const onImgLoad = (index, photo) => {
+  if (photo) loadedPhotos[photo.Name] = true
+  if (zoomWings.value) applyWingFrame(index)
+}
 
 const boxesFor = (index) => {
   const st = photoState[index]
@@ -309,7 +315,7 @@ const displayPhotos = (side = props.side) => {
     <h5 class="fw-bold text-center mt-2">{{ item.CAM_ID }}</h5>
 
     <div class="photo-grid-container p-2">
-       <div v-for="(photo, index) in displayPhotos()" :key="index" class="img-wrapper"
+       <div v-for="(photo, index) in displayPhotos()" :key="index" class="img-wrapper" :class="{ 'is-loading': !loadedPhotos[photo.Name] }"
          role="button" tabindex="0" :aria-label="`Enlarge photo: ${photoCaption(photo)}`"
          @pointerdown.capture="onPointerDown" @click="onPhotoClick($event, index, photo)"
          @keydown.enter.prevent="enlarge(index, photo)" @keydown.space.prevent="enlarge(index, photo)">
@@ -325,7 +331,7 @@ const displayPhotos = (side = props.side) => {
              loading="lazy"
              referrerpolicy="no-referrer"
              :alt="photo.Name"
-             @load="onImgLoad(index)"
+             @load="onImgLoad(index, photo)"
              @error="(e) => handleImgError(e, photo.URL_to_view)"
            >
 
@@ -420,6 +426,8 @@ const displayPhotos = (side = props.side) => {
   position: relative;
 }
 .img-wrapper:only-child { grid-column: span 2; }
+/* while a photo streams in, its frame shows as a tinted slot of the usual 3:2 shape */
+.img-wrapper.is-loading { aspect-ratio: 3 / 2; background: var(--wg-line); border-radius: 4px; }
 /* phones: dorsal over ventral at the card's full width (about 340 px each at 390 px) */
 @media (max-width: 575.98px) {
   .photo-grid-container { grid-template-columns: 1fr; padding: 0.25rem 0 !important; }
