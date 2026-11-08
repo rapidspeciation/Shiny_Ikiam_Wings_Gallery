@@ -244,7 +244,7 @@ watch([camid, () => props.prediction], load, { immediate: true })
   min-height: 36px;
   color: var(--wg-text-strong);
 }
-.pred-head:focus-visible { outline: 2px solid #0d6efd; outline-offset: -2px; }
+.pred-head:focus-visible { outline-offset: -2px;   /* inside the header: the shared ring, drawn inset */ }
 .chevron { transition: transform 0.15s ease; color: var(--wg-muted); }
 .chevron.open { transform: rotate(90deg); }
 .pred-tree { text-align: left; }

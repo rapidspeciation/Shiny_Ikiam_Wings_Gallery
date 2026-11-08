@@ -417,7 +417,6 @@ const displayPhotos = () => {
   .photo-grid-container { grid-template-columns: 1fr; padding: 0.25rem 0 !important; }
   .img-wrapper:only-child { grid-column: auto; }
 }
-.img-wrapper:focus-visible { outline: 2px solid var(--bs-primary); outline-offset: 2px; }
 
 /* The zoom-layer wraps img + overlay so panzoom transforms them together. */
 .zoom-layer {

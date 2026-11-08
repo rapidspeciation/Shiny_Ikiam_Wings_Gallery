@@ -973,7 +973,6 @@ const showAbout = ref(false)
 <style scoped>
 .dropzone { border: 2px dashed var(--wg-line-strong); border-radius: 8px; padding: 1.25rem 1rem; text-align: center; cursor: pointer; transition: border-color .15s, background .15s; }
 .dropzone:hover, .dropzone.over { border-color: #0d6efd; background: var(--wg-chip-bg); }
-.dropzone:focus-visible { outline: 2px solid #0d6efd; outline-offset: 2px; }
 .hint-touch { display: none; }
 @media (hover: none) and (pointer: coarse) {
   .hint-pointer { display: none; }
@@ -999,7 +998,6 @@ const showAbout = ref(false)
 .photo-tab { display: flex; align-items: center; gap: .5rem; flex: 0 0 auto; max-width: 260px; padding: .3rem .6rem .3rem .3rem; border: 1px solid var(--bs-border-color); border-radius: 8px; background: var(--wg-card); color: inherit; text-align: left; cursor: pointer; }
 .photo-tab:hover { border-color: var(--wg-faint); }
 .photo-tab.active { border-color: #16a34a; box-shadow: 0 0 0 1px #16a34a; background: var(--wg-sel-bg); }
-.photo-tab:focus-visible { outline: 2px solid #0d6efd; outline-offset: 2px; }
 .photo-tab img { width: 44px; height: 44px; object-fit: cover; border-radius: 5px; flex: 0 0 auto; }
 .pt-text { display: flex; flex-direction: column; min-width: 0; font-size: .75rem; }
 .pt-name { color: var(--wg-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -1030,7 +1028,6 @@ const showAbout = ref(false)
 .mini-bar { position: sticky; top: 56px; z-index: 20; display: flex; align-items: center; gap: .6rem; margin: -.25rem -.25rem .75rem; padding: .4rem .5rem; background: var(--wg-float-bg); border: 1px solid var(--wg-line); border-radius: 8px; box-shadow: 0 2px 8px rgba(15,23,42,.08); }
 .mini-thumb { padding: 0; border: none; background: none; flex: 0 0 auto; }
 .mini-thumb img { width: 48px; height: 48px; object-fit: cover; border-radius: 6px; display: block; }
-.mini-thumb:focus-visible { outline: 2px solid #0d6efd; outline-offset: 2px; }
 .mini-text { min-width: 0; flex: 1 1 auto; }
 .mini-lbl { font-size: .65rem; text-transform: uppercase; letter-spacing: .04em; color: var(--wg-muted); }
 .mini-name { font-size: .88rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }

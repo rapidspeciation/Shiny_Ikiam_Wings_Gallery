@@ -256,7 +256,7 @@ defineExpose({ rows })
 .taxon-tree { font-size: .8rem; line-height: 1.25; }
 .tt-row { display: flex; align-items: center; gap: .35rem; min-height: 20px; padding: 1px 6px; border-radius: 4px; cursor: pointer; }
 .tt-row:hover { background: var(--wg-hover); }
-.tt-row:focus-visible { outline: 2px solid #0d6efd; outline-offset: -2px; }
+.tt-row:focus-visible { outline-offset: -2px;   /* inside the row: the shared ring, drawn inset */ }
 .lv1 { margin-top: 2px; }
 .lv1.k-genus { background: var(--wg-genus); font-weight: 700; color: var(--wg-text-strong); }
 .lv1.k-genus:hover { background: var(--wg-genus-hover); }

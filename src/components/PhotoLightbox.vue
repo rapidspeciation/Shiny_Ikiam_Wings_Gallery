@@ -34,9 +34,8 @@ function onKey(e) {
 </template>
 
 <style scoped>
-.lb-backdrop { position: fixed; inset: 0; z-index: 1070; background: rgba(10, 12, 15, 0.9); display: flex; align-items: center; justify-content: center; padding: 3rem 1rem 1rem; }
+.lb-backdrop { --wg-focus: #fff; position: fixed; inset: 0; z-index: 1070; background: rgba(10, 12, 15, 0.9); display: flex; align-items: center; justify-content: center; padding: 3rem 1rem 1rem; }
 .lb-close { position: absolute; top: 0.75rem; right: 0.75rem; width: 1.5em; height: 1.5em; padding: 0.5rem; opacity: 0.9; }
-.lb-close:focus-visible { outline: 2px solid #fff; outline-offset: 2px; box-shadow: none; }
 .lb-figure { margin: 0; max-width: 100%; max-height: 100%; display: flex; flex-direction: column; align-items: center; gap: 0.4rem; }
 .lb-figure img { max-width: 96vw; max-height: calc(100vh - 6rem); object-fit: contain; border-radius: 4px; background: #111; }
 .lb-figure figcaption { color: #e9ecef; font-size: 0.85rem; }

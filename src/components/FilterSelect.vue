@@ -64,11 +64,6 @@ onUpdated(nameParts)
   border-radius: 0.375rem; /* Bootstrap rounded */
   border: 1px solid var(--wg-control-border);
 }
-/* clear keyboard focus, like Bootstrap's form controls */
-.filter-wrapper:focus-within :deep(.multiselect__tags) {
-  border-color: #86b7fe;
-  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
-}
 /* long names (e.g. "Mechanitis polymnia" in a half-width phone column) wrap instead of being cut */
 :deep(.multiselect__tag) {
   white-space: normal;

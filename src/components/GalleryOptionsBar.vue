@@ -106,8 +106,4 @@ watch(supportsModelConfidence, (ok) => {
   cursor: pointer;
   padding-left: 0.15rem;
 }
-.curation-switch .form-check-input:focus-visible {
-  outline: 2px solid #0d6efd;
-  outline-offset: 2px;
-}
 </style>

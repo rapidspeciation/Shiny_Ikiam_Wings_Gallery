@@ -270,7 +270,6 @@ const altFor = (p, i) => (tab.value === 'field'
 .guides { display: flex; flex-wrap: wrap; align-items: center; gap: .25rem; font-size: .72rem; }
 .src-chip { display: inline-flex; align-items: center; min-height: 22px; padding: 0 7px; font-size: .7rem; text-decoration: none; color: var(--wg-chip-text); background: var(--wg-chip-bg); border: 1px solid var(--wg-chip-border); border-radius: 999px; }
 .src-chip:hover { background: var(--wg-chip-hover); }
-.src-chip:focus-visible, .thumb:focus-visible, .hnav:focus-visible { outline: 2px solid #0d6efd; outline-offset: 2px; }
 .ref-tabs .nav-link { font-size: .85rem; padding: .35rem .75rem; }
 .notes { font-size: .75rem; color: var(--wg-muted); }
 .ref-empty { min-height: 200px; display: flex; align-items: center; justify-content: center; gap: .25rem; background: var(--wg-hover); border-radius: 8px; color: var(--wg-muted); font-size: .85rem; text-align: center; padding: 1rem; }
