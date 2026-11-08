@@ -6,11 +6,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="color-scheme" content="light dark" />
     <title>Ikiam Wings Gallery</title>
-    <!-- theme from the system setting before the first paint (no white flash), and live on change -->
+    <!-- theme before the first paint (no flash): a stored choice (Light or Dark) wins, otherwise the
+         system setting, followed live while on System. src/composables/useTheme.js changes it later. -->
     <script>
       (function () {
+        var root = document.documentElement
         var mq = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null
-        function apply() { document.documentElement.setAttribute('data-bs-theme', mq && mq.matches ? 'dark' : 'light') }
+        var mode = 'system'
+        try { mode = localStorage.getItem('wgTheme') || 'system' } catch (e) {}
+        if (mode !== 'light' && mode !== 'dark') mode = 'system'
+        root.setAttribute('data-wg-theme-mode', mode)
+        function apply() {
+          var m = root.getAttribute('data-wg-theme-mode')
+          var t = m === 'light' || m === 'dark' ? m : (mq && mq.matches ? 'dark' : 'light')
+          root.setAttribute('data-bs-theme', t)
+          root.style.colorScheme = t
+        }
         apply()
         if (mq && mq.addEventListener) mq.addEventListener('change', apply)
         else if (mq && mq.addListener) mq.addListener(apply)

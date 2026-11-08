@@ -1,7 +1,7 @@
 /*
   Shared colour tokens, one per pattern, for the light and the dark theme.
-  index.html sets data-bs-theme on <html> from prefers-color-scheme before the first
-  paint and follows later changes, so Bootstrap's own components switch too.
+  index.html sets data-bs-theme on <html> before the first paint, from the navbar's theme
+  choice (System, Light, Dark; useTheme.js), so Bootstrap's own components switch too.
   Components use these tokens (or Bootstrap's --bs-* variables) instead of fixed greys.
 */
 :root,
@@ -37,6 +37,7 @@
   --wg-nav-border: transparent;
   --wg-float-bg: rgba(255, 255, 255, 0.96);
   --wg-shadow: rgba(15, 23, 42, 0.12);
+  color-scheme: light;         /* Light chosen on a dark system: light scrollbars and form controls */
 }
 
 [data-bs-theme="dark"] {
