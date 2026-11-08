@@ -151,7 +151,7 @@ onMounted(async () => {
               <input class="form-check-input" type="checkbox" role="switch" id="navZoomWings" v-model="zoomWings">
               <label class="form-check-label small text-light" for="navZoomWings">Zoom to wings</label>
             </div>
-            <div class="form-check form-switch mb-0" title="Wing outlines from the Database Manager's readings: forewings orange, hindwings blue">
+            <div class="form-check form-switch mb-0" title="Forewings orange, hindwings blue">
               <input class="form-check-input" type="checkbox" role="switch" id="navShowOutlines" v-model="showOutlines">
               <label class="form-check-label small text-light" for="navShowOutlines">
                 Wing outlines<span v-if="showOutlines && outlineStatus === 'loading'" class="text-white-50"> (loading&hellip;)</span><span v-else-if="showOutlines && ['empty', 'error'].includes(outlineStatus)" class="text-white-50"> (not available)</span>
