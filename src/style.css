@@ -118,6 +118,9 @@ body {
   border-color: var(--wg-focus);
 }
 .wg-navbar { --wg-focus: #fff; }
+/* menus that open from the navbar sit on the page colour, so they take the page ring back */
+.wg-navbar .dropdown-menu { --wg-focus: #0d6efd; }
+[data-bs-theme="dark"] .wg-navbar .dropdown-menu { --wg-focus: #6ea8fe; }
 /* vue-multiselect: the ring goes round the visible box, not its hidden search input */
 .multiselect:focus-visible,
 .multiselect :focus-visible { outline: none; }

@@ -121,6 +121,7 @@ function onKey(e) {
 .lb-btn { padding: 0.1rem 0.55rem; font-size: 0.8rem; }
 .lb-link { color: #9ec5fe; }
 .lb-link:hover { color: #cfe2ff; }
+@media (pointer: coarse) { .lb-link { display: inline-flex; align-items: center; min-height: 44px; } }
 .lb-nav { position: absolute; top: 50%; transform: translateY(-50%); width: 44px; height: 44px; border: 1px solid rgba(255, 255, 255, 0.5); border-radius: 50%; background: rgba(20, 23, 27, 0.7); color: #fff; font-size: 1.8rem; line-height: 1; padding: 0 0 0.2rem; display: flex; align-items: center; justify-content: center; z-index: 2; }
 .lb-nav:hover { background: rgba(50, 55, 62, 0.9); }
 .lb-prev { left: 0.6rem; }
