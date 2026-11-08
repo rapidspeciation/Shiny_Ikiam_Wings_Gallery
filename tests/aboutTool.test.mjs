@@ -38,7 +38,7 @@ test('About changelog has one entry per date and describes the spatial location 
   assert.equal(new Set(dates).size, dates.length, 'one changelog entry per date')
   assert.equal(dates[0], '27 October 2026')
   const sex = log.split('20 October 2026:</strong>')[1].split('14 October 2026:</strong>')[0].replace(/\s+/g, ' ')
-  for (const copy of ['from 92.3% to 94.0%', 'Heliconiini 86.6% to 91.8%', '1,828 predictions are now Supported (was 1,592)']) assert.ok(sex.includes(copy), copy)
+  for (const copy of ['from 92.3% to 94.0%', 'Heliconiini 86.6% to 91.8%', '1,828 predictions are no longer marked Uncertain (was 1,592)']) assert.ok(sex.includes(copy), copy)
   // reserved for model changes: no interface-only entries
   assert.doesNotMatch(log, /shared as links|Field photos now|tapping a collapsed|agreement filters|confidence sorting|zoom-to-wings/)
   const first = log.split('27 September 2026:</strong>')[1].split('26 September 2026:</strong>')[0].replace(/\s+/g, ' ')
@@ -55,6 +55,12 @@ test('About changelog has one entry per date and describes the spatial location 
   for (const copy of ['about 8,000 moth species', 'recorded before 12 February 2026', '85.15% (Top-5: 96.86%)',
     'unchanged at 85.74%', '87.93% with the country', '88.66% with coordinates']) assert.ok(moths.includes(copy), copy)
   assert.doesNotMatch(moths, /—|licen[cs]e/i)
+})
+
+test('the Supported label is gone: About and the changelog explain only Uncertain', () => {
+  const about = readFileSync('src/components/AIIdTab.vue', 'utf8').split('About this tool')[1]
+  assert.doesNotMatch(about, /Supported/)
+  assert.match(about.replace(/\s+/g, ' '), /A prediction is marked <strong>Uncertain<\/strong> when its confidence is below 85%/)
 })
 
 test('About text does not expose internal model names (links excluded)', () => {

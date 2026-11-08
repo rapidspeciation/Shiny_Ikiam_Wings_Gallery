@@ -25,7 +25,7 @@ test('sex filters compare predictions with the recorded sex', () => {
   assert.equal(matchesSexFilter({ Sex: 'NA' }, { sex: 'female', confidence: 0.9 }, 'Sex matches'), false)
 })
 
-test('sex confidence sorting keeps Supported predictions above Uncertain predictions', () => {
+test('sex confidence sorting keeps confident predictions above Uncertain predictions', () => {
   const items = [
     { CAM_ID: 'CAM-A', Species: 'Species alpha' },
     { CAM_ID: 'CAM-B', Species: 'Species beta' },
