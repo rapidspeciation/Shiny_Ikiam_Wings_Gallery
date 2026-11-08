@@ -173,7 +173,7 @@ onBeforeUnmount(() => { window.removeEventListener('resize', onResize); destroyZ
 .mask-rect.used { stroke: #16a34a; stroke-width: 3; fill: rgba(22,163,74,.06); }
 .frame-btn { position: absolute; bottom: 8px; right: 8px; z-index: 4; box-shadow: 0 1px 4px rgba(0,0,0,.25); }
 .mask-lbl { position: absolute; transform: translateY(-100%); pointer-events: auto; border: none; background: #6b7280; color: #fff; font-size: 10px; font-weight: 700; line-height: 1.2; padding: 0 4px; border-radius: 3px 3px 3px 0; cursor: pointer; white-space: nowrap; }
-.mask-lbl.used { background: #16a34a; }
+.mask-lbl.used { background: #15803d; }   /* white 10 px text at 5:1 */
 .mask-loading { position: absolute; bottom: 8px; left: 8px; z-index: 4; background: rgba(15,23,42,.85); color: #fff; font-size: .75rem; padding: 3px 8px; border-radius: 6px; display: flex; align-items: center; gap: .4rem; }
 @media (max-width: 575px) { .ai-photo { height: 300px; } }
 </style>
