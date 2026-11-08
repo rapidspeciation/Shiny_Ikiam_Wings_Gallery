@@ -11,7 +11,7 @@
 // Results view, per photo (photos switch via tabs): the "Where taken?" chips
 // (AILocationChips), a low-confidence banner and the shared taxonomy table
 // (TaxonTree: genus > species > subspecies with every taxon browsable), the
-// uploaded photo (sticky), and a reference panel for the selected taxon with
+// uploaded photo (sticky; on phones below the predictions), and a reference panel for the selected taxon with
 // iNaturalist field photos and museum photos (AIReferencePanel; a genus shows its
 // top species). Phones get a sticky mini-bar and a bottom sheet that pins the
 // user's photo above the reference photos.
@@ -1013,10 +1013,16 @@ const showAbout = ref(false)
 .pt-name { color: var(--wg-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .pt-top { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-/* results grid: phones stack the photo, then the candidates (reference opens in a sheet) */
-.res-grid { display: grid; gap: 1rem; grid-template-columns: minmax(0, 1fr); grid-template-areas: "photo" "cands"; }
+/* results grid: phones show the predictions first, then where taken, then the photo
+   (the mini-bar thumbnail scrolls to it; the reference opens in a sheet) */
+.res-grid { display: grid; gap: 1rem; grid-template-columns: minmax(0, 1fr); grid-template-areas: "cands" "photo"; }
 .area-cands { grid-area: cands; min-width: 0; }
 .cands-main { margin-top: 1rem; min-width: 0; }
+@media (max-width: 767.98px) {
+  .area-cands { display: flex; flex-direction: column; }
+  .cands-main { order: -1; margin-top: 0; }
+  .cands-side { margin-top: 1rem; }
+}
 .area-photo { grid-area: photo; min-width: 0; scroll-margin-top: 130px; }
 .area-ref { grid-area: ref; min-width: 0; }
 /* medium: photo and reference side by side, predictions below */
