@@ -991,6 +991,12 @@ const showAbout = ref(false)
 .preview-grid.small { grid-template-columns: repeat(auto-fill, 64px); }
 .preview-grid.small .preview img { height: 48px; }
 .preview-grid.small .preview .rm { width: 20px; height: 20px; font-size: .8rem; }
+/* touch: the remove button keeps its look but takes taps over 44 x 44 px */
+@media (pointer: coarse) {
+  .preview { overflow: visible; }
+  .preview img { border-radius: 5px; }
+  .preview .rm::after { content: ""; position: absolute; inset: calc((100% - 44px) / 2); }
+}
 .identify-btn { min-width: 12rem; }
 .mask-bar { margin-bottom: .35rem; }
 .life-note { font-size: .78rem; color: var(--wg-text-2); background: var(--wg-hover); border: 1px solid var(--wg-line-strong); border-radius: 6px; padding: .35rem .55rem; margin-bottom: .45rem; }

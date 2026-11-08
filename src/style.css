@@ -213,6 +213,8 @@ body {
   }
   .multiselect__tags { display: flex; align-items: center; flex-wrap: wrap; }
   .navbar-toggler { min-width: 44px; min-height: 44px; }
+  /* the phone menu's tab links are its only way between tabs */
+  .navbar-nav .nav-link { min-height: 44px; display: flex; align-items: center; }
   .form-check {
     min-height: 44px;
     display: inline-flex;

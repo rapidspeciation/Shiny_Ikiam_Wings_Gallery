@@ -108,7 +108,7 @@ function onKey(e) {
 
 <style scoped>
 .lb-backdrop { --wg-focus: #fff; position: fixed; inset: 0; z-index: 1070; background: rgba(10, 12, 15, 0.9); display: flex; align-items: center; justify-content: center; padding: 3rem 1rem 1rem; }
-.lb-close { position: absolute; top: 0.75rem; right: 0.75rem; width: 1.5em; height: 1.5em; padding: 0.5rem; opacity: 0.9; z-index: 2; }
+.lb-close { position: absolute; top: 0.5rem; right: 0.5rem; width: 28px; height: 28px; padding: 8px; background-size: 18px; opacity: 0.9; z-index: 2; }   /* 44 x 44 px */
 .lb-figure { margin: 0; max-width: 100%; max-height: 100%; display: flex; flex-direction: column; align-items: center; gap: 0.4rem; }
 .lb-stage { --lb-h: calc(100vh - 7rem); display: flex; max-width: 96vw; max-height: var(--lb-h); }
 @supports (height: 100dvh) { .lb-stage { --lb-h: calc(100dvh - 7rem); } }
