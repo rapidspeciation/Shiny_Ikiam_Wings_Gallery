@@ -111,6 +111,11 @@ body {
 .form-check-input:focus {
   box-shadow: none;
 }
+/* a focused field's own edge in the ring colour (Bootstrap's #86b7fe was 2.1:1 on white) */
+.form-select:focus,
+.form-control:focus {
+  border-color: var(--wg-focus);
+}
 .wg-navbar { --wg-focus: #fff; }
 /* vue-multiselect: the ring goes round the visible box, not its hidden search input */
 .multiselect:focus-visible,
