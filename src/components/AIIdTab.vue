@@ -29,6 +29,7 @@ import { suggestLocations, speciesProbs, countryList, countryName, checklistCoun
 import { getGeoPrior, getCountryPresence, resolvePrior, cachedPrior, suggestEcRegion } from '../utils/geoSpatial.js'
 import { readGpsFromFile } from '../utils/exifGps.js'
 import { getChecklist } from '../composables/useCurationData.js'
+import { useMediaQuery } from '../composables/useMediaQuery.js'
 
 // ---- intake ----
 const items = ref([])              // { id, name, previewUrl, blob, status, error }
@@ -379,6 +380,8 @@ function alreadyDone(id) { const r = byId(id); return !!(r && !r.loading && !r.e
 // after adding one more photo doesn't re-run the model on the earlier ones.
 const pendingItems = computed(() => validItems.value.filter((it) => !alreadyDone(it.id)))
 // every photo identified and nothing waiting: the upload card folds into one row
+// touch screens keep a direct camera button in the folded row
+const isTouch = useMediaQuery('(hover: none) and (pointer: coarse)')
 const uploadFolded = computed(() => results.value.length > 0 && !pendingItems.value.length && !running.value && !preparing.value)
 
 async function run() {
@@ -583,6 +586,7 @@ const showAbout = ref(false)
           </div>
         </div>
         <button type="button" class="btn btn-outline-primary btn-sm" @click="fileInput.click()">Add photos</button>
+        <button v-if="isTouch" type="button" class="btn btn-outline-secondary btn-sm" @click="cameraInput.click()">Take photo</button>
         <span class="small text-success-emphasis">&#10003; Identified</span>
         <button class="btn btn-link btn-sm p-0 ms-auto text-nowrap" @click="clearAll">Clear photos</button>
       </div>
