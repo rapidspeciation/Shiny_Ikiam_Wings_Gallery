@@ -87,7 +87,8 @@ const recordedLabel = computed(() => recordedTaxon.value || 'No ID recorded')
         <div class="drawer-head">
           <div class="drawer-title">
             <span class="fw-semibold">Compare {{ item.CAM_ID }}</span>
-            <span class="text-muted small">Recorded: <em>{{ recordedLabel }}</em></span>
+            <!-- a recorded ID is the first Show chip; only its absence is said here -->
+            <span v-if="!recordedTaxon" class="text-muted small">{{ recordedLabel }}</span>
           </div>
           <button type="button" class="btn-close" aria-label="Close" @click="closeDrawer"></button>
         </div>
