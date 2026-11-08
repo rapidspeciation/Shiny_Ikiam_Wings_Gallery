@@ -1,6 +1,7 @@
 <script setup>
 import { computed, watch } from 'vue'
 import { useGlobalGalleryOptions } from '../composables/useGlobalGalleryOptions.js'
+import { useMediaQuery } from '../composables/useMediaQuery.js'
 
 const props = defineProps({ currentTab: { type: String, default: '' } })
 
@@ -24,10 +25,26 @@ watch(supportsModelConfidence, (ok) => {
   if (!ok && ['ModelConfidence', 'SexConfidence'].includes(sortBy.value)) sortBy.value = DEFAULT_SORT
 }, { immediate: true })
 
+// Phones: the box folds into one line that states the current choice, so the taxon
+// filters and Show Photos come up into the first screen.
+const isPhone = useMediaQuery('(max-width: 575.98px)')
+const SORT_LABELS = { Preservation_date: 'Date', CAM_ID: 'CAMID', 'Row Number': 'Row #', ModelConfidence: 'Model confidence (taxonomy)', SexConfidence: 'Model confidence (sex)' }
+const summary = computed(() => {
+  const order = sortBy.value === 'Preservation_date'
+    ? (sortOrder.value === 'desc' ? 'newest first' : 'oldest first')
+    : (sortOrder.value === 'desc' ? 'descending' : 'ascending')
+  const parts = [`${SORT_LABELS[sortBy.value] || sortBy.value}, ${order}`, side.value]
+  if (onlyPhotos.value) parts.push('Has Photos')
+  if (onePerSubspecies.value) parts.push('Unique Subsp')
+  if (showBoxes.value) parts.push('Wing boxes')
+  return parts.join(' · ')
+})
 </script>
 
 <template>
-  <div class="row g-2 mb-3 align-items-end wg-box p-3 rounded border">
+  <component :is="isPhone ? 'details' : 'div'" class="opt-box wg-box rounded border" :class="isPhone ? 'opt-folded' : 'p-3'">
+    <summary v-if="isPhone" class="opt-summary"><span class="fw-bold">View:</span> <span class="opt-summary-text">{{ summary }}</span></summary>
+    <div class="row g-2 align-items-end m-0" :class="{ 'opt-fields': isPhone }">
     <!-- phones always show one column (PhotoGrid), so Columns is hidden there and Side gets a full row -->
     <div class="d-none d-md-block col-md-2">
       <label class="form-label small fw-bold" for="opt-columns">Columns</label>
@@ -80,10 +97,42 @@ watch(supportsModelConfidence, (ok) => {
       </div>
       <span id="chkShowBoxesHelp" class="visually-hidden">Draw detected wing bounding boxes over each photo</span>
     </div>
-  </div>
+    </div>
+  </component>
 </template>
 
 <style scoped>
+/* the same place and inner spacing as the former .row.g-2.p-3 box */
+.opt-box { margin: -0.5rem -0.25rem 1rem; }
+.opt-folded { margin: 0 0 0.75rem; }
+.opt-summary {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.45rem 2.25rem 0.45rem 0.75rem;
+  position: relative;
+  cursor: pointer;
+  list-style: none;
+  font-size: 0.875rem;
+}
+.opt-summary::-webkit-details-marker { display: none; }
+.opt-summary-text { min-width: 0; }
+/* the form-select chevron, turned when open */
+.opt-summary::after {
+  content: "";
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  width: 16px;
+  height: 12px;
+  margin-top: -6px;
+  background: var(--wg-chevron) center / 16px 12px no-repeat;
+  transition: transform 0.15s ease;
+}
+details[open] > .opt-summary::after { transform: rotate(180deg); }
+details[open] > .opt-summary { border-bottom: 1px solid var(--bs-border-color); }
+.opt-fields { padding: 0.5rem 0.75rem 0.75rem; }
 .curation-legend {
   /* legend resets to block/auto width; keep it inline-sized + un-bold-large */
   font-size: 0.75rem;

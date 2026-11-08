@@ -32,6 +32,7 @@
   --wg-chip-border: #cfe0ff;
   --wg-chip-text: #0d6efd;
   --wg-focus: #0d6efd;         /* keyboard focus ring, 4.5:1 on white */
+  --wg-chevron: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");   /* Bootstrap's form-select caret */
   --wg-nav: #212529;
   --wg-nav-border: transparent;
   --wg-float-bg: rgba(255, 255, 255, 0.96);
@@ -65,6 +66,7 @@
   --wg-chip-border: #3b6fc0;
   --wg-chip-text: #a5c8ff;
   --wg-focus: #6ea8fe;         /* 7:1 on the page, 5.6:1 on the facts box */
+  --wg-chevron: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23dee2e6' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
   --wg-nav: #2b3035;
   --wg-nav-border: #3e454e;
   --wg-float-bg: rgba(35, 39, 44, 0.96);
