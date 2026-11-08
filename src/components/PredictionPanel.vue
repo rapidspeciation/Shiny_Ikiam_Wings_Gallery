@@ -244,6 +244,7 @@ watch([camid, () => props.prediction], load, { immediate: true })
   min-height: 36px;
   color: var(--wg-text-strong);
 }
+@media (pointer: coarse) { .pred-head { min-height: 44px; } }
 .pred-head:focus-visible { outline-offset: -2px;   /* inside the header: the shared ring, drawn inset */ }
 .chevron { transition: transform 0.15s ease; color: var(--wg-muted); }
 .chevron.open { transform: rotate(90deg); }

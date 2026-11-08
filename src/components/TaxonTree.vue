@@ -219,7 +219,7 @@ defineExpose({ rows })
 </script>
 
 <template>
-  <div ref="treeEl" class="taxon-tree" :class="{ 'with-thumbs': thumbs }" role="tree" :aria-label="label">
+  <div ref="treeEl" class="taxon-tree" :class="{ 'with-thumbs': thumbs, 'with-badges': badges }" role="tree" :aria-label="label">
     <div v-for="r in rows" :key="r.key" :data-key="r.key" role="treeitem"
       class="tt-row" :class="[`lv${r.level}`, `k-${r.kind}`, {
         sel: isTaxonRow(r) && r.taxon === selected, extra: r.extra, 'rec-hit': isTaxonRow(r) && isRecorded(r) }]"
@@ -236,14 +236,18 @@ defineExpose({ rows })
             @error="fallbackToDirect($event)" />
         </span>
         <span v-else-if="thumbs && r.kind !== 'subspecies'" class="tt-thumb empty" aria-hidden="true"></span>
-        <span class="tt-name">
-          <template v-if="r.rank === 'genus'">{{ r.taxon }}</template>
-          <template v-else-if="r.rank === 'species'"><em>{{ r.taxon }}</em></template>
-          <template v-else><span class="ssp">ssp.</span> <em>{{ epithet(r.taxon) }}</em></template>
+        <span class="tt-label">
+          <span class="tt-name">
+            <template v-if="r.rank === 'genus'">{{ r.taxon }}</template>
+            <template v-else-if="r.rank === 'species'"><em>{{ r.taxon }}</em></template>
+            <template v-else><span class="ssp">ssp.</span> <em>{{ epithet(r.taxon) }}</em></template>
+          </span>
+          <span v-if="isRecorded(r) || isPredicted(r) || r.oor" class="tt-badges">
+            <span v-if="isRecorded(r)" class="tt-badge rec" title="Recorded ID in the database">recorded</span>
+            <span v-if="isPredicted(r)" class="tt-badge pred" title="Model's top prediction">predicted</span>
+            <span v-if="r.oor" class="tt-badge oor" :title="oorTitle">{{ oorLabel }}</span>
+          </span>
         </span>
-        <span v-if="isRecorded(r)" class="tt-badge rec" title="Recorded ID in the database">recorded</span>
-        <span v-if="isPredicted(r)" class="tt-badge pred" title="Model's top prediction">predicted</span>
-        <span v-if="r.oor" class="tt-badge oor" :title="oorTitle">{{ oorLabel }}</span>
         <span class="tt-bar" aria-hidden="true"><span class="fill" :style="{ width: barW(r.prob) }"></span></span>
         <span class="tt-pct">{{ pct(r.prob) }}</span>
       </template>
@@ -271,7 +275,9 @@ defineExpose({ rows })
 .tt-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .with-thumbs .tt-row { min-height: 32px; }
 .with-thumbs .k-subspecies, .with-thumbs .tt-row:not(.k-genus):not(.k-species) { min-height: 24px; }
+.tt-label { flex: 1 1 auto; min-width: 0; display: flex; align-items: center; gap: .35rem; }
 .tt-name { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tt-badges { flex: 0 0 auto; display: flex; gap: .35rem; }
 .ssp { color: var(--wg-faint); font-size: .9em; }
 .extra .tt-name { color: var(--wg-muted); }
 .tt-badge { flex: 0 0 auto; font-size: .58rem; font-weight: 700; text-transform: uppercase; letter-spacing: .03em; border-radius: 4px; padding: 0 4px; border: 1px solid; }
@@ -288,4 +294,13 @@ defineExpose({ rows })
 .k-all-species, .k-all-subspecies, .k-more-genera { min-height: 22px; }
 .k-all-species { padding-left: calc(6px + 1rem + 14px + .35rem); }
 .k-all-subspecies { padding-left: calc(6px + 2.3rem); }
+/* phones: the badges go under the name, so a long name is not cut to "M..." */
+@media (max-width: 575.98px) {
+  .with-badges .tt-label { flex-direction: column; align-items: flex-start; gap: 1px; }
+  .with-badges .tt-label .tt-name { max-width: 100%; }
+}
+/* touch screens: every row, the "+ all" rows too, is a 44 px tap target */
+@media (pointer: coarse) {
+  .taxon-tree .tt-row, .taxon-tree.with-thumbs .tt-row { min-height: 44px; }
+}
 </style>
