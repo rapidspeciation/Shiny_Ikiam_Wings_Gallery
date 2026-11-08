@@ -6,10 +6,11 @@
 */
 :root,
 [data-bs-theme="light"] {
-  --wg-page: #f8f9fa;          /* page behind the cards */
+  --wg-page: #fff;             /* page behind the cards (white, as before the themes) */
   --wg-card: #fff;             /* gallery card, panels, drawers */
   --wg-card-2: #f8f9fa;        /* one step from the card: facts box, options box */
   --wg-card-border: #dee2e6;   /* gallery card outline */
+  --wg-control-border: #dee2e6; /* form control edges */
   --wg-line: #e2e8f0;          /* soft borders, bar tracks, thumbnail placeholders */
   --wg-line-strong: #cbd5e1;   /* dashed and stronger soft borders */
   --wg-hover: #f1f5f9;         /* row hover, header strips */
@@ -41,6 +42,7 @@
   --wg-card: #23272c;
   --wg-card-2: #2e3339;
   --wg-card-border: #6c757d;   /* >= 3:1 against the page */
+  --wg-control-border: #7a828a;
   --wg-line: #495057;
   --wg-line-strong: #5c636a;
   --wg-hover: #30363d;
@@ -124,6 +126,14 @@ body {
 .multiselect__option--highlight,
 .multiselect__option--highlight::after {
   color: #0b2e1f;
+}
+
+/* form control edges in dark: Bootstrap's #495057 was 1.6:1 on the options box */
+[data-bs-theme="dark"] .form-select,
+[data-bs-theme="dark"] .form-control,
+[data-bs-theme="dark"] .form-check-input:not(:checked),
+[data-bs-theme="dark"] .multiselect__tags {
+  border-color: var(--wg-control-border);
 }
 
 /* outline buttons (location chips, quick chips): Bootstrap's grey was 3.6:1 on the dark page */

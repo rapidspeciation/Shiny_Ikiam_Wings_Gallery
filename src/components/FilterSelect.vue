@@ -62,7 +62,7 @@ onUpdated(nameParts)
   min-height: 38px;
   padding-top: 6px;
   border-radius: 0.375rem; /* Bootstrap rounded */
-  border: 1px solid var(--bs-border-color);
+  border: 1px solid var(--wg-control-border);
 }
 /* clear keyboard focus, like Bootstrap's form controls */
 .filter-wrapper:focus-within :deep(.multiselect__tags) {
