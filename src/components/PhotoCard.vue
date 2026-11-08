@@ -322,7 +322,7 @@ const displayPhotos = (side = props.side) => {
        <div v-for="(photo, index) in displayPhotos()" :key="index" class="img-wrapper" :class="{ 'is-loading': !loadedPhotos[photo.Name] }"
          role="button" tabindex="0" :aria-label="`Enlarge photo: ${photoCaption(photo)}`"
          @pointerdown.capture="onPointerDown" @click="onPhotoClick($event, index, photo)"
-         @keydown.enter.prevent="enlarge(index, photo)" @keydown.space.prevent="enlarge(index, photo)">
+         @keydown.enter.self.prevent="enlarge(index, photo)" @keydown.space.self.prevent="enlarge(index, photo)">
          <!-- zoom-layer holds img + overlay together so the SVG zooms WITH the image -->
          <!-- a HEIC photo that could not be converted: placeholder with a link to the file -->
          <div v-if="failedHeic[photo.Name]" class="photo-unavailable small" @click.stop>
