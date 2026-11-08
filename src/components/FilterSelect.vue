@@ -57,13 +57,7 @@ onUpdated(nameParts)
 </template>
 
 <style scoped>
-/* Bootstrap alignment fix for VueMultiselect */
-:deep(.multiselect__tags) {
-  min-height: 38px;
-  padding-top: 6px;
-  border-radius: 0.375rem; /* Bootstrap rounded */
-  border: 1px solid var(--wg-control-border);
-}
+/* form-select metrics for the multiselect live in src/style.css */
 /* long names (e.g. "Mechanitis polymnia" in a half-width phone column) wrap instead of being cut */
 :deep(.multiselect__tag) {
   white-space: normal;

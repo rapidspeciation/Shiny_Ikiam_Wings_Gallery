@@ -126,12 +126,42 @@ body {
   display: none;
 }
 
-/* ---- vue-multiselect follows the theme (its stylesheet uses fixed whites) ---- */
-/* its placeholder grey ("All") was 2.3:1 on white */
-.multiselect__placeholder,
-.multiselect__input::placeholder {
-  color: var(--bs-secondary-color);
+/* ---- vue-multiselect looks like Bootstrap's .form-select (one dropdown look) ---- */
+.multiselect { min-height: 38px; color: var(--bs-body-color); }
+.multiselect__tags {
+  min-height: 38px;
+  padding: 0.375rem 2.25rem 0.375rem 0.75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  border: 1px solid var(--wg-control-border);
+  border-radius: 0.375rem;
 }
+.multiselect__placeholder,
+.multiselect__input,
+.multiselect__single {
+  font-size: 1rem;
+  line-height: 1.5;
+  min-height: 0;
+  margin-bottom: 0;
+  padding: 0;
+}
+/* "All" is the current value, not a hint: body colour, like the native selects */
+.multiselect__placeholder { color: var(--bs-body-color); padding-top: 0; }
+.multiselect__input::placeholder { color: var(--bs-secondary-color); }
+.multiselect__tag { margin-top: 1px; margin-bottom: 1px; }
+/* Bootstrap's chevron instead of the filled triangle */
+.multiselect__select {
+  top: 0;
+  right: 0;
+  width: 2.25rem;
+  height: 100%;
+  max-height: 38px;
+  background: var(--wg-chevron) center / 16px 12px no-repeat;
+}
+.multiselect__select::before { display: none; }
+@media (pointer: coarse) { .multiselect__select { max-height: 44px; } }
+
+/* ---- vue-multiselect follows the theme (its stylesheet uses fixed whites) ---- */
 [data-bs-theme="dark"] .multiselect,
 [data-bs-theme="dark"] .multiselect__input,
 [data-bs-theme="dark"] .multiselect__single {
@@ -144,7 +174,6 @@ body {
 [data-bs-theme="dark"] .multiselect__content-wrapper {
   background: var(--bs-body-bg);
 }
-[data-bs-theme="dark"] .multiselect__tags,
 [data-bs-theme="dark"] .multiselect__content-wrapper {
   border-color: var(--bs-border-color);
 }
