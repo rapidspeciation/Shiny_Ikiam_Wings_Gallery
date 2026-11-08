@@ -208,6 +208,12 @@ body {
   border-color: var(--wg-control-border);
 }
 
+/* ticked boxes and switches in dark: #0d6efd was 2.8:1 on the options box, #3d8bfd is 3.8:1 (white tick 3.3:1) */
+[data-bs-theme="dark"] .form-check-input:checked {
+  background-color: #3d8bfd;
+  border-color: #3d8bfd;
+}
+
 /* outline buttons (location chips, quick chips): Bootstrap's grey was 3.6:1 on the dark page */
 [data-bs-theme="dark"] .btn-outline-secondary {
   --bs-btn-color: #c3c9cf;
