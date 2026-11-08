@@ -301,6 +301,8 @@ defineExpose({ rows })
 }
 /* touch screens: every row, the "+ all" rows too, is a 44 px tap target */
 @media (pointer: coarse) {
-  .taxon-tree .tt-row, .taxon-tree.with-thumbs .tt-row { min-height: 44px; }
+  .taxon-tree .tt-row, .taxon-tree.with-thumbs .tt-row,
+  .taxon-tree.with-thumbs .k-subspecies, .taxon-tree.with-thumbs .tt-row:not(.k-genus):not(.k-species),
+  .taxon-tree .k-all-species, .taxon-tree .k-all-subspecies, .taxon-tree .k-more-genera { min-height: 44px; }
 }
 </style>
