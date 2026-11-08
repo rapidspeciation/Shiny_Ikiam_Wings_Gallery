@@ -47,6 +47,7 @@ export function formatSexPrediction(value, recordedSpecies = '') {
   const conditioned = comparableSpecies(prediction.species)
   const speciesStillMatches = !conditioned || recorded === conditioned
   const supported = prediction.supported && speciesStillMatches
-  const evidence = supported ? 'Supported' : 'Uncertain'
-  return { ...prediction, supported, text: `Predicted sex: ${sex} · ${confidence} · ${evidence}` }
+  // only the state the reader must notice is named: an unsupported prediction is "Uncertain"
+  const evidence = supported ? '' : ' · Uncertain'
+  return { ...prediction, supported, text: `Predicted sex: ${sex} · ${confidence}${evidence}` }
 }

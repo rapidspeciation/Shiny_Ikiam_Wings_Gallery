@@ -4,16 +4,17 @@ import { readFileSync } from 'node:fs'
 import { formatSexPrediction, matchesSexFilter } from '../src/utils/sexPrediction.js'
 import { sortItems } from '../src/utils/galleryPipeline.js'
 
-test('sex predictions use the two-label support contract', () => {
+test('sex predictions name only the uncertain state (supported ones carry no label)', () => {
   assert.equal(
     formatSexPrediction({ sex: 'female', confidence: 0.87, supported: true, species: 'Ithomia salapia' }, 'Ithomia salapia').text,
-    'Predicted sex: Female · 87% · Supported'
+    'Predicted sex: Female · 87%'
   )
   assert.equal(
     formatSexPrediction({ sex: 'male', confidence: 0.99, supported: true, species: 'Hamadryas laodamia' }, 'Ithomia salapia').text,
     'Predicted sex: Male · 99% · Uncertain'
   )
   assert.equal(formatSexPrediction({ sex: 'male', confidence: 0.79, supported: true }, '').supported, false)
+  assert.equal(formatSexPrediction({ sex: 'male', confidence: 0.79, supported: true }, '').text, 'Predicted sex: Male · 79% · Uncertain')
 })
 
 test('sex filters compare predictions with the recorded sex', () => {
@@ -59,7 +60,7 @@ test('confidences that round to 100% read ">99%", not certainty', async () => {
   assert.equal(fmtPct(0.994), '99%')
   assert.equal(
     formatSexPrediction({ sex: 'male', confidence: 0.998, supported: true, species: 'Ithomia salapia' }, 'Ithomia salapia').text,
-    'Predicted sex: Male · >99% · Supported'
+    'Predicted sex: Male · >99%'
   )
 })
 
