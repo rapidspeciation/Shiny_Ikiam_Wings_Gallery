@@ -9,7 +9,8 @@ import AIPhotoView from './AIPhotoView.vue'
 import AIReferencePanel from './AIReferencePanel.vue'
 import { useTaxonDrawer } from '../composables/useTaxonDrawer.js'
 import { getBoxes } from '../composables/useCurationData.js'
-import { getProxiedUrl, notifyTierFailed, isHeicName } from '../utils/imageProxy.js'
+import { getProxiedUrl, notifyTierFailed, isHeicName, retryUrl } from '../utils/imageProxy.js'
+import HeicPlaceholder from './HeicPlaceholder.vue'
 import { taxonInfo } from '../utils/aiCandidates.js'
 import { genusMembers, rankOf } from '../utils/taxonTree.js'
 
@@ -43,14 +44,18 @@ function specimenPhotos(it) {
   return list.filter((p) => p.original).sort((a, b) => order(a.name) - order(b.name) || a.name.localeCompare(b.name))
 }
 watch(() => state.item, async (it) => {
-  photos.value = it ? specimenPhotos(it).map((p) => ({ ...p, src: getProxiedUrl(p.original, { name: p.name }), boxes: [] })) : []
+  photos.value = it ? specimenPhotos(it).map((p) => ({ ...p, src: getProxiedUrl(p.original, { name: p.name }), boxes: [], retried: false, failed: false })) : []
   for (const p of photos.value) {
     getBoxes(p.name).then((b) => { p.boxes = b || [] }).catch(() => {})
   }
 })
 // image tier failed (e.g. proxy blocked): mark it and retry through the next tier
 function onPhotoError(p) {
-  if (isHeicName(p.name)) return   // only wsrv.nl decodes HEIC; a failure there says nothing about the other photos
+  // only wsrv.nl decodes HEIC (a failure there says nothing about the other photos): one retry, then the placeholder
+  if (isHeicName(p.name)) {
+    if (!p.retried) { p.retried = true; p.src = retryUrl(p.src) } else p.failed = true
+    return
+  }
   notifyTierFailed(p.src)
   const next = getProxiedUrl(p.original, { name: p.name })
   if (next !== p.src) p.src = next
@@ -99,7 +104,8 @@ const recordedLabel = computed(() => recordedTaxon.value || 'No ID recorded')
             <div class="col-title">This specimen</div>
             <div class="spec-photos">
               <div v-for="p in photos" :key="p.name" class="spec-photo">
-                <AIPhotoView :src="p.src" :boxes="p.boxes" :used-index="-1" :show-masks="false" dark
+                <HeicPlaceholder v-if="p.failed" :url="p.original" />
+                <AIPhotoView v-else :src="p.src" :boxes="p.boxes" :used-index="-1" :show-masks="false" dark
                   :alt="`${item.CAM_ID} ${/d\d*\./i.test(p.name) ? 'dorsal' : 'ventral'}`" @error="onPhotoError(p)" />
                 <span class="spec-lbl">{{ /d\d*\./i.test(p.name) ? 'Dorsal' : /v\d*\./i.test(p.name) ? 'Ventral' : p.name }}</span>
               </div>

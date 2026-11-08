@@ -152,6 +152,12 @@ export function getProxiedUrl(url, { width = 2000, name = '' } = {}) {
   return resolveUrl(url, width)
 }
 
+// The same image URL with a cache-busting parameter (one retry of a slow first HEIC conversion)
+export function retryUrl(url) {
+  if (!url) return url
+  return `${url}${url.includes('?') ? '&' : '?'}retry=${Date.now()}`
+}
+
 // Drive's own page for a file (a HEIC the browser cannot show still opens or downloads there)
 export function driveViewUrl(url) {
   const fileId = extractGoogleDriveFileId(url)

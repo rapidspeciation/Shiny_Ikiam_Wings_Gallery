@@ -1,6 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { getProxiedUrl, setProxyMode, isHeicName, driveViewUrl } from '../src/utils/imageProxy.js'
+import { getProxiedUrl, setProxyMode, isHeicName, driveViewUrl, retryUrl } from '../src/utils/imageProxy.js'
 
 const DRIVE = 'https://drive.google.com/uc?id=1f0SbuWOGBGYrZPVc6HXk4s4ApbveyV-0'
 
@@ -19,4 +19,11 @@ test('HEIC photos always go through wsrv.nl, the only tier that converts them, w
 
 test('Open original for a HEIC the browser cannot show links to the file on Drive', () => {
   assert.equal(driveViewUrl(DRIVE), 'https://drive.google.com/file/d/1f0SbuWOGBGYrZPVc6HXk4s4ApbveyV-0/view')
+})
+
+test('a failed HEIC conversion is retried once with a cache-busting parameter', () => {
+  const first = getProxiedUrl(DRIVE, { name: 'CAM076567v2.HEIC' })
+  const again = retryUrl(first)
+  assert.ok(again.startsWith(first + '&retry='))
+  assert.match(retryUrl('https://example.org/a.heic'), /^https:\/\/example\.org\/a\.heic\?retry=\d+$/)
 })
