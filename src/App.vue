@@ -16,7 +16,7 @@ import AIIdTab from './components/AIIdTab.vue'
 import GalleryOptionsBar from './components/GalleryOptionsBar.vue'
 import TaxonDrawer from './components/TaxonDrawer.vue'
 import PhotoLightbox from './components/PhotoLightbox.vue'
-import ImageCacheSettings from './components/ImageCacheSettings.vue'
+import SettingsMenu from './components/SettingsMenu.vue'
 import { useTaxonDrawer } from './composables/useTaxonDrawer.js'
 
 // Pinned in the top navbar so they stay reachable while scrolling through photos.
@@ -121,7 +121,12 @@ onMounted(async () => {
     <nav class="navbar navbar-expand-xl navbar-dark wg-navbar sticky-top">
       <div class="container-fluid">
         <a class="navbar-brand" href="#">Ikiam Wings Gallery</a>
-        
+
+        <!-- Settings (theme, image cache): beside the phone menu button below xl, at the far right from xl -->
+        <div class="d-flex align-items-center ms-auto ms-xl-2 order-xl-last nav-end">
+          <SettingsMenu :show-image-cache="hasPhotoTools" />
+        </div>
+
         <!-- Mobile Toggler -->
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
           aria-controls="navbarContent" aria-expanded="false" aria-label="Menu">
@@ -161,20 +166,6 @@ onMounted(async () => {
               <input class="form-check-input" type="checkbox" role="switch" id="navShowPred" v-model="expandPredictions">
               <label class="form-check-label small text-light" for="navShowPred">Show predictions</label>
             </div>
-            <!-- mouse and keyboard shortcuts (not on phones) -->
-            <div class="dropdown d-none d-md-block">
-              <button type="button" class="btn btn-sm btn-outline-light nav-icon-btn" data-bs-toggle="dropdown" aria-expanded="false"
-                aria-label="Photo shortcuts" title="Photo shortcuts">?</button>
-              <div class="dropdown-menu dropdown-menu-end p-3 small help-menu">
-                <div class="fw-bold mb-1">Photo shortcuts</div>
-                <ul class="list-unstyled mb-0">
-                  <li>Click a photo: open it large</li>
-                  <li>Shift + scroll: zoom all photos</li>
-                  <li>Ctrl + scroll: zoom one photo</li>
-                  <li>Drag: move a zoomed photo</li>
-                </ul>
-              </div>
-            </div>
             <button type="button" class="btn btn-sm btn-outline-light nav-icon-btn" aria-label="Reset zoom" title="Reset zoom" @click="resetAll">
               <!-- arrow-counterclockwise (Bootstrap Icons, MIT) -->
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
@@ -203,7 +194,6 @@ onMounted(async () => {
 
     <footer class="container-fluid small text-body-secondary py-3 mt-4 d-flex flex-wrap justify-content-center align-items-start column-gap-4 row-gap-2">
       <span>GitHub: <a href="https://github.com/rapidspeciation/Shiny_Ikiam_Wings_Gallery/" target="_blank" rel="noopener noreferrer">rapidspeciation/Shiny_Ikiam_Wings_Gallery</a></span>
-      <ImageCacheSettings v-if="hasPhotoTools" />
     </footer>
   </div>
 </template>
@@ -248,7 +238,7 @@ onMounted(async () => {
 /* 1200 to 1399 px: tabs and switches share one row (they wrapped to 87 px) */
 @media (min-width: 1200px) and (max-width: 1399.98px) {
   .navbar-nav .nav-link.px-2 { padding-left: 0.4rem !important; padding-right: 0.4rem !important; }
-  .nav-tools { column-gap: 0.75rem !important; }
+  .nav-tools { column-gap: 0.6rem !important; }
   .navbar-brand { margin-right: 0.6rem; }
 }
 @media (min-width: 1200px) and (max-width: 1279.98px) {
@@ -268,7 +258,10 @@ onMounted(async () => {
   box-shadow: 0 2px 10px var(--wg-shadow);
 }
 .main-task:focus { outline: none; }
-.help-menu { min-width: 15rem; }
+/* below xl the theme and settings buttons sit just left of the menu button */
+@media (max-width: 1199.98px) {
+  .nav-end { margin-right: 0.5rem; }
+}
 .nav-icon-btn {
   display: inline-flex;
   align-items: center;

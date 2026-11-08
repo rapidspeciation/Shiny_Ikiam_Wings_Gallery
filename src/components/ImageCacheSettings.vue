@@ -1,5 +1,5 @@
 <script setup>
-// Which image proxy serves the photos (troubleshooting only, so it lives in the page footer).
+// Which image proxy serves the photos (troubleshooting). Lives in the navbar's settings menu.
 import { getProxyState, setProxyMode } from '../utils/imageProxy.js'
 
 const { mode: proxyMode, tierStatus } = getProxyState()
@@ -20,33 +20,31 @@ function statusClass(tier) {
 </script>
 
 <template>
-  <details class="image-cache">
-    <summary>Image cache</summary>
-    <div class="d-flex flex-wrap gap-2 mt-1">
-      <div v-for="opt in proxyOptions" :key="opt.value" class="form-check form-check-inline mb-0">
-        <input
-          class="form-check-input"
-          type="radio"
-          name="proxyMode"
-          :id="'proxy-' + opt.value"
-          :value="opt.value"
-          :checked="proxyMode === opt.value"
-          @change="setProxyMode(opt.value)"
-        >
-        <label class="form-check-label" :for="'proxy-' + opt.value">
-          {{ opt.label }}
-          <span
-            v-if="opt.value !== 'auto'"
-            class="d-inline-block rounded-circle ms-1"
-            :class="statusClass(opt.value)"
-            style="width: 8px; height: 8px;"
-          ></span>
-        </label>
-      </div>
+  <fieldset class="image-cache mb-0">
+    <legend class="fs-6 fw-bold mb-1">Image cache</legend>
+    <div v-for="opt in proxyOptions" :key="opt.value" class="form-check mb-0">
+      <input
+        class="form-check-input"
+        type="radio"
+        name="proxyMode"
+        :id="'proxy-' + opt.value"
+        :value="opt.value"
+        :checked="proxyMode === opt.value"
+        @change="setProxyMode(opt.value)"
+      >
+      <label class="form-check-label" :for="'proxy-' + opt.value">
+        {{ opt.label }}
+        <span
+          v-if="opt.value !== 'auto'"
+          class="d-inline-block rounded-circle ms-1"
+          :class="statusClass(opt.value)"
+          style="width: 8px; height: 8px;"
+        ></span>
+      </label>
     </div>
-  </details>
+  </fieldset>
 </template>
 
 <style scoped>
-.image-cache summary { cursor: pointer; color: var(--bs-link-color); }
+@media (pointer: coarse) { .image-cache .form-check { display: flex; } }
 </style>
