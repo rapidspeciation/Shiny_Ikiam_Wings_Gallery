@@ -210,13 +210,21 @@ let downAt = null
 const onPointerDown = (e) => { downAt = { x: e.clientX, y: e.clientY } }
 const viewName = (photo) => /d\d*\./i.test(photo.Name) ? 'dorsal' : /v\d*\./i.test(photo.Name) ? 'ventral' : ''
 const photoCaption = (photo) => [props.item.CAM_ID, viewName(photo)].filter(Boolean).join(' ')
+// The lightbox gets all of the card's photos (dorsal and ventral, whatever the Side
+// option shows), so the arrow keys flip between them.
 const enlarge = (index, photo) => {
-  const img = imgRefs.value[index]
-  openLightbox({
-    src: img?.currentSrc || img?.src || resolvePhotoUrl(photo.URL_to_view),
-    alt: `${photoCaption(photo)}, large`,
-    caption: photoCaption(photo),
+  const shown = displayPhotos()
+  const all = displayPhotos('Dorsal and Ventral')
+  const photos = all.map(p => {
+    const i = shown.findIndex(q => q.Name === p.Name)
+    const img = i >= 0 ? imgRefs.value[i] : null
+    return {
+      src: img?.currentSrc || img?.src || resolvePhotoUrl(p.URL_to_view),
+      alt: `${photoCaption(p)}, large`,
+      caption: photoCaption(p),
+    }
   })
+  openLightbox({ photos, index: Math.max(0, all.findIndex(p => p.Name === photo.Name)) })
 }
 const onPhotoClick = (e, index, photo) => {
   const moved = downAt ? Math.hypot(e.clientX - downAt.x, e.clientY - downAt.y) : 0
@@ -261,20 +269,20 @@ onBeforeUnmount(() => {
   detachPanzoomAll()
 })
 
-const displayPhotos = () => {
+const displayPhotos = (side = props.side) => {
   let list = []
   if (props.item.all_photos && props.item.all_photos.length > 0) {
     list = props.item.all_photos.filter(p => {
       const viewName = String(p.Name || '').toLowerCase()
-      if (props.side === 'Dorsal' && !/[d]\d*\./.test(viewName)) return false
-      if (props.side === 'Ventral' && !/[v]\d*\./.test(viewName)) return false
+      if (side === 'Dorsal' && !/[d]\d*\./.test(viewName)) return false
+      if (side === 'Ventral' && !/[v]\d*\./.test(viewName)) return false
       return true
     })
   } else {
-    if ((props.side.includes('Dorsal') || props.side === 'Dorsal and Ventral') && props.item.URLd) {
+    if ((side.includes('Dorsal') || side === 'Dorsal and Ventral') && props.item.URLd) {
       list.push({ URL_to_view: props.item.URLd, Name: `${props.item.CAM_ID}d.JPG` })
     }
-    if ((props.side.includes('Ventral') || props.side === 'Dorsal and Ventral') && props.item.URLv) {
+    if ((side.includes('Ventral') || side === 'Dorsal and Ventral') && props.item.URLv) {
       list.push({ URL_to_view: props.item.URLv, Name: `${props.item.CAM_ID}v.JPG` })
     }
   }
