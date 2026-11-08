@@ -838,7 +838,7 @@ const showAbout = ref(false)
           <p>Scores average three models that each excluded the specimen from training and checkpoint selection. The model
           design was chosen using 2,771 of these specimens; on the other 691, held back from every choice, it recorded the
           correct sex for 95.4%. A prediction is marked <strong>Uncertain</strong> when its confidence is below 85% or the
-          model has a weak track record for that species on other specimens. The other predictions were 97.6%
+          model has a weak track record for that species on other specimens. Predictions not marked Uncertain were 97.6%
           correct, and 43 of them disagree with the recorded sex and are candidates for review. Groups outside Ithomiini and
           Heliconiini have fewer examples (75.2% correct) and are mostly Uncertain.</p>
           <p>Sex prediction is not yet supported for uploaded photos. The current method needs the wing strips from the
@@ -882,7 +882,7 @@ const showAbout = ref(false)
             <li>Collection sex prediction now reads only four narrow wing strips where males carry scent scales, with a
             small image network, instead of four wing crops and eight close-up tiles. Out-of-fold accuracy on 3,462
             specimens rose from 92.3% to 94.0% (Ithomiini 95.7% to 97.2%, Heliconiini 86.6% to 91.8%; species not seen
-            in training 90.1% to 92.8%), and 1,828 predictions are no longer marked Uncertain (was 1,592). It also gives a sex for
+            in training 90.1% to 92.8%), and 1,828 predictions are now confident enough not to be marked Uncertain (was 1,592). It also gives a sex for
             specimens with a missing or damaged wing.</li>
             <li>Each specimen now shows an out-of-fold species prediction (from a model that did not see it in
             training) whenever one exists.</li>
@@ -906,8 +906,8 @@ const showAbout = ref(false)
             preparation. The note comes from a separate small classifier and does not change the names offered.</li>
             <li>Collection sex prediction now also looks at eight close-up tiles of the wing regions that carry male
             scent scales. Out-of-fold accuracy on 3,462 specimens rose from 90.2% to 92.3% (Ithomiini 94.0% to 95.7%,
-            Heliconiini 79.7% to 86.6%; species not seen in training 85.5% to 90.1%), and 1,592 predictions are no longer
-            marked Uncertain (was 1,435), 98.0% correct in testing.</li>
+            Heliconiini 79.7% to 86.6%; species not seen in training 85.5% to 90.1%), and 1,592 predictions are now
+            confident enough not to be marked Uncertain (was 1,435), 98.0% correct in testing.</li>
           </ul>
           <p class="mb-1"><strong>29 September 2026:</strong></p>
           <ul class="mb-2">
