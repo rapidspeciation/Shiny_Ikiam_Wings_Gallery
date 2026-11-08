@@ -10,7 +10,7 @@
   --wg-card: #fff;             /* gallery card, panels, drawers */
   --wg-card-2: #f8f9fa;        /* one step from the card: facts box, options box */
   --wg-card-border: #dee2e6;   /* gallery card outline */
-  --wg-control-border: #dee2e6; /* form control edges */
+  --wg-control-border: #868e96; /* form control edges: 3.3:1 on white, 3.15:1 on the options box */
   --wg-line: #e2e8f0;          /* soft borders, bar tracks, thumbnail placeholders */
   --wg-line-strong: #cbd5e1;   /* dashed and stronger soft borders */
   --wg-hover: #f1f5f9;         /* row hover, header strips */
@@ -165,11 +165,12 @@ body {
   color: #0b2e1f;
 }
 
-/* form control edges in dark: Bootstrap's #495057 was 1.6:1 on the options box */
-[data-bs-theme="dark"] .form-select,
-[data-bs-theme="dark"] .form-control,
-[data-bs-theme="dark"] .form-check-input:not(:checked),
-[data-bs-theme="dark"] .multiselect__tags {
+/* form control edges at 3:1 or more in both themes (Bootstrap's were 1.3:1 light, 1.6:1 dark);
+   hairline dividers and card outlines keep their own lighter tokens */
+.form-select,
+.form-control,
+.form-check-input:not(:checked),
+.multiselect__tags {
   border-color: var(--wg-control-border);
 }
 
