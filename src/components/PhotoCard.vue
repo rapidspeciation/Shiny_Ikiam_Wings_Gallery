@@ -6,7 +6,7 @@ import { useGlobalGalleryOptions } from '../composables/useGlobalGalleryOptions.
 import { getBoxes, getBoxReason, outlinesFor, driveFileId } from '../composables/useCurationData.js'
 import { useWingOutlines } from '../composables/useWingOutlines.js'
 import { useNearViewport } from '../composables/useNearViewport.js'
-import { getProxiedUrl, notifyTierFailed, getProxyState } from '../utils/imageProxy.js'
+import { getProxiedUrl, notifyTierFailed, getProxyState, isHeicName, driveViewUrl } from '../utils/imageProxy.js'
 import { unionBox, unionBoxScale } from '../utils/wingBoxes.js'
 import PredictionPanel from './PredictionPanel.vue'
 import { usePhotoLightbox } from '../composables/usePhotoLightbox.js'
@@ -46,13 +46,17 @@ const proxyVersion = computed(() => JSON.stringify({
   tiers: tierStatusRef.value
 }))
 
-const resolvePhotoUrl = (url) => {
+const resolvePhotoUrl = (url, name = '') => {
   void proxyVersion.value
-  return getProxiedUrl(url)
+  return getProxiedUrl(url, { name })
 }
 
-const handleImgError = (e, originalUrl) => {
+// HEIC photos that wsrv.nl could not convert either: a placeholder with a link to the file on Drive
+const failedHeic = reactive({})
+
+const handleImgError = (e, originalUrl, name = '') => {
   const currentSrc = e.target.src
+  if (isHeicName(name)) { failedHeic[name] = true; return }   // only wsrv decodes HEIC: not a sign wsrv is blocked
 
   if (proxyModeRef.value === 'auto') {
     const canFallToLh3 = currentSrc.includes('wsrv.nl') && tierStatusRef.value.lh3 !== 'blocked'
@@ -225,7 +229,7 @@ const enlarge = (index, photo) => {
     const i = shown.findIndex(q => q.Name === p.Name)
     const img = i >= 0 ? imgRefs.value[i] : null
     return {
-      src: img?.currentSrc || img?.src || resolvePhotoUrl(p.URL_to_view),
+      src: img?.currentSrc || img?.src || resolvePhotoUrl(p.URL_to_view, p.Name),
       alt: `${photoCaption(p)}, large`,
       caption: photoCaption(p),
     }
@@ -320,19 +324,25 @@ const displayPhotos = (side = props.side) => {
          @pointerdown.capture="onPointerDown" @click="onPhotoClick($event, index, photo)"
          @keydown.enter.prevent="enlarge(index, photo)" @keydown.space.prevent="enlarge(index, photo)">
          <!-- zoom-layer holds img + overlay together so the SVG zooms WITH the image -->
+         <!-- a HEIC photo that could not be converted: placeholder with a link to the file -->
+         <div v-if="failedHeic[photo.Name]" class="photo-unavailable small" @click.stop>
+           <span>{{ photoCaption(photo) }}: HEIC photo this browser cannot show.</span>
+           <a :href="driveViewUrl(photo.URL_to_view)" target="_blank" rel="noopener noreferrer">Open original</a>
+         </div>
          <div
+           v-else
            class="zoom-layer"
            :ref="el => layerRefs[index] = el"
          >
            <img
              :ref="el => imgRefs[index] = el"
-             :src="resolvePhotoUrl(photo.URL_to_view)"
+             :src="resolvePhotoUrl(photo.URL_to_view, photo.Name)"
              class="panzoom-img"
              loading="lazy"
              referrerpolicy="no-referrer"
              :alt="photo.Name"
              @load="onImgLoad(index, photo)"
-             @error="(e) => handleImgError(e, photo.URL_to_view)"
+             @error="(e) => handleImgError(e, photo.URL_to_view, photo.Name)"
            >
 
            <!-- Wing-box SVG overlay (stroke only; no fill, no svg text) -->
@@ -428,6 +438,7 @@ const displayPhotos = (side = props.side) => {
 .img-wrapper:only-child { grid-column: span 2; }
 /* while a photo streams in, its frame shows as a tinted slot of the usual 3:2 shape */
 .img-wrapper.is-loading { aspect-ratio: 3 / 2; background: var(--wg-line); border-radius: 4px; }
+.photo-unavailable { aspect-ratio: 3 / 2; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.4rem; padding: 0.75rem; text-align: center; color: var(--wg-text-3); background: var(--wg-card-2); border: 1px dashed var(--wg-line-strong); border-radius: 4px; cursor: default; }
 /* phones: dorsal over ventral at the card's full width (about 340 px each at 390 px) */
 @media (max-width: 575.98px) {
   .photo-grid-container { grid-template-columns: 1fr; padding: 0.25rem 0 !important; }

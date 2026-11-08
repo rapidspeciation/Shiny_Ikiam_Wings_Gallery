@@ -138,11 +138,24 @@ export function getProxyState() {
 
 export function setProxyMode(mode) {
   proxyMode.value = mode
-  localStorage.setItem(STORAGE_KEY, mode)
+  try { localStorage.setItem(STORAGE_KEY, mode) } catch { /* storage blocked */ }
 }
 
-export function getProxiedUrl(url, { width = 2000 } = {}) {
+// HEIC/HEIF files (phone photos, some Insectary and CRISPR uploads): browsers cannot decode them and
+// Drive's thumbnail and lh3 tiers return 404 for many of them, so they always go through wsrv.nl,
+// which converts them to WebP, whatever the chosen mode.
+export const isHeicName = (name) => /\.hei[cf]$/i.test(String(name || '').trim())
+
+export function getProxiedUrl(url, { width = 2000, name = '' } = {}) {
+  const fileId = isHeicName(name) ? extractGoogleDriveFileId(url) : null
+  if (fileId) return wsrvUrl(fileId, width)
   return resolveUrl(url, width)
+}
+
+// Drive's own page for a file (a HEIC the browser cannot show still opens or downloads there)
+export function driveViewUrl(url) {
+  const fileId = extractGoogleDriveFileId(url)
+  return fileId ? `https://drive.google.com/file/d/${fileId}/view` : url
 }
 
 export function getThumbnailUrl(url) {

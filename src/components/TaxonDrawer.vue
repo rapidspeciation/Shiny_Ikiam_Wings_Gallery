@@ -9,7 +9,7 @@ import AIPhotoView from './AIPhotoView.vue'
 import AIReferencePanel from './AIReferencePanel.vue'
 import { useTaxonDrawer } from '../composables/useTaxonDrawer.js'
 import { getBoxes } from '../composables/useCurationData.js'
-import { getProxiedUrl, notifyTierFailed } from '../utils/imageProxy.js'
+import { getProxiedUrl, notifyTierFailed, isHeicName } from '../utils/imageProxy.js'
 import { taxonInfo } from '../utils/aiCandidates.js'
 import { genusMembers, rankOf } from '../utils/taxonTree.js'
 
@@ -43,15 +43,16 @@ function specimenPhotos(it) {
   return list.filter((p) => p.original).sort((a, b) => order(a.name) - order(b.name) || a.name.localeCompare(b.name))
 }
 watch(() => state.item, async (it) => {
-  photos.value = it ? specimenPhotos(it).map((p) => ({ ...p, src: getProxiedUrl(p.original), boxes: [] })) : []
+  photos.value = it ? specimenPhotos(it).map((p) => ({ ...p, src: getProxiedUrl(p.original, { name: p.name }), boxes: [] })) : []
   for (const p of photos.value) {
     getBoxes(p.name).then((b) => { p.boxes = b || [] }).catch(() => {})
   }
 })
 // image tier failed (e.g. proxy blocked): mark it and retry through the next tier
 function onPhotoError(p) {
+  if (isHeicName(p.name)) return   // only wsrv.nl decodes HEIC; a failure there says nothing about the other photos
   notifyTierFailed(p.src)
-  const next = getProxiedUrl(p.original)
+  const next = getProxiedUrl(p.original, { name: p.name })
   if (next !== p.src) p.src = next
 }
 
