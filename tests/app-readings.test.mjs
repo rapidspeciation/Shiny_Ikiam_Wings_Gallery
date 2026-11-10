@@ -3,7 +3,7 @@ import assert from 'node:assert/strict'
 import { mkdtempSync, readFileSync, writeFileSync, existsSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { checkReadings, fetchReadings, outlinePoints, READINGS } from '../scripts/fetch-app-readings.mjs'
+import { checkReadings, fetchReadings, outlinePoints, readSexSkipList, READINGS } from '../scripts/fetch-app-readings.mjs'
 import { driveFileId, pickBoxes, photoOutlines, unionBox, unionBoxScale } from '../src/utils/wingBoxes.js'
 import { VIEW_DEFAULTS, readView } from '../src/utils/shareView.js'
 
@@ -51,6 +51,13 @@ test('invalid rows are left out and a file without valid rows is refused', () =>
   assert.match(checkReadings('predictions_app.json', []).error, /not a JSON object/)
 })
 
+// A made-up locked list: none of these CAMs is a real specimen.
+function skipFile(text = 'CAM999001\nCAM999002\n') {
+  const path = join(mkdtempSync(join(tmpdir(), 'sex-skip-')), 'skip.txt')
+  writeFileSync(path, text)
+  return path
+}
+
 function server(routes) {
   return async url => {
     const name = url.split('/').pop()
@@ -63,7 +70,7 @@ function server(routes) {
 
 test('downloaded readings replace the copies in public/data', async () => {
   const dir = mkdtempSync(join(tmpdir(), 'readings-'))
-  const results = await fetchReadings({ outDir: dir, fetchFn: server(files), log: () => {} })
+  const results = await fetchReadings({ outDir: dir, fetchFn: server(files), log: () => {}, sexSkipFile: skipFile() })
   for (const name of Object.keys(READINGS)) {
     assert.equal(results[name].updated, true, name)
     assert.deepEqual(JSON.parse(readFileSync(join(dir, name), 'utf8')), files[name])
@@ -77,7 +84,7 @@ test('an unreachable, missing, broken or much smaller file keeps the current cop
   writeFileSync(join(dir, 'sex_predictions_app.json'), JSON.stringify(files['sex_predictions_app.json']))
   writeFileSync(join(dir, 'wing_boxes_app.json'), JSON.stringify(files['wing_boxes_app.json']))
   const results = await fetchReadings({
-    outDir: dir, log: () => {},
+    outDir: dir, log: () => {}, sexSkipFile: skipFile(),
     fetchFn: server({
       'predictions_app.json': files['predictions_app.json'],   // 1 row where there were 3
       'sex_predictions_app.json': new TypeError('fetch failed'),
@@ -92,6 +99,31 @@ test('an unreachable, missing, broken or much smaller file keeps the current cop
   assert.equal(results['wing_outlines.json'].reason, 'HTTP 404')
   assert.equal(Object.keys(JSON.parse(readFileSync(join(dir, 'predictions_app.json'), 'utf8'))).length, 3)
   assert.equal(existsSync(join(dir, 'wing_outlines.json')), false)
+})
+
+test('locked CAMs never enter the sex file, and without a valid list the sex file is not downloaded', async () => {
+  const row = files['sex_predictions_app.json'].CAM036744
+  const remote = { CAM999001: row, cam999002: row, CAM999003: row }
+  const dir = mkdtempSync(join(tmpdir(), 'readings-'))
+  const results = await fetchReadings({ outDir: dir, fetchFn: server({ 'sex_predictions_app.json': remote }), log: () => {}, sexSkipFile: skipFile() })
+  assert.deepEqual(results['sex_predictions_app.json'], { updated: true, rows: 1, dropped: 0, locked: 2 })
+  assert.deepEqual(Object.keys(JSON.parse(readFileSync(join(dir, 'sex_predictions_app.json'), 'utf8'))), ['CAM999003'])
+
+  for (const sexSkipFile of [undefined, '', join(dir, 'missing.txt'), skipFile(''), skipFile('CAM999001\nnot a cam\n')]) {
+    const empty = mkdtempSync(join(tmpdir(), 'readings-'))
+    const asked = []
+    const fetchFn = url => { asked.push(url.split('/').pop()); return server({ 'sex_predictions_app.json': remote })(url) }
+    const res = await fetchReadings({ outDir: empty, fetchFn, log: () => {}, sexSkipFile })
+    assert.equal(res['sex_predictions_app.json'].updated, false, String(sexSkipFile))
+    assert.match(res['sex_predictions_app.json'].reason, /no valid locked-CAM list/)
+    assert.ok(!asked.includes('sex_predictions_app.json'))
+    assert.equal(existsSync(join(empty, 'sex_predictions_app.json')), false)
+  }
+  assert.deepEqual([...readSexSkipList(skipFile('cam999001\r\n\r\nCAM999002'))], ['CAM999001', 'CAM999002'])
+
+  // every locked row: the current copy stays
+  const only = await fetchReadings({ outDir: dir, fetchFn: server({ 'sex_predictions_app.json': { CAM999001: row } }), log: () => {}, sexSkipFile: skipFile() })
+  assert.equal(only['sex_predictions_app.json'].reason, 'no rows outside the locked list')
 })
 
 test('the readings box wins over Wings-v6 unless the photo was replaced since', () => {

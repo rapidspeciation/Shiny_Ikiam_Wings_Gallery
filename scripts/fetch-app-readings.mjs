@@ -8,6 +8,11 @@
 //
 //   node scripts/fetch-app-readings.mjs [outDir]
 //   APP_READINGS_URL overrides the base URL.
+//
+// Sex: the CAMs of the collection sex model's locked test split must never be shown.
+// COLLECTION_SEX_SKIP_FILE names the list (one CAM id per line; never commit it). Their
+// rows are left out of sex_predictions_app.json; without a valid list the sex file is not
+// downloaded at all and the current copy stays.
 
 import { readFileSync, writeFileSync, renameSync, existsSync } from 'node:fs'
 import { join } from 'node:path'
@@ -88,6 +93,29 @@ export function checkReadings(name, doc) {
   return { doc: spec.wrap ? spec.wrap(doc, good) : good, kept, dropped }
 }
 
+// The locked CAM ids as an upper-case Set, or null when the list is missing, empty or has
+// a line that is not a CAM id.
+export function readSexSkipList(path) {
+  if (!path) return null
+  let text
+  try { text = readFileSync(path, 'utf8') } catch { return null }
+  const ids = text.split(/\r?\n/).map(line => line.trim()).filter(Boolean)
+  if (!ids.length || !ids.every(id => /^CAM\d{5,7}$/i.test(id))) return null
+  return new Set(ids.map(id => id.toUpperCase()))
+}
+
+export function dropLockedSex(rows, skip) {
+  const kept = {}
+  let locked = 0
+  for (const [key, row] of Object.entries(rows)) {
+    if (skip.has(key.toUpperCase())) locked++
+    else kept[key] = row
+  }
+  return { rows: kept, locked }
+}
+
+const SEX_FILE = 'sex_predictions_app.json'
+
 function rowCount(name, path) {
   if (!existsSync(path)) return 0
   try {
@@ -98,11 +126,14 @@ function rowCount(name, path) {
   }
 }
 
-export async function fetchReadings({ base = APP_READINGS_URL, outDir = 'public/data', fetchFn = fetch, log = console.log } = {}) {
+export async function fetchReadings({ base = APP_READINGS_URL, outDir = 'public/data', fetchFn = fetch, log = console.log,
+  sexSkipFile = process.env.COLLECTION_SEX_SKIP_FILE } = {}) {
   const results = {}
+  const sexSkip = readSexSkipList(sexSkipFile)
   for (const name of Object.keys(READINGS)) {
     const path = join(outDir, name)
     const keep = reason => { results[name] = { updated: false, reason }; log(`${name}: kept the current copy (${reason})`) }
+    if (name === SEX_FILE && !sexSkip) { keep('no valid locked-CAM list in COLLECTION_SEX_SKIP_FILE'); continue }
     let doc
     try {
       const res = await fetchFn(`${base.replace(/\/+$/, '')}/${name}`, { signal: AbortSignal.timeout(120000) })
@@ -114,12 +145,21 @@ export async function fetchReadings({ base = APP_READINGS_URL, outDir = 'public/
     }
     const checked = checkReadings(name, doc)
     if (checked.error) { keep(checked.error); continue }
+    let locked = 0
+    if (name === SEX_FILE) {
+      const clean = dropLockedSex(checked.doc, sexSkip)
+      checked.doc = clean.rows
+      checked.kept -= clean.locked
+      locked = clean.locked
+      if (!checked.kept) { keep('no rows outside the locked list'); continue }
+    }
     const before = rowCount(name, path)
     if (checked.kept < before / 2) { keep(`${checked.kept} rows, the current copy has ${before}`); continue }
     writeFileSync(`${path}.tmp`, JSON.stringify(checked.doc))
     renameSync(`${path}.tmp`, path)
-    results[name] = { updated: true, rows: checked.kept, dropped: checked.dropped }
-    log(`${name}: ${checked.kept} rows${checked.dropped ? `, ${checked.dropped} invalid left out` : ''} (was ${before})`)
+    results[name] = { updated: true, rows: checked.kept, dropped: checked.dropped, ...(name === SEX_FILE ? { locked } : {}) }
+    log(`${name}: ${checked.kept} rows${checked.dropped ? `, ${checked.dropped} invalid left out` : ''}` +
+      `${locked ? `, ${locked} locked left out` : ''} (was ${before})`)
   }
   return results
 }
